@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kgl_time/work_entry.dart';
+
+import 'format_duration.dart';
 
 class WorkEntryPreview extends StatelessWidget {
   final WorkEntry workEntry;
@@ -12,7 +13,7 @@ class WorkEntryPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Card(
-      margin: EdgeInsets.all(8),
+      //margin: EdgeInsets.all(8),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -39,16 +40,5 @@ class WorkEntryPreview extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String formatDuration(Duration duration) {
-    List<String> parts = [];
-    if (duration.inHours > 0) {
-      parts.add('${duration.inHours}h');
-    }
-    if (duration.inMinutes.remainder(60) > 0) {
-      parts.add('${duration.inMinutes.remainder(60)} min');
-    }
-    return parts.join(' ');
   }
 }

@@ -261,6 +261,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "14.2.5"
+  week_number:
+    dependency: "direct main"
+    description:
+      name: week_number
+      sha256: d2c4d95b665cdbb6d9938d85e1a899038a4bd0b0843a2528345ed33dcfade13e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
 sdks:
   dart: ">=3.5.3 <4.0.0"
   flutter: ">=3.19.0"

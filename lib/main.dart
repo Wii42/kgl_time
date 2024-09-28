@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/work_entries.dart';
 import 'package:kgl_time/work_entry.dart';
-import 'package:kgl_time/work_entry_preview.dart';
 import 'package:provider/provider.dart';
 
-import 'kgl_page.dart';
+import 'home_page.dart';
 
 List<WorkEntry> mockWorkEntries = [
   WorkEntry(
@@ -56,7 +55,6 @@ class MyApp extends StatelessWidget {
         ),
       ],
     );
-    print('initialEntries: $initialEntries');
     return ChangeNotifierProvider<WorkEntries>(
       create: (context) => WorkEntries(initialEntries),
       child: MaterialApp.router(
@@ -69,39 +67,13 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}
 
-class HomePage extends KglPage {
-  const HomePage({super.key, required super.appTitle});
-
-  @override
-  Widget body(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        FilledButton(
-          onPressed: () {},
-          child: Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Neuen Eintrag erfassen',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.apply(color: Colors.white)),
-                Icon(Icons.add),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 32),
-        for (WorkEntry entry in context.watch<WorkEntries>().entries.take(5))
-          WorkEntryPreview(workEntry: entry),
-        ElevatedButton(onPressed: () {}, child: Text('Alle Einträge anzeigen')),
-        const SizedBox(height: 32),
-      ],
-    );
+  bool isInCurrentWeek(DateTime date) {
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+    DateTime startOfWeek = today.subtract(Duration(days: today.weekday - 1));
+    DateTime endOfWeek = startOfWeek.add(Duration(days: 8));
+    return (date.isAtSameMomentAs(startOfWeek) || date.isAfter(startOfWeek)) &&
+        date.isBefore(endOfWeek);
   }
 }
