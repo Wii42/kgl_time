@@ -13,7 +13,7 @@ import 'new_entry_page.dart';
 
 List<WorkEntry> mockWorkEntries = [
   WorkEntry(
-   workDurationInSeconds: const Duration(hours: 1).inSeconds,
+    workDurationInSeconds: const Duration(hours: 1).inSeconds,
     date: DateTime.now(),
     description: 'Test',
     categories: [WorkCategory.phoneCall],
@@ -33,10 +33,14 @@ List<WorkEntry> mockWorkEntries = [
 ];
 
 void main() async {
-  PersistentStorageService.setImplementation(IsarPersistentStorage());
+  WidgetsFlutterBinding.ensureInitialized();
+  await PersistentStorageService.initializeImplementation(
+      IsarPersistentStorage());
+  List<WorkEntry> initialEntries =
+      await PersistentStorageService.instance.loadEntries();
   await initializeDateFormatting(
       'de', '_'); // initialize the date formatting for German
-  runApp(MyApp(appTitle: 'KGL Time', initialEntries: mockWorkEntries));
+  runApp(MyApp(appTitle: 'KGL Time', initialEntries: initialEntries));
 }
 
 class MyApp extends StatelessWidget {

@@ -1,9 +1,12 @@
 import 'package:flutter/foundation.dart';
+import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 
 import 'work_entry.dart';
 import 'package:notifying_list/notifying_list.dart';
 
 class WorkEntries extends ChangeNotifier {
+  final PersistentStorageService storage =
+      PersistentStorageService.instance;
   late final CallbackNotifyingList<WorkEntry> _entries;
 
   WorkEntries(List<WorkEntry> entriesList) {
@@ -26,15 +29,18 @@ class WorkEntries extends ChangeNotifier {
   void add(WorkEntry entry) {
     _entries.add(entry);
     sortEntriesInReverse(_entries);
+    storage.addEntry(entry);
   }
 
   void remove(WorkEntry entry) {
     _entries.remove(entry);
+    storage.deleteEntry(entry);
   }
 
   void updateEntry(WorkEntry workEntry, WorkEntry newEntry) {
     int index = _entries.indexOf(workEntry);
     _entries[index] = newEntry;
     sortEntriesInReverse(_entries);
+    storage.updateEntry(newEntry, workEntry);
   }
 }
