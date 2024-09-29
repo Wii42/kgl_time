@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:kgl_time/work_entry.dart';
 import 'package:kgl_time/work_entry_widget.dart';
 
 import 'format_duration.dart';

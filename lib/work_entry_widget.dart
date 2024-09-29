@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/work_entries.dart';
 import 'package:kgl_time/work_entry.dart';
@@ -88,6 +87,5 @@ abstract class WorkEntryWidget extends StatelessWidget {
 
   void _deleteItem(WorkEntries workEntries) {
     workEntries.remove(workEntry);
-    print('Item deleted');
   }
 }

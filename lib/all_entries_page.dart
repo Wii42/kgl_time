@@ -16,7 +16,7 @@ class AllEntriesPage extends KglPage {
   @override
   Widget body(BuildContext context) => Consumer<WorkEntries>(
       builder: (context, workEntries, _) =>
-          _AllEntriesStatefulPage(workEntries: workEntries));
+          _AllEntriesStatefulPage(workEntries: workEntries, key: key));
 }
 
 class _AllEntriesStatefulPage extends StatefulWidget {
@@ -99,8 +99,6 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
   void _updateGroupedEntries() {
     _groupedEntries = GroupedWorkEntries.groupEntriesByCalendarUnit(
         widget.workEntries.entries, _selectedCalendarUnit);
-    print(
-        "Grouped ${widget.workEntries.entries.length} in ${_groupedEntries.length} groups by $_selectedCalendarUnit");
   }
 
   String formatCalendarUnitValue(

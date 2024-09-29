@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:kgl_time/work_entry.dart';
 
 String formatDuration(Duration duration) {
   List<String> parts = [];

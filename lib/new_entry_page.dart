@@ -16,7 +16,7 @@ class NewEntryPage extends KglPage {
   @override
   Widget body(BuildContext context) => Consumer<WorkEntries>(
         builder: (context, workEntries, _) => _NewEntryStatefulPage(
-          existingEntry: existingEntry,
+          existingEntry: existingEntry, key: key,
         ),
       );
 
