@@ -4,6 +4,7 @@ import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/kgl_page.dart';
 import 'package:kgl_time/work_entries.dart';
 import 'package:kgl_time/work_entry.dart';
+import 'package:kgl_time/work_entry_details.dart';
 import 'package:provider/provider.dart';
 import 'package:week_number/iso.dart';
 
@@ -76,18 +77,19 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
             Padding(
                 padding: const EdgeInsets.all(
                     16)), // To avoid collision with the SegmentedButton
-            for (GroupedWorkEntries entryGroup in _groupedEntries)
+            for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit)} ${entryGroup.year}'),
+                  Text(
+                      '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit)} ${entryGroup.year}'),
                   Text(formatDuration(entryGroup.totalWorkDuration())),
                 ],
               ),
-            //ListTile(
-            //  title: Text(entry.description ?? ''),
-            //  subtitle: Text(entry.date.toString()),
-            //),
+              for (WorkEntry entry in entryGroup.entries)
+                WorkEntryDetails(workEntry: entry),
+              SizedBox(height: 16),
+            ],
           ],
         ),
       ].reversed.toList(),
@@ -105,7 +107,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
       int calendarUnitValue, CalendarUnit calendarUnit) {
     switch (calendarUnit) {
       case CalendarUnit.week:
-        return 'KW$calendarUnitValue';
+        return 'Kalenderwoche $calendarUnitValue,';
       case CalendarUnit.month:
         return DateFormat('MMMM').format(DateTime(0, calendarUnitValue));
     }

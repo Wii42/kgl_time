@@ -20,6 +20,7 @@ class WorkEntry {
 enum WorkCategory {
   phoneCall('Telefonanruf'),
   ;
+  final String displayName;
 
-  const WorkCategory(String displayName);
+  const WorkCategory(this.displayName);
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:kgl_time/work_entries.dart';
 import 'package:kgl_time/work_entry.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,7 @@ List<WorkEntry> mockWorkEntries = [
 ];
 
 void main() async {
+  await initializeDateFormatting('de', '_'); // initialize the date formatting for German
   runApp(MyApp(appTitle: 'KGL Time', initialEntries: mockWorkEntries));
 }
 
