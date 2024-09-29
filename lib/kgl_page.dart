@@ -13,15 +13,16 @@ abstract class KglPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: appbarTitle(context),
-        backgroundColor: theme.primaryColor,
-        foregroundColor: Colors.white,
+        //backgroundColor: theme.primaryColor,
+        //foregroundColor: Colors.white,
       ),
       body: body(context),
     );
   }
 
   Widget appbarTitle(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
+    ThemeData theme = Theme.of(context);
+    TextTheme textTheme = theme.textTheme;
     String largeTitle = pageTitle ?? appTitle;
     String? smallTitle = pageTitle != null ? appTitle : null;
     return Column(
@@ -29,7 +30,7 @@ abstract class KglPage extends StatelessWidget {
       children: [
         if (smallTitle != null)
           Text(smallTitle,
-              style: textTheme.bodySmall?.apply(color: Colors.white)),
+              style: textTheme.bodySmall?.copyWith(color: theme.appBarTheme.foregroundColor)),
         Text(largeTitle),
       ],
     );

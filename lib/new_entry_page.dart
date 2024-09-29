@@ -16,7 +16,8 @@ class NewEntryPage extends KglPage {
   @override
   Widget body(BuildContext context) => Consumer<WorkEntries>(
         builder: (context, workEntries, _) => _NewEntryStatefulPage(
-          existingEntry: existingEntry, key: key,
+          existingEntry: existingEntry,
+          key: key,
         ),
       );
 
@@ -113,7 +114,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
             readOnly: true,
             onTap: () async {
               DateTime? newDate = await showDatePicker(
-                //locale: Locale('de', 'DE'),
+                //locale: Locale('de'),
                 context: context,
                 initialDate: selectedDate,
                 firstDate: DateTime(2000),

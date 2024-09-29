@@ -42,6 +42,9 @@ void main() async {
 class MyApp extends StatelessWidget {
   final String appTitle;
 
+  final Color primaryColor = const Color(0xff2a5c9f);
+  final Color appBarColor = const Color(0xff5a9859);
+
   final List<WorkEntry> initialEntries;
 
   const MyApp(
@@ -78,11 +81,12 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<WorkEntries>(
       create: (context) => WorkEntries(initialEntries),
       child: MaterialApp.router(
-        title: 'KGL Time',
+        locale: const Locale('de'),
+        title: appTitle,
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+            colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
+            useMaterial3: true,
+            ).copyWith(appBarTheme: AppBarTheme(backgroundColor: appBarColor, foregroundColor: Colors.white)),
         routerConfig: router,
       ),
     );
