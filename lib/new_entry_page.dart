@@ -52,8 +52,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     });
     selectedDate = widget.existingEntry?.date ?? DateTime.now();
     dateController = TextEditingController(text: formatDate(selectedDate));
-    durationController = TextEditingController(text: widget.existingEntry?.workDuration.inMinutes.toString() ?? '');
-    descriptionController = TextEditingController( text: widget.existingEntry?.description ?? '');
+    durationController = TextEditingController(
+        text: widget.existingEntry?.workDuration.inMinutes.toString() ?? '');
+    descriptionController =
+        TextEditingController(text: widget.existingEntry?.description ?? '');
   }
 
   @override
@@ -124,6 +126,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
               }
             },
           ),
+          SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -190,6 +193,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   @override
   void dispose() {
     dateController.dispose();
+    durationController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 }
