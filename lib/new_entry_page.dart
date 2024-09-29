@@ -95,6 +95,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
           ),
           SizedBox(height: 16),
           TextFormField(
+            controller: descriptionController,
             decoration: InputDecoration(
               labelText: 'Beschreibung',
             ),

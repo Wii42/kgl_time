@@ -6,7 +6,7 @@ String formatDuration(Duration duration) {
   if (duration.inHours > 0) {
     parts.add('${duration.inHours}h');
   }
-  if (duration.inMinutes.remainder(60) > 0) {
+  if (duration.inMinutes.remainder(60) > 0 || parts.isEmpty) {
     parts.add('${duration.inMinutes.remainder(60)} min');
   }
   return parts.join(' ');
