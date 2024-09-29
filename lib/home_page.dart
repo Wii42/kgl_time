@@ -29,7 +29,7 @@ class HomePage extends KglPage {
           padding: const EdgeInsets.all(16),
           children: [
             FilledButton(
-              onPressed: () {},
+              onPressed: () {context.go('/newEntry');},
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: Row(

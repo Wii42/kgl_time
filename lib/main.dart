@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import 'all_entries_page.dart';
 import 'home_page.dart';
+import 'new_entry_page.dart';
 
 List<WorkEntry> mockWorkEntries = [
   WorkEntry(
@@ -33,7 +34,8 @@ List<WorkEntry> mockWorkEntries = [
 ];
 
 void main() async {
-  await initializeDateFormatting('de', '_'); // initialize the date formatting for German
+  await initializeDateFormatting(
+      'de', '_'); // initialize the date formatting for German
   runApp(MyApp(appTitle: 'KGL Time', initialEntries: mockWorkEntries));
 }
 
@@ -51,15 +53,26 @@ class MyApp extends StatelessWidget {
     final router = GoRouter(
       routes: [
         GoRoute(
-          path: '/',
-          builder: (context, state) => HomePage(
-            appTitle: appTitle,
-          ),
-          routes: [GoRoute(
-              path: 'allEntries',
-              builder: (context, state) => AllEntriesPage(appTitle: appTitle)),]
-        ),
-
+            path: '/',
+            builder: (context, state) => HomePage(
+                  appTitle: appTitle,
+                ),
+            routes: [
+              GoRoute(
+                  path: 'allEntries',
+                  builder: (context, state) =>
+                      AllEntriesPage(appTitle: appTitle)),
+              GoRoute(
+                  path: 'newEntry',
+                  builder: (context, state) {
+                    WorkEntry? existingEntry;
+                    if (state.extra is WorkEntry) {
+                      existingEntry = state.extra as WorkEntry;
+                    }
+                    return NewEntryPage(
+                        appTitle: appTitle, existingEntry: existingEntry);
+                  }),
+            ]),
       ],
     );
     return ChangeNotifierProvider<WorkEntries>(

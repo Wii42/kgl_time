@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:kgl_time/work_entries.dart';
 import 'package:kgl_time/work_entry.dart';
-
-import 'format_duration.dart';
+import 'package:provider/provider.dart';
 
 abstract class WorkEntryWidget extends StatelessWidget {
   final WorkEntry workEntry;
@@ -24,8 +25,8 @@ abstract class WorkEntryWidget extends StatelessWidget {
           children: [
             details(context),
             switch (rightSideButtonsAxis) {
-              Axis.horizontal => Row(children: rightSideButtons()),
-              Axis.vertical => Column(children: rightSideButtons()),
+              Axis.horizontal => Row(children: rightSideButtons(context)),
+              Axis.vertical => Column(children: rightSideButtons(context)),
             },
           ],
         ),
@@ -33,13 +34,60 @@ abstract class WorkEntryWidget extends StatelessWidget {
     );
   }
 
-  String formattedDate() => DateFormat('EE dd.MM.yyyy', 'de').format(workEntry.date);
+  String formattedDate() =>
+      DateFormat('EE dd.MM.yyyy', 'de').format(workEntry.date);
 
-  List<Widget> rightSideButtons() {
+  List<Widget> rightSideButtons(BuildContext context) {
     return [
-      IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
+      IconButton(
+          onPressed: () {
+            context.go('/newEntry', extra: workEntry);
+          },
+          icon: Icon(Icons.edit)),
       SizedBox(width: 12),
-      IconButton(onPressed: () {}, icon: Icon(Icons.delete))
+      IconButton(
+          onPressed: () {
+            _showDeleteConfirmationDialog(context);
+          },
+          icon: Icon(Icons.delete))
     ];
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Löschen bestätigen'),
+          content: Text('Wollen Sie diesen Eintrag wirklich löschen?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Abbrechen'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Löschen',
+                style:
+                    TextStyle(color: Colors.red), // Highlight the Delete button
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                WorkEntries workEntries =
+                    context.read<WorkEntries>(); // Close the dialog
+                _deleteItem(workEntries); // Call the delete function
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteItem(WorkEntries workEntries) {
+    workEntries.remove(workEntry);
+    print('Item deleted');
   }
 }

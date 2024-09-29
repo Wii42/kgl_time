@@ -1,6 +1,6 @@
 # kgl_time
 
-Arbeitszeiterfassung für die kirchegemeinde LAuterbrunnen
+Arbeitszeiterfassung für die Kirchgemeinde Lauterbrunnen
 
 ## Getting Started
 
