@@ -41,8 +41,6 @@ class IsarPersistentStorage implements PersistentStorage {
   @override
   Future<void> initialize() async {
     dir = await getApplicationDocumentsDirectory();
-    print('Isar database directory: ${dir.path}');
-    print(dir.listSync());
     isar = await Isar.open([WorkEntrySchema], directory: dir.path);
   }
 

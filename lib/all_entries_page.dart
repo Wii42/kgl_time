@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kgl_time/format_duration.dart';
@@ -32,10 +34,16 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
 
   late List<GroupedWorkEntries> _groupedEntries;
 
+  final GlobalKey _buttonKey = GlobalKey();  // GlobalKey to track the button size
+  double _buttonHeight = 0;  // Variable to store the height of the button
+
   @override
   void initState() {
     super.initState();
     _updateGroupedEntries();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getButtonHeight();
+    });
   }
 
   @override
@@ -51,6 +59,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         Align(
           alignment: Alignment.topCenter,
           child: Padding(
+            key: _buttonKey,  // Assign the key to the button
             padding: const EdgeInsets.all(12.0),
             child: SegmentedButton<CalendarUnit>(
                 segments: [
@@ -74,9 +83,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            Padding(
-                padding: const EdgeInsets.all(
-                    16)), // To avoid collision with the SegmentedButton
+            SizedBox(height: max(_buttonHeight-8, 0),), // To avoid collision with the SegmentedButton
             for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -110,6 +117,17 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         return DateFormat('MMMM').format(DateTime(0, calendarUnitValue));
     }
   }
+
+  void _getButtonHeight() {
+    // Use the key to get the RenderBox of the button and measure its height
+    final RenderBox renderBox = _buttonKey.currentContext?.findRenderObject() as RenderBox;
+    final double height = renderBox.size.height;
+
+    setState(() {
+      _buttonHeight = height;  // Update the button height
+    });
+  }
+
 }
 
 /// WorkEntries which are in a specific calendar unit, e.g. week or month
