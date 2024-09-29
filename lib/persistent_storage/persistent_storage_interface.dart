@@ -2,6 +2,8 @@ import 'package:kgl_time/work_entry.dart';
 
 abstract class PersistentStorage {
   /// Initializes the persistent storage service.
+  ///
+  /// Must be called before any other method, otherwise they will throw an exception.
   Future<void> initialize();
 
   /// Gets all work entries from the persistent storage.
