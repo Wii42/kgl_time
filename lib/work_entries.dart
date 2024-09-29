@@ -4,17 +4,31 @@ import 'work_entry.dart';
 import 'package:notifying_list/notifying_list.dart';
 
 class WorkEntries extends ChangeNotifier {
-  late final CallbackNotifyingList<WorkEntry> entries;
+  late final CallbackNotifyingList<WorkEntry> _entries;
 
-  WorkEntries(List<WorkEntry> entries) {
-    entries = List.from(entries);
-    entries.sort((a, b) {
+  WorkEntries(List<WorkEntry> entriesList) {
+    entriesList = List.from(entriesList);
+    sortEntriesInReverse(entriesList);
+    _entries = CallbackNotifyingList<WorkEntry>(notifyListeners);
+    _entries.addAll(entriesList);
+  }
+
+  void sortEntriesInReverse(List<WorkEntry> entriesList) {
+    entriesList.sort((a, b) {
       DateTime aDate = a.startTime ?? a.endTime ?? a.date;
       DateTime bDate = b.startTime ?? b.endTime ?? b.date;
-      return aDate.compareTo(bDate);
+      return -aDate.compareTo(bDate);
     });
-    entries = entries.reversed.toList();
-    this.entries = CallbackNotifyingList<WorkEntry>(notifyListeners);
-    this.entries.addAll(entries);
+  }
+
+  List<WorkEntry> get entries => List.unmodifiable(_entries);
+
+  void add(WorkEntry entry) {
+    _entries.add(entry);
+    sortEntriesInReverse(_entries);
+  }
+
+  void remove(WorkEntry entry) {
+    _entries.remove(entry);
   }
 }

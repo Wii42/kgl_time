@@ -25,6 +25,7 @@ abstract class KglPage extends StatelessWidget {
     String largeTitle = pageTitle ?? appTitle;
     String? smallTitle = pageTitle != null ? appTitle : null;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (smallTitle != null)
           Text(smallTitle,

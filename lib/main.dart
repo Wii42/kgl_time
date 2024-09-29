@@ -4,6 +4,7 @@ import 'package:kgl_time/work_entries.dart';
 import 'package:kgl_time/work_entry.dart';
 import 'package:provider/provider.dart';
 
+import 'all_entries_page.dart';
 import 'home_page.dart';
 
 List<WorkEntry> mockWorkEntries = [
@@ -52,7 +53,11 @@ class MyApp extends StatelessWidget {
           builder: (context, state) => HomePage(
             appTitle: appTitle,
           ),
+          routes: [GoRoute(
+              path: 'allEntries',
+              builder: (context, state) => AllEntriesPage(appTitle: appTitle)),]
         ),
+
       ],
     );
     return ChangeNotifierProvider<WorkEntries>(
@@ -66,14 +71,5 @@ class MyApp extends StatelessWidget {
         routerConfig: router,
       ),
     );
-  }
-
-  bool isInCurrentWeek(DateTime date) {
-    DateTime now = DateTime.now();
-    DateTime today = DateTime(now.year, now.month, now.day);
-    DateTime startOfWeek = today.subtract(Duration(days: today.weekday - 1));
-    DateTime endOfWeek = startOfWeek.add(Duration(days: 8));
-    return (date.isAtSameMomentAs(startOfWeek) || date.isAfter(startOfWeek)) &&
-        date.isBefore(endOfWeek);
   }
 }

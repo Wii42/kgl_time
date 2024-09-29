@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/work_entries.dart';
 import 'package:kgl_time/work_entry.dart';
@@ -15,6 +16,15 @@ class HomePage extends KglPage {
   Widget body(BuildContext context) {
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
+        //Future.delayed(Duration(seconds: 2), () {
+        //  workEntries.add(WorkEntry(
+        //    id: '4',
+        //    workDuration: const Duration(hours: 2),
+        //    date: DateTime.now().subtract(const Duration(days: 2)),
+        //    description: 'Test3',
+        //    categories: [WorkCategory.phoneCall],
+        //  ));
+        //});
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -40,7 +50,7 @@ class HomePage extends KglPage {
             for (WorkEntry entry in workEntries.entries.take(5))
               WorkEntryPreview(workEntry: entry),
             ElevatedButton(
-                onPressed: () {}, child: Text('Alle Einträge anzeigen')),
+                onPressed: () {context.go('/allEntries');}, child: Text('Alle Einträge anzeigen')),
             const SizedBox(height: 32),
             Center(
               child: Text(
