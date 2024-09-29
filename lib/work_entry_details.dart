@@ -27,6 +27,7 @@ class WorkEntryDetails extends WorkEntryWidget {
             children: [
               for (WorkCategory category in workEntry.categories) ...[
                 Chip(
+                  padding: EdgeInsets.zero,
                   label: Text(category.displayName),
                 ),
                 SizedBox(width: 8),

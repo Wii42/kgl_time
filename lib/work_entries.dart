@@ -31,4 +31,10 @@ class WorkEntries extends ChangeNotifier {
   void remove(WorkEntry entry) {
     _entries.remove(entry);
   }
+
+  void updateEntry(WorkEntry workEntry, WorkEntry newEntry) {
+    int index = _entries.indexOf(workEntry);
+    _entries[index] = newEntry;
+    sortEntriesInReverse(_entries);
+  }
 }

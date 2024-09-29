@@ -1,3 +1,6 @@
+import 'package:intl/intl.dart';
+import 'package:kgl_time/work_entry.dart';
+
 String formatDuration(Duration duration) {
   List<String> parts = [];
   if (duration.inHours > 0) {
@@ -8,3 +11,6 @@ String formatDuration(Duration duration) {
   }
   return parts.join(' ');
 }
+
+String formatDate(DateTime date) =>
+    DateFormat('EE dd.MM.yyyy', 'de').format(date);

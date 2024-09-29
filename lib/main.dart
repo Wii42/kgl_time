@@ -11,25 +11,25 @@ import 'new_entry_page.dart';
 
 List<WorkEntry> mockWorkEntries = [
   WorkEntry(
-    id: '1',
+    id: 1,
     workDuration: const Duration(hours: 1),
     date: DateTime.now(),
     description: 'Test',
     categories: [WorkCategory.phoneCall],
   ),
   WorkEntry(
-    id: '2',
+    id: 2,
     workDuration: const Duration(minutes: 30),
     date: DateTime.now().subtract(const Duration(days: 1, hours: 12)),
     description: 'Test2',
-    categories: [WorkCategory.phoneCall],
+    categories: [WorkCategory.category2],
   ),
   WorkEntry(
-    id: '3',
+    id: 3,
     workDuration: const Duration(hours: 1, minutes: 30),
     date: DateTime.now().subtract(const Duration(days: 7)),
     description: 'old entry',
-    categories: [WorkCategory.phoneCall],
+    categories: [WorkCategory.category4, WorkCategory.category5],
   ),
 ];
 

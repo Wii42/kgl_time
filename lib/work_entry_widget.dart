@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/work_entries.dart';
 import 'package:kgl_time/work_entry.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ abstract class WorkEntryWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            details(context),
+            Expanded(child: details(context)),
             switch (rightSideButtonsAxis) {
               Axis.horizontal => Row(children: rightSideButtons(context)),
               Axis.vertical => Column(children: rightSideButtons(context)),
@@ -34,8 +35,7 @@ abstract class WorkEntryWidget extends StatelessWidget {
     );
   }
 
-  String formattedDate() =>
-      DateFormat('EE dd.MM.yyyy', 'de').format(workEntry.date);
+  String formattedDate() => formatDate(workEntry.date);
 
   List<Widget> rightSideButtons(BuildContext context) {
     return [

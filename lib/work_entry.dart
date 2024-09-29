@@ -1,5 +1,5 @@
 class WorkEntry {
-  String id;
+  int id;
   Duration workDuration;
   DateTime date;
   String? description;
@@ -19,7 +19,12 @@ class WorkEntry {
 
 enum WorkCategory {
   phoneCall('Telefonanruf'),
+  category2('Kategorie 2'),
+  category3('Kategorie 3'),
+  category4('Kategorie 4'),
+  category5('Kategorie 5'),
   ;
+
   final String displayName;
 
   const WorkCategory(this.displayName);
