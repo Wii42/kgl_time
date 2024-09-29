@@ -84,9 +84,11 @@ class MyApp extends StatelessWidget {
         locale: const Locale('de'),
         title: appTitle,
         theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
-            useMaterial3: true,
-            ).copyWith(appBarTheme: AppBarTheme(backgroundColor: appBarColor, foregroundColor: Colors.white)),
+          colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
+          useMaterial3: true,
+        ).copyWith(
+            appBarTheme: AppBarTheme(
+                backgroundColor: appBarColor, foregroundColor: Colors.white)),
         routerConfig: router,
       ),
     );
