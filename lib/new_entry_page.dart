@@ -152,14 +152,13 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   void saveEntry(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       WorkEntry newEntry = WorkEntry(
-        workDuration: Duration(minutes: int.parse(durationController.text)),
+        workDurationInSeconds: Duration(minutes: int.parse(durationController.text)).inSeconds,
         date: selectedDate,
         categories: [
           for (int i = 0; i < WorkCategory.values.length; i++)
             if (categorySelection[i]) WorkCategory.values[i]
         ],
         description: descriptionController.text,
-        id: widget.existingEntry?.id ?? UniqueKey().hashCode,
         startTime: widget.existingEntry?.startTime,
         endTime: widget.existingEntry?.endTime,
       );

@@ -9,12 +9,9 @@ abstract class KglPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: appbarTitle(context),
-        //backgroundColor: theme.primaryColor,
-        //foregroundColor: Colors.white,
       ),
       body: body(context),
     );

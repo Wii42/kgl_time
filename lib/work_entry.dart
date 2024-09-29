@@ -1,20 +1,28 @@
+import 'package:isar/isar.dart';
+
+part 'work_entry.g.dart';
+
+@collection
 class WorkEntry {
-  int id;
-  Duration workDuration;
+  Id id = Isar.autoIncrement;
+  int workDurationInSeconds;
   DateTime date;
   String? description;
+  @enumerated
   List<WorkCategory> categories;
   DateTime? startTime;
   DateTime? endTime;
 
   WorkEntry(
-      {required this.id,
-      required this.workDuration,
+      {required this.workDurationInSeconds,
       required this.date,
       this.description,
       this.categories = const [],
       this.startTime,
       this.endTime});
+
+  @ignore
+  Duration get workDuration => Duration(seconds: workDurationInSeconds);
 }
 
 enum WorkCategory {
