@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kgl_time/work_entry.dart';
-import 'package:kgl_time/work_entry_widget.dart';
+import 'package:kgl_time/enums/work_category.dart';
 
-import 'format_duration.dart';
+import '../format_duration.dart';
+import 'work_entry_widget.dart';
 
 class WorkEntryDetails extends WorkEntryWidget {
   const WorkEntryDetails({super.key, required super.workEntry});

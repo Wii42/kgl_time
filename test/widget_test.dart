@@ -7,13 +7,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kgl_time/kgl_time_app.dart';
 
 import 'package:kgl_time/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp(appTitle: 'test',));
+    await tester.pumpWidget(const KglTimeApp(appTitle: 'test',));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

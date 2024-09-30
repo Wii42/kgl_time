@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import 'package:kgl_time/enums/work_category.dart';
 
 part 'work_entry.g.dart';
 
@@ -23,17 +24,4 @@ class WorkEntry {
 
   @ignore
   Duration get workDuration => Duration(seconds: workDurationInSeconds);
-}
-
-enum WorkCategory {
-  phoneCall('Telefonanruf'),
-  category2('Kategorie 2'),
-  category3('Kategorie 3'),
-  category4('Kategorie 4'),
-  category5('Kategorie 5'),
-  ;
-
-  final String displayName;
-
-  const WorkCategory(this.displayName);
 }

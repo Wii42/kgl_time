@@ -1,4 +1,4 @@
-import 'package:kgl_time/work_entry.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
 
 abstract class PersistentStorage {
   /// Initializes the persistent storage service.

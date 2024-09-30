@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kgl_time/kgl_page.dart';
-import 'package:kgl_time/work_entries.dart';
-import 'package:kgl_time/work_entry.dart';
+import 'package:kgl_time/data_model/work_entries.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
+import 'package:kgl_time/enums/work_category.dart';
+import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:provider/provider.dart';
 
-import 'format_duration.dart';
 
 class NewEntryPage extends KglPage {
   /// The existing entry to edit, or null if a new entry should be created.

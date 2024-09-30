@@ -2,13 +2,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kgl_time/data_model/grouped_work_entries.dart';
+import 'package:kgl_time/data_model/work_entries.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
+import 'package:kgl_time/enums/calendar_unit.dart';
 import 'package:kgl_time/format_duration.dart';
-import 'package:kgl_time/kgl_page.dart';
-import 'package:kgl_time/work_entries.dart';
-import 'package:kgl_time/work_entry.dart';
-import 'package:kgl_time/work_entry_details.dart';
+import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:provider/provider.dart';
-import 'package:week_number/iso.dart';
+
+import 'kgl_page.dart';
 
 class AllEntriesPage extends KglPage {
   @override
@@ -34,8 +36,9 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
 
   late List<GroupedWorkEntries> _groupedEntries;
 
-  final GlobalKey _buttonKey = GlobalKey();  // GlobalKey to track the button size
-  double _buttonHeight = 0;  // Variable to store the height of the button
+  /// // GlobalKey to track the button size
+  final GlobalKey _buttonKey = GlobalKey();
+  double _buttonHeight = 0; // Variable to store the height of the button
 
   @override
   void initState() {
@@ -59,7 +62,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         Align(
           alignment: Alignment.topCenter,
           child: Padding(
-            key: _buttonKey,  // Assign the key to the button
+            key: _buttonKey, // Assign the key to the button
             padding: const EdgeInsets.all(12.0),
             child: SegmentedButton<CalendarUnit>(
                 segments: [
@@ -83,7 +86,9 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            SizedBox(height: max(_buttonHeight-8, 0),), // To avoid collision with the SegmentedButton
+            SizedBox(
+              height: max(_buttonHeight - 8, 0),
+            ), // To avoid collision with the SegmentedButton
             for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,62 +119,18 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
       case CalendarUnit.week:
         return 'Kalenderwoche $calendarUnitValue,';
       case CalendarUnit.month:
-        return DateFormat('MMMM').format(DateTime(0, calendarUnitValue));
+        return DateFormat('MMMM', 'de').format(DateTime(0, calendarUnitValue));
     }
   }
 
   void _getButtonHeight() {
     // Use the key to get the RenderBox of the button and measure its height
-    final RenderBox renderBox = _buttonKey.currentContext?.findRenderObject() as RenderBox;
+    final RenderBox renderBox =
+        _buttonKey.currentContext?.findRenderObject() as RenderBox;
     final double height = renderBox.size.height;
 
     setState(() {
-      _buttonHeight = height;  // Update the button height
+      _buttonHeight = height; // Update the button height
     });
   }
-
-}
-
-/// WorkEntries which are in a specific calendar unit, e.g. week or month
-class GroupedWorkEntries {
-  final List<WorkEntry> entries;
-  final CalendarUnit calendarUnit;
-  final int calendarUnitValue; // e.g. week number or month number
-  final int year;
-
-  const GroupedWorkEntries(
-      {required this.entries,
-      required this.calendarUnit,
-      required this.calendarUnitValue,
-      required this.year});
-
-  Duration totalWorkDuration() {
-    return entries.fold(Duration.zero,
-        (previousValue, element) => previousValue + element.workDuration);
-  }
-
-  static List<GroupedWorkEntries> groupEntriesByCalendarUnit(
-      List<WorkEntry> entries, CalendarUnit calendarUnit) {
-    Map<(int, int), List<WorkEntry>> entriesByCalendarUnit = {};
-    for (WorkEntry entry in entries) {
-      int calendarUnitNumber = switch (calendarUnit) {
-        CalendarUnit.week => entry.date.weekNumber,
-        CalendarUnit.month => entry.date.month,
-      };
-      entriesByCalendarUnit.putIfAbsent(
-          (calendarUnitNumber, entry.date.year), () => []).add(entry);
-    }
-    return entriesByCalendarUnit.entries
-        .map((entry) => GroupedWorkEntries(
-            entries: entry.value,
-            calendarUnit: calendarUnit,
-            calendarUnitValue: entry.key.$1,
-            year: entry.key.$2))
-        .toList();
-  }
-}
-
-enum CalendarUnit {
-  week,
-  month,
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kgl_time/work_entry_widget.dart';
 
-import 'format_duration.dart';
+import '../format_duration.dart';
+import 'work_entry_widget.dart';
 
 class WorkEntryPreview extends WorkEntryWidget {
   @override

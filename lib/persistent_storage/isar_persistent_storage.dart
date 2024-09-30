@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:isar/isar.dart';
-import 'package:kgl_time/work_entry.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'persistent_storage_interface.dart';

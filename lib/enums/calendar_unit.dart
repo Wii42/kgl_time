@@ -1,0 +1,4 @@
+enum CalendarUnit {
+  week,
+  month,
+}

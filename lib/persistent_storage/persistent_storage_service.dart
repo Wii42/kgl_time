@@ -1,5 +1,6 @@
-import 'package:kgl_time/persistent_storage/persistent_storage_interface.dart';
-import 'package:kgl_time/work_entry.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
+
+import 'persistent_storage_interface.dart';
 
 /// A service that provides access to a persistent storage for work entries.
 ///

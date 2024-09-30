@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/data_model/work_entries.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
+import 'package:kgl_time/date_week.dart';
 import 'package:kgl_time/format_duration.dart';
-import 'package:kgl_time/work_entries.dart';
-import 'package:kgl_time/work_entry.dart';
-import 'package:kgl_time/work_entry_preview.dart';
+import 'package:kgl_time/work_entry_widgets/work_entry_preview.dart';
 import 'package:provider/provider.dart';
 
-import 'date_week.dart';
 import 'kgl_page.dart';
 
 class HomePage extends KglPage {
@@ -16,15 +16,6 @@ class HomePage extends KglPage {
   Widget body(BuildContext context) {
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
-        //Future.delayed(Duration(seconds: 2), () {
-        //  workEntries.add(WorkEntry(
-        //    id: '4',
-        //    workDuration: const Duration(hours: 2),
-        //    date: DateTime.now().subtract(const Duration(days: 2)),
-        //    description: 'Test3',
-        //    categories: [WorkCategory.phoneCall],
-        //  ));
-        //});
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [

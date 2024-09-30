@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
+import 'package:notifying_list/notifying_list.dart';
 
 import 'work_entry.dart';
-import 'package:notifying_list/notifying_list.dart';
 
 class WorkEntries extends ChangeNotifier {
   final PersistentStorageService storage =
