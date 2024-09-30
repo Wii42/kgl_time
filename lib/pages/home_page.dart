@@ -14,43 +14,61 @@ class HomePage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
+    TextTheme textTheme = Theme.of(context).textTheme;
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
-        return ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            FilledButton(
-              onPressed: () {context.go('/newEntry');},
-              child: Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return KglPage.alwaysFillingScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FilledButton(
+                  onPressed: () => context.go('/newEntry'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Neuen Eintrag erfassen',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.apply(color: Colors.white)),
+                        Icon(Icons.add),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                if (workEntries.entries.isNotEmpty)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text('Neuen Eintrag erfassen',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.apply(color: Colors.white)),
-                    Icon(Icons.add),
+                    Text('Letzte Einträge'),
+                    for (WorkEntry entry in workEntries.entries.take(5))
+                      WorkEntryPreview(workEntry: entry),
+                    ElevatedButton(
+                        onPressed: () => context.go('/allEntries'),
+                        child: Text('Alle Einträge anzeigen')),
+                  ],
+                )else Center(child: Text('Keine Einträge vorhanden')),
+                const SizedBox(height: 32),
+                Column(
+                  children: [
+                    Text(
+                      'Aktuelle Woche: ${formatDuration(totalThisWeek(workEntries.entries))}',
+                      style: textTheme.bodyLarge,
+                    ),
+                    Text(
+                        'Aktueller Monat: ${formatDuration(totalThisMonth(workEntries.entries))}',
+                        style: textTheme.bodyLarge),
                   ],
                 ),
-              ),
+              ],
             ),
-            const SizedBox(height: 32),
-            Text('Letzte Einträge'),
-            for (WorkEntry entry in workEntries.entries.take(5))
-              WorkEntryPreview(workEntry: entry),
-            ElevatedButton(
-                onPressed: () {context.go('/allEntries');}, child: Text('Alle Einträge anzeigen')),
-            const SizedBox(height: 32),
-            Center(
-              child: Text(
-                  'Aktuelle Woche: ${formatDuration(totalThisWeek(workEntries.entries))}'),
-            ),
-            Center(
-                child: Text(
-                    'Aktueller Monat: ${formatDuration(totalThisMonth(workEntries.entries))}')),
-          ],
+          ),
         );
       },
     );

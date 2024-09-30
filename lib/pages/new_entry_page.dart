@@ -8,7 +8,6 @@ import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:provider/provider.dart';
 
-
 class NewEntryPage extends KglPage {
   /// The existing entry to edit, or null if a new entry should be created.
   final WorkEntry? existingEntry;
@@ -65,87 +64,94 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Form(
       key: _formKey,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: TextFormField(
-              controller: durationController,
-              style: textTheme.displaySmall,
-              autofocus: true,
-              decoration: InputDecoration(
-                  labelText: 'Arbeitsdauer',
-                  labelStyle: textTheme.bodyLarge,
-                  suffixText: 'min'),
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Bitte geben Sie eine Dauer ein. Nur Ziffern erlaubt';
-                }
-                return null;
-              },
-            ),
-          ),
-          SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            alignment: WrapAlignment.center,
-            children: _buildCategoryChips(context),
-          ),
-          SizedBox(height: 16),
-          TextFormField(
-            controller: descriptionController,
-            decoration: InputDecoration(
-              labelText: 'Beschreibung',
-            ),
-            maxLines: 1,
-            maxLengthEnforcement:
-                MaxLengthEnforcement.truncateAfterCompositionEnds,
-          ),
-          SizedBox(height: 16),
-          TextFormField(
-            controller: dateController,
-            decoration: InputDecoration(
-              labelText: 'Datum',
-              prefixIcon: Icon(Icons.calendar_today),
-            ),
-            readOnly: true,
-            onTap: () async {
-              DateTime? newDate = await showDatePicker(
-                //locale: Locale('de'),
-                context: context,
-                initialDate: selectedDate,
-                firstDate: DateTime(2000),
-                lastDate: DateTime(2100),
-              );
-              if (newDate != null) {
-                setState(() {
-                  selectedDate = newDate;
-                  dateController.text = formatDate(selectedDate);
-                });
-              }
-            },
-          ),
-          SizedBox(height: 16),
-          Row(
+      child: KglPage.alwaysFillingScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    context.pop();
+            children: <Widget>[
+              SizedBox(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: TextFormField(
+                  controller: durationController,
+                  style: textTheme.displaySmall,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                      labelText: 'Arbeitsdauer',
+                      labelStyle: textTheme.bodyLarge,
+                      suffixText: 'min'),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Bitte geben Sie eine Dauer ein. Nur Ziffern erlaubt';
+                    }
+                    return null;
                   },
-                  child: Text('Abbrechen')),
-              FilledButton(
-                  onPressed: () {
-                    saveEntry(context);
-                  },
-                  child: Text('Speichern'))
+                ),
+              ),
+              SizedBox(height: 16),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                alignment: WrapAlignment.center,
+                children: _buildCategoryChips(context),
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: descriptionController,
+                decoration: InputDecoration(
+                  labelText: 'Beschreibung',
+                ),
+                maxLines: 1,
+                maxLengthEnforcement:
+                    MaxLengthEnforcement.truncateAfterCompositionEnds,
+              ),
+              SizedBox(height: 16),
+              TextFormField(
+                controller: dateController,
+                decoration: InputDecoration(
+                  labelText: 'Datum',
+                  prefixIcon: Icon(Icons.calendar_today),
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? newDate = await showDatePicker(
+                    //locale: Locale('de'),
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2100),
+                  );
+                  if (newDate != null) {
+                    setState(() {
+                      selectedDate = newDate;
+                      dateController.text = formatDate(selectedDate);
+                    });
+                  }
+                },
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      child: Text('Abbrechen')),
+                  FilledButton(
+                      onPressed: () {
+                        saveEntry(context);
+                      },
+                      child: Text('Speichern'))
+                ],
+              ),
+              SizedBox()
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -153,7 +159,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   void saveEntry(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       WorkEntry newEntry = WorkEntry(
-        workDurationInSeconds: Duration(minutes: int.parse(durationController.text)).inSeconds,
+        workDurationInSeconds:
+            Duration(minutes: int.parse(durationController.text)).inSeconds,
         date: selectedDate,
         categories: [
           for (int i = 0; i < WorkCategory.values.length; i++)
@@ -181,6 +188,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     return [
       for (WorkCategory category in WorkCategory.values)
         ChoiceChip(
+          //avatar: category.icon != null? Icon(category.icon): null,
           label: Text(category.displayName),
           selected: categorySelection[category.index],
           onSelected: (selected) {

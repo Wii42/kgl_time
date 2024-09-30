@@ -53,6 +53,7 @@ abstract class WorkEntryWidget extends StatelessWidget {
   }
 
   void _showDeleteConfirmationDialog(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -70,7 +71,7 @@ abstract class WorkEntryWidget extends StatelessWidget {
               child: Text(
                 'Löschen',
                 style:
-                    TextStyle(color: Colors.red), // Highlight the Delete button
+                    TextStyle(color: theme.colorScheme.error), // Highlight the Delete button
               ),
               onPressed: () {
                 Navigator.of(context).pop();

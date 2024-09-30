@@ -41,7 +41,7 @@ abstract class KglPage extends StatelessWidget {
   /// Note the provided [constraints] in [builder] are measured before the
   /// ScrollView is applied, e.g. the visible available space, not the space
   /// inside the ScrollView.
-  Widget alwaysFillingScrollView(
+  static Widget alwaysFillingScrollView(
       {Widget? child, Widget Function(BuildContext, BoxConstraints)? builder}) {
     assert(child != null || builder != null);
     return LayoutBuilder(builder: (context, constraints) {

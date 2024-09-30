@@ -27,6 +27,7 @@ class WorkEntryDetails extends WorkEntryWidget {
             children: [
               for (WorkCategory category in workEntry.categories) ...[
                 Chip(
+                  //avatar: category.icon != null? Icon(category.icon): null,
                   padding: EdgeInsets.zero,
                   label: Text(category.displayName),
                 ),
