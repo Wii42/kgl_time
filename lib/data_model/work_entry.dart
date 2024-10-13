@@ -1,16 +1,20 @@
 import 'package:isar/isar.dart';
-import 'package:kgl_time/enums/work_category.dart';
+import 'package:kgl_time/data_model/work_category.dart';
+
+import '../isar_icon_data.dart';
+import 'isar_storable.dart';
 
 part 'work_entry.g.dart';
 
 @collection
-class WorkEntry {
+class WorkEntry implements IsarStorable {
+  @override
   Id id = Isar.autoIncrement;
   int workDurationInSeconds;
   DateTime date;
   String? description;
   @enumerated
-  List<WorkCategory> categories;
+  List<EmbeddedWorkCategory> categories;
   DateTime? startTime;
   DateTime? endTime;
 

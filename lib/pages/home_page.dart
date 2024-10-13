@@ -53,7 +53,7 @@ class HomePage extends KglPage {
                         onPressed: () => context.go('/allEntries'),
                         child: Text('Alle Einträge anzeigen')),
                   ],
-                )else Center(child: Text('Keine Einträge vorhanden')),
+                )else Center(child: Text('Noch keine Einträge vorhanden')),
                 const SizedBox(height: 32),
                 Column(
                   children: [

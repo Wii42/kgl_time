@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/enums/work_category.dart';
+import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:provider/provider.dart';
@@ -14,10 +15,14 @@ class NewEntryPage extends KglPage {
   const NewEntryPage({super.key, required super.appTitle, this.existingEntry});
 
   @override
-  Widget body(BuildContext context) => Consumer<WorkEntries>(
-        builder: (context, workEntries, _) => _NewEntryStatefulPage(
-          existingEntry: existingEntry,
-          key: key,
+  Widget body(BuildContext context) => Consumer<WorkCategories>(
+        /// TODO: Check if WorkEntries is needed here
+        builder: (context, workCategories, _) => Consumer<WorkEntries>(
+          builder: (context, workEntries, _) => _NewEntryStatefulPage(
+            existingEntry: existingEntry,
+            categories: workCategories.entries,
+            key: key,
+          ),
         ),
       );
 
@@ -28,7 +33,9 @@ class NewEntryPage extends KglPage {
 
 class _NewEntryStatefulPage extends StatefulWidget {
   final WorkEntry? existingEntry;
-  const _NewEntryStatefulPage({super.key, required this.existingEntry});
+  final List<WorkCategory> categories;
+  const _NewEntryStatefulPage(
+      {super.key, required this.existingEntry, required this.categories});
 
   @override
   _NewEntryStatefulPageState createState() => _NewEntryStatefulPageState();
@@ -46,11 +53,14 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   @override
   void initState() {
     super.initState();
-    categorySelection = List.generate(WorkCategory.values.length, (int index) {
-      if (widget.existingEntry == null) return false;
-      return widget.existingEntry!.categories
-          .contains(WorkCategory.values[index]);
-    });
+    categorySelection = [
+      for (WorkCategory category in widget.categories)
+        if (widget.existingEntry == null)
+          false
+        else
+          widget.existingEntry!.categories.contains(category)
+    ];
+
     selectedDate = widget.existingEntry?.date ?? DateTime.now();
     dateController = TextEditingController(text: formatDate(selectedDate));
     durationController = TextEditingController(
@@ -163,8 +173,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
             Duration(minutes: int.parse(durationController.text)).inSeconds,
         date: selectedDate,
         categories: [
-          for (int i = 0; i < WorkCategory.values.length; i++)
-            if (categorySelection[i]) WorkCategory.values[i]
+          for (int i = 0; i < widget.categories.length; i++)
+            if (categorySelection[i]) widget.categories[i].toEmbedded()
         ],
         description: descriptionController.text,
         startTime: widget.existingEntry?.startTime,
@@ -186,14 +196,14 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
 
   List<Widget> _buildCategoryChips(BuildContext context) {
     return [
-      for (WorkCategory category in WorkCategory.values)
+      for ((int index, IWorkCategory category) element in widget.categories.indexed)
         ChoiceChip(
           //avatar: category.icon != null? Icon(category.icon): null,
-          label: Text(category.displayName),
-          selected: categorySelection[category.index],
+          label: Text(element.$2.displayName),
+          selected: categorySelection[element.$1],
           onSelected: (selected) {
             setState(() {
-              categorySelection[category.index] = selected;
+              categorySelection[element.$1] = selected;
             });
           },
         ),

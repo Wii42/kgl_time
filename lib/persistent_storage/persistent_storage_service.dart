@@ -1,4 +1,5 @@
 import 'package:kgl_time/data_model/work_entry.dart';
+import 'package:kgl_time/data_model/work_category.dart';
 
 import 'persistent_storage_interface.dart';
 
@@ -24,27 +25,9 @@ class PersistentStorageService implements PersistentStorage {
   PersistentStorage? _implementation;
 
   @override
-  Future<void> addEntry(WorkEntry entry) {
-    _checkHasImplementation();
-    return _implementation!.addEntry(entry);
-  }
-
-  @override
   Future<void> close() {
     _checkHasImplementation();
     return _implementation!.close();
-  }
-
-  @override
-  Future<void> deleteAllEntries() {
-    _checkHasImplementation();
-    return _implementation!.deleteAllEntries();
-  }
-
-  @override
-  Future<void> deleteEntry(WorkEntry entry) {
-    _checkHasImplementation();
-    return _implementation!.deleteEntry(entry);
   }
 
   @override
@@ -53,28 +36,22 @@ class PersistentStorageService implements PersistentStorage {
     return _implementation!.initialize();
   }
 
-  @override
-  Future<List<WorkEntry>> loadEntries() {
-    _checkHasImplementation();
-    return _implementation!.loadEntries();
-  }
-
-  @override
-  Future<void> saveEntries(List<WorkEntry> entries) {
-    _checkHasImplementation();
-    return _implementation!.saveEntries(entries);
-  }
-
-  @override
-  Future<void> updateEntry(WorkEntry newEntry, WorkEntry oldEntry) {
-    _checkHasImplementation();
-    return _implementation!.updateEntry(newEntry, oldEntry);
-  }
-
   void _checkHasImplementation() {
     if (_implementation == null) {
       throw StateError(
           'No PersistentStorage implementation provided for PersistentStorageService');
     }
+  }
+
+  @override
+  Table<WorkCategory> get workCategories {
+    _checkHasImplementation();
+    return _implementation!.workCategories;
+  }
+
+  @override
+  Table<WorkEntry> get workEntries {
+    _checkHasImplementation();
+    return _implementation!.workEntries;
   }
 }

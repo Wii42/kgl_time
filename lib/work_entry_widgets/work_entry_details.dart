@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kgl_time/enums/work_category.dart';
+import 'package:kgl_time/data_model/work_category.dart';
 
 import '../format_duration.dart';
 import 'work_entry_widget.dart';
@@ -25,7 +25,7 @@ class WorkEntryDetails extends WorkEntryWidget {
           SizedBox(height: 8),
           Wrap(
             children: [
-              for (WorkCategory category in workEntry.categories) ...[
+              for (IWorkCategory category in workEntry.categories) ...[
                 Chip(
                   //avatar: category.icon != null? Icon(category.icon): null,
                   padding: EdgeInsets.zero,

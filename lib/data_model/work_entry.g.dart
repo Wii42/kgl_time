@@ -20,8 +20,8 @@ const WorkEntrySchema = CollectionSchema(
     r'categories': PropertySchema(
       id: 0,
       name: r'categories',
-      type: IsarType.byteList,
-      enumMap: _WorkEntrycategoriesEnumValueMap,
+      type: IsarType.objectList,
+      target: r'EmbeddedWorkCategory',
     ),
     r'date': PropertySchema(
       id: 1,
@@ -56,7 +56,10 @@ const WorkEntrySchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {},
-  embeddedSchemas: {},
+  embeddedSchemas: {
+    r'EmbeddedWorkCategory': EmbeddedWorkCategorySchema,
+    r'IsarIconData': IsarIconDataSchema
+  },
   getId: _workEntryGetId,
   getLinks: _workEntryGetLinks,
   attach: _workEntryAttach,
@@ -69,7 +72,15 @@ int _workEntryEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.categories.length;
+  bytesCount += 3 + object.categories.length * 3;
+  {
+    final offsets = allOffsets[EmbeddedWorkCategory]!;
+    for (var i = 0; i < object.categories.length; i++) {
+      final value = object.categories[i];
+      bytesCount +=
+          EmbeddedWorkCategorySchema.estimateSize(value, offsets, allOffsets);
+    }
+  }
   {
     final value = object.description;
     if (value != null) {
@@ -85,8 +96,12 @@ void _workEntrySerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeByteList(
-      offsets[0], object.categories.map((e) => e.index).toList());
+  writer.writeObjectList<EmbeddedWorkCategory>(
+    offsets[0],
+    allOffsets,
+    EmbeddedWorkCategorySchema.serialize,
+    object.categories,
+  );
   writer.writeDateTime(offsets[1], object.date);
   writer.writeString(offsets[2], object.description);
   writer.writeDateTime(offsets[3], object.endTime);
@@ -101,11 +116,12 @@ WorkEntry _workEntryDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = WorkEntry(
-    categories: reader
-            .readByteList(offsets[0])
-            ?.map((e) =>
-                _WorkEntrycategoriesValueEnumMap[e] ?? WorkCategory.phoneCall)
-            .toList() ??
+    categories: reader.readObjectList<EmbeddedWorkCategory>(
+          offsets[0],
+          EmbeddedWorkCategorySchema.deserialize,
+          allOffsets,
+          EmbeddedWorkCategory(),
+        ) ??
         const [],
     date: reader.readDateTime(offsets[1]),
     description: reader.readStringOrNull(offsets[2]),
@@ -125,11 +141,12 @@ P _workEntryDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader
-              .readByteList(offset)
-              ?.map((e) =>
-                  _WorkEntrycategoriesValueEnumMap[e] ?? WorkCategory.phoneCall)
-              .toList() ??
+      return (reader.readObjectList<EmbeddedWorkCategory>(
+            offset,
+            EmbeddedWorkCategorySchema.deserialize,
+            allOffsets,
+            EmbeddedWorkCategory(),
+          ) ??
           const []) as P;
     case 1:
       return (reader.readDateTime(offset)) as P;
@@ -145,21 +162,6 @@ P _workEntryDeserializeProp<P>(
       throw IsarError('Unknown property with id $propertyId');
   }
 }
-
-const _WorkEntrycategoriesEnumValueMap = {
-  'phoneCall': 0,
-  'category2': 1,
-  'category3': 2,
-  'category4': 3,
-  'category5': 4,
-};
-const _WorkEntrycategoriesValueEnumMap = {
-  0: WorkCategory.phoneCall,
-  1: WorkCategory.category2,
-  2: WorkCategory.category3,
-  3: WorkCategory.category4,
-  4: WorkCategory.category5,
-};
 
 Id _workEntryGetId(WorkEntry object) {
   return object.id;
@@ -252,62 +254,6 @@ extension WorkEntryQueryWhere
 
 extension WorkEntryQueryFilter
     on QueryBuilder<WorkEntry, WorkEntry, QFilterCondition> {
-  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesElementEqualTo(WorkCategory value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'categories',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesElementGreaterThan(
-    WorkCategory value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'categories',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesElementLessThan(
-    WorkCategory value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'categories',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesElementBetween(
-    WorkCategory lower,
-    WorkCategory upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'categories',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
-  }
-
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
       categoriesLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
@@ -853,7 +799,14 @@ extension WorkEntryQueryFilter
 }
 
 extension WorkEntryQueryObject
-    on QueryBuilder<WorkEntry, WorkEntry, QFilterCondition> {}
+    on QueryBuilder<WorkEntry, WorkEntry, QFilterCondition> {
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> categoriesElement(
+      FilterQuery<EmbeddedWorkCategory> q) {
+    return QueryBuilder.apply(this, (query) {
+      return query.object(q, r'categories');
+    });
+  }
+}
 
 extension WorkEntryQueryLinks
     on QueryBuilder<WorkEntry, WorkEntry, QFilterCondition> {}
@@ -1001,12 +954,6 @@ extension WorkEntryQuerySortThenBy
 
 extension WorkEntryQueryWhereDistinct
     on QueryBuilder<WorkEntry, WorkEntry, QDistinct> {
-  QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByCategories() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'categories');
-    });
-  }
-
   QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'date');
@@ -1048,7 +995,7 @@ extension WorkEntryQueryProperty
     });
   }
 
-  QueryBuilder<WorkEntry, List<WorkCategory>, QQueryOperations>
+  QueryBuilder<WorkEntry, List<EmbeddedWorkCategory>, QQueryOperations>
       categoriesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'categories');
