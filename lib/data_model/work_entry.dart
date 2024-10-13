@@ -6,7 +6,7 @@ import 'isar_storable.dart';
 
 part 'work_entry.g.dart';
 
-@collection
+@Collection(accessor: 'workEntries')
 class WorkEntry implements IsarStorable {
   @override
   Id id = Isar.autoIncrement;
