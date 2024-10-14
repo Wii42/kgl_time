@@ -32,6 +32,11 @@ const WorkCategorySchema = CollectionSchema(
       name: r'icon',
       type: IsarType.object,
       target: r'IsarIconData',
+    ),
+    r'listIndex': PropertySchema(
+      id: 3,
+      name: r'listIndex',
+      type: IsarType.long,
     )
   },
   estimateSize: _workCategoryEstimateSize,
@@ -80,6 +85,7 @@ void _workCategorySerialize(
     IsarIconDataSchema.serialize,
     object.icon,
   );
+  writer.writeLong(offsets[3], object.listIndex);
 }
 
 WorkCategory _workCategoryDeserialize(
@@ -95,6 +101,7 @@ WorkCategory _workCategoryDeserialize(
       IsarIconDataSchema.deserialize,
       allOffsets,
     ),
+    listIndex: reader.readLongOrNull(offsets[3]) ?? -1,
   );
   object.id = id;
   return object;
@@ -117,6 +124,8 @@ P _workCategoryDeserializeProp<P>(
         IsarIconDataSchema.deserialize,
         allOffsets,
       )) as P;
+    case 3:
+      return (reader.readLongOrNull(offset) ?? -1) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -477,6 +486,62 @@ extension WorkCategoryQueryFilter
       ));
     });
   }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+      listIndexEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'listIndex',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+      listIndexGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'listIndex',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+      listIndexLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'listIndex',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+      listIndexBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'listIndex',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension WorkCategoryQueryObject
@@ -516,6 +581,18 @@ extension WorkCategoryQuerySortBy
   QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> sortByHashCodeDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hashCode', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> sortByListIndex() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'listIndex', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> sortByListIndexDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'listIndex', Sort.desc);
     });
   }
 }
@@ -558,6 +635,18 @@ extension WorkCategoryQuerySortThenBy
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> thenByListIndex() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'listIndex', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> thenByListIndexDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'listIndex', Sort.desc);
+    });
+  }
 }
 
 extension WorkCategoryQueryWhereDistinct
@@ -572,6 +661,12 @@ extension WorkCategoryQueryWhereDistinct
   QueryBuilder<WorkCategory, WorkCategory, QDistinct> distinctByHashCode() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'hashCode');
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QDistinct> distinctByListIndex() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'listIndex');
     });
   }
 }
@@ -599,6 +694,12 @@ extension WorkCategoryQueryProperty
   QueryBuilder<WorkCategory, IsarIconData?, QQueryOperations> iconProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'icon');
+    });
+  }
+
+  QueryBuilder<WorkCategory, int, QQueryOperations> listIndexProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'listIndex');
     });
   }
 }

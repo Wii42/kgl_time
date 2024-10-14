@@ -14,3 +14,7 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+TODOs:
+- [ ] Add an id to the categories, so they are correctly matched.
+- [ ] Change the category in the entries if the category is changed.

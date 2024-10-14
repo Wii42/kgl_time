@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 abstract class KglPage extends StatelessWidget {
   final String appTitle;
 
   Widget body(BuildContext context);
   String? get pageTitle => null;
+  bool get showSettingsButton => true;
   const KglPage({super.key, required this.appTitle});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
         title: appbarTitle(context),
+        actions: [
+          if (showSettingsButton)
+          IconButton(
+            icon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.settings),
+            ),
+            onPressed: () {
+              context.go('/settings');
+            },
+          ),
+        ],
       ),
       body: body(context),
     );

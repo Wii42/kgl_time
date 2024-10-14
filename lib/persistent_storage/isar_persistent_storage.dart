@@ -41,10 +41,9 @@ class IsarTable<T extends IsarStorable> implements Table<T> {
 
   @override
   Future<void> addEntry(T entry) async {
-    await isar.writeTxn(() async {
+    return isar.writeTxn(() async {
       await collection.put(entry);
     });
-    return;
   }
 
   @override
@@ -56,10 +55,9 @@ class IsarTable<T extends IsarStorable> implements Table<T> {
 
   @override
   Future<void> deleteEntry(T entry) async {
-    await isar.writeTxn(() async {
+    return isar.writeTxn(() async {
       await collection.delete(entry.id);
     });
-    return;
   }
 
   @override
@@ -79,6 +77,9 @@ class IsarTable<T extends IsarStorable> implements Table<T> {
   @override
   Future<void> updateEntry(T newEntry, T oldEntry) async {
     await isar.writeTxn(() async {
+      if (oldEntry.id != newEntry.id) {
+        collection.delete(oldEntry.id);
+      }
       await collection.put(newEntry);
     });
     return;

@@ -6,9 +6,9 @@ import 'isar_storable.dart';
 part 'work_category.g.dart';
 
 abstract class IWorkCategory {
-  final String displayName;
+  String displayName;
 
-  final IsarIconData? icon;
+  IsarIconData? icon;
 
   IWorkCategory(this.displayName, {this.icon});
 
@@ -29,10 +29,16 @@ abstract class IWorkCategory {
 class WorkCategory extends IWorkCategory implements IsarStorable {
   @override
   Id id = Isar.autoIncrement;
-  WorkCategory(super.displayName, {super.icon});
+  int listIndex;
+  WorkCategory(super.displayName, {super.icon, this.listIndex = -1});
 
   EmbeddedWorkCategory toEmbedded() {
     return EmbeddedWorkCategory(displayName: displayName, icon: icon);
+  }
+
+  @override
+  String toString() {
+    return 'WorkCategory{id: $id, displayName: $displayName, icon: $icon, listIndex: $listIndex}';
   }
 }
 
@@ -40,4 +46,8 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
 class EmbeddedWorkCategory extends IWorkCategory {
   EmbeddedWorkCategory({String displayName = '', super.icon})
       : super(displayName);
+
+  WorkCategory toWorkCategory() {
+    return WorkCategory(displayName, icon: icon);
+  }
 }

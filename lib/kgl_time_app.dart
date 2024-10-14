@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/data_model/work_category.dart';
+import 'package:kgl_time/pages/settings_page.dart';
 import 'package:provider/provider.dart';
 
 import 'data_model/work_categories.dart';
@@ -17,7 +18,7 @@ class KglTimeApp extends StatelessWidget {
   final Color appBarColor = const Color(0xff5a9859);
 
   final List<WorkEntry> initialEntries;
-  final List<IWorkCategory> initialCategories;
+  final List<WorkCategory> initialCategories;
 
   const KglTimeApp(
       {super.key,
@@ -50,6 +51,10 @@ class KglTimeApp extends StatelessWidget {
                     return NewEntryPage(
                         appTitle: appTitle, existingEntry: existingEntry);
                   }),
+              GoRoute(
+                  path: 'settings',
+                  builder: (context, state) =>
+                      SettingsPage(appTitle: appTitle)),
             ]),
       ],
     );

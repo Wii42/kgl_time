@@ -20,7 +20,12 @@ class NewEntryPage extends KglPage {
         builder: (context, workCategories, _) => Consumer<WorkEntries>(
           builder: (context, workEntries, _) => _NewEntryStatefulPage(
             existingEntry: existingEntry,
-            categories: workCategories.entries,
+            categories: List.of(workCategories.entries)
+              ..addAll(existingEntry?.categories
+                      .where((element) =>
+                          !workCategories.entries.contains(element))
+                      .map((e) => e.toWorkCategory()) ??
+                  []),
             key: key,
           ),
         ),
@@ -196,7 +201,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
 
   List<Widget> _buildCategoryChips(BuildContext context) {
     return [
-      for ((int index, IWorkCategory category) element in widget.categories.indexed)
+      for ((int index, IWorkCategory category) element
+          in widget.categories.indexed)
         ChoiceChip(
           //avatar: category.icon != null? Icon(category.icon): null,
           label: Text(element.$2.displayName),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
+import 'package:kgl_time/delete_dialog.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:provider/provider.dart';
 
@@ -52,39 +53,14 @@ abstract class WorkEntryWidget extends StatelessWidget {
     ];
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Löschen bestätigen'),
-          content: Text('Wollen Sie diesen Eintrag wirklich löschen?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Abbrechen'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Dismiss the dialog
-              },
-            ),
-            TextButton(
-              child: Text(
-                'Löschen',
-                style:
-                    TextStyle(color: theme.colorScheme.error), // Highlight the Delete button
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-                WorkEntries workEntries =
-                    context.read<WorkEntries>(); // Close the dialog
-                _deleteItem(workEntries); // Call the delete function
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  void _showDeleteConfirmationDialog(BuildContext context) =>
+      showDeleteConfirmationDialog(
+          context: context,
+          onDelete: () {
+            WorkEntries workEntries =
+                context.read<WorkEntries>(); // Close the dialog
+            _deleteItem(workEntries); // Call the delete function
+          });
 
   void _deleteItem(WorkEntries workEntries) {
     workEntries.remove(workEntry);
