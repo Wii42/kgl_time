@@ -63,7 +63,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         if (widget.existingEntry == null)
           false
         else
-          widget.existingEntry!.categories.contains(category)
+          widget.existingEntry!.categories
+              .any((element) => element.id == category.id)
     ];
 
     selectedDate = widget.existingEntry?.date ?? DateTime.now();
@@ -184,11 +185,15 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         description: descriptionController.text,
         startTime: widget.existingEntry?.startTime,
         endTime: widget.existingEntry?.endTime,
+        lastEdit: DateTime.now(),
       );
       WorkEntries workEntries = context.read<WorkEntries>();
       if (widget.existingEntry != null) {
-        workEntries.updateEntry(widget.existingEntry!,
-            newEntry..startTime = widget.existingEntry!.startTime);
+        workEntries.updateEntry(
+            widget.existingEntry!,
+            newEntry
+              ..startTime = widget.existingEntry!.startTime
+              ..id = widget.existingEntry!.id);
       } else {
         workEntries.add(newEntry);
       }

@@ -17,6 +17,7 @@ class WorkEntry implements IsarStorable {
   List<EmbeddedWorkCategory> categories;
   DateTime? startTime;
   DateTime? endTime;
+  DateTime? lastEdit;
 
   WorkEntry(
       {required this.workDurationInSeconds,
@@ -24,7 +25,8 @@ class WorkEntry implements IsarStorable {
       this.description,
       this.categories = const [],
       this.startTime,
-      this.endTime});
+      this.endTime,
+      this.lastEdit});
 
   @ignore
   Duration get workDuration => Duration(seconds: workDurationInSeconds);

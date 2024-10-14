@@ -730,6 +730,11 @@ const EmbeddedWorkCategorySchema = Schema(
       name: r'icon',
       type: IsarType.object,
       target: r'IsarIconData',
+    ),
+    r'id': PropertySchema(
+      id: 3,
+      name: r'id',
+      type: IsarType.long,
     )
   },
   estimateSize: _embeddedWorkCategoryEstimateSize,
@@ -770,6 +775,7 @@ void _embeddedWorkCategorySerialize(
     IsarIconDataSchema.serialize,
     object.icon,
   );
+  writer.writeLong(offsets[3], object.id);
 }
 
 EmbeddedWorkCategory _embeddedWorkCategoryDeserialize(
@@ -785,6 +791,7 @@ EmbeddedWorkCategory _embeddedWorkCategoryDeserialize(
       IsarIconDataSchema.deserialize,
       allOffsets,
     ),
+    id: reader.readLongOrNull(offsets[3]),
   );
   return object;
 }
@@ -806,6 +813,8 @@ P _embeddedWorkCategoryDeserializeProp<P>(
         IsarIconDataSchema.deserialize,
         allOffsets,
       )) as P;
+    case 3:
+      return (reader.readLongOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1021,6 +1030,80 @@ extension EmbeddedWorkCategoryQueryFilter on QueryBuilder<EmbeddedWorkCategory,
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'icon',
+      ));
+    });
+  }
+
+  QueryBuilder<EmbeddedWorkCategory, EmbeddedWorkCategory,
+      QAfterFilterCondition> idIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<EmbeddedWorkCategory, EmbeddedWorkCategory,
+      QAfterFilterCondition> idIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<EmbeddedWorkCategory, EmbeddedWorkCategory,
+      QAfterFilterCondition> idEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<EmbeddedWorkCategory, EmbeddedWorkCategory,
+      QAfterFilterCondition> idGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<EmbeddedWorkCategory, EmbeddedWorkCategory,
+      QAfterFilterCondition> idLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<EmbeddedWorkCategory, EmbeddedWorkCategory,
+      QAfterFilterCondition> idBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
       ));
     });
   }

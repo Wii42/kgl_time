@@ -33,7 +33,7 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
   WorkCategory(super.displayName, {super.icon, this.listIndex = -1});
 
   EmbeddedWorkCategory toEmbedded() {
-    return EmbeddedWorkCategory(displayName: displayName, icon: icon);
+    return EmbeddedWorkCategory(displayName: displayName, icon: icon, id: id);
   }
 
   @override
@@ -44,10 +44,15 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
 
 @embedded
 class EmbeddedWorkCategory extends IWorkCategory {
-  EmbeddedWorkCategory({String displayName = '', super.icon})
+  int? id;
+  EmbeddedWorkCategory({String displayName = '', super.icon, this.id})
       : super(displayName);
 
   WorkCategory toWorkCategory() {
-    return WorkCategory(displayName, icon: icon);
+    WorkCategory category = WorkCategory(displayName, icon: icon);
+    if (id != null) {
+      category.id = id!;
+    }
+    return category;
   }
 }

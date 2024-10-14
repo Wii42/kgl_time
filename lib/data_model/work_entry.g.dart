@@ -38,13 +38,18 @@ const WorkEntrySchema = CollectionSchema(
       name: r'endTime',
       type: IsarType.dateTime,
     ),
-    r'startTime': PropertySchema(
+    r'lastEdit': PropertySchema(
       id: 4,
+      name: r'lastEdit',
+      type: IsarType.dateTime,
+    ),
+    r'startTime': PropertySchema(
+      id: 5,
       name: r'startTime',
       type: IsarType.dateTime,
     ),
     r'workDurationInSeconds': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'workDurationInSeconds',
       type: IsarType.long,
     )
@@ -105,8 +110,9 @@ void _workEntrySerialize(
   writer.writeDateTime(offsets[1], object.date);
   writer.writeString(offsets[2], object.description);
   writer.writeDateTime(offsets[3], object.endTime);
-  writer.writeDateTime(offsets[4], object.startTime);
-  writer.writeLong(offsets[5], object.workDurationInSeconds);
+  writer.writeDateTime(offsets[4], object.lastEdit);
+  writer.writeDateTime(offsets[5], object.startTime);
+  writer.writeLong(offsets[6], object.workDurationInSeconds);
 }
 
 WorkEntry _workEntryDeserialize(
@@ -126,8 +132,9 @@ WorkEntry _workEntryDeserialize(
     date: reader.readDateTime(offsets[1]),
     description: reader.readStringOrNull(offsets[2]),
     endTime: reader.readDateTimeOrNull(offsets[3]),
-    startTime: reader.readDateTimeOrNull(offsets[4]),
-    workDurationInSeconds: reader.readLong(offsets[5]),
+    lastEdit: reader.readDateTimeOrNull(offsets[4]),
+    startTime: reader.readDateTimeOrNull(offsets[5]),
+    workDurationInSeconds: reader.readLong(offsets[6]),
   );
   object.id = id;
   return object;
@@ -157,6 +164,8 @@ P _workEntryDeserializeProp<P>(
     case 4:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 6:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -670,6 +679,76 @@ extension WorkEntryQueryFilter
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'lastEdit',
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
+      lastEditIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'lastEdit',
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditEqualTo(
+      DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastEdit',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastEdit',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastEdit',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastEdit',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> startTimeIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -848,6 +927,18 @@ extension WorkEntryQuerySortBy on QueryBuilder<WorkEntry, WorkEntry, QSortBy> {
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByLastEdit() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastEdit', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByLastEditDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastEdit', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByStartTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'startTime', Sort.asc);
@@ -925,6 +1016,18 @@ extension WorkEntryQuerySortThenBy
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByLastEdit() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastEdit', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByLastEditDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastEdit', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByStartTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'startTime', Sort.asc);
@@ -973,6 +1076,12 @@ extension WorkEntryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByLastEdit() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastEdit');
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByStartTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'startTime');
@@ -1017,6 +1126,12 @@ extension WorkEntryQueryProperty
   QueryBuilder<WorkEntry, DateTime?, QQueryOperations> endTimeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'endTime');
+    });
+  }
+
+  QueryBuilder<WorkEntry, DateTime?, QQueryOperations> lastEditProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastEdit');
     });
   }
 

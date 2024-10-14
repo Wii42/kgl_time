@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/delete_dialog.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:provider/provider.dart';
 
 import '../data_model/work_categories.dart';
 import '../data_model/work_category.dart';
+import '../data_model/work_entry.dart';
 
 class SettingsPage extends KglPage {
   const SettingsPage({super.key, required super.appTitle});
@@ -110,8 +112,35 @@ class SettingsPage extends KglPage {
                 WorkCategories categories =
                     Provider.of<WorkCategories>(context, listen: false);
                 if (existingCategory != null) {
+                  String oldName = existingCategory.displayName;
                   categories.updateEntry(existingCategory,
                       existingCategory..displayName = controller.text);
+                  WorkEntries workEntries =
+                      Provider.of<WorkEntries>(context, listen: false);
+
+                  Iterable<WorkEntry> entriesWithThisCategory = workEntries
+                      .entries
+                      .where((entry) => entry.categories.any((category) =>
+                          category.displayName == oldName &&
+                          category.id == existingCategory.id));
+                  for (WorkEntry entry in entriesWithThisCategory) {
+                    WorkEntry newEntry = WorkEntry(
+                      workDurationInSeconds: entry.workDurationInSeconds,
+                      date: entry.date,
+                      categories: [
+                        for (EmbeddedWorkCategory category in entry.categories)
+                          if (category.id == existingCategory.id &&
+                              category.displayName == oldName)
+                            category..displayName = controller.text
+                          else
+                            category
+                      ],
+                      description: entry.description,
+                      startTime: entry.startTime,
+                      endTime: entry.endTime,
+                    )..id = entry.id;
+                    workEntries.updateEntry(entry, newEntry);
+                  }
                 } else {
                   categories.add(WorkCategory(controller.text,
                       listIndex: categories.entries.length));
