@@ -54,4 +54,10 @@ class PersistentStorageService implements PersistentStorage {
     _checkHasImplementation();
     return _implementation!.workEntries;
   }
+
+  @override
+  KeyValueStorage get keyValueStorage{
+    _checkHasImplementation();
+    return _implementation!.keyValueStorage;
+  }
 }

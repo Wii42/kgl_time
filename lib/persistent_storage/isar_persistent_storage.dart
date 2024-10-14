@@ -6,6 +6,7 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../data_model/isar_storable.dart';
+import '../data_model/key_value.dart';
 import 'persistent_storage_interface.dart';
 
 class IsarPersistentStorage implements PersistentStorage {
@@ -21,21 +22,25 @@ class IsarPersistentStorage implements PersistentStorage {
   @override
   Future<void> initialize() async {
     dir = await getApplicationDocumentsDirectory();
-    isar = await Isar.open([WorkEntrySchema, WorkCategorySchema], directory: dir.path);
+    isar = await Isar.open(
+        [WorkEntrySchema, WorkCategorySchema, KeyValueSchema],
+        directory: dir.path);
     workEntries = IsarTable<WorkEntry>(isar, isar.workEntries);
     workCategories = IsarTable<WorkCategory>(isar, isar.workCategories);
+    keyValueStorage = IsarKeyValue(isar);
   }
 
   @override
   late final Table<WorkCategory> workCategories;
   @override
   late final Table<WorkEntry> workEntries;
+  @override
+  late final KeyValueStorage keyValueStorage;
 }
 
 class IsarTable<T extends IsarStorable> implements Table<T> {
-  late final Isar isar;
-  late final Directory dir;
-  late final IsarCollection<T> collection;
+  final Isar isar;
+  final IsarCollection<T> collection;
 
   IsarTable(this.isar, this.collection);
 
@@ -83,5 +88,51 @@ class IsarTable<T extends IsarStorable> implements Table<T> {
       await collection.put(newEntry);
     });
     return;
+  }
+}
+
+class IsarKeyValue extends KeyValueStorage {
+  final Isar isar;
+
+  IsarKeyValue(this.isar);
+
+  @override
+  Future<int> set<T>(String key, T value) async {
+    final item = KeyValue()..key = key;
+    item.value = value;
+    return isar.writeTxn(() => isar.keyValues.put(item));
+  }
+
+  @override
+  Future<T?> get<T>(String key) async {
+    final item = await isar.txn(() => isar.keyValues.getByKey(key));
+    return item?.value;
+  }
+
+  @override
+  Future<T?> getById<T>(int id) async {
+    final item = await isar.txn(() => isar.keyValues.get(id));
+    return item?.value;
+  }
+
+  @override
+  Future<bool> remove(String key) async {
+    return isar.writeTxn(() => isar.keyValues.deleteByKey(key));
+  }
+
+  @override
+  Future<bool> removeById(int id) async {
+    return isar.writeTxn(() => isar.keyValues.delete(id));
+  }
+
+  @override
+  Future<void> clear() async {
+    return isar.writeTxn(() => isar.clear());
+  }
+
+  @override
+  Future<Map<String, T>> getAll<T>() async {
+    final items = await isar.txn(() => isar.keyValues.where().findAll());
+    return {for (var item in items) item.key: item.value as T};
   }
 }

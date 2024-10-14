@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/delete_dialog.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
+import 'package:kgl_time/helpers.dart';
 import 'package:provider/provider.dart';
 
+import '../data_model/key_values.dart';
 import '../data_model/work_categories.dart';
 import '../data_model/work_category.dart';
 import '../data_model/work_entry.dart';
@@ -20,9 +21,62 @@ class SettingsPage extends KglPage {
   @override
   Widget body(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [categories(context)],
+      padding: const EdgeInsets.all(8),
+      children: [withCard(themeMode(context)), withCard(categories(context))]
+          .withSpaceBetween(height: 16),
     );
+  }
+
+  Widget withCard(Widget child) {
+    return Card(
+        child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: child,
+    ));
+  }
+
+  Widget themeMode(BuildContext context) {
+    Map<ThemeMode, String> themeModeNames = {
+      ThemeMode.system: 'System',
+      ThemeMode.light: 'Hell',
+      ThemeMode.dark: 'Dunkel'
+    };
+    Map<ThemeMode, IconData> themeModeIcons = {
+      ThemeMode.system: Icons.brightness_auto,
+      ThemeMode.light: Icons.brightness_7,
+      ThemeMode.dark: Icons.brightness_2
+    };
+    return Consumer<KeyValues>(builder: (context, keyValues, _) {
+      return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text('Darstellung'),
+        ToggleButtons(
+          isSelected: [
+            for (ThemeMode themeMode in ThemeMode.values)
+              (parseThemeMode(keyValues.get<String>('themeMode')) ??
+                      ThemeMode.system) ==
+                  themeMode
+          ],
+          children: [
+            for (ThemeMode themeMode in ThemeMode.values)
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Column(
+                  children: [
+                    Icon(themeModeIcons[themeMode]),
+                    Text(
+                      themeModeNames[themeMode] ?? '',
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                  ],
+                ),
+              )
+          ],
+          onPressed: (int index) {
+            keyValues.set('themeMode', ThemeMode.values[index].name);
+          },
+        ),
+      ]);
+    });
   }
 
   Widget categories(BuildContext context) {

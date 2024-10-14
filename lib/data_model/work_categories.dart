@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_interface.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
-import 'package:notifying_list/notifying_list.dart';
 
 class WorkCategories extends ChangeNotifier {
   final Table<WorkCategory> storedEntries =
