@@ -2,8 +2,6 @@ import 'package:isar/isar.dart';
 
 import 'isar_storable.dart';
 
-import 'package:isar/isar.dart';
-
 part 'key_value.g.dart';
 
 @collection
