@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/delete_dialog.dart';
@@ -9,6 +10,7 @@ import '../data_model/key_values.dart';
 import '../data_model/work_categories.dart';
 import '../data_model/work_category.dart';
 import '../data_model/work_entry.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends KglPage {
   const SettingsPage({super.key, required super.appTitle});
@@ -20,10 +22,18 @@ class SettingsPage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      children: [withCard(themeMode(context)), withCard(categories(context))]
-          .withSpaceBetween(height: 16),
+    return KglPage.alwaysFillingScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            withCard(themeMode(context)),
+            withCard(categories(context)),
+            infos(context),
+          ].withSpaceBetween(height: 16),
+        ),
+      ),
     );
   }
 
@@ -210,4 +220,78 @@ class SettingsPage extends KglPage {
       },
     );
   }
+
+  Widget infos(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        infoWithLink(
+            infoText: 'Kontakt: ',
+            linkText: 'wi42.dev@gmail.com',
+            link: Uri.parse('mailto:wi42.dev@gmail.com'),
+            context: context),
+        infoWithLink(
+            infoText: 'Lizenz: ',
+            linkText: 'GNU General Public License v3.0',
+            link: Uri.https(
+                'github.com', 'Wii42/kgl_time/blob/master/LICENSE.md'),
+            context: context),
+        infoWithLink(
+            linkText: 'Datenschutzrichtlinie',
+            link: Uri.parse('https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#datenschutzrichtlinie-für-kgl-time'),
+            context: context),
+        Text(''),
+        Text("v0.0.1", style: theme.textTheme.bodySmall),
+      ],
+    );
+  }
+
+  Widget infoWithLink({
+    String? infoText,
+    required String linkText,
+    required Uri link,
+    required BuildContext context,
+  }) {
+    ThemeData theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        RichText(
+          text: TextSpan(
+            children: [
+              if (infoText != null)
+                TextSpan(text: infoText, style: theme.textTheme.bodyMedium),
+              TooltipSpan(
+                message: link.toString(),
+                inlineSpan: TextSpan(
+                  text: linkText,
+                  style: theme.textTheme.bodyMedium
+                      ?.apply(color: theme.colorScheme.primary),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(link);
+                    },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TooltipSpan extends WidgetSpan {
+  TooltipSpan({
+    required String message,
+    required TextSpan inlineSpan,
+  }) : super(
+          child: Tooltip(
+            message: message,
+            child: Text.rich(
+              inlineSpan,
+            ),
+          ),
+        );
 }
