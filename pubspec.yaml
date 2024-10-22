@@ -40,6 +40,9 @@ dev_dependencies:
       url: https://pub.isar-community.dev/
     version: ^3.0.0
   build_runner: any
+  flutter_launcher_icons: ^0.14.1
 
 flutter:
   uses-material-design: true
+  assets:
+  - assets/playstore-icon.png

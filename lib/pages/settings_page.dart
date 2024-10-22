@@ -112,7 +112,8 @@ class SettingsPage extends KglPage {
                           onPressed: () => showDeleteConfirmationDialog(
                               context: context,
                               detailText:
-                                  'Wollen Sie die Kategorie ${category.$2.displayName} wirklich löschen?\n\nEinträge, die dieser Kategorie zugeordnet sind, werden nicht verändert.',
+                                  'Wollen Sie die Kategorie ${category.$2.displayName} wirklich löschen?\n\n'
+                                  'Einträge, die dieser Kategorie zugeordnet sind, werden nicht verändert.',
                               onDelete: () => categories.remove(category.$2)),
                         ),
                       ],
