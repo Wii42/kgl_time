@@ -63,5 +63,6 @@ void main() async {
     appTitle: 'KGL Time',
     initialEntries: initialEntries,
     initialCategories: initialCategories,
+    initialKeyValueStorage: initialKeyValueStorage,
   ));
 }
