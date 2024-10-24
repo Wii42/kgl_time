@@ -113,12 +113,12 @@ class SettingsPage extends KglPage {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          icon: Icon(Icons.edit),
+                          icon: Icon(Icons.edit_outlined),
                           onPressed: () => _showNewCategoryDialog(context,
                               existingCategory: category.$2),
                         ),
                         IconButton(
-                          icon: Icon(Icons.delete),
+                          icon: Icon(Icons.delete_outline_outlined),
                           onPressed: () => showDeleteConfirmationDialog(
                               context: context,
                               detailText:
@@ -242,7 +242,7 @@ class SettingsPage extends KglPage {
             link: Uri.parse('https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#datenschutzrichtlinie-für-kgl-time'),
             context: context),
         Text(''),
-        Text("v0.0.1", style: theme.textTheme.bodySmall),
+        Text("v0.0.2", style: theme.textTheme.bodySmall),
       ],
     );
   }

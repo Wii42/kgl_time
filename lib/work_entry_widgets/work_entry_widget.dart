@@ -43,13 +43,13 @@ abstract class WorkEntryWidget extends StatelessWidget {
           onPressed: () {
             context.go('/newEntry', extra: workEntry);
           },
-          icon: Icon(Icons.edit)),
+          icon: Icon(Icons.edit_outlined)),
       SizedBox(width: 12),
       IconButton(
           onPressed: () {
             _showDeleteConfirmationDialog(context);
           },
-          icon: Icon(Icons.delete))
+          icon: Icon(Icons.delete_outline_outlined))
     ];
   }
 
