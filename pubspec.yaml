@@ -16,7 +16,6 @@ dependencies:
   go_router: ^14.3.0
   intl: any
   week_number: ^1.1.0
-  #collection: any
   isar:
     hosted:
       name: isar
@@ -30,6 +29,8 @@ dependencies:
   path_provider: ^2.1.4
   path_provider_linux: 2.2.0
   url_launcher: ^6.3.1
+  animated_toggle_switch: ^0.8.3
+  timer_builder: ^2.0.0
 
 dev_dependencies:
   flutter_test:

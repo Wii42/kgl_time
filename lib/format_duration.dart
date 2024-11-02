@@ -13,3 +13,6 @@ String formatDuration(Duration duration) {
 
 String formatDate(DateTime date) =>
     DateFormat('EE dd.MM.yyyy', 'de').format(date);
+
+String formatTime(DateTime time) =>
+    DateFormat('H:mm', 'de').format(time);

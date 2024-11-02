@@ -42,6 +42,7 @@ class HomePage extends KglPage {
                     ),
                   ),
                 ),
+                const SizedBox(height: 32),
                 WorkEntryTimeTracker(),
                 const SizedBox(height: 32),
                 if (workEntries.entries.isNotEmpty)
@@ -49,7 +50,7 @@ class HomePage extends KglPage {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text('Letzte Einträge'),
-                    for (WorkEntry entry in workEntries.entries.take(5))
+                    for (WorkEntry entry in workEntries.entries.take(3))
                       WorkEntryPreview(workEntry: entry),
                     ElevatedButton(
                         onPressed: () => context.go('/allEntries'),

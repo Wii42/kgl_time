@@ -16,8 +16,9 @@ import 'pages/new_entry_page.dart';
 class KglTimeApp extends StatelessWidget {
   final String appTitle;
 
-  final Color primaryColor = const Color(0xff0067b1);
-  final Color appBarColor = const Color(0xff66b461);
+  static const Color primaryColor = Color(0xff0067b1);
+  static const Color appBarColor = Color(0xff66b461);
+  static const Color actionColor = Color(0xffd32f2f);
 
   final List<WorkEntry> initialEntries;
   final List<WorkCategory> initialCategories;
@@ -90,10 +91,13 @@ class KglTimeApp extends StatelessWidget {
 
   ThemeData theme({required Brightness brightness}) {
     return ThemeData(
-      colorScheme: ColorScheme.fromSeed(seedColor: primaryColor, brightness: brightness),
+      colorScheme:
+          ColorScheme.fromSeed(seedColor: primaryColor, brightness: brightness),
       useMaterial3: true,
       brightness: brightness,
-      filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(backgroundColor: primaryColor, foregroundColor: Colors.white)),
+      filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+              backgroundColor: primaryColor, foregroundColor: Colors.white)),
     ).copyWith(
         appBarTheme: AppBarTheme(
             backgroundColor: appBarColor, foregroundColor: Colors.white));

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kgl_time/data_model/work_category.dart';
-import 'package:kgl_time/kgl_time_app.dart';
 import 'package:provider/provider.dart';
 
 import '../data_model/work_entries.dart';
@@ -34,6 +33,8 @@ class WorkEntryDetails extends WorkEntryWidget {
                 formatDuration(workEntry.workDuration),
                 style: textTheme.headlineSmall,
               ),
+              if(workEntry.startTime != null && workEntry.endTime != null)
+                Text('${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
               Text(formattedDate()),
               if (workEntry.categories.isNotEmpty) ...[
                 SizedBox(height: 8),

@@ -54,7 +54,6 @@ class WorkEntry implements IsarStorable {
   factory WorkEntry.fromStartAndEndTime({
     required DateTime startTime,
     required DateTime endTime,
-    DateTime? date,
     String? description,
     List<EmbeddedWorkCategory> categories = const [],
     DateTime? lastEdit,
@@ -62,7 +61,7 @@ class WorkEntry implements IsarStorable {
     bool tickedOff = false;
     return WorkEntry(
       workDurationInSeconds: endTime.difference(startTime).inSeconds,
-      date: date ?? startTime,
+      date: startTime,
       description: description,
       categories: categories,
       startTime: startTime,
