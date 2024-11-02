@@ -16,8 +16,8 @@ import 'pages/new_entry_page.dart';
 class KglTimeApp extends StatelessWidget {
   final String appTitle;
 
-  final Color primaryColor = const Color(0xff2a5c9f);
-  final Color appBarColor = const Color(0xff5a9859);
+  final Color primaryColor = const Color(0xff0067b1);
+  final Color appBarColor = const Color(0xff66b461);
 
   final List<WorkEntry> initialEntries;
   final List<WorkCategory> initialCategories;
@@ -76,6 +76,7 @@ class KglTimeApp extends StatelessWidget {
       ],
       builder: (context, _) => MaterialApp.router(
         locale: const Locale('de'),
+        debugShowCheckedModeBanner: false,
         title: appTitle,
         themeMode: parseThemeMode(
                 context.watch<KeyValues>().get<String>('themeMode')) ??
