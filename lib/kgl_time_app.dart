@@ -17,8 +17,8 @@ class KglTimeApp extends StatelessWidget {
   final String appTitle;
 
   static const Color primaryColor = Color(0xff0067b1);
-  static const Color appBarColor = Color(0xff66b461);
-  static const Color actionColor = Color(0xffd32f2f);
+  static const Color appBarColor = Color(0xff4a8e3b);
+  static const Color actionColor = Color(0xffc62828);
 
   final List<WorkEntry> initialEntries;
   final List<WorkCategory> initialCategories;
