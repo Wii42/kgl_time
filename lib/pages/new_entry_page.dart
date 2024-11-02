@@ -52,7 +52,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   late List<bool> categorySelection;
   late DateTime selectedDate;
   late TextEditingController dateController;
-  late TextEditingController durationController;
+  late TextEditingController durationMinuteController;
+  late TextEditingController durationHourController;
   late TextEditingController descriptionController;
 
   @override
@@ -69,8 +70,12 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
 
     selectedDate = widget.existingEntry?.date ?? DateTime.now();
     dateController = TextEditingController(text: formatDate(selectedDate));
-    durationController = TextEditingController(
-        text: widget.existingEntry?.workDuration.inMinutes.toString() ?? '');
+    Duration? workDuration = widget.existingEntry?.workDuration;
+    durationMinuteController = TextEditingController(
+        text: workDuration != null ?(workDuration.inMinutes % Duration.minutesPerHour).toString() : '');
+    String workHours = workDuration?.inHours.toString() ?? '';
+    durationHourController = TextEditingController(
+        text: workHours != '0' ? workHours : '');
     descriptionController =
         TextEditingController(text: widget.existingEntry?.description ?? '');
   }
@@ -89,22 +94,49 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
               SizedBox(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: TextFormField(
-                  controller: durationController,
-                  style: textTheme.displaySmall,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                      labelText: 'Arbeitsdauer',
-                      labelStyle: textTheme.bodyLarge,
-                      suffixText: 'min'),
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Bitte geben Sie eine Dauer ein. Nur Ziffern erlaubt';
-                    }
-                    return null;
-                  },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //Text('Arbeitsdauer', style: textTheme.bodyLarge),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Flexible(
+                          flex: 2,
+                          child: TextFormField(
+                            controller: durationHourController,
+                            style: textTheme.displaySmall,
+                            decoration: InputDecoration(
+                                labelText: 'Stunden',
+                                suffixText: 'h'),
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Flexible(
+                          flex: 4,
+                          child: TextFormField(
+                            controller: durationMinuteController,
+                            style: textTheme.displaySmall,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                                labelText: 'Minuten',
+                                suffixText: 'min'),
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Bitte geben Sie eine Dauer ein.\nNur Ziffern erlaubt';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 16),
@@ -174,9 +206,12 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
 
   void saveEntry(BuildContext context) {
     if (_formKey.currentState!.validate()) {
+      int hours = durationHourController.text.isNotEmpty
+          ? int.parse(durationHourController.text)
+          : 0;
       WorkEntry newEntry = WorkEntry(
         workDurationInSeconds:
-            Duration(minutes: int.parse(durationController.text)).inSeconds,
+            Duration(hours: hours, minutes: int.parse(durationMinuteController.text)).inSeconds,
         date: selectedDate,
         categories: [
           for (int i = 0; i < widget.categories.length; i++)
@@ -225,7 +260,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   @override
   void dispose() {
     dateController.dispose();
-    durationController.dispose();
+    durationMinuteController.dispose();
     descriptionController.dispose();
     super.dispose();
   }
