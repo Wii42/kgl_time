@@ -48,8 +48,13 @@ const WorkEntrySchema = CollectionSchema(
       name: r'startTime',
       type: IsarType.dateTime,
     ),
-    r'workDurationInSeconds': PropertySchema(
+    r'tickedOff': PropertySchema(
       id: 6,
+      name: r'tickedOff',
+      type: IsarType.bool,
+    ),
+    r'workDurationInSeconds': PropertySchema(
+      id: 7,
       name: r'workDurationInSeconds',
       type: IsarType.long,
     )
@@ -112,7 +117,8 @@ void _workEntrySerialize(
   writer.writeDateTime(offsets[3], object.endTime);
   writer.writeDateTime(offsets[4], object.lastEdit);
   writer.writeDateTime(offsets[5], object.startTime);
-  writer.writeLong(offsets[6], object.workDurationInSeconds);
+  writer.writeBool(offsets[6], object.tickedOff);
+  writer.writeLong(offsets[7], object.workDurationInSeconds);
 }
 
 WorkEntry _workEntryDeserialize(
@@ -134,7 +140,8 @@ WorkEntry _workEntryDeserialize(
     endTime: reader.readDateTimeOrNull(offsets[3]),
     lastEdit: reader.readDateTimeOrNull(offsets[4]),
     startTime: reader.readDateTimeOrNull(offsets[5]),
-    workDurationInSeconds: reader.readLong(offsets[6]),
+    tickedOff: reader.readBoolOrNull(offsets[6]) ?? false,
+    workDurationInSeconds: reader.readLong(offsets[7]),
   );
   object.id = id;
   return object;
@@ -166,6 +173,8 @@ P _workEntryDeserializeProp<P>(
     case 5:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 6:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
+    case 7:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -820,6 +829,16 @@ extension WorkEntryQueryFilter
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> tickedOffEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'tickedOff',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
       workDurationInSecondsEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
@@ -951,6 +970,18 @@ extension WorkEntryQuerySortBy on QueryBuilder<WorkEntry, WorkEntry, QSortBy> {
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByTickedOff() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tickedOff', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByTickedOffDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tickedOff', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
       sortByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
@@ -1040,6 +1071,18 @@ extension WorkEntryQuerySortThenBy
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByTickedOff() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tickedOff', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByTickedOffDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'tickedOff', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
       thenByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
@@ -1085,6 +1128,12 @@ extension WorkEntryQueryWhereDistinct
   QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByStartTime() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'startTime');
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByTickedOff() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'tickedOff');
     });
   }
 
@@ -1138,6 +1187,12 @@ extension WorkEntryQueryProperty
   QueryBuilder<WorkEntry, DateTime?, QQueryOperations> startTimeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'startTime');
+    });
+  }
+
+  QueryBuilder<WorkEntry, bool, QQueryOperations> tickedOffProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'tickedOff');
     });
   }
 

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kgl_time/data_model/work_category.dart';
+import 'package:kgl_time/kgl_time_app.dart';
+import 'package:provider/provider.dart';
 
+import '../data_model/work_entries.dart';
 import '../format_duration.dart';
 import 'work_entry_widget.dart';
 
@@ -13,34 +16,49 @@ class WorkEntryDetails extends WorkEntryWidget {
   @override
   Widget details(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        Text(
-          formatDuration(workEntry.workDuration),
-          style: textTheme.headlineSmall,
-        ),
-        Text(formattedDate()),
-        if (workEntry.categories.isNotEmpty) ...[
-          SizedBox(height: 8),
-          Wrap(
+        Checkbox(
+            value: workEntry.tickedOff,
+            onChanged: (_) {
+              WorkEntries entriesList = context.read<WorkEntries>();
+              entriesList.updateEntry(
+                  workEntry, workEntry..tickedOff = !workEntry.tickedOff);
+            }),
+        SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (IWorkCategory category in workEntry.categories) ...[
-                Chip(
-                  //avatar: category.icon != null? Icon(category.icon): null,
-                  padding: EdgeInsets.zero,
-                  label: Text(category.displayName),
+              Text(
+                formatDuration(workEntry.workDuration),
+                style: textTheme.headlineSmall,
+              ),
+              Text(formattedDate()),
+              if (workEntry.categories.isNotEmpty) ...[
+                SizedBox(height: 8),
+                Wrap(
+                  children: [
+                    for (IWorkCategory category in workEntry.categories) ...[
+                      RawChip(
+                        isEnabled: !workEntry.tickedOff,
+                        //avatar: category.icon != null? Icon(category.icon): null,
+                        padding: EdgeInsets.zero,
+                        label: Text(category.displayName),
+                      ),
+                      SizedBox(width: 8),
+                    ],
+                  ],
                 ),
-                SizedBox(width: 8),
+              ],
+              if (workEntry.description != null &&
+                  workEntry.description!.isNotEmpty) ...[
+                SizedBox(height: 8),
+                Text('Beschreibung: ${workEntry.description}'),
               ],
             ],
           ),
-        ],
-        if (workEntry.description != null &&
-            workEntry.description!.isNotEmpty) ...[
-          SizedBox(height: 8),
-          Text('Beschreibung: ${workEntry.description}'),
-        ],
+        ),
       ],
     );
   }

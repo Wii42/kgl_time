@@ -6,7 +6,7 @@ import 'package:notifying_list/notifying_list.dart';
 import 'work_entry.dart';
 
 class WorkEntries extends ChangeNotifier {
-  final Table<WorkEntry> storedEntries =
+  final Table<WorkEntry> _storedEntries =
       PersistentStorageService.instance.workEntries;
   late final CallbackNotifyingList<WorkEntry> _entries;
 
@@ -30,18 +30,18 @@ class WorkEntries extends ChangeNotifier {
   void add(WorkEntry entry) {
     _entries.add(entry);
     sortEntriesInReverse(_entries);
-    storedEntries.addEntry(entry);
+    _storedEntries.addEntry(entry);
   }
 
   void remove(WorkEntry entry) {
     _entries.remove(entry);
-    storedEntries.deleteEntry(entry);
+    _storedEntries.deleteEntry(entry);
   }
 
   void updateEntry(WorkEntry workEntry, WorkEntry newEntry) {
     int index = _entries.indexOf(workEntry);
     _entries[index] = newEntry;
     sortEntriesInReverse(_entries);
-    storedEntries.updateEntry(newEntry, workEntry);
+    _storedEntries.updateEntry(newEntry, workEntry);
   }
 }

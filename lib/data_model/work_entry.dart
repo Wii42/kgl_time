@@ -18,6 +18,7 @@ class WorkEntry implements IsarStorable {
   DateTime? startTime;
   DateTime? endTime;
   DateTime? lastEdit;
+  bool tickedOff;
 
   WorkEntry(
       {required this.workDurationInSeconds,
@@ -26,7 +27,8 @@ class WorkEntry implements IsarStorable {
       this.categories = const [],
       this.startTime,
       this.endTime,
-      this.lastEdit});
+      this.lastEdit,
+      this.tickedOff = false});
 
   @ignore
   Duration get workDuration => Duration(seconds: workDurationInSeconds);
