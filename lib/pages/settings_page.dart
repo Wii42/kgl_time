@@ -95,9 +95,12 @@ class SettingsPage extends KglPage {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'Kategorien',
-            style: textTheme.titleLarge,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Kategorien',
+              style: textTheme.titleLarge,
+            ),
           ),
           if (categories.entries.isNotEmpty)
             ReorderableListView(
@@ -137,6 +140,8 @@ class SettingsPage extends KglPage {
               style: textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
+          if (categories.entries.isNotEmpty)
+            SizedBox(height: 8),
           ElevatedButton(
             onPressed: () => _showNewCategoryDialog(context),
             child: Row(
@@ -156,6 +161,7 @@ class SettingsPage extends KglPage {
       {WorkCategory? existingCategory}) {
     TextEditingController controller =
         TextEditingController(text: existingCategory?.displayName);
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
     showDialog(
       context: context,
       builder: (context) {
@@ -163,10 +169,17 @@ class SettingsPage extends KglPage {
           title: Text(existingCategory == null
               ? 'Neue Kategorie hinzufügen'
               : 'Kategorie bearbeiten'),
-          content: TextField(
+          content: Form(
+          key: formKey,child: TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Bitte geben Sie einen Namen ein';
+              }
+              return null;
+            },
             controller: controller,
             decoration: InputDecoration(hintText: 'Kategorie'),
-          ),
+          ),),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -174,6 +187,7 @@ class SettingsPage extends KglPage {
             ),
             ElevatedButton(
               onPressed: () {
+                if (formKey.currentState!.validate()){
                 WorkCategories categories =
                     Provider.of<WorkCategories>(context, listen: false);
                 if (existingCategory != null) {
@@ -211,7 +225,7 @@ class SettingsPage extends KglPage {
                       listIndex: categories.entries.length));
                 }
                 Navigator.of(context).pop();
-              },
+              }},
               child:
                   Text(existingCategory == null ? 'Hinzufügen' : 'Speichern'),
             ),
@@ -230,12 +244,6 @@ class SettingsPage extends KglPage {
             infoText: 'Kontakt: ',
             linkText: 'wi42.dev@gmail.com',
             link: Uri.parse('mailto:wi42.dev@gmail.com'),
-            context: context),
-        infoWithLink(
-            infoText: 'Lizenz: ',
-            linkText: 'GNU General Public License v3.0',
-            link: Uri.https(
-                'github.com', 'Wii42/kgl_time/blob/master/LICENSE.md'),
             context: context),
         infoWithLink(
             linkText: 'Datenschutzrichtlinie',
