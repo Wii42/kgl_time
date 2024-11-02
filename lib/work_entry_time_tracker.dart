@@ -53,8 +53,12 @@ class WorkEntryTimeTracker extends StatelessWidget {
                   keyValues.set<DateTime>(_storageKey, DateTime.now());
                 } else {
                   keyValues.remove(_storageKey);
-                  context.read<WorkEntries>().add(WorkEntry.fromStartAndEndTime(
-                      startTime: startTime!, endTime: DateTime.now()));
+                  context.read<WorkEntries>().add(
+                        WorkEntry.fromStartAndEndTime(
+                            startTime: startTime!,
+                            endTime: DateTime.now(),
+                            lastEdit: DateTime.now()),
+                      );
                 }
               },
               height: height,
