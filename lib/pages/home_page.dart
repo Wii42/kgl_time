@@ -4,6 +4,7 @@ import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/date_week.dart';
 import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/work_entry_time_tracker.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_preview.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,7 @@ class HomePage extends KglPage {
                     ),
                   ),
                 ),
+                WorkEntryTimeTracker(),
                 const SizedBox(height: 32),
                 if (workEntries.entries.isNotEmpty)
                 Column(

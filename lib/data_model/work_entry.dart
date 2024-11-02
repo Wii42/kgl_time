@@ -32,4 +32,43 @@ class WorkEntry implements IsarStorable {
 
   @ignore
   Duration get workDuration => Duration(seconds: workDurationInSeconds);
+
+  factory WorkEntry.fromDuration({
+    required Duration duration,
+    required DateTime date,
+    String? description,
+    List<EmbeddedWorkCategory> categories = const [],
+    DateTime? lastEdit,
+    bool tickedOff = false,
+  }) {
+    return WorkEntry(
+      workDurationInSeconds: duration.inSeconds,
+      date: date,
+      description: description,
+      categories: categories,
+      lastEdit: lastEdit,
+      tickedOff: tickedOff,
+    );
+  }
+
+  factory WorkEntry.fromStartAndEndTime({
+    required DateTime startTime,
+    required DateTime endTime,
+    DateTime? date,
+    String? description,
+    List<EmbeddedWorkCategory> categories = const [],
+    DateTime? lastEdit,
+  }) {
+    bool tickedOff = false;
+    return WorkEntry(
+      workDurationInSeconds: endTime.difference(startTime).inSeconds,
+      date: date ?? startTime,
+      description: description,
+      categories: categories,
+      startTime: startTime,
+      endTime: endTime,
+      lastEdit: lastEdit,
+      tickedOff: tickedOff,
+    );
+  }
 }
