@@ -19,6 +19,7 @@ class KglTimeApp extends StatelessWidget {
   static const Color primaryColor = Color(0xff0067b1);
   static const Color appBarColor = Color(0xff4a8e3b);
   static const Color actionColor = Color(0xffc62828);
+  static const double maxPageWidth = 800;
 
   final List<WorkEntry> initialEntries;
   final List<WorkCategory> initialCategories;

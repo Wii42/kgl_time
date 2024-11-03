@@ -4,6 +4,7 @@ import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/date_week.dart';
 import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/work_entry_time_tracker.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_preview.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class HomePage extends KglPage {
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
         return KglPage.alwaysFillingScrollView(
+          maxWidth: KglTimeApp.maxPageWidth,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(

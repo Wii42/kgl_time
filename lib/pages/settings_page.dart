@@ -12,6 +12,8 @@ import '../data_model/work_category.dart';
 import '../data_model/work_entry.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../kgl_time_app.dart';
+
 class SettingsPage extends KglPage {
   const SettingsPage({super.key, required super.appTitle});
 
@@ -23,6 +25,7 @@ class SettingsPage extends KglPage {
   @override
   Widget body(BuildContext context) {
     return KglPage.alwaysFillingScrollView(
+      maxWidth: KglTimeApp.maxPageWidth,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

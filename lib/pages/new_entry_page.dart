@@ -9,6 +9,8 @@ import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:provider/provider.dart';
 
+import '../kgl_time_app.dart';
+
 class NewEntryPage extends KglPage {
   /// The existing entry to edit, or null if a new entry should be created.
   final WorkEntry? existingEntry;
@@ -86,6 +88,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     return Form(
       key: _formKey,
       child: KglPage.alwaysFillingScrollView(
+        maxWidth: KglTimeApp.maxPageWidth,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

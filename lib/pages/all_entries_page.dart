@@ -10,6 +10,7 @@ import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:provider/provider.dart';
 
+import '../kgl_time_app.dart';
 import 'kgl_page.dart';
 
 class AllEntriesPage extends KglPage {
@@ -83,26 +84,30 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
                 }),
           ),
         ),
-        ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            SizedBox(
-              height: max(_buttonHeight - 8, 0),
-            ), // To avoid collision with the SegmentedButton
-            for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                      '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit)} ${entryGroup.year}'),
-                  Text(formatDuration(entryGroup.totalWorkDuration())),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: _constrainWidth([
+                SizedBox(
+                  height: max(_buttonHeight - 8, 0),
+                ), // To avoid collision with the SegmentedButton
+                for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit)} ${entryGroup.year}'),
+                      Text(formatDuration(entryGroup.totalWorkDuration())),
+                    ],
+                  ),
+                  for (WorkEntry entry in entryGroup.entries)
+                    WorkEntryDetails(workEntry: entry),
+                  SizedBox(height: 16),
                 ],
-              ),
-              for (WorkEntry entry in entryGroup.entries)
-                WorkEntryDetails(workEntry: entry),
-              SizedBox(height: 16),
-            ],
-          ],
+              ], constraints.maxWidth - 32) // Subtract padding,
+            );
+          }
         ),
       ].reversed.toList(),
     );
@@ -132,5 +137,17 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
     setState(() {
       _buttonHeight = height; // Update the button height
     });
+  }
+
+  List<Widget> _constrainWidth(List<Widget> children, double maxAvailableWidth) {
+    return children.map((child) => Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: min(KglTimeApp.maxPageWidth, maxAvailableWidth),),
+          child: child,
+        ),
+      ],
+    )).toList();
   }
 }

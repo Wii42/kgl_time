@@ -57,15 +57,18 @@ abstract class KglPage extends StatelessWidget {
   /// ScrollView is applied, e.g. the visible available space, not the space
   /// inside the ScrollView.
   static Widget alwaysFillingScrollView(
-      {Widget? child, Widget Function(BuildContext, BoxConstraints)? builder}) {
+      {Widget? child, Widget Function(BuildContext, BoxConstraints)? builder, double maxWidth = double.infinity}) {
     assert(child != null || builder != null);
     return LayoutBuilder(builder: (context, constraints) {
       return SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: constraints.maxHeight,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight,
+              maxWidth: maxWidth,
+            ),
+            child: child ?? builder?.call(context, constraints),
           ),
-          child: child ?? builder?.call(context, constraints),
         ),
       );
     });
