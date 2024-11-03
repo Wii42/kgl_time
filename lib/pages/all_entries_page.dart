@@ -84,9 +84,8 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
                 }),
           ),
         ),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return ListView(
+        LayoutBuilder(builder: (context, constraints) {
+          return ListView(
               padding: const EdgeInsets.all(16),
               children: _constrainWidth([
                 SizedBox(
@@ -96,8 +95,10 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                          '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit)} ${entryGroup.year}'),
+                      Expanded(
+                        child: Text(
+                            '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit)} ${entryGroup.year}', overflow: TextOverflow.ellipsis,),
+                      ),
                       Text(formatDuration(entryGroup.totalWorkDuration())),
                     ],
                   ),
@@ -106,9 +107,8 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
                   SizedBox(height: 16),
                 ],
               ], constraints.maxWidth - 32) // Subtract padding,
-            );
-          }
-        ),
+              );
+        }),
       ].reversed.toList(),
     );
   }
@@ -139,15 +139,20 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
     });
   }
 
-  List<Widget> _constrainWidth(List<Widget> children, double maxAvailableWidth) {
-    return children.map((child) => Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: min(KglTimeApp.maxPageWidth, maxAvailableWidth),),
-          child: child,
-        ),
-      ],
-    )).toList();
+  List<Widget> _constrainWidth(
+      List<Widget> children, double maxAvailableWidth) {
+    return children
+        .map((child) => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: min(KglTimeApp.maxPageWidth, maxAvailableWidth),
+                  ),
+                  child: child,
+                ),
+              ],
+            ))
+        .toList();
   }
 }

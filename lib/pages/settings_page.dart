@@ -60,35 +60,46 @@ class SettingsPage extends KglPage {
       ThemeMode.dark: Icons.brightness_2
     };
     return Consumer<KeyValues>(builder: (context, keyValues, _) {
-      return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text('Darstellung'),
-        ToggleButtons(
-          isSelected: [
-            for (ThemeMode themeMode in ThemeMode.values)
-              (parseThemeMode(keyValues.get<String>('themeMode')) ??
-                      ThemeMode.system) ==
-                  themeMode
-          ],
-          children: [
-            for (ThemeMode themeMode in ThemeMode.values)
-              Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Column(
-                  children: [
-                    Icon(themeModeIcons[themeMode]),
-                    Text(
-                      themeModeNames[themeMode] ?? '',
-                      style: Theme.of(context).textTheme.labelSmall,
-                    ),
+      return LayoutBuilder(builder: (context, constraints) {
+        return SizedBox(
+          width: constraints.maxWidth,
+          child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              runAlignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                Text('Darstellung'),
+                ToggleButtons(
+                  isSelected: [
+                    for (ThemeMode themeMode in ThemeMode.values)
+                      (parseThemeMode(keyValues.get<String>('themeMode')) ??
+                              ThemeMode.system) ==
+                          themeMode
                   ],
+                  children: [
+                    for (ThemeMode themeMode in ThemeMode.values)
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Column(
+                          children: [
+                            Icon(themeModeIcons[themeMode]),
+                            Text(
+                              themeModeNames[themeMode] ?? '',
+                              style: Theme.of(context).textTheme.labelSmall,
+                            ),
+                          ],
+                        ),
+                      )
+                  ],
+                  onPressed: (int index) {
+                    keyValues.set('themeMode', ThemeMode.values[index].name);
+                  },
                 ),
-              )
-          ],
-          onPressed: (int index) {
-            keyValues.set('themeMode', ThemeMode.values[index].name);
-          },
-        ),
-      ]);
+              ]),
+        );
+      });
     });
   }
 
@@ -143,14 +154,13 @@ class SettingsPage extends KglPage {
               style: textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
-          if (categories.entries.isNotEmpty)
-            SizedBox(height: 8),
+          if (categories.entries.isNotEmpty) SizedBox(height: 8),
           ElevatedButton(
             onPressed: () => _showNewCategoryDialog(context),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Neue Kategorie hinzufügen'),
+                Expanded(child: Text('Neue Kategorie hinzufügen', textAlign: TextAlign.center,)),
                 Icon(Icons.add),
               ],
             ),
@@ -173,16 +183,18 @@ class SettingsPage extends KglPage {
               ? 'Neue Kategorie hinzufügen'
               : 'Kategorie bearbeiten'),
           content: Form(
-          key: formKey,child: TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Bitte geben Sie einen Namen ein';
-              }
-              return null;
-            },
-            controller: controller,
-            decoration: InputDecoration(hintText: 'Kategorie'),
-          ),),
+            key: formKey,
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Bitte geben Sie einen Namen ein';
+                }
+                return null;
+              },
+              controller: controller,
+              decoration: InputDecoration(hintText: 'Kategorie'),
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -190,45 +202,47 @@ class SettingsPage extends KglPage {
             ),
             ElevatedButton(
               onPressed: () {
-                if (formKey.currentState!.validate()){
-                WorkCategories categories =
-                    Provider.of<WorkCategories>(context, listen: false);
-                if (existingCategory != null) {
-                  String oldName = existingCategory.displayName;
-                  categories.updateEntry(existingCategory,
-                      existingCategory..displayName = controller.text);
-                  WorkEntries workEntries =
-                      Provider.of<WorkEntries>(context, listen: false);
+                if (formKey.currentState!.validate()) {
+                  WorkCategories categories =
+                      Provider.of<WorkCategories>(context, listen: false);
+                  if (existingCategory != null) {
+                    String oldName = existingCategory.displayName;
+                    categories.updateEntry(existingCategory,
+                        existingCategory..displayName = controller.text);
+                    WorkEntries workEntries =
+                        Provider.of<WorkEntries>(context, listen: false);
 
-                  Iterable<WorkEntry> entriesWithThisCategory = workEntries
-                      .entries
-                      .where((entry) => entry.categories.any((category) =>
-                          category.displayName == oldName &&
-                          category.id == existingCategory.id));
-                  for (WorkEntry entry in entriesWithThisCategory) {
-                    WorkEntry newEntry = WorkEntry(
-                      workDurationInSeconds: entry.workDurationInSeconds,
-                      date: entry.date,
-                      categories: [
-                        for (EmbeddedWorkCategory category in entry.categories)
-                          if (category.id == existingCategory.id &&
-                              category.displayName == oldName)
-                            category..displayName = controller.text
-                          else
-                            category
-                      ],
-                      description: entry.description,
-                      startTime: entry.startTime,
-                      endTime: entry.endTime,
-                    )..id = entry.id;
-                    workEntries.updateEntry(entry, newEntry);
+                    Iterable<WorkEntry> entriesWithThisCategory = workEntries
+                        .entries
+                        .where((entry) => entry.categories.any((category) =>
+                            category.displayName == oldName &&
+                            category.id == existingCategory.id));
+                    for (WorkEntry entry in entriesWithThisCategory) {
+                      WorkEntry newEntry = WorkEntry(
+                        workDurationInSeconds: entry.workDurationInSeconds,
+                        date: entry.date,
+                        categories: [
+                          for (EmbeddedWorkCategory category
+                              in entry.categories)
+                            if (category.id == existingCategory.id &&
+                                category.displayName == oldName)
+                              category..displayName = controller.text
+                            else
+                              category
+                        ],
+                        description: entry.description,
+                        startTime: entry.startTime,
+                        endTime: entry.endTime,
+                      )..id = entry.id;
+                      workEntries.updateEntry(entry, newEntry);
+                    }
+                  } else {
+                    categories.add(WorkCategory(controller.text,
+                        listIndex: categories.entries.length));
                   }
-                } else {
-                  categories.add(WorkCategory(controller.text,
-                      listIndex: categories.entries.length));
+                  Navigator.of(context).pop();
                 }
-                Navigator.of(context).pop();
-              }},
+              },
               child:
                   Text(existingCategory == null ? 'Hinzufügen' : 'Speichern'),
             ),
@@ -250,10 +264,11 @@ class SettingsPage extends KglPage {
             context: context),
         infoWithLink(
             linkText: 'Datenschutzrichtlinie',
-            link: Uri.parse('https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#datenschutzrichtlinie-für-kgl-time'),
+            link: Uri.parse(
+                'https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#datenschutzrichtlinie-für-kgl-time'),
             context: context),
         Text(''),
-        Text("v0.0.2", style: theme.textTheme.bodySmall),
+        Text("v0.1.0", style: theme.textTheme.bodySmall),
       ],
     );
   }

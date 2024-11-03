@@ -74,10 +74,12 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     dateController = TextEditingController(text: formatDate(selectedDate));
     Duration? workDuration = widget.existingEntry?.workDuration;
     durationMinuteController = TextEditingController(
-        text: workDuration != null ?(workDuration.inMinutes % Duration.minutesPerHour).toString() : '');
+        text: workDuration != null
+            ? (workDuration.inMinutes % Duration.minutesPerHour).toString()
+            : '');
     String workHours = workDuration?.inHours.toString() ?? '';
-    durationHourController = TextEditingController(
-        text: workHours != '0' ? workHours : '');
+    durationHourController =
+        TextEditingController(text: workHours != '0' ? workHours : '');
     descriptionController =
         TextEditingController(text: widget.existingEntry?.description ?? '');
   }
@@ -111,9 +113,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                             controller: durationHourController,
                             style: textTheme.displaySmall,
                             decoration: InputDecoration(
-                                labelText: 'Stunden',
-                                suffixText: 'h'),
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                labelText: 'Stunden', suffixText: 'h'),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                             keyboardType: TextInputType.number,
                           ),
                         ),
@@ -125,9 +128,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                             style: textTheme.displaySmall,
                             autofocus: true,
                             decoration: InputDecoration(
-                                labelText: 'Minuten',
-                                suffixText: 'min'),
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                labelText: 'Minuten', suffixText: 'min'),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                             keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -184,21 +188,29 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                 },
               ),
               SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        context.pop();
-                      },
-                      child: Text('Abbrechen')),
-                  FilledButton(
-                      onPressed: () {
-                        saveEntry(context);
-                      },
-                      child: Text('Speichern'))
-                ],
-              ),
+              LayoutBuilder(builder: (context, constraints) {
+                return ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    runSpacing: 8,
+                    spacing: 8,
+                    runAlignment: WrapAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            context.pop();
+                          },
+                          child: Text('Abbrechen')),
+                      FilledButton(
+                          onPressed: () {
+                            saveEntry(context);
+                          },
+                          child: Text('Speichern'))
+                    ],
+                  ),
+                );
+              }),
               SizedBox()
             ],
           ),
@@ -213,8 +225,9 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
           ? int.parse(durationHourController.text)
           : 0;
       WorkEntry newEntry = WorkEntry(
-        workDurationInSeconds:
-            Duration(hours: hours, minutes: int.parse(durationMinuteController.text)).inSeconds,
+        workDurationInSeconds: Duration(
+                hours: hours, minutes: int.parse(durationMinuteController.text))
+            .inSeconds,
         date: selectedDate,
         categories: [
           for (int i = 0; i < widget.categories.length; i++)

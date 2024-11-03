@@ -34,11 +34,17 @@ class HomePage extends KglPage {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Neuen Eintrag erfassen',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.apply(color: Colors.white)),
+                        Expanded(
+                          child: Text('Neuen Eintrag erfassen',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              softWrap: true,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.apply(color: Colors.white)),
+                        ),
                         Icon(Icons.add),
                       ],
                     ),
@@ -48,17 +54,19 @@ class HomePage extends KglPage {
                 WorkEntryTimeTracker(),
                 const SizedBox(height: 32),
                 if (workEntries.entries.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text('Letzte Einträge'),
-                    for (WorkEntry entry in workEntries.entries.take(3))
-                      WorkEntryPreview(workEntry: entry),
-                    ElevatedButton(
-                        onPressed: () => context.go('/allEntries'),
-                        child: Text('Alle Einträge anzeigen')),
-                  ],
-                )else Center(child: Text('Noch keine Einträge vorhanden')),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text('Letzte Einträge'),
+                      for (WorkEntry entry in workEntries.entries.take(3))
+                        WorkEntryPreview(workEntry: entry),
+                      ElevatedButton(
+                          onPressed: () => context.go('/allEntries'),
+                          child: Text('Alle Einträge anzeigen')),
+                    ],
+                  )
+                else
+                  Center(child: Text('Noch keine Einträge vorhanden')),
                 const SizedBox(height: 32),
                 Column(
                   children: [
