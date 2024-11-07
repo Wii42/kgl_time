@@ -1,6 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-
-import '../isar_icon_data.dart';
 import 'isar_storable.dart';
 
 part 'work_category.g.dart';
@@ -8,7 +7,8 @@ part 'work_category.g.dart';
 abstract class IWorkCategory {
   String displayName;
 
-  IsarIconData? icon;
+  @Enumerated(EnumType.name)
+  CategoryIcon? icon;
 
   IWorkCategory(this.displayName, {this.icon});
 
@@ -55,4 +55,17 @@ class EmbeddedWorkCategory extends IWorkCategory {
     }
     return category;
   }
+}
+
+enum CategoryIcon {
+  phone(Icons.phone),
+  work(Icons.work),
+  home(Icons.home),
+  school(Icons.school),
+  shopping(Icons.shopping_cart),
+  sport(Icons.sports),
+  transport(Icons.directions_bus),
+  ;
+
+  const CategoryIcon(IconData icon);
 }

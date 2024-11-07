@@ -66,10 +66,7 @@ const WorkEntrySchema = CollectionSchema(
   idName: r'id',
   indexes: {},
   links: {},
-  embeddedSchemas: {
-    r'EmbeddedWorkCategory': EmbeddedWorkCategorySchema,
-    r'IsarIconData': IsarIconDataSchema
-  },
+  embeddedSchemas: {r'EmbeddedWorkCategory': EmbeddedWorkCategorySchema},
   getId: _workEntryGetId,
   getLinks: _workEntryGetLinks,
   attach: _workEntryAttach,
