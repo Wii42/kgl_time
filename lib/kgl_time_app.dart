@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_category.dart';
@@ -86,6 +87,15 @@ class KglTimeApp extends StatelessWidget {
         theme: theme(brightness: Brightness.light),
         darkTheme: theme(brightness: Brightness.dark),
         routerConfig: router,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+
+        ],
+        supportedLocales: [
+          const Locale('de', 'CH'), // English
+          // Add other locales here if needed
+        ],
       ),
     );
   }
