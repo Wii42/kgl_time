@@ -87,11 +87,7 @@ class KglTimeApp extends StatelessWidget {
         theme: theme(brightness: Brightness.light),
         darkTheme: theme(brightness: Brightness.dark),
         routerConfig: router,
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-
-        ],
+        localizationsDelegates: GlobalMaterialLocalizations.delegates,
         supportedLocales: [
           const Locale('de', 'CH'), // English
           // Add other locales here if needed
