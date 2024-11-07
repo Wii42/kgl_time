@@ -18,18 +18,15 @@ class NewEntryPage extends KglPage {
 
   @override
   Widget body(BuildContext context) => Consumer<WorkCategories>(
-        /// TODO: Check if WorkEntries is needed here
-        builder: (context, workCategories, _) => Consumer<WorkEntries>(
-          builder: (context, workEntries, _) => _NewEntryStatefulPage(
-            existingEntry: existingEntry,
-            categories: List.of(workCategories.entries)
-              ..addAll(existingEntry?.categories
-                      .where((element) =>
-                          !workCategories.entries.contains(element))
-                      .map((e) => e.toWorkCategory()) ??
-                  []),
-            key: key,
-          ),
+        builder: (context, workCategories, _) => _NewEntryStatefulPage(
+          existingEntry: existingEntry,
+          categories: List.of(workCategories.entries)
+            ..addAll(existingEntry?.categories
+                    .where(
+                        (element) => !workCategories.entries.contains(element))
+                    .map((e) => e.toWorkCategory()) ??
+                []),
+          key: key,
         ),
       );
 
@@ -97,55 +94,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               SizedBox(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //Text('Arbeitsdauer', style: textTheme.bodyLarge),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Flexible(
-                          flex: 2,
-                          child: TextFormField(
-                            controller: durationHourController,
-                            style: textTheme.displaySmall,
-                            decoration: InputDecoration(
-                                labelText: 'Stunden', suffixText: 'h'),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            keyboardType: TextInputType.number,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        Flexible(
-                          flex: 4,
-                          child: TextFormField(
-                            controller: durationMinuteController,
-                            style: textTheme.displaySmall,
-                            autofocus: true,
-                            decoration: InputDecoration(
-                                labelText: 'Minuten', suffixText: 'min'),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Bitte geben Sie eine Dauer ein.\nNur Ziffern erlaubt';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              workDurationField(textTheme),
               SizedBox(height: 16),
               Wrap(
                 spacing: 8,
@@ -173,7 +122,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                 readOnly: true,
                 onTap: () async {
                   DateTime? newDate = await showDatePicker(
-                    //locale: Locale('de'),
+                    locale: Locale('de'),
                     context: context,
                     initialDate: selectedDate,
                     firstDate: DateTime(2000),
@@ -215,6 +164,54 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget workDurationField(TextTheme textTheme) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //Text('Arbeitsdauer', style: textTheme.bodyLarge),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Flexible(
+                flex: 2,
+                child: TextFormField(
+                  controller: durationHourController,
+                  style: textTheme.displaySmall,
+                  decoration:
+                      InputDecoration(labelText: 'Stunden', suffixText: 'h'),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              SizedBox(width: 8),
+              Flexible(
+                flex: 4,
+                child: TextFormField(
+                  controller: durationMinuteController,
+                  style: textTheme.displaySmall,
+                  autofocus: true,
+                  decoration:
+                      InputDecoration(labelText: 'Minuten', suffixText: 'min'),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Bitte geben Sie eine Dauer ein.\nNur Ziffern erlaubt';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -278,6 +275,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     dateController.dispose();
     durationMinuteController.dispose();
     descriptionController.dispose();
+    durationHourController.dispose();
     super.dispose();
   }
 }
