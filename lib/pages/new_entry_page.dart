@@ -122,7 +122,6 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                 readOnly: true,
                 onTap: () async {
                   DateTime? newDate = await showDatePicker(
-                    locale: Locale('de'),
                     context: context,
                     initialDate: selectedDate,
                     firstDate: DateTime(2000),
