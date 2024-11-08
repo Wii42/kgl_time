@@ -71,32 +71,40 @@ class SettingsPage extends KglPage {
               runSpacing: 8,
               children: [
                 Text('Darstellung'),
-                ToggleButtons(
-                  isSelected: [
-                    for (ThemeMode themeMode in ThemeMode.values)
-                      (parseThemeMode(keyValues.get<String>('themeMode')) ??
-                              ThemeMode.system) ==
-                          themeMode
-                  ],
-                  children: [
-                    for (ThemeMode themeMode in ThemeMode.values)
-                      Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Column(
-                          children: [
-                            Icon(themeModeIcons[themeMode]),
-                            Text(
-                              themeModeNames[themeMode] ?? '',
-                              style: Theme.of(context).textTheme.labelSmall,
+                SegmentedButton<ThemeMode>(
+                  segments: [
+                    for (ThemeMode mode in ThemeMode.values)
+                      ButtonSegment(
+                          value: mode,
+                          label: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Column(
+                              children: [
+                                Icon(themeModeIcons[mode], size: 20),
+                                Text(
+                                  themeModeNames[mode] ?? '',
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      )
+                          )),
                   ],
-                  onPressed: (int index) {
-                    keyValues.set('themeMode', ThemeMode.values[index].name);
+                  showSelectedIcon: false,
+                  selected: {
+                    parseThemeMode(keyValues.get<String>('themeMode')) ??
+                        ThemeMode.system
                   },
-                ),
+                  onSelectionChanged: (Set<ThemeMode> modes) {
+                    keyValues.set('themeMode', modes.single.name);
+                  },
+                  style: ButtonStyle(
+                      iconColor: WidgetStateProperty.resolveWith((states) {
+                    if (states.contains(WidgetState.selected)) {
+                      return Theme.of(context).colorScheme.primary;
+                    }
+                    return null;
+                  }), visualDensity: VisualDensity.compact),
+                )
               ]),
         );
       });
@@ -160,7 +168,11 @@ class SettingsPage extends KglPage {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: Text('Neue Kategorie hinzufügen', textAlign: TextAlign.center,)),
+                Expanded(
+                    child: Text(
+                  'Neue Kategorie hinzufügen',
+                  textAlign: TextAlign.center,
+                )),
                 Icon(Icons.add),
               ],
             ),

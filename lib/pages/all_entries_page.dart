@@ -66,22 +66,22 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
             key: _buttonKey, // Assign the key to the button
             padding: const EdgeInsets.all(12.0),
             child: SegmentedButton<CalendarUnit>(
-                segments: [
-                  ButtonSegment(
-                      value: CalendarUnit.week, label: Text('Nach Woche')),
-                  ButtonSegment(
-                      value: CalendarUnit.month, label: Text('Nach Monat'))
-                ],
-                selected: {
-                  _selectedCalendarUnit
-                },
-                onSelectionChanged: (Set<CalendarUnit> selected) {
-                  assert(selected.length == 1);
-                  setState(() {
-                    _selectedCalendarUnit = selected.single;
-                    _updateGroupedEntries();
-                  });
-                }),
+              segments: [
+                ButtonSegment(
+                    value: CalendarUnit.week, label: Text('Nach Woche')),
+                ButtonSegment(
+                    value: CalendarUnit.month, label: Text('Nach Monat'))
+              ],
+              selected: {_selectedCalendarUnit},
+              onSelectionChanged: (Set<CalendarUnit> selected) {
+                assert(selected.length == 1);
+                setState(() {
+                  _selectedCalendarUnit = selected.single;
+                  _updateGroupedEntries();
+                });
+              },
+              style: solidUnselectedBackgroundStyle(context),
+            ),
           ),
         ),
         LayoutBuilder(builder: (context, constraints) {
@@ -97,7 +97,9 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
                     children: [
                       Expanded(
                         child: Text(
-                            '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit)} ${entryGroup.year}', overflow: TextOverflow.ellipsis,),
+                          '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit)} ${entryGroup.year}',
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       Text(formatDuration(entryGroup.totalWorkDuration())),
                     ],
@@ -111,6 +113,22 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         }),
       ].reversed.toList(),
     );
+  }
+
+  /// Sets the background color of the button if not selected to [color] if provided or the default background color
+  ButtonStyle solidUnselectedBackgroundStyle(BuildContext context,
+      {Color? color}) {
+    return ButtonStyle(backgroundColor:
+        WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+      if (states.contains(WidgetState.selected)) {
+        return Theme.of(context)
+            .segmentedButtonTheme
+            .style
+            ?.backgroundColor
+            ?.resolve(states); // use default
+      }
+      return color ?? Theme.of(context).canvasColor;
+    }));
   }
 
   void _updateGroupedEntries() {

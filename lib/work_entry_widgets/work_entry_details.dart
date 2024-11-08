@@ -18,13 +18,20 @@ class WorkEntryDetails extends WorkEntryWidget {
     return Row(
       children: [
         Checkbox(
-            value: workEntry.tickedOff,
-            onChanged: (_) {
-              WorkEntries entriesList = context.read<WorkEntries>();
-              entriesList.updateEntry(
-                  workEntry, workEntry..tickedOff = !workEntry.tickedOff);
-            }),
-        SizedBox(width: 8),
+          value: workEntry.tickedOff,
+          onChanged: (_) {
+            WorkEntries entriesList = context.read<WorkEntries>();
+            entriesList.updateEntry(
+                workEntry, workEntry..tickedOff = !workEntry.tickedOff);
+          },
+          shape: CircleBorder(),
+          side: BorderSide(
+            color: Theme.of(context).dividerColor,
+            width: 1,
+          ),
+          visualDensity: VisualDensity.compact,
+        ),
+        SizedBox(width: 6),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,8 +40,9 @@ class WorkEntryDetails extends WorkEntryWidget {
                 formatDuration(workEntry.workDuration),
                 style: textTheme.headlineSmall,
               ),
-              if(workEntry.startTime != null && workEntry.endTime != null)
-                Text('${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
+              if (workEntry.startTime != null && workEntry.endTime != null)
+                Text(
+                    '${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
               Text(formattedDate()),
               if (workEntry.categories.isNotEmpty) ...[
                 SizedBox(height: 8),
