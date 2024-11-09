@@ -77,7 +77,7 @@ class SettingsPage extends KglPage {
                       ButtonSegment(
                           value: mode,
                           label: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Column(
                               children: [
                                 Icon(themeModeIcons[mode], size: 20),
