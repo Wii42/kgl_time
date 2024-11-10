@@ -245,6 +245,10 @@ class SettingsPage extends KglPage {
                         description: entry.description,
                         startTime: entry.startTime,
                         endTime: entry.endTime,
+                        lastEdit: entry.lastEdit,
+                        tickedOff: entry.tickedOff,
+                        createType: entry.createType,
+                        wasEdited: entry.wasEdited,
                       )..id = entry.id;
                       workEntries.updateEntry(entry, newEntry);
                     }

@@ -57,7 +57,9 @@ class WorkEntryTimeTracker extends StatelessWidget {
                         WorkEntry.fromStartAndEndTime(
                             startTime: startTime!,
                             endTime: DateTime.now(),
-                            lastEdit: DateTime.now()),
+                            lastEdit: DateTime.now(),
+                          createType: CreateWorkEntryType.timeTracker
+                        ),
                       );
                 }
               },

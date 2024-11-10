@@ -234,6 +234,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         endTime: widget.existingEntry?.endTime,
         lastEdit: DateTime.now(),
         tickedOff: widget.existingEntry?.tickedOff ?? false,
+        createType: widget.existingEntry != null
+            ? widget.existingEntry!.createType
+            : CreateWorkEntryType.manualDuration,
+        wasEdited: widget.existingEntry != null,
       );
       WorkEntries workEntries = context.read<WorkEntries>();
       if (widget.existingEntry != null) {

@@ -23,38 +23,49 @@ const WorkEntrySchema = CollectionSchema(
       type: IsarType.objectList,
       target: r'EmbeddedWorkCategory',
     ),
-    r'date': PropertySchema(
+    r'createType': PropertySchema(
       id: 1,
+      name: r'createType',
+      type: IsarType.int,
+      enumMap: _WorkEntrycreateTypeEnumValueMap,
+    ),
+    r'date': PropertySchema(
+      id: 2,
       name: r'date',
       type: IsarType.dateTime,
     ),
     r'description': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'description',
       type: IsarType.string,
     ),
     r'endTime': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'endTime',
       type: IsarType.dateTime,
     ),
     r'lastEdit': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'lastEdit',
       type: IsarType.dateTime,
     ),
     r'startTime': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'startTime',
       type: IsarType.dateTime,
     ),
     r'tickedOff': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'tickedOff',
       type: IsarType.bool,
     ),
+    r'wasEdited': PropertySchema(
+      id: 8,
+      name: r'wasEdited',
+      type: IsarType.bool,
+    ),
     r'workDurationInSeconds': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'workDurationInSeconds',
       type: IsarType.long,
     )
@@ -109,13 +120,15 @@ void _workEntrySerialize(
     EmbeddedWorkCategorySchema.serialize,
     object.categories,
   );
-  writer.writeDateTime(offsets[1], object.date);
-  writer.writeString(offsets[2], object.description);
-  writer.writeDateTime(offsets[3], object.endTime);
-  writer.writeDateTime(offsets[4], object.lastEdit);
-  writer.writeDateTime(offsets[5], object.startTime);
-  writer.writeBool(offsets[6], object.tickedOff);
-  writer.writeLong(offsets[7], object.workDurationInSeconds);
+  writer.writeInt(offsets[1], object.createType?.index);
+  writer.writeDateTime(offsets[2], object.date);
+  writer.writeString(offsets[3], object.description);
+  writer.writeDateTime(offsets[4], object.endTime);
+  writer.writeDateTime(offsets[5], object.lastEdit);
+  writer.writeDateTime(offsets[6], object.startTime);
+  writer.writeBool(offsets[7], object.tickedOff);
+  writer.writeBool(offsets[8], object.wasEdited);
+  writer.writeLong(offsets[9], object.workDurationInSeconds);
 }
 
 WorkEntry _workEntryDeserialize(
@@ -132,13 +145,16 @@ WorkEntry _workEntryDeserialize(
           EmbeddedWorkCategory(),
         ) ??
         const [],
-    date: reader.readDateTime(offsets[1]),
-    description: reader.readStringOrNull(offsets[2]),
-    endTime: reader.readDateTimeOrNull(offsets[3]),
-    lastEdit: reader.readDateTimeOrNull(offsets[4]),
-    startTime: reader.readDateTimeOrNull(offsets[5]),
-    tickedOff: reader.readBoolOrNull(offsets[6]) ?? false,
-    workDurationInSeconds: reader.readLong(offsets[7]),
+    createType:
+        _WorkEntrycreateTypeValueEnumMap[reader.readIntOrNull(offsets[1])],
+    date: reader.readDateTime(offsets[2]),
+    description: reader.readStringOrNull(offsets[3]),
+    endTime: reader.readDateTimeOrNull(offsets[4]),
+    lastEdit: reader.readDateTimeOrNull(offsets[5]),
+    startTime: reader.readDateTimeOrNull(offsets[6]),
+    tickedOff: reader.readBoolOrNull(offsets[7]) ?? false,
+    wasEdited: reader.readBoolOrNull(offsets[8]) ?? false,
+    workDurationInSeconds: reader.readLong(offsets[9]),
   );
   object.id = id;
   return object;
@@ -160,23 +176,39 @@ P _workEntryDeserializeProp<P>(
           ) ??
           const []) as P;
     case 1:
-      return (reader.readDateTime(offset)) as P;
+      return (_WorkEntrycreateTypeValueEnumMap[reader.readIntOrNull(offset)])
+          as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 3:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 6:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 7:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
+    case 8:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
+    case 9:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
 }
+
+const _WorkEntrycreateTypeEnumValueMap = {
+  'timeTracker': 0,
+  'manualDuration': 1,
+  'manualStartAndEndTime': 2,
+};
+const _WorkEntrycreateTypeValueEnumMap = {
+  0: CreateWorkEntryType.timeTracker,
+  1: CreateWorkEntryType.manualDuration,
+  2: CreateWorkEntryType.manualStartAndEndTime,
+};
 
 Id _workEntryGetId(WorkEntry object) {
   return object.id;
@@ -355,6 +387,77 @@ extension WorkEntryQueryFilter
         upper,
         includeUpper,
       );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> createTypeIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'createType',
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
+      createTypeIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'createType',
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> createTypeEqualTo(
+      CreateWorkEntryType? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'createType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
+      createTypeGreaterThan(
+    CreateWorkEntryType? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'createType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> createTypeLessThan(
+    CreateWorkEntryType? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'createType',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> createTypeBetween(
+    CreateWorkEntryType? lower,
+    CreateWorkEntryType? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'createType',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
     });
   }
 
@@ -836,6 +939,16 @@ extension WorkEntryQueryFilter
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> wasEditedEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'wasEdited',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
       workDurationInSecondsEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
@@ -907,6 +1020,18 @@ extension WorkEntryQueryLinks
     on QueryBuilder<WorkEntry, WorkEntry, QFilterCondition> {}
 
 extension WorkEntryQuerySortBy on QueryBuilder<WorkEntry, WorkEntry, QSortBy> {
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByCreateType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByCreateTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createType', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'date', Sort.asc);
@@ -979,6 +1104,18 @@ extension WorkEntryQuerySortBy on QueryBuilder<WorkEntry, WorkEntry, QSortBy> {
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByWasEdited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'wasEdited', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByWasEditedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'wasEdited', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
       sortByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
@@ -996,6 +1133,18 @@ extension WorkEntryQuerySortBy on QueryBuilder<WorkEntry, WorkEntry, QSortBy> {
 
 extension WorkEntryQuerySortThenBy
     on QueryBuilder<WorkEntry, WorkEntry, QSortThenBy> {
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByCreateType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createType', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByCreateTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createType', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'date', Sort.asc);
@@ -1080,6 +1229,18 @@ extension WorkEntryQuerySortThenBy
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByWasEdited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'wasEdited', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByWasEditedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'wasEdited', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
       thenByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
@@ -1097,6 +1258,12 @@ extension WorkEntryQuerySortThenBy
 
 extension WorkEntryQueryWhereDistinct
     on QueryBuilder<WorkEntry, WorkEntry, QDistinct> {
+  QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByCreateType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'createType');
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'date');
@@ -1134,6 +1301,12 @@ extension WorkEntryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByWasEdited() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'wasEdited');
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QDistinct>
       distinctByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
@@ -1154,6 +1327,13 @@ extension WorkEntryQueryProperty
       categoriesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'categories');
+    });
+  }
+
+  QueryBuilder<WorkEntry, CreateWorkEntryType?, QQueryOperations>
+      createTypeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'createType');
     });
   }
 
@@ -1190,6 +1370,12 @@ extension WorkEntryQueryProperty
   QueryBuilder<WorkEntry, bool, QQueryOperations> tickedOffProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tickedOff');
+    });
+  }
+
+  QueryBuilder<WorkEntry, bool, QQueryOperations> wasEditedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'wasEdited');
     });
   }
 

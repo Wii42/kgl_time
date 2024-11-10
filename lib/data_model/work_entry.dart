@@ -11,12 +11,14 @@ class WorkEntry implements IsarStorable {
   int workDurationInSeconds;
   DateTime date;
   String? description;
-  @enumerated
   List<EmbeddedWorkCategory> categories;
   DateTime? startTime;
   DateTime? endTime;
   DateTime? lastEdit;
   bool tickedOff;
+  @Enumerated(EnumType.ordinal32)
+  CreateWorkEntryType? createType;
+  bool wasEdited;
 
   WorkEntry(
       {required this.workDurationInSeconds,
@@ -26,7 +28,9 @@ class WorkEntry implements IsarStorable {
       this.startTime,
       this.endTime,
       this.lastEdit,
-      this.tickedOff = false});
+      this.tickedOff = false,
+      this.createType,
+      this.wasEdited = false});
 
   @ignore
   Duration get workDuration => Duration(seconds: workDurationInSeconds);
@@ -38,6 +42,8 @@ class WorkEntry implements IsarStorable {
     List<EmbeddedWorkCategory> categories = const [],
     DateTime? lastEdit,
     bool tickedOff = false,
+    CreateWorkEntryType? createType,
+    bool wasEdited = false,
   }) {
     return WorkEntry(
       workDurationInSeconds: duration.inSeconds,
@@ -46,6 +52,8 @@ class WorkEntry implements IsarStorable {
       categories: categories,
       lastEdit: lastEdit,
       tickedOff: tickedOff,
+      createType: createType,
+      wasEdited: wasEdited,
     );
   }
 
@@ -55,8 +63,10 @@ class WorkEntry implements IsarStorable {
     String? description,
     List<EmbeddedWorkCategory> categories = const [],
     DateTime? lastEdit,
+    bool tickedOff = false,
+    CreateWorkEntryType? createType,
+    bool wasEdited = false,
   }) {
-    bool tickedOff = false;
     return WorkEntry(
       workDurationInSeconds: endTime.difference(startTime).inSeconds,
       date: startTime,
@@ -66,6 +76,10 @@ class WorkEntry implements IsarStorable {
       endTime: endTime,
       lastEdit: lastEdit,
       tickedOff: tickedOff,
+      createType: createType,
+      wasEdited: wasEdited,
     );
   }
 }
+
+enum CreateWorkEntryType { timeTracker, manualDuration, manualStartAndEndTime }
