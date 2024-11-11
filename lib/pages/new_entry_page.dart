@@ -7,6 +7,7 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
+import 'package:kgl_time/popup_dialog.dart';
 import 'package:provider/provider.dart';
 
 import '../kgl_time_app.dart';
@@ -48,7 +49,7 @@ class _NewEntryStatefulPage extends StatefulWidget {
 class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   final _formKey = GlobalKey<FormState>();
 
-  late List<bool> categorySelection;
+  late Map<WorkCategory, bool> categorySelection;
   late DateTime selectedDate;
   late TextEditingController dateController;
   late TextEditingController durationMinuteController;
@@ -58,14 +59,14 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   @override
   void initState() {
     super.initState();
-    categorySelection = [
-      for (WorkCategory category in widget.categories)
-        if (widget.existingEntry == null)
-          false
-        else
-          widget.existingEntry!.categories
-              .any((element) => element.id == category.id)
-    ];
+    categorySelection = Map.fromIterable(widget.categories, value: (category) {
+      if (widget.existingEntry == null) {
+        return false;
+      } else {
+        return widget.existingEntry!.categories
+            .any((element) => element.id == category.id);
+      }
+    });
 
     selectedDate = widget.existingEntry?.date ?? DateTime.now();
     dateController = TextEditingController(text: formatDate(selectedDate));
@@ -96,12 +97,13 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
               SizedBox(),
               workDurationField(textTheme),
               SizedBox(height: 16),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                alignment: WrapAlignment.center,
-                children: _buildCategoryChips(context),
-              ),
+              SelectCategoriesWidget(
+                  categories: categorySelection,
+                  onSelectedCategoriesChanged: (selected) {
+                    setState(() {
+                      categorySelection = selected;
+                    });
+                  }),
               SizedBox(height: 16),
               TextFormField(
                 controller: descriptionController,
@@ -225,10 +227,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                 hours: hours, minutes: int.parse(durationMinuteController.text))
             .inSeconds,
         date: selectedDate,
-        categories: [
-          for (int i = 0; i < widget.categories.length; i++)
-            if (categorySelection[i]) widget.categories[i].toEmbedded()
-        ],
+        categories: categorySelection.entries
+            .where((element) => element.value)
+            .map((e) => e.key.toEmbedded())
+            .toList(),
         description: descriptionController.text,
         startTime: widget.existingEntry?.startTime,
         endTime: widget.existingEntry?.endTime,
@@ -254,23 +256,6 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
       ));
       context.pop();
     }
-  }
-
-  List<Widget> _buildCategoryChips(BuildContext context) {
-    return [
-      for ((int index, IWorkCategory category) element
-          in widget.categories.indexed)
-        ChoiceChip(
-          //avatar: category.icon != null? Icon(category.icon): null,
-          label: Text(element.$2.displayName),
-          selected: categorySelection[element.$1],
-          onSelected: (selected) {
-            setState(() {
-              categorySelection[element.$1] = selected;
-            });
-          },
-        ),
-    ];
   }
 
   @override

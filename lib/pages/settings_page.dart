@@ -99,11 +99,12 @@ class SettingsPage extends KglPage {
                   },
                   style: ButtonStyle(
                       iconColor: WidgetStateProperty.resolveWith((states) {
-                    if (states.contains(WidgetState.selected)) {
-                      return Theme.of(context).colorScheme.primary;
-                    }
-                    return null;
-                  }), visualDensity: VisualDensity.compact),
+                        if (states.contains(WidgetState.selected)) {
+                          return Theme.of(context).colorScheme.primary;
+                        }
+                        return null;
+                      }),
+                      visualDensity: VisualDensity.compact),
                 )
               ]),
         );
@@ -197,6 +198,7 @@ class SettingsPage extends KglPage {
           content: Form(
             key: formKey,
             child: TextFormField(
+              autofocus: true,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Bitte geben Sie einen Namen ein';

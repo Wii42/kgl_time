@@ -37,9 +37,26 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
   }
 
   @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is WorkCategory &&
+        other.id == id &&
+        other.displayName == displayName &&
+        other.icon == icon &&
+        other.listIndex == listIndex;
+  }
+
+
+
+  @override
   String toString() {
     return 'WorkCategory{id: $id, displayName: $displayName, icon: $icon, listIndex: $listIndex}';
   }
+
+  @override
+  int get hashCode => Object.hash(id, displayName, icon, listIndex);
+
 }
 
 @embedded

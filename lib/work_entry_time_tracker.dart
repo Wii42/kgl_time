@@ -1,11 +1,15 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:kgl_time/data_model/key_values.dart';
+import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/kgl_time_app.dart';
+import 'package:kgl_time/popup_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_builder/timer_builder.dart';
+
+import 'data_model/work_category.dart';
 
 class WorkEntryTimeTracker extends StatelessWidget {
   static const String _storageKey = 'timeTrackerStart';
@@ -34,9 +38,26 @@ class WorkEntryTimeTracker extends StatelessWidget {
               textBuilder: (isTracking) => isTracking
                   ? TimerBuilder.periodic(
                       Duration(seconds: 10),
-                      builder: (context) => Text(
-                          'läuft seit ${_trackTime(startTime ?? DateTime.now())}',
-                          style: Theme.of(context).textTheme.bodyLarge),
+                      builder: (context) => Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton.filledTonal(
+                            onPressed: () =>
+                                SelectCategoriesWidget.showSelectCategoryDialog(
+                                    context),
+                            icon: Icon(
+                              Icons.category,
+                            ),
+                            tooltip: "Kategorie auswählen",
+                          ),
+                          Text(
+                              'läuft seit ${_trackTime(startTime ?? DateTime.now())}',
+                              style: Theme.of(context).textTheme.bodyLarge),
+                          SizedBox()
+                        ],
+                      ),
                     )
                   : Text('Zeit erfassen',
                       style: Theme.of(context).textTheme.bodyLarge),
@@ -53,12 +74,25 @@ class WorkEntryTimeTracker extends StatelessWidget {
                   keyValues.set<DateTime>(_storageKey, DateTime.now());
                 } else {
                   keyValues.remove(_storageKey);
+                  String? serializedCategories =
+                      keyValues.get<String>(SelectCategoryDialog.storageKey);
+                  List<WorkCategory> selectedCategories = [];
+                  if (serializedCategories != null) {
+                    selectedCategories =
+                        SelectCategoryDialog.deserializeCategories(
+                            serializedCategories,
+                            context.read<WorkCategories>().entries);
+                  }
+                  keyValues.remove(SelectCategoryDialog.storageKey);
                   context.read<WorkEntries>().add(
                         WorkEntry.fromStartAndEndTime(
-                            startTime: startTime!,
-                            endTime: DateTime.now(),
-                            lastEdit: DateTime.now(),
-                          createType: CreateWorkEntryType.timeTracker
+                          startTime: startTime!,
+                          endTime: DateTime.now(),
+                          lastEdit: DateTime.now(),
+                          categories: selectedCategories
+                              .map((e) => e.toEmbedded())
+                              .toList(),
+                          createType: CreateWorkEntryType.timeTracker,
                         ),
                       );
                 }
