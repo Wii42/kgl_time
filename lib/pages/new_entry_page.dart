@@ -23,8 +23,8 @@ class NewEntryPage extends KglPage {
           existingEntry: existingEntry,
           categories: List.of(workCategories.entries)
             ..addAll(existingEntry?.categories
-                    .where(
-                        (element) => !workCategories.entries.contains(element))
+                    .where((element) =>
+                        workCategories.entries.every((e) => e.id != element.id))
                     .map((e) => e.toWorkCategory()) ??
                 []),
           key: key,
