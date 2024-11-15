@@ -286,7 +286,7 @@ class SettingsPage extends KglPage {
                 'https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#datenschutzrichtlinie-für-kgl-time'),
             context: context),
         Text(''),
-        Text("v0.2.0", style: theme.textTheme.bodySmall),
+        Text("v0.2.1", style: theme.textTheme.bodySmall),
       ],
     );
   }
