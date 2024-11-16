@@ -13,6 +13,7 @@ import '../data_model/work_entry.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../kgl_time_app.dart';
+import '../main.dart';
 
 class SettingsPage extends KglPage {
   const SettingsPage({super.key, required super.appTitle});
@@ -286,7 +287,7 @@ class SettingsPage extends KglPage {
                 'https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#datenschutzrichtlinie-für-kgl-time'),
             context: context),
         Text(''),
-        Text("v0.2.1", style: theme.textTheme.bodySmall),
+        Text("v$appVersion", style: theme.textTheme.bodySmall),
       ],
     );
   }
