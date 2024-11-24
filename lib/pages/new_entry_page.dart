@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -276,17 +274,15 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   }
 
   String? _intValidator(String? value, {int? factor, String? otherValue}) {
-    int maxSaveValue =
-    pow(2,32).toInt(); // 2^53, limited by Web implementation
-    print('maxSaveValue: $maxSaveValue');
+    const int maxSaveValue = 4294967296; // 2^32
 
     if (value == null || value.isEmpty) {
       return null;
     }
-
+    int parsedValue;
     try {
-      int result = int.parse(value);
-      print('Parsed number: $result');
+      parsedValue = int.parse(value);
+      //print('Parsed number: $result');
     } catch (e) {
       if (e is FormatException) {
         return 'Eingegebener Wert ist zu gross oder keine ganze Zahl';
@@ -294,9 +290,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         return 'Unerwarteter Fehler: $e';
       }
     }
-    int parsedValue = int.parse(value);
 
-    print('number of binary digits: ${log(parsedValue) / log(2)}');
+    //print('number of binary digits: ${log(parsedValue) / log(2)}');
     if (parsedValue > (maxSaveValue / (factor ?? 1))) {
       return 'Eingegebener Wert ist zu gross\nMaximal ${maxSaveValue ~/ (factor ?? 1)}';
     }
@@ -309,7 +304,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         }
       }
     }
-    if (parsedValue*(factor??1) < 0) {
+    if (parsedValue * (factor ?? 1) < 0) {
       return 'Eingegebener Wert ist ungültig';
     }
 
