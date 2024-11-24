@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -189,6 +191,9 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                       InputDecoration(labelText: 'Stunden', suffixText: 'h'),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
+                  validator: (value) => _intValidator(value,
+                      factor: Duration.secondsPerHour,
+                      otherValue: durationMinuteController.text),
                 ),
               ),
               SizedBox(width: 8),
@@ -206,7 +211,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                     if (value == null || value.isEmpty) {
                       return 'Bitte geben Sie eine Dauer ein.\nNur Ziffern erlaubt';
                     }
-                    return null;
+
+                    return _intValidator(value,
+                        factor: Duration.secondsPerMinute,
+                        otherValue: durationHourController.text);
                   },
                 ),
               ),
@@ -265,5 +273,46 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     descriptionController.dispose();
     durationHourController.dispose();
     super.dispose();
+  }
+
+  String? _intValidator(String? value, {int? factor, String? otherValue}) {
+    int maxSaveValue =
+    pow(2,32).toInt(); // 2^53, limited by Web implementation
+    print('maxSaveValue: $maxSaveValue');
+
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    try {
+      int result = int.parse(value);
+      print('Parsed number: $result');
+    } catch (e) {
+      if (e is FormatException) {
+        return 'Eingegebener Wert ist zu gross oder keine ganze Zahl';
+      } else {
+        return 'Unerwarteter Fehler: $e';
+      }
+    }
+    int parsedValue = int.parse(value);
+
+    print('number of binary digits: ${log(parsedValue) / log(2)}');
+    if (parsedValue > (maxSaveValue / (factor ?? 1))) {
+      return 'Eingegebener Wert ist zu gross\nMaximal ${maxSaveValue ~/ (factor ?? 1)}';
+    }
+
+    if (otherValue != null) {
+      int? otherInt = int.tryParse(otherValue);
+      if (otherInt != null) {
+        if (parsedValue > ((maxSaveValue / (factor ?? 1)) - otherInt)) {
+          return 'Summe der beiden Werte ist zu gross';
+        }
+      }
+    }
+    if (parsedValue*(factor??1) < 0) {
+      return 'Eingegebener Wert ist ungültig';
+    }
+
+    return null;
   }
 }
