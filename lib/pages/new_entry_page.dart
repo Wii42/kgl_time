@@ -170,6 +170,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   }
 
   Widget workDurationField(TextTheme textTheme) {
+    int errorMaxLines = 5;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
@@ -185,8 +187,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                 child: TextFormField(
                   controller: durationHourController,
                   style: textTheme.displaySmall,
-                  decoration:
-                      InputDecoration(labelText: 'Stunden', suffixText: 'h'),
+                  decoration: InputDecoration(
+                      labelText: 'Stunden', suffixText: 'h', errorMaxLines: errorMaxLines),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   validator: (value) => _intValidator(value,
@@ -201,8 +203,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                   controller: durationMinuteController,
                   style: textTheme.displaySmall,
                   autofocus: true,
-                  decoration:
-                      InputDecoration(labelText: 'Minuten', suffixText: 'min'),
+                  decoration: InputDecoration(
+                      labelText: 'Minuten',
+                      suffixText: 'min',
+                      errorMaxLines: errorMaxLines),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -273,7 +277,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     super.dispose();
   }
 
-  String? _intValidator(String? value, {int? factor, String? otherValue}) {
+  String? _intValidator(String? value, {int factor = 1, String? otherValue}) {
     const int maxSaveValue = 4294967296; // 2^32
 
     if (value == null || value.isEmpty) {
@@ -292,19 +296,19 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     }
 
     //print('number of binary digits: ${log(parsedValue) / log(2)}');
-    if (parsedValue > (maxSaveValue / (factor ?? 1))) {
-      return 'Eingegebener Wert ist zu gross\nMaximal ${maxSaveValue ~/ (factor ?? 1)}';
+    if (parsedValue > (maxSaveValue / factor)) {
+      return 'Eingegebener Wert ist zu gross';
     }
 
     if (otherValue != null) {
       int? otherInt = int.tryParse(otherValue);
       if (otherInt != null) {
-        if (parsedValue > ((maxSaveValue / (factor ?? 1)) - otherInt)) {
+        if (parsedValue > ((maxSaveValue / factor) - otherInt)) {
           return 'Summe der beiden Werte ist zu gross';
         }
       }
     }
-    if (parsedValue * (factor ?? 1) < 0) {
+    if (parsedValue * factor < 0) {
       return 'Eingegebener Wert ist ungültig';
     }
 

@@ -45,7 +45,7 @@ class HomePage extends KglPage {
                                   .bodyLarge
                                   ?.apply(color: Colors.white)),
                         ),
-                        Icon(Icons.add),
+                        Icon(Icons.add, color: Colors.white,),
                       ],
                     ),
                   ),
