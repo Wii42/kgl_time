@@ -105,62 +105,11 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                     });
                   }),
               SizedBox(height: 16),
-              TextFormField(
-                controller: descriptionController,
-                decoration: InputDecoration(
-                  labelText: 'Beschreibung',
-                ),
-                maxLines: 1,
-                maxLengthEnforcement:
-                    MaxLengthEnforcement.truncateAfterCompositionEnds,
-              ),
+              descriptionField(),
               SizedBox(height: 16),
-              TextFormField(
-                controller: dateController,
-                decoration: InputDecoration(
-                  labelText: 'Datum',
-                  prefixIcon: Icon(Icons.calendar_today),
-                ),
-                readOnly: true,
-                onTap: () async {
-                  DateTime? newDate = await showDatePicker(
-                    context: context,
-                    initialDate: selectedDate,
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                  );
-                  if (newDate != null) {
-                    setState(() {
-                      selectedDate = newDate;
-                      dateController.text = formatDate(selectedDate);
-                    });
-                  }
-                },
-              ),
+              selectDateWidget(context),
               SizedBox(height: 16),
-              LayoutBuilder(builder: (context, constraints) {
-                return ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                  child: Wrap(
-                    alignment: WrapAlignment.spaceBetween,
-                    runSpacing: 8,
-                    spacing: 8,
-                    runAlignment: WrapAlignment.center,
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            context.pop();
-                          },
-                          child: Text('Abbrechen')),
-                      FilledButton(
-                          onPressed: () {
-                            saveEntry(context);
-                          },
-                          child: Text('Speichern'))
-                    ],
-                  ),
-                );
-              }),
+              bottomButtons(),
               SizedBox()
             ],
           ),
@@ -188,7 +137,9 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                   controller: durationHourController,
                   style: textTheme.displaySmall,
                   decoration: InputDecoration(
-                      labelText: 'Stunden', suffixText: 'h', errorMaxLines: errorMaxLines),
+                      labelText: 'Stunden',
+                      suffixText: 'h',
+                      errorMaxLines: errorMaxLines),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   validator: (value) => _intValidator(value,
@@ -225,6 +176,68 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         ],
       ),
     );
+  }
+
+  Widget descriptionField() {
+    return TextFormField(
+      controller: descriptionController,
+      decoration: InputDecoration(
+        labelText: 'Beschreibung',
+      ),
+      maxLines: 1,
+      maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
+    );
+  }
+
+  Widget selectDateWidget(BuildContext context) {
+    return TextFormField(
+      controller: dateController,
+      decoration: InputDecoration(
+        labelText: 'Datum',
+        prefixIcon: Icon(Icons.calendar_today),
+      ),
+      readOnly: true,
+      onTap: () async {
+        DateTime? newDate = await showDatePicker(
+          context: context,
+          initialDate: selectedDate,
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2100),
+        );
+        if (newDate != null) {
+          setState(() {
+            selectedDate = newDate;
+            dateController.text = formatDate(selectedDate);
+          });
+        }
+      },
+    );
+  }
+
+  Widget bottomButtons() {
+    return LayoutBuilder(builder: (context, constraints) {
+      return ConstrainedBox(
+        constraints: BoxConstraints(minWidth: constraints.maxWidth),
+        child: Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          runSpacing: 8,
+          spacing: 8,
+          runAlignment: WrapAlignment.center,
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  context.pop();
+                },
+                child: Text('Abbrechen')),
+            FilledButton(
+                onPressed: () {
+                  saveEntry(context);
+                },
+                child: Text('Speichern'))
+          ],
+        ),
+      );
+    });
   }
 
   void saveEntry(BuildContext context) {

@@ -78,7 +78,7 @@ class KglTimeApp extends StatelessWidget {
         ),
       ],
       builder: (context, _) => MaterialApp.router(
-        locale: const Locale('de'),
+        locale: Locale.fromSubtags(languageCode: "de"),
         debugShowCheckedModeBanner: false,
         title: appTitle,
         themeMode: parseThemeMode(
