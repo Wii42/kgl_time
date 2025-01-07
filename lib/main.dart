@@ -27,8 +27,7 @@ void main() async {
     await PersistentStorageService.instance.keyValueStorage
         .set('isFirstRun', false);
   }
-  await initializeDateFormatting(
-      'de', '_'); // initialize the date formatting for German
+  await initializeDateFormatting(); // initialize the date formatting for German
   runApp(KglTimeApp(
     appTitle: 'KGL Time',
     initialEntries: initialEntries,

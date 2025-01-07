@@ -78,7 +78,6 @@ class KglTimeApp extends StatelessWidget {
         ),
       ],
       builder: (context, _) => MaterialApp.router(
-        locale: Locale.fromSubtags(languageCode: "de"),
         debugShowCheckedModeBanner: false,
         title: appTitle,
         themeMode: parseThemeMode(
@@ -89,7 +88,7 @@ class KglTimeApp extends StatelessWidget {
         routerConfig: router,
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
         supportedLocales: [
-          const Locale('de', 'CH'), // English
+          Locale.fromSubtags(languageCode: "en"), // English
           // Add other locales here if needed
         ],
       ),
