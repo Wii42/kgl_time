@@ -5,6 +5,7 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/delete_dialog.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 abstract class WorkEntryWidget extends StatelessWidget {
   final WorkEntry workEntry;
@@ -44,7 +45,7 @@ abstract class WorkEntryWidget extends StatelessWidget {
     );
   }
 
-  String formattedDate() => formatDate(workEntry.date);
+  String formattedDate(AppLocalizations? loc) => formatDate(workEntry.date, loc);
 
   List<Widget> rightSideButtons(BuildContext context) {
     return [

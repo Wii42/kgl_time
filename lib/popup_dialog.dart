@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'data_model/work_category.dart';
 
@@ -80,6 +81,7 @@ class _SelectCategoryDialogState extends State<SelectCategoryDialog> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     return Consumer2<WorkCategories, KeyValues>(
       builder: (BuildContext context, WorkCategories categories,
           KeyValues keyValues, _) {
@@ -95,7 +97,7 @@ class _SelectCategoryDialogState extends State<SelectCategoryDialog> {
                 selectedCategories[e] ?? storedCategories.contains(e));
 
         return AlertDialog(
-          title: Text("Kategorien auswählen"),
+          title: Text(loc?.selectCategory ?? ''),
           content: SelectCategoriesWidget(
               categories: selectedCategories,
               onSelectedCategoriesChanged: (categories) {
@@ -106,7 +108,7 @@ class _SelectCategoryDialogState extends State<SelectCategoryDialog> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Abbrechen'),
+              child: Text(loc?.cancel?? ''),
             ),
             ElevatedButton(
               onPressed: () {
@@ -116,7 +118,7 @@ class _SelectCategoryDialogState extends State<SelectCategoryDialog> {
                         selectedCategories));
                 Navigator.of(context).pop();
               },
-              child: Text('Speichern'),
+              child: Text(loc?.save?? ''),
             ),
           ],
         );

@@ -8,6 +8,7 @@ import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/work_entry_time_tracker.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_preview.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'kgl_page.dart';
 
@@ -16,6 +17,7 @@ class HomePage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
@@ -35,7 +37,7 @@ class HomePage extends KglPage {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text('Neuen Eintrag erfassen',
+                          child: Text(loc?.createNewEntry ?? '<createNewEntry>',
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                               textAlign: TextAlign.center,
@@ -45,7 +47,10 @@ class HomePage extends KglPage {
                                   .bodyLarge
                                   ?.apply(color: Colors.white)),
                         ),
-                        Icon(Icons.add, color: Colors.white,),
+                        Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
                       ],
                     ),
                   ),
@@ -57,25 +62,25 @@ class HomePage extends KglPage {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text('Letzte Einträge'),
+                      Text(loc?.recentEntries ?? '<recentEntries>'),
                       for (WorkEntry entry in workEntries.entries.take(3))
                         WorkEntryPreview(workEntry: entry),
                       ElevatedButton(
                           onPressed: () => context.go('/allEntries'),
-                          child: Text('Alle Einträge anzeigen')),
+                          child: Text(loc?.showAllEntries ?? '')),
                     ],
                   )
                 else
-                  Center(child: Text('Noch keine Einträge vorhanden')),
+                  Center(child: Text(loc?.noExistingEntries ?? '<noEntries>')),
                 const SizedBox(height: 32),
                 Column(
                   children: [
                     Text(
-                      'Aktuelle Woche: ${formatDuration(totalThisWeek(workEntries.entries))}',
+                      '${loc?.currentWeek}: ${formatDuration(totalThisWeek(workEntries.entries))}',
                       style: textTheme.bodyLarge,
                     ),
                     Text(
-                        'Aktueller Monat: ${formatDuration(totalThisMonth(workEntries.entries))}',
+                        '${loc?.currentMonth}: ${formatDuration(totalThisMonth(workEntries.entries))}',
                         style: textTheme.bodyLarge),
                   ],
                 ),

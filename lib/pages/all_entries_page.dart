@@ -9,13 +9,14 @@ import 'package:kgl_time/enums/calendar_unit.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../kgl_time_app.dart';
 import 'kgl_page.dart';
 
 class AllEntriesPage extends KglPage {
   @override
-  final String pageTitle = 'Alle Einträge';
+  String? pageTitle(AppLocalizations? loc) => loc?.allEntries;
   const AllEntriesPage({super.key, required super.appTitle});
 
   @override
@@ -58,6 +59,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     return Stack(
       children: [
         Align(
@@ -68,9 +70,11 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
             child: SegmentedButton<CalendarUnit>(
               segments: [
                 ButtonSegment(
-                    value: CalendarUnit.week, label: Text('Nach Woche')),
+                    value: CalendarUnit.week,
+                    label: Text(loc?.groupByWeek ?? '<byWeek>')),
                 ButtonSegment(
-                    value: CalendarUnit.month, label: Text('Nach Monat'))
+                    value: CalendarUnit.month,
+                    label: Text(loc?.groupByMonth ?? '<byMonth>')),
               ],
               selected: {_selectedCalendarUnit},
               onSelectionChanged: (Set<CalendarUnit> selected) {
@@ -97,7 +101,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
                     children: [
                       Expanded(
                         child: Text(
-                          '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit)} ${entryGroup.year}',
+                          '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit, loc: loc)} ${entryGroup.year}',
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -137,12 +141,13 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
   }
 
   String formatCalendarUnitValue(
-      int calendarUnitValue, CalendarUnit calendarUnit) {
+      int calendarUnitValue, CalendarUnit calendarUnit,
+      {required AppLocalizations? loc}) {
     switch (calendarUnit) {
       case CalendarUnit.week:
-        return 'Kalenderwoche $calendarUnitValue,';
+        return '${loc?.calendarWeek} $calendarUnitValue,';
       case CalendarUnit.month:
-        return DateFormat('MMMM', 'de').format(DateTime(0, calendarUnitValue));
+        return DateFormat('MMMM').format(DateTime(0, calendarUnitValue));
     }
   }
 

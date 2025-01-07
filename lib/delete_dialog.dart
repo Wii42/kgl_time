@@ -1,29 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 /// Shows a dialog to confirm the deletion of an entry.
 /// [onDelete] is called when the user confirms the deletion.
 void showDeleteConfirmationDialog(
-    {required BuildContext context, required void Function()? onDelete, String detailText = 'Wollen Sie diesen Eintrag wirklich löschen?'}) {
+    {required BuildContext context,
+    required void Function()? onDelete,
+    String? Function(AppLocalizations? loc) detailText =
+        defaultConfirmDeleteText}) {
+  AppLocalizations? loc = AppLocalizations.of(context);
   ThemeData theme = Theme.of(context);
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Löschen bestätigen'),
-        content: Text(detailText),
+        title: Text(loc?.confirmDelete ?? '<confirmDelete>'),
+        content: Text(detailText(loc) ?? '<explanationText>'),
         actions: <Widget>[
           TextButton(
-            child: Text('Abbrechen'),
+            child: Text(loc?.cancel ?? '<cancel>'),
             onPressed: () {
               Navigator.of(context).pop(); // Dismiss the dialog
             },
           ),
           TextButton(
-            onPressed: (){
+            onPressed: () {
               Navigator.of(context).pop();
               onDelete?.call();
             },
             child: Text(
-              'Löschen',
+              loc?.delete ?? '<delete>',
               style: TextStyle(
                   color:
                       theme.colorScheme.error), // Highlight the Delete button
@@ -34,3 +40,5 @@ void showDeleteConfirmationDialog(
     },
   );
 }
+
+String? defaultConfirmDeleteText(AppLocalizations? loc) => loc?.confirmDeleteDialog;

@@ -50,3 +50,6 @@ flutter:
   uses-material-design: true
   assets:
   - assets/playstore-icon.png
+  generate: true
+flutter_intl:
+  enabled: true

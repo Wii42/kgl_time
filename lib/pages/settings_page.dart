@@ -11,6 +11,7 @@ import '../data_model/work_categories.dart';
 import '../data_model/work_category.dart';
 import '../data_model/work_entry.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../kgl_time_app.dart';
 import '../main.dart';
@@ -19,7 +20,7 @@ class SettingsPage extends KglPage {
   const SettingsPage({super.key, required super.appTitle});
 
   @override
-  final String pageTitle = 'Einstellungen';
+  String? pageTitle(AppLocalizations? loc) => loc?.settings;
   @override
   final bool showSettingsButton = false;
 
@@ -50,10 +51,11 @@ class SettingsPage extends KglPage {
   }
 
   Widget themeMode(BuildContext context) {
-    Map<ThemeMode, String> themeModeNames = {
-      ThemeMode.system: 'System',
-      ThemeMode.light: 'Hell',
-      ThemeMode.dark: 'Dunkel'
+    AppLocalizations? loc = AppLocalizations.of(context);
+    Map<ThemeMode, String?> themeModeNames = {
+      ThemeMode.system: loc?.systemBrightness,
+      ThemeMode.light: loc?.lightMode,
+      ThemeMode.dark: loc?.darkMode
     };
     Map<ThemeMode, IconData> themeModeIcons = {
       ThemeMode.system: Icons.brightness_auto,
@@ -71,7 +73,7 @@ class SettingsPage extends KglPage {
               spacing: 8,
               runSpacing: 8,
               children: [
-                Text('Darstellung'),
+                Text(loc?.appearance ?? '<Appearance>'),
                 SegmentedButton<ThemeMode>(
                   segments: [
                     for (ThemeMode mode in ThemeMode.values)
@@ -83,7 +85,7 @@ class SettingsPage extends KglPage {
                               children: [
                                 Icon(themeModeIcons[mode], size: 20),
                                 Text(
-                                  themeModeNames[mode] ?? '',
+                                  themeModeNames[mode] ?? '<themeMode>',
                                   style: Theme.of(context).textTheme.labelSmall,
                                 ),
                               ],
@@ -114,6 +116,7 @@ class SettingsPage extends KglPage {
   }
 
   Widget categories(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     return Consumer<WorkCategories>(builder: (context, categories, _) {
       TextTheme textTheme = Theme.of(context).textTheme;
       return Column(
@@ -122,7 +125,7 @@ class SettingsPage extends KglPage {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              'Kategorien',
+              loc?.categories ?? '<Categories>',
               style: textTheme.titleLarge,
             ),
           ),
@@ -148,9 +151,9 @@ class SettingsPage extends KglPage {
                           icon: Icon(Icons.delete_outline_outlined),
                           onPressed: () => showDeleteConfirmationDialog(
                               context: context,
-                              detailText:
-                                  'Wollen Sie die Kategorie ${category.$2.displayName} wirklich löschen?\n\n'
-                                  'Einträge, die dieser Kategorie zugeordnet sind, werden nicht verändert.',
+                              detailText: (l) =>
+                                  l?.deleteCategoryConfirmationDialog(
+                                      category.$2.displayName),
                               onDelete: () => categories.remove(category.$2)),
                         ),
                       ],
@@ -160,7 +163,7 @@ class SettingsPage extends KglPage {
             )
           else
             Text(
-              'Noch keine Kategorien vorhanden',
+              loc?.noExistingCategories ?? '<noCategories>',
               style: textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -172,7 +175,7 @@ class SettingsPage extends KglPage {
               children: [
                 Expanded(
                     child: Text(
-                  'Neue Kategorie hinzufügen',
+                  loc?.addNewCategory ?? '<addNewCategory>',
                   textAlign: TextAlign.center,
                 )),
                 Icon(Icons.add),
@@ -186,6 +189,7 @@ class SettingsPage extends KglPage {
 
   void _showNewCategoryDialog(BuildContext context,
       {WorkCategory? existingCategory}) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     TextEditingController controller =
         TextEditingController(text: existingCategory?.displayName);
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -193,27 +197,28 @@ class SettingsPage extends KglPage {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(existingCategory == null
-              ? 'Neue Kategorie hinzufügen'
-              : 'Kategorie bearbeiten'),
+          title: Text((existingCategory == null
+                  ? loc?.addNewCategory
+                  : loc?.editCategory) ??
+              ''),
           content: Form(
             key: formKey,
             child: TextFormField(
               autofocus: true,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Bitte geben Sie einen Namen ein';
+                  return loc?.emptyCategoryNameError ?? '<emptyCategory>';
                 }
                 return null;
               },
               controller: controller,
-              decoration: InputDecoration(hintText: 'Kategorie'),
+              decoration: InputDecoration(hintText: loc?.category),
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text('Abbrechen'),
+              child: Text(loc?.cancel ?? '<cancel>'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -263,7 +268,7 @@ class SettingsPage extends KglPage {
                 }
               },
               child:
-                  Text(existingCategory == null ? 'Hinzufügen' : 'Speichern'),
+                  Text((existingCategory == null ? loc?.add : loc?.save) ?? '<add/save>'),
             ),
           ],
         );
@@ -272,19 +277,20 @@ class SettingsPage extends KglPage {
   }
 
   Widget infos(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     ThemeData theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         infoWithLink(
-            infoText: 'Kontakt: ',
+            infoText: '${loc?.contact}: ',
             linkText: 'wi42.dev@gmail.com',
             link: Uri.parse('mailto:wi42.dev@gmail.com'),
             context: context),
         infoWithLink(
-            linkText: 'Datenschutzrichtlinie',
+            linkText: loc?.privacyPolicy ?? '<privacyPolicy>',
             link: Uri.parse(
-                'https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#datenschutzrichtlinie-für-kgl-time'),
+                'https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#${loc?.privacyPolicyUrlFragment}'),
             context: context),
         Text(''),
         Text("v$appVersion", style: theme.textTheme.bodySmall),

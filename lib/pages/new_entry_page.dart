@@ -9,6 +9,7 @@ import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/popup_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../kgl_time_app.dart';
 
@@ -32,8 +33,8 @@ class NewEntryPage extends KglPage {
       );
 
   @override
-  String get pageTitle =>
-      existingEntry == null ? 'Neuer Eintrag' : 'Eintrag bearbeiten';
+  String? pageTitle(AppLocalizations? loc) =>
+      existingEntry == null ? loc?.newEntry : loc?.editEntry;
 }
 
 class _NewEntryStatefulPage extends StatefulWidget {
@@ -69,7 +70,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     });
 
     selectedDate = widget.existingEntry?.date ?? DateTime.now();
-    dateController = TextEditingController(text: formatDate(selectedDate));
+    dateController = TextEditingController();
     Duration? workDuration = widget.existingEntry?.workDuration;
     durationMinuteController = TextEditingController(
         text: workDuration != null
@@ -83,7 +84,16 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (dateController.text.isEmpty) {
+      dateController.text = formatDate(selectedDate, AppLocalizations.of(context));
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     return Form(
       key: _formKey,
@@ -95,7 +105,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               SizedBox(),
-              workDurationField(textTheme),
+              workDurationField(textTheme, localizations: loc),
               SizedBox(height: 16),
               SelectCategoriesWidget(
                   categories: categorySelection,
@@ -105,11 +115,11 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                     });
                   }),
               SizedBox(height: 16),
-              descriptionField(),
+              descriptionField(localizations: loc),
               SizedBox(height: 16),
               selectDateWidget(context),
               SizedBox(height: 16),
-              bottomButtons(),
+              bottomButtons(localizations: loc),
               SizedBox()
             ],
           ),
@@ -118,7 +128,8 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     );
   }
 
-  Widget workDurationField(TextTheme textTheme) {
+  Widget workDurationField(TextTheme textTheme,
+      {required AppLocalizations? localizations}) {
     int errorMaxLines = 5;
 
     return Padding(
@@ -137,14 +148,15 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                   controller: durationHourController,
                   style: textTheme.displaySmall,
                   decoration: InputDecoration(
-                      labelText: 'Stunden',
+                      labelText: localizations?.hours,
                       suffixText: 'h',
                       errorMaxLines: errorMaxLines),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   validator: (value) => _intValidator(value,
                       factor: Duration.secondsPerHour,
-                      otherValue: durationMinuteController.text),
+                      otherValue: durationMinuteController.text,
+                      localizations: localizations),
                 ),
               ),
               SizedBox(width: 8),
@@ -155,19 +167,20 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                   style: textTheme.displaySmall,
                   autofocus: true,
                   decoration: InputDecoration(
-                      labelText: 'Minuten',
+                      labelText: localizations?.minutes,
                       suffixText: 'min',
                       errorMaxLines: errorMaxLines),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Bitte geben Sie eine Dauer ein.\nNur Ziffern erlaubt';
+                      return localizations?.noInputError;
                     }
 
                     return _intValidator(value,
                         factor: Duration.secondsPerMinute,
-                        otherValue: durationHourController.text);
+                        otherValue: durationHourController.text,
+                        localizations: localizations);
                   },
                 ),
               ),
@@ -178,11 +191,11 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     );
   }
 
-  Widget descriptionField() {
+  Widget descriptionField({required AppLocalizations? localizations}) {
     return TextFormField(
       controller: descriptionController,
       decoration: InputDecoration(
-        labelText: 'Beschreibung',
+        labelText: localizations?.description,
       ),
       maxLines: 1,
       maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
@@ -190,10 +203,11 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   }
 
   Widget selectDateWidget(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     return TextFormField(
       controller: dateController,
       decoration: InputDecoration(
-        labelText: 'Datum',
+        labelText: loc?.date,
         prefixIcon: Icon(Icons.calendar_today),
       ),
       readOnly: true,
@@ -201,20 +215,20 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         DateTime? newDate = await showDatePicker(
           context: context,
           initialDate: selectedDate,
-          firstDate: DateTime(2000),
+          firstDate: DateTime(1900),
           lastDate: DateTime(2100),
         );
         if (newDate != null) {
           setState(() {
             selectedDate = newDate;
-            dateController.text = formatDate(selectedDate);
+            dateController.text = formatDate(selectedDate, loc);
           });
         }
       },
     );
   }
 
-  Widget bottomButtons() {
+  Widget bottomButtons({required AppLocalizations? localizations}) {
     return LayoutBuilder(builder: (context, constraints) {
       return ConstrainedBox(
         constraints: BoxConstraints(minWidth: constraints.maxWidth),
@@ -228,12 +242,16 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                 onPressed: () {
                   context.pop();
                 },
-                child: Text('Abbrechen')),
+                child: Text(
+                  localizations?.cancel ?? "<cancel>",
+                )),
             FilledButton(
                 onPressed: () {
                   saveEntry(context);
                 },
-                child: Text('Speichern'))
+                child: Text(
+                  localizations?.save ?? "<save>",
+                )),
           ],
         ),
       );
@@ -241,6 +259,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   }
 
   void saveEntry(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     if (_formKey.currentState!.validate()) {
       int hours = durationHourController.text.isNotEmpty
           ? int.parse(durationHourController.text)
@@ -275,7 +294,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         workEntries.add(newEntry);
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Eintrag gespeichert'),
+        content: Text(loc?.entrySaved ?? ''),
       ));
       context.pop();
     }
@@ -290,7 +309,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     super.dispose();
   }
 
-  String? _intValidator(String? value, {int factor = 1, String? otherValue}) {
+  String? _intValidator(String? value,
+      {int factor = 1,
+      String? otherValue,
+      required AppLocalizations? localizations}) {
     const int maxSaveValue = 4294967296; // 2^32
 
     if (value == null || value.isEmpty) {
@@ -302,27 +324,27 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
       //print('Parsed number: $result');
     } catch (e) {
       if (e is FormatException) {
-        return 'Eingegebener Wert ist zu gross oder keine ganze Zahl';
+        return localizations?.inputTooLargeOrNanException ?? '<tooLargeOrNan>';
       } else {
-        return 'Unerwarteter Fehler: $e';
+        return '${localizations?.unexpectedError}: $e';
       }
     }
 
     //print('number of binary digits: ${log(parsedValue) / log(2)}');
     if (parsedValue > (maxSaveValue / factor)) {
-      return 'Eingegebener Wert ist zu gross';
+      return localizations?.inputTooLargeOrNanException ?? '<tooLarge>';
     }
 
     if (otherValue != null) {
       int? otherInt = int.tryParse(otherValue);
       if (otherInt != null) {
         if (parsedValue > ((maxSaveValue / factor) - otherInt)) {
-          return 'Summe der beiden Werte ist zu gross';
+          return localizations?.inputSumTooLargeException ?? '<sumTooLarge>';
         }
       }
     }
     if (parsedValue * factor < 0) {
-      return 'Eingegebener Wert ist ungültig';
+      return localizations?.inputInvalidException ?? '<invalidInput>';
     }
 
     return null;

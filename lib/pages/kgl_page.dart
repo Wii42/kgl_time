@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 abstract class KglPage extends StatelessWidget {
   final String appTitle;
 
   Widget body(BuildContext context);
-  String? get pageTitle => null;
+  String? pageTitle(AppLocalizations? loc) => null;
   bool get showSettingsButton => true;
   const KglPage({super.key, required this.appTitle});
 
@@ -34,7 +35,9 @@ abstract class KglPage extends StatelessWidget {
 
   Widget appbarTitle(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    AppLocalizations? localizations = AppLocalizations.of(context);
     TextTheme textTheme = theme.textTheme;
+    String? pageTitle = this.pageTitle(localizations);
     String largeTitle = pageTitle ?? appTitle;
     String? smallTitle = pageTitle != null ? appTitle : null;
     return Column(

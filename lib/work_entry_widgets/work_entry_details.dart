@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../data_model/work_entries.dart';
 import '../format_duration.dart';
@@ -14,6 +15,7 @@ class WorkEntryDetails extends WorkEntryWidget {
 
   @override
   Widget details(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     return Row(
       children: [
@@ -43,7 +45,7 @@ class WorkEntryDetails extends WorkEntryWidget {
               if (workEntry.startTime != null && workEntry.endTime != null)
                 Text(
                     '${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
-              Text(formattedDate()),
+              Text(formattedDate(loc)),
               if (workEntry.categories.isNotEmpty) ...[
                 SizedBox(height: 8),
                 Wrap(
@@ -63,7 +65,7 @@ class WorkEntryDetails extends WorkEntryWidget {
               if (workEntry.description != null &&
                   workEntry.description!.isNotEmpty) ...[
                 SizedBox(height: 8),
-                Text('Beschreibung: ${workEntry.description}'),
+                Text('${loc?.description}: ${workEntry.description}'),
               ],
             ],
           ),

@@ -8,6 +8,7 @@ import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/popup_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_builder/timer_builder.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'data_model/work_category.dart';
 
@@ -26,6 +27,8 @@ class WorkEntryTimeTracker extends StatelessWidget {
 
     Color indicatorColor(bool isTracking) =>
         isTracking ? KglTimeApp.actionColor : KglTimeApp.primaryColor;
+
+    AppLocalizations? loc = AppLocalizations.of(context);
     return Center(
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -50,19 +53,21 @@ class WorkEntryTimeTracker extends StatelessWidget {
                             icon: Icon(
                               Icons.category,
                             ),
-                            tooltip: "Kategorie auswählen",
+                            tooltip: loc?.selectCategory,
                           ),
                           Text(
-                              'läuft seit ${_trackTime(startTime ?? DateTime.now())}',
+                              loc?.runningForDuration(_trackTime(
+                                      startTime ?? DateTime.now())) ??
+                                  '<runningForDuration>',
                               style: Theme.of(context).textTheme.bodyLarge),
                           SizedBox()
                         ],
                       ),
                     )
-                  : Text('Zeit erfassen',
+                  : Text(loc?.trackTime ?? '<trackTime>',
                       style: Theme.of(context).textTheme.bodyLarge),
               iconBuilder: (isTracking) => Text(
-                isTracking ? 'Stop' : 'Start',
+                (isTracking ? loc?.stop : loc?.start) ?? '<start/stop>',
                 style: Theme.of(context)
                     .textTheme
                     .bodyLarge
