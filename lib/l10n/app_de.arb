@@ -16,9 +16,9 @@
   "save": "Speichern",
   "entrySaved": "Eintrag gespeichert",
   "unexpectedError": "Unerwarteter Fehler",
-  "inputTooLargeOrNanException": "Eingegebener Wert ist zu gross oder keine ganze Zahl",
-  "inputTooLargeException": "Eingegebener Wert ist zu gross",
-  "inputSumTooLargeException": "Summe der beiden Werte ist zu gross",
+  "inputTooLargeOrNanException": "Eingegebener Wert ist zu groß oder keine ganze Zahl",
+  "inputTooLargeException": "Eingegebener Wert ist zu groß",
+  "inputSumTooLargeException": "Summe der beiden Werte ist zu groß",
   "inputInvalidException": "Eingegebener Wert ist ungültig",
   "createNewEntry": "Neuen Eintrag erfassen",
   "recentEntries": "Letzte Einträge",
@@ -48,5 +48,5 @@
   "runningForDuration": "läuft seit {duration}",
   "trackTime": "Zeit erfassen",
   "start": "Start",
-  "stop": "Stop"
+  "stop": "Stopp"
 }

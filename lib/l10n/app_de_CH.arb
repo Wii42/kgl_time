@@ -1,0 +1,7 @@
+{
+  "@@locale": "de_CH",
+  "inputTooLargeOrNanException": "Eingegebener Wert ist zu gross oder keine ganze Zahl",
+  "inputTooLargeException": "Eingegebener Wert ist zu gross",
+  "inputSumTooLargeException": "Summe der beiden Werte ist zu gross",
+  "stop": "Stop"
+}

@@ -147,7 +147,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
       case CalendarUnit.week:
         return '${loc?.calendarWeek} $calendarUnitValue,';
       case CalendarUnit.month:
-        return DateFormat('MMMM').format(DateTime(0, calendarUnitValue));
+        return DateFormat('MMMM', loc?.localeName).format(DateTime(0, calendarUnitValue));
     }
   }
 
