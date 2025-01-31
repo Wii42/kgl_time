@@ -18,7 +18,6 @@ class HomePage extends KglPage {
   @override
   Widget body(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
-    print(loc?.localeName);
     TextTheme textTheme = Theme.of(context).textTheme;
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {

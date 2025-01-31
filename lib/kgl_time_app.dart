@@ -92,7 +92,7 @@ class KglTimeApp extends StatelessWidget {
           ...GlobalMaterialLocalizations.delegates,
           AppLocalizations.delegate,
         ],
-        locale:  kDebugMode?  Locale('de', 'CH') : null,
+        locale: kDebugMode ? Locale('de', 'CH') : null,
         supportedLocales: [
           Locale('en'),
           Locale('de'),
