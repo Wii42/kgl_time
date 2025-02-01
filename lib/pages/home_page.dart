@@ -65,9 +65,9 @@ class HomePage extends KglPage {
                       Text(loc?.recentEntries ?? '<recentEntries>'),
                       for (WorkEntry entry in workEntries.entries.take(3))
                         WorkEntryPreview(workEntry: entry),
-                      ElevatedButton(
-                          onPressed: () => context.go('/allEntries'),
-                          child: Text(loc?.showAllEntries ?? '')),
+                      //ElevatedButton(
+                      //    onPressed: () => context.go('/allEntries'),
+                      //    child: Text(loc?.showAllEntries ?? '')),
                     ],
                   )
                 else
@@ -82,6 +82,7 @@ class HomePage extends KglPage {
                     Text(
                         '${loc?.currentMonth}: ${formatDuration(totalThisMonth(workEntries.entries))}',
                         style: textTheme.bodyLarge),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ],

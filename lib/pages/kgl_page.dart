@@ -24,7 +24,7 @@ abstract class KglPage extends StatelessWidget {
               child: Icon(Icons.settings),
             ),
             onPressed: () {
-              context.go('/settings');
+              context.push('/settings');
             },
           ),
         ],
