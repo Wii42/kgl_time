@@ -48,5 +48,6 @@
   "runningForDuration": "running for {duration}",
   "trackTime": "Track time",
   "start": "Start",
-  "stop": "Stop"
+  "stop": "Stop",
+  "home": "Home"
 }

@@ -48,5 +48,6 @@
   "runningForDuration": "läuft seit {duration}",
   "trackTime": "Zeit erfassen",
   "start": "Start",
-  "stop": "Stopp"
+  "stop": "Stopp",
+  "home": "Startseite"
 }

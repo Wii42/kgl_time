@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/pages/settings_page.dart';
@@ -54,66 +55,18 @@ class _KglTimeAppState extends State<KglTimeApp> {
             return AppView(navigationShell: navigationShell);
           },
           branches: [
-            StatefulShellBranch(
-              routes: [
-                GoRoute(
-                  path: '/',
-                  builder: (context, state) =>
-                      HomePage(appTitle: widget.appTitle),
-                  routes: [GoRoute(
-                      path: '/newEntry',
-                      builder: (context, state) {
-                        WorkEntry? existingEntry;
-                        if (state.extra is WorkEntry) {
-                          existingEntry = state.extra as WorkEntry;
-                        }
-                        return NewEntryPage(
-                            appTitle: widget.appTitle,
-                            existingEntry: existingEntry);
-                      }),],
-                ),
-              ],
-            ),
-            StatefulShellBranch(routes: [
-              GoRoute(
-                  path: '/allEntries',
-                  builder: (context, state) =>
-                      AllEntriesPage(appTitle: widget.appTitle))
-            ]),
-
+            NavBarAppRoute.home.statefulShellBranch(
+                appTitle: widget.appTitle,
+                subRoutes: [
+                  AppRoute.newEntry.goRoute(appTitle: widget.appTitle)
+                ]),
+            NavBarAppRoute.allEntries
+                .statefulShellBranch(appTitle: widget.appTitle),
+            NavBarAppRoute.categories
+                .statefulShellBranch(appTitle: widget.appTitle),
           ],
         ),
-        GoRoute(
-            path: '/settings',
-            builder: (context, state) =>
-                SettingsPage(appTitle: widget.appTitle)),
-
-        //GoRoute(
-        //    path: '/',
-        //    builder: (context, state) => HomePage(
-        //          appTitle: widget.appTitle,
-        //        ),
-        //    routes: [
-        //      GoRoute(
-        //          path: 'allEntries',
-        //          builder: (context, state) =>
-        //              AllEntriesPage(appTitle: widget.appTitle)),
-        //      GoRoute(
-        //          path: 'newEntry',
-        //          builder: (context, state) {
-        //            WorkEntry? existingEntry;
-        //            if (state.extra is WorkEntry) {
-        //              existingEntry = state.extra as WorkEntry;
-        //            }
-        //            return NewEntryPage(
-        //                appTitle: widget.appTitle,
-        //                existingEntry: existingEntry);
-        //          }),
-        //      GoRoute(
-        //          path: 'settings',
-        //          builder: (context, state) =>
-        //              SettingsPage(appTitle: widget.appTitle)),
-        //    ]),
+        AppRoute.settings.goRoute(appTitle: widget.appTitle),
       ],
     );
     return MultiProvider(
@@ -194,8 +147,9 @@ class AppView extends StatelessWidget {
             ),
             NavigationDestination(
               icon: Icon(Icons.category),
-              label: loc?.categories?? "<categories>",
+              label: loc?.categories ?? "<categories>",
             ),
-          ],));
+          ],
+        ));
   }
 }
