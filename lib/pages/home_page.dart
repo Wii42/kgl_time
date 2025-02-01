@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/date_week.dart';
@@ -30,7 +31,7 @@ class HomePage extends KglPage {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 FilledButton(
-                  onPressed: () => context.go('/newEntry'),
+                  onPressed: () => context.go(AppRoute.newEntry.path),
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Row(

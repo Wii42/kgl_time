@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../app_route.dart';
 abstract class KglPage extends StatelessWidget {
   final String appTitle;
 
@@ -24,7 +26,7 @@ abstract class KglPage extends StatelessWidget {
               child: Icon(Icons.settings),
             ),
             onPressed: () {
-              context.push('/settings');
+              context.push(AppRoute.settings.path);
             },
           ),
         ],

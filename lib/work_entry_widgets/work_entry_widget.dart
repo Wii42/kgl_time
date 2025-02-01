@@ -7,6 +7,8 @@ import 'package:kgl_time/format_duration.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../app_route.dart';
+
 abstract class WorkEntryWidget extends StatelessWidget {
   final WorkEntry workEntry;
 
@@ -51,7 +53,7 @@ abstract class WorkEntryWidget extends StatelessWidget {
     return [
       IconButton(
           onPressed: () {
-            context.go('/newEntry', extra: workEntry);
+            context.go(AppRoute.newEntry.path, extra: workEntry);
           },
           icon: Icon(Icons.edit_outlined)),
       SizedBox(width: 12),

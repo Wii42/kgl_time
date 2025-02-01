@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:kgl_time/edit_categories_widget.dart';
+import 'package:go_router/go_router.dart';
+import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/helpers.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class SettingsPage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     return KglPage.alwaysFillingScrollView(
       maxWidth: KglTimeApp.maxPageWidth,
       child: Padding(
@@ -30,7 +32,16 @@ class SettingsPage extends KglPage {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             withCard(themeMode(context)),
-            withCard(EditCategoriesWidget()),
+            ElevatedButton(
+                onPressed: () => context.go(NavBarAppRoute.categories.path),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(loc?.editCategories ?? '<editCategories>'),
+                    SizedBox(width: 8),
+                    Icon(Icons.link)
+                  ],
+                )),
             infos(context),
           ].withSpaceBetween(height: 16),
         ),

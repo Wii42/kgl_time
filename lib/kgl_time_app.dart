@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_category.dart';
-import 'package:kgl_time/pages/settings_page.dart';
 import 'package:kgl_time/helpers.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,9 +12,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'data_model/work_categories.dart';
 import 'data_model/work_entries.dart';
 import 'data_model/work_entry.dart';
-import 'pages/all_entries_page.dart';
-import 'pages/home_page.dart';
-import 'pages/new_entry_page.dart';
 
 class KglTimeApp extends StatefulWidget {
   final String appTitle;
@@ -135,20 +131,15 @@ class AppView extends StatelessWidget {
         body: navigationShell,
         bottomNavigationBar: NavigationBar(
           selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: navigationShell.goBranch,
+          onDestinationSelected: (newIndex) {
+            // go to the initial Location of the branch, if active destination is clicked again.
+            bool goToInitialLocation = newIndex == navigationShell.currentIndex;
+            navigationShell.goBranch(newIndex,
+                initialLocation: goToInitialLocation);
+          },
           destinations: [
-            const NavigationDestination(
-              icon: Icon(Icons.home),
-              label: "Home",
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.list),
-              label: loc?.allEntries ?? "<allEntries>",
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.category),
-              label: loc?.categories ?? "<categories>",
-            ),
+            for (NavBarAppRoute item in NavBarAppRoute.navBarItems)
+              item.navigationDestination(loc)
           ],
         ));
   }

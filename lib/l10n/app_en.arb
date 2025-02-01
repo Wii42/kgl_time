@@ -35,6 +35,7 @@
   "noExistingCategories": "No existing categories yet",
   "addNewCategory": "Add new category",
   "editCategory": "Edit category",
+  "editCategories": "Edit categories",
   "emptyCategoryNameError": "Please enter a name",
   "category": "Category",
   "add": "Add",
