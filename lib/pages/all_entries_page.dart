@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:kgl_time/data_model/grouped_work_entries.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -9,7 +10,6 @@ import 'package:kgl_time/enums/calendar_unit.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../kgl_time_app.dart';
 import 'kgl_page.dart';
@@ -17,6 +17,7 @@ import 'kgl_page.dart';
 class AllEntriesPage extends KglPage {
   @override
   String? pageTitle(AppLocalizations? loc) => loc?.allEntries;
+
   const AllEntriesPage({super.key, required super.appTitle});
 
   @override
@@ -27,6 +28,7 @@ class AllEntriesPage extends KglPage {
 
 class _AllEntriesStatefulPage extends StatefulWidget {
   final WorkEntries workEntries;
+
   const _AllEntriesStatefulPage({super.key, required this.workEntries});
 
   @override
@@ -147,7 +149,8 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
       case CalendarUnit.week:
         return '${loc?.calendarWeek} $calendarUnitValue,';
       case CalendarUnit.month:
-        return DateFormat('MMMM', loc?.localeName).format(DateTime(0, calendarUnitValue));
+        return DateFormat('MMMM', loc?.localeName)
+            .format(DateTime(0, calendarUnitValue));
     }
   }
 

@@ -1,5 +1,5 @@
-import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/data_model/work_category.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
 
 import '../data_model/isar_storable.dart';
 
@@ -10,7 +10,9 @@ abstract class PersistentStorage {
   Future<void> initialize();
 
   Table<WorkEntry> get workEntries;
+
   Table<WorkCategory> get workCategories;
+
   KeyValueStorage get keyValueStorage;
 
   /// Closes the persistent storage service.

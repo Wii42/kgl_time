@@ -12,13 +12,13 @@ class GroupedWorkEntries {
 
   const GroupedWorkEntries(
       {required this.entries,
-        required this.calendarUnit,
-        required this.calendarUnitValue,
-        required this.year});
+      required this.calendarUnit,
+      required this.calendarUnitValue,
+      required this.year});
 
   Duration totalWorkDuration() {
     return entries.fold(Duration.zero,
-            (previousValue, element) => previousValue + element.workDuration);
+        (previousValue, element) => previousValue + element.workDuration);
   }
 
   static List<GroupedWorkEntries> groupEntriesByCalendarUnit(
@@ -34,10 +34,10 @@ class GroupedWorkEntries {
     }
     return entriesByCalendarUnit.entries
         .map((entry) => GroupedWorkEntries(
-        entries: entry.value,
-        calendarUnit: calendarUnit,
-        calendarUnitValue: entry.key.$1,
-        year: entry.key.$2))
+            entries: entry.value,
+            calendarUnit: calendarUnit,
+            calendarUnitValue: entry.key.$1,
+            year: entry.key.$2))
         .toList();
   }
 }

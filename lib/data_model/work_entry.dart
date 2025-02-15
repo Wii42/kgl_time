@@ -1,5 +1,6 @@
 import 'package:isar/isar.dart';
 import 'package:kgl_time/data_model/work_category.dart';
+
 import 'isar_storable.dart';
 
 part 'work_entry.g.dart';

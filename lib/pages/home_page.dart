@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -9,7 +10,6 @@ import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/work_entry_time_tracker.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_preview.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'kgl_page.dart';
 

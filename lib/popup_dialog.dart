@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'data_model/work_category.dart';
 
@@ -54,6 +54,7 @@ class SelectCategoriesWidget extends StatelessWidget {
 
 class SelectCategoryDialog extends StatefulWidget {
   static const String storageKey = 'timeTrackerCategories';
+
   const SelectCategoryDialog({super.key});
 
   @override
@@ -108,7 +109,7 @@ class _SelectCategoryDialogState extends State<SelectCategoryDialog> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text(loc?.cancel?? ''),
+              child: Text(loc?.cancel ?? ''),
             ),
             ElevatedButton(
               onPressed: () {
@@ -118,7 +119,7 @@ class _SelectCategoryDialogState extends State<SelectCategoryDialog> {
                         selectedCategories));
                 Navigator.of(context).pop();
               },
-              child: Text(loc?.save?? ''),
+              child: Text(loc?.save ?? ''),
             ),
           ],
         );

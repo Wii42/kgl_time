@@ -1,15 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
-import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/helpers.dart';
+import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../data_model/key_values.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../kgl_time_app.dart';
 import '../main.dart';
 

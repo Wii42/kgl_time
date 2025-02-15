@@ -41,4 +41,5 @@ void showDeleteConfirmationDialog(
   );
 }
 
-String? defaultConfirmDeleteText(AppLocalizations? loc) => loc?.confirmDeleteDialog;
+String? defaultConfirmDeleteText(AppLocalizations? loc) =>
+    loc?.confirmDeleteDialog;
