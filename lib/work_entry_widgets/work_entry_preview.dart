@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kgl_time/l10n/generated/app_localizations.dart';
 
 import '../format_duration.dart';
 import 'work_entry_widget.dart';

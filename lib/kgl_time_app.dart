@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/helpers.dart';
+import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'app_view.dart';
@@ -103,7 +103,7 @@ class _KglTimeAppState extends State<KglTimeApp> {
   }
 
   ThemeData theme({required Brightness brightness}) {
-    return ThemeData(
+    ThemeData theme = ThemeData(
       colorScheme: ColorScheme.fromSeed(
           seedColor: KglTimeApp.primaryColor, brightness: brightness),
       useMaterial3: true,
@@ -113,8 +113,12 @@ class _KglTimeAppState extends State<KglTimeApp> {
               backgroundColor: KglTimeApp.primaryColor,
               foregroundColor: Colors.white)),
     ).copyWith(
-        appBarTheme: AppBarTheme(
-            backgroundColor: KglTimeApp.appBarColor,
-            foregroundColor: Colors.white));
+      appBarTheme: AppBarTheme(
+          backgroundColor: KglTimeApp.appBarColor,
+          foregroundColor: Colors.white),
+    );
+    theme = theme.copyWith(bottomNavigationBarTheme: theme.bottomNavigationBarTheme.copyWith());
+
+    return theme;
   }
 }
