@@ -11,7 +11,7 @@ import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:provider/provider.dart';
 
-import '../kgl_time_app.dart';
+import '../width_constrained_list_view.dart';
 import 'kgl_page.dart';
 
 class AllEntriesPage extends KglPage {
@@ -91,33 +91,39 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
           ),
         ),
         LayoutBuilder(builder: (context, constraints) {
-          return ListView(
-              padding: const EdgeInsets.all(16),
-              children: _constrainWidth([
+          return WidthConstrainedListView(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              children: [
                 SizedBox(
                   height: max(_buttonHeight - 8, 0),
                 ), // To avoid collision with the SegmentedButton
                 for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit, loc: loc)} ${entryGroup.year}',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Text(formatDuration(entryGroup.totalWorkDuration())),
-                    ],
-                  ),
+                  entriesGroupHeader(entryGroup, loc),
                   for (WorkEntry entry in entryGroup.entries)
                     WorkEntryDetails(workEntry: entry),
                   SizedBox(height: 16),
                 ],
-              ], constraints.maxWidth - 32) // Subtract padding,
-              );
+              ]);
         }),
       ].reversed.toList(),
+    );
+  }
+
+  Row entriesGroupHeader(GroupedWorkEntries entryGroup, AppLocalizations? loc) {
+    String calendarUnitOfGroup = formatCalendarUnitValue(
+        entryGroup.calendarUnitValue, entryGroup.calendarUnit,
+        loc: loc);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            '$calendarUnitOfGroup ${entryGroup.year}',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Text(formatDuration(entryGroup.totalWorkDuration())),
+      ],
     );
   }
 
@@ -163,22 +169,5 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
     setState(() {
       _buttonHeight = height; // Update the button height
     });
-  }
-
-  List<Widget> _constrainWidth(
-      List<Widget> children, double maxAvailableWidth) {
-    return children
-        .map((child) => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: min(KglTimeApp.maxPageWidth, maxAvailableWidth),
-                  ),
-                  child: child,
-                ),
-              ],
-            ))
-        .toList();
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
+import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/select_categories.dart';
+import 'package:kgl_time/width_constrained_list_view.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:provider/provider.dart';
 
@@ -41,16 +43,18 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
               if (e.value) e.key
           ];
           return Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                for (var entry in workEntries.entries)
-                  if (entry.categories
-                      .map((c) => c.id)
-                      .any(selectedCategoryIds.contains))
-                    WorkEntryDetails(workEntry: entry)
-              ],
-            ),
+            child: LayoutBuilder(builder: (context, constraints) {
+              return WidthConstrainedListView(
+                shrinkWrap: true,
+                children: [
+                  for (var entry in workEntries.entries)
+                    if (entry.categories
+                        .map((c) => c.id)
+                        .any(selectedCategoryIds.contains))
+                      WorkEntryDetails(workEntry: entry)
+                ],
+              );
+            }),
           );
         }),
       ],

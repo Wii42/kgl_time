@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 
 import '../app_route.dart';
+import '../kgl_time_app.dart';
 
 abstract class KglPage extends StatelessWidget {
   final String appTitle;
@@ -82,5 +85,24 @@ abstract class KglPage extends StatelessWidget {
         ),
       );
     });
+  }
+
+
+  /// Constrains the width of the list items to [KglTimeApp.maxPageWidth], if smaller than the available Width.
+  static List<Widget> constrainWidthOfListItems(
+      List<Widget> children, double maxAvailableWidth) {
+    return children
+        .map((child) => Center(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              child:
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: min(KglTimeApp.maxPageWidth, maxAvailableWidth),
+                  ),
+                  child: child,
+                ),
+
+            ))
+        .toList();
   }
 }

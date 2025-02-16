@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -117,7 +116,8 @@ class _KglTimeAppState extends State<KglTimeApp> {
           backgroundColor: KglTimeApp.appBarColor,
           foregroundColor: Colors.white),
     );
-    theme = theme.copyWith(bottomNavigationBarTheme: theme.bottomNavigationBarTheme.copyWith());
+    theme = theme.copyWith(
+        bottomNavigationBarTheme: theme.bottomNavigationBarTheme.copyWith());
 
     return theme;
   }
