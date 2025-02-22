@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
-import 'package:kgl_time/pages/kgl_page.dart';
+import 'package:kgl_time/hover_controls.dart';
 import 'package:kgl_time/select_categories.dart';
 import 'package:kgl_time/width_constrained_list_view.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
@@ -19,6 +19,7 @@ class CategoryFilterWidget extends StatefulWidget {
 
 class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
   late Map<WorkCategory, bool> _selectedCategories;
+  final GlobalKey _controlsKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -28,36 +29,38 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
   @override
   Widget build(BuildContext context) {
     _updateCategoriesOnChanged();
-    return Column(
-      children: [
-        SelectCategoriesWidget(
+    return HoverControls(
+      controlsKey: _controlsKey,
+      hoveringControls: Padding(
+        key: _controlsKey,
+        padding: const EdgeInsets.all(8.0),
+        child: SelectCategoriesWidget(
             categories: _selectedCategories,
             onSelectedCategoriesChanged: (categories) {
               setState(() {
                 _selectedCategories = categories;
               });
             }),
-        Consumer<WorkEntries>(builder: (context, workEntries, _) {
+      ),
+      builder: (_, controlsHeight) {
+        return Consumer<WorkEntries>(builder: (context, workEntries, _) {
           Iterable<int> selectedCategoryIds = [
             for (var e in idMapSelectedCategories.entries)
               if (e.value) e.key
           ];
-          return Expanded(
-            child: LayoutBuilder(builder: (context, constraints) {
-              return WidthConstrainedListView(
-                shrinkWrap: true,
-                children: [
-                  for (var entry in workEntries.entries)
-                    if (entry.categories
-                        .map((c) => c.id)
-                        .any(selectedCategoryIds.contains))
-                      WorkEntryDetails(workEntry: entry)
-                ],
-              );
-            }),
+          return WidthConstrainedListView(
+            shrinkWrap: true,
+            children: [
+              SizedBox(height: controlsHeight),
+              for (var entry in workEntries.entries)
+                if (entry.categories
+                    .map((c) => c.id)
+                    .any(selectedCategoryIds.contains))
+                  WorkEntryDetails(workEntry: entry)
+            ],
           );
-        }),
-      ],
+        });
+      },
     );
   }
 
