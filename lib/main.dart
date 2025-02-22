@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/persistent_storage/isar_persistent_storage.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
@@ -11,6 +13,9 @@ const String appVersion = '0.2.3';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await PersistentStorageService.initializeImplementation(
       IsarPersistentStorage());
   List<WorkEntry> initialEntries =

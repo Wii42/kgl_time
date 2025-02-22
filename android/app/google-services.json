@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "43939542388",
+    "project_id": "kgl-time",
+    "storage_bucket": "kgl-time.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43939542388:android:89715ce307c24fd537a821",
+        "android_client_info": {
+          "package_name": "com.wi42.kgl_time"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "43939542388-dtv4b6kagj1uhigl8022pb1kh41qi53b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wi42.kgl_time",
+            "certificate_hash": "1a48bbe18e6ddc3ec96c2ea8e8df0d9eb7ce3544"
+          }
+        },
+        {
+          "client_id": "43939542388-ekad9eagbpk3q6tnddq9ftlffq94n5ls.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaThYFcmIGQA-HQmuPNSteVtrPaMqukyo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "43939542388-bbr3bjke5dmlc43497cdtpd3n5n91sar.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

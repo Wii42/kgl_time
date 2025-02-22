@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../data_model/key_values.dart';
+import '../google_sign_in_widget.dart';
 import '../kgl_time_app.dart';
 import '../main.dart';
 
@@ -41,6 +42,7 @@ class SettingsPage extends KglPage {
                     Icon(Icons.link)
                   ],
                 )),
+            GoogleSignInScreen(),
             infos(context),
           ].withSpaceBetween(height: 16),
         ),
