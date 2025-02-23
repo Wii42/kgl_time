@@ -33,7 +33,7 @@ class SettingsPage extends KglPage {
           children: [
             withCard(themeMode(context)),
             ElevatedButton(
-                onPressed: () => context.go(NavBarAppRoute.categories.path),
+                onPressed: () => context.push(AppRoute.editCategories.path),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
