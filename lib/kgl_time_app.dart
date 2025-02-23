@@ -52,11 +52,7 @@ class _KglTimeAppState extends State<KglTimeApp> {
             return AppView(navigationShell: navigationShell);
           },
           branches: [
-            NavBarAppRoute.home.statefulShellBranch(
-                appTitle: widget.appTitle,
-                subRoutes: [
-                  AppRoute.newEntry.goRoute(appTitle: widget.appTitle)
-                ]),
+            NavBarAppRoute.home.statefulShellBranch(appTitle: widget.appTitle),
             NavBarAppRoute.allEntries
                 .statefulShellBranch(appTitle: widget.appTitle),
             NavBarAppRoute.categories
@@ -64,6 +60,7 @@ class _KglTimeAppState extends State<KglTimeApp> {
           ],
         ),
         AppRoute.settings.goRoute(appTitle: widget.appTitle),
+        AppRoute.newEntry.goRoute(appTitle: widget.appTitle),
       ],
     );
     return MultiProvider(
@@ -78,7 +75,7 @@ class _KglTimeAppState extends State<KglTimeApp> {
           create: (context) => KeyValues(widget.initialKeyValueStorage),
         ),
         ChangeNotifierProvider<LoggedInUser>(
-          lazy: false,
+            lazy: false,
             create: (context) => LoggedInUser.listenForUserChanges()),
       ],
       builder: (context, _) => MaterialApp.router(

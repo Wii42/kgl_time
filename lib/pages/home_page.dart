@@ -31,7 +31,7 @@ class HomePage extends KglPage {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 FilledButton(
-                  onPressed: () => context.go(AppRoute.newEntry.path),
+                  onPressed: () => context.push(AppRoute.newEntry.path),
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Row(

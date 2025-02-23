@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/all_entries_page.dart';
 import 'package:kgl_time/pages/categories_page.dart';
+import 'package:kgl_time/pages/edit_categories_page.dart';
 import 'package:kgl_time/pages/home_page.dart';
 import 'package:kgl_time/pages/new_entry_page.dart';
 import 'package:kgl_time/pages/settings_page.dart';
@@ -26,7 +27,7 @@ class AppRoute {
 
   static final AppRoute newEntry = AppRoute(
       name: 'newEntry',
-      path: '/:parent/newEntry',
+      path: '/newEntry',
       body: (context, state, appTitle) {
         WorkEntry? existingEntry;
         if (state.extra is WorkEntry) {
@@ -45,6 +46,12 @@ class AppRoute {
     settings,
     ...NavBarAppRoute.navBarItems
   ];
+
+  static final AppRoute editCategories = AppRoute(
+      name: 'editCategories',
+      path: '/editCategories',
+      body: (context, state, appTitle) =>
+          EditCategoriesPage(appTitle: appTitle));
 }
 
 class NavBarAppRoute extends AppRoute {
@@ -68,7 +75,7 @@ class NavBarAppRoute extends AppRoute {
           routes: [goRoute(subRoutes: subRoutes, appTitle: appTitle)]);
 
   static final NavBarAppRoute home = NavBarAppRoute(
-    name: 'home',
+      name: 'home',
       path: '/',
       body: (context, state, appTitle) => HomePage(appTitle: appTitle),
       title: (loc) => loc?.home ?? "<Home>",
