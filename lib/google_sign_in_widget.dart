@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -32,9 +33,13 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                   ),
                 ),
                 onPressed: () async {
+                  ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
                   UserCredential? credentials = await user.signInWithGoogle();
                   if (credentials != null) {
-                    print(credentials.user!.email);
+                    log(credentials.user?.email?.toString() ?? 'No email', name: 'GoogleSignInScreen:signInWithGoogle');
+                  }
+                  else {
+                    messenger.showSnackBar(SnackBar(content: Text('Failed to sign in')));
                   }
                 },
               ),
@@ -65,7 +70,7 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
                   ElevatedButton(
                       onPressed: () async {
                         bool result = await user.signOut();
-                        if (result) print('Logged out');
+                        if (result) log('Logged out', name: 'GoogleSignInScreen');
                       },
                       child: const Text('Logout'))
                 ],

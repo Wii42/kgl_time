@@ -37,7 +37,6 @@ class _HoverControlsState extends State<HoverControls> {
       widget.builder(context, _controlsHeight)),
       NotificationListener<LayoutChangedNotification>(
         onNotification: (notification) {
-          print(notification);
           _updateControlsHeight();
           return false;
         },
@@ -54,7 +53,6 @@ class _HoverControlsState extends State<HoverControls> {
     final RenderBox renderBox =
         widget.controlsKey.currentContext?.findRenderObject() as RenderBox;
     final double height = renderBox.size.height;
-    print('Height: $height');
     if (height != _controlsHeight) {
       setState(() {
         _controlsHeight = height; // Update the button height

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
@@ -35,7 +36,7 @@ class LoggedInUser extends ChangeNotifier {
 
   void listenForUserChanges() {
     firebase.FirebaseAuth.instance.userChanges().listen((firebase.User? user) {
-      print('USER CHANGES: $user');
+      log('$user', name: 'LoggedInUser:listenForUserChanges');
       this.user = user;
       if (user == null) {
         _client = null;
@@ -55,7 +56,7 @@ class LoggedInUser extends ChangeNotifier {
     _client = await getNewClient();
     notifyListeners();
     driveApi?.about.get($fields: 'user').then((value) {
-      print('DRIVE-API USER: ${value.user?.displayName} ${value.user?.emailAddress} ${value.user?.photoLink}');
+      log('${value.user?.displayName} ${value.user?.emailAddress} ${value.user?.photoLink}', name: 'LoggedInUser:updateDriveApi');
     });
   }
 
@@ -69,6 +70,7 @@ class LoggedInUser extends ChangeNotifier {
   Future<firebase.UserCredential?> signInWithGoogle() async {
     try {
       if (Platform.isWindows || Platform.isLinux) {
+        log('Google Sign In is not supported on Windows or Linux', name: 'LoggedInUser:signInWithGoogle', level: 900);
         return null;
       }
 
@@ -87,7 +89,7 @@ class LoggedInUser extends ChangeNotifier {
       return user;
     } on Exception catch (e) {
       // TODO
-      print('exception->$e');
+      log('exception->$e', name: 'LoggedInUser:signInWithGoogle', level: 1000);
       return null;
     }
   }
