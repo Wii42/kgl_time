@@ -42,3 +42,8 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /untranslated_messages.json
+
+# Firebase API key files
+google-services.json
+firebase.json
+firebase_options.dart
