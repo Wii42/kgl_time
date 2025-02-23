@@ -11,9 +11,10 @@ import 'data_model/work_entry.dart';
 
 class AppRoute {
   final String path;
+  final String name;
   final Widget Function(BuildContext, GoRouterState, String appTitle) body;
 
-  const AppRoute({required this.path, required this.body});
+  const AppRoute({required this.path, required this.body, required this.name});
 
   GoRoute goRoute(
       {List<RouteBase> subRoutes = const [], required String appTitle}) {
@@ -24,7 +25,8 @@ class AppRoute {
   }
 
   static final AppRoute newEntry = AppRoute(
-      path: '/newEntry',
+      name: 'newEntry',
+      path: '/:parent/newEntry',
       body: (context, state, appTitle) {
         WorkEntry? existingEntry;
         if (state.extra is WorkEntry) {
@@ -34,6 +36,7 @@ class AppRoute {
       });
 
   static final AppRoute settings = AppRoute(
+      name: 'settings',
       path: '/settings',
       body: (context, state, appTitle) => SettingsPage(appTitle: appTitle));
 
@@ -51,6 +54,7 @@ class NavBarAppRoute extends AppRoute {
   const NavBarAppRoute(
       {required super.path,
       required super.body,
+      required super.name,
       required this.title,
       required this.icon});
 
@@ -64,18 +68,21 @@ class NavBarAppRoute extends AppRoute {
           routes: [goRoute(subRoutes: subRoutes, appTitle: appTitle)]);
 
   static final NavBarAppRoute home = NavBarAppRoute(
+    name: 'home',
       path: '/',
       body: (context, state, appTitle) => HomePage(appTitle: appTitle),
       title: (loc) => loc?.home ?? "<Home>",
       icon: Icons.home);
 
   static final allEntries = NavBarAppRoute(
+      name: 'allEntries',
       path: '/allEntries',
       body: (context, state, appTitle) => AllEntriesPage(appTitle: appTitle),
       title: (loc) => loc?.allEntries ?? "<allEntries>",
       icon: Icons.list);
 
   static final categories = NavBarAppRoute(
+      name: 'categories',
       path: '/categories',
       body: (context, state, appTitle) => CategoriesPage(appTitle: appTitle),
       title: (loc) => loc?.categories ?? "<categories>",

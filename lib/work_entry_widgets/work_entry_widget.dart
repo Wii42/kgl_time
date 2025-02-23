@@ -54,7 +54,7 @@ abstract class WorkEntryWidget extends StatelessWidget {
     return [
       IconButton(
           onPressed: () {
-            context.go(AppRoute.newEntry.path, extra: workEntry);
+            context.push(AppRoute.newEntry.path, extra: workEntry);
           },
           icon: Icon(Icons.edit_outlined)),
       SizedBox(width: 12),
