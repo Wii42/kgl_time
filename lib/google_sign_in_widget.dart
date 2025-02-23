@@ -17,20 +17,26 @@ class _GoogleSignInScreenState extends State<GoogleSignInScreen> {
     return Consumer<LoggedInUser>(builder: (context, user, child) {
       return (user.isLoggedOut)
           ? Center(
-              child: Card(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                child: IconButton(
-                  iconSize: 40,
-                  icon: FlutterLogo(),
-                  onPressed: () async {
-                    UserCredential? credentials = await user.signInWithGoogle();
-                    if (credentials != null) {
-                      print(credentials.user!.email);
-                    }
-                  },
+              child: ElevatedButton(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    spacing: 8,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(Icons.add_to_drive_outlined, size: 40),
+                      ),
+                      Text("Sync entries with Google Drive")
+                    ],
+                  ),
                 ),
+                onPressed: () async {
+                  UserCredential? credentials = await user.signInWithGoogle();
+                  if (credentials != null) {
+                    print(credentials.user!.email);
+                  }
+                },
               ),
             )
           : Center(
