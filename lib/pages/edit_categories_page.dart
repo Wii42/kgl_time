@@ -17,4 +17,7 @@ class EditCategoriesPage extends KglPage {
         padding: const EdgeInsets.all(8.0),
         child: EditCategoriesWidget(),
       )), maxWidth: KglTimeApp.maxPageWidth);
+
+  @override
+  bool get showSettingsButton => false;
 }

@@ -118,9 +118,6 @@ class _KglTimeAppState extends State<KglTimeApp> {
           backgroundColor: KglTimeApp.appBarColor,
           foregroundColor: Colors.white),
     );
-    theme = theme.copyWith(
-        bottomNavigationBarTheme: theme.bottomNavigationBarTheme.copyWith());
-
     return theme;
   }
 }
