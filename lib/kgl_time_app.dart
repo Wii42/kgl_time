@@ -3,7 +3,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/key_values.dart';
-import 'package:kgl_time/data_model/logged_in_user.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
@@ -75,9 +74,6 @@ class _KglTimeAppState extends State<KglTimeApp> {
         ChangeNotifierProvider<KeyValues>(
           create: (context) => KeyValues(widget.initialKeyValueStorage),
         ),
-        ChangeNotifierProvider<LoggedInUser>(
-            lazy: false,
-            create: (context) => LoggedInUser.listenForUserChanges()),
       ],
       builder: (context, _) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
