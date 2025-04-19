@@ -7,7 +7,7 @@ import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'data_model/work_category.dart';
 import 'kgl_time_app.dart';
 
-const String appVersion = '1.0.0-dev.1';
+const String appVersion = '0.3.0';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
