@@ -38,8 +38,32 @@ The app can, in principle, be built for all platforms that Flutter provides, exc
    ```bash
    flutter run
    ```
+   or build the APK for Android:
+   ```bash
+   flutter build apk
+   ```
+   
+## Changelog
+#### v0.3.0
+- Added a navigation bar
+- Minor bug fixes and adjustments
 
-## Reach Out
+#### v0.2.3
+- Improved the error message text for excessively large numbers (see v0.2.2)
+
+#### v0.2.2
+- Fixed an issue where very large numbers entered for work duration on the “New Entry” page appeared as negative values
+
+
+#### v0.2.0
+- Categories can now be added directly in the time entry slider
+
+#### v0.1.1
+- Minor UI improvements
+
+#### v0.1.0
+- Initial release
+## Contact
 
 For any questions about KGL Time or this project, please reach out via the provided email address:
 
