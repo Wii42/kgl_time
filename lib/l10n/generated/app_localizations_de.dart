@@ -36,7 +36,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get minutes => 'Minuten';
 
   @override
-  String get noInputError => 'Bitte geben Sie eine Dauer ein.\nNur Ziffern erlaubt';
+  String get noInputError =>
+      'Bitte geben Sie eine Dauer ein.\nNur Ziffern erlaubt';
 
   @override
   String get description => 'Beschreibung';
@@ -57,7 +58,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get unexpectedError => 'Unerwarteter Fehler';
 
   @override
-  String get inputTooLargeOrNanException => 'Eingegebener Wert ist zu groß oder keine ganze Zahl';
+  String get inputTooLargeOrNanException =>
+      'Eingegebener Wert ist zu groß oder keine ganze Zahl';
 
   @override
   String get inputTooLargeException => 'Eingegebener Wert ist zu groß';
@@ -168,17 +170,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
 /// The translations for German, as used in Austria (`de_AT`).
 class AppLocalizationsDeAt extends AppLocalizationsDe {
-  AppLocalizationsDeAt(): super('de_AT');
-
-
+  AppLocalizationsDeAt() : super('de_AT');
 }
 
 /// The translations for German, as used in Switzerland (`de_CH`).
 class AppLocalizationsDeCh extends AppLocalizationsDe {
-  AppLocalizationsDeCh(): super('de_CH');
+  AppLocalizationsDeCh() : super('de_CH');
 
   @override
-  String get inputTooLargeOrNanException => 'Eingegebener Wert ist zu gross oder keine ganze Zahl';
+  String get inputTooLargeOrNanException =>
+      'Eingegebener Wert ist zu gross oder keine ganze Zahl';
 
   @override
   String get inputTooLargeException => 'Eingegebener Wert ist zu gross';

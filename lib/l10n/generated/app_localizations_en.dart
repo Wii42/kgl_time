@@ -57,7 +57,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unexpectedError => 'Unexpected error';
 
   @override
-  String get inputTooLargeOrNanException => 'Input value is too large or not an integer';
+  String get inputTooLargeOrNanException =>
+      'Input value is too large or not an integer';
 
   @override
   String get inputTooLargeException => 'Input value is too large';
