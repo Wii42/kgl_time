@@ -81,7 +81,7 @@ const WorkEntrySchema = CollectionSchema(
   getId: _workEntryGetId,
   getLinks: _workEntryGetLinks,
   attach: _workEntryAttach,
-  version: '3.1.8',
+  version: '3.3.0-dev.1',
 );
 
 int _workEntryEstimateSize(
