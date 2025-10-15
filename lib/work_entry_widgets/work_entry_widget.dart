@@ -4,8 +4,10 @@ import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/delete_dialog.dart';
 import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../app_route.dart';
 
 abstract class WorkEntryWidget extends StatelessWidget {
   final WorkEntry workEntry;
@@ -45,13 +47,14 @@ abstract class WorkEntryWidget extends StatelessWidget {
     );
   }
 
-  String formattedDate(AppLocalizations? loc) => formatDate(workEntry.date, loc);
+  String formattedDate(AppLocalizations? loc) =>
+      formatDate(workEntry.date, loc);
 
   List<Widget> rightSideButtons(BuildContext context) {
     return [
       IconButton(
           onPressed: () {
-            context.go('/newEntry', extra: workEntry);
+            context.push(AppRoute.newEntry.path, extra: workEntry);
           },
           icon: Icon(Icons.edit_outlined)),
       SizedBox(width: 12),

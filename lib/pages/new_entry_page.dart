@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
+import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
-import 'package:kgl_time/popup_dialog.dart';
+import 'package:kgl_time/select_categories.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../kgl_time_app.dart';
 
 class NewEntryPage extends KglPage {
   /// The existing entry to edit, or null if a new entry should be created.
   final WorkEntry? existingEntry;
+
   const NewEntryPage({super.key, required super.appTitle, this.existingEntry});
 
   @override
@@ -40,6 +41,7 @@ class NewEntryPage extends KglPage {
 class _NewEntryStatefulPage extends StatefulWidget {
   final WorkEntry? existingEntry;
   final List<WorkCategory> categories;
+
   const _NewEntryStatefulPage(
       {super.key, required this.existingEntry, required this.categories});
 

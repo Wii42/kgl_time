@@ -1,5 +1,5 @@
-import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/data_model/work_category.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
 
 import 'persistent_storage_interface.dart';
 
@@ -56,7 +56,7 @@ class PersistentStorageService implements PersistentStorage {
   }
 
   @override
-  KeyValueStorage get keyValueStorage{
+  KeyValueStorage get keyValueStorage {
     _checkHasImplementation();
     return _implementation!.keyValueStorage;
   }

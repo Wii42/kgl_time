@@ -5,10 +5,10 @@ import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/kgl_time_app.dart';
-import 'package:kgl_time/popup_dialog.dart';
+import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:kgl_time/select_categories.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_builder/timer_builder.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'data_model/work_category.dart';
 
@@ -16,6 +16,7 @@ class WorkEntryTimeTracker extends StatelessWidget {
   static const String _storageKey = 'timeTrackerStart';
 
   const WorkEntryTimeTracker({super.key});
+
   @override
   Widget build(BuildContext context) {
     DateTime? startTime = context.select<KeyValues, DateTime?>(

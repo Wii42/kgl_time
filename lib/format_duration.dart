@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:kgl_time/l10n/generated/app_localizations.dart';
 
 String formatDuration(Duration duration) {
   List<String> parts = [];
@@ -15,5 +15,4 @@ String formatDuration(Duration duration) {
 String formatDate(DateTime date, AppLocalizations? loc) =>
     DateFormat('EE dd.MM.yyyy', loc?.localeName).format(date);
 
-String formatTime(DateTime time) =>
-    DateFormat('HH:mm').format(time);
+String formatTime(DateTime time) => DateFormat('HH:mm').format(time);

@@ -35,6 +35,7 @@
   "noExistingCategories": "No existing categories yet",
   "addNewCategory": "Add new category",
   "editCategory": "Edit category",
+  "editCategories": "Edit categories",
   "emptyCategoryNameError": "Please enter a name",
   "category": "Category",
   "add": "Add",
@@ -48,5 +49,6 @@
   "runningForDuration": "running for {duration}",
   "trackTime": "Track time",
   "start": "Start",
-  "stop": "Stop"
+  "stop": "Stop",
+  "home": "Home"
 }

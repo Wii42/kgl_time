@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
+
 import 'isar_storable.dart';
 
 part 'work_category.g.dart';
@@ -30,6 +31,7 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
   @override
   Id id = Isar.autoIncrement;
   int listIndex;
+
   WorkCategory(super.displayName, {super.icon, this.listIndex = -1});
 
   EmbeddedWorkCategory toEmbedded() {
@@ -47,8 +49,6 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
         other.listIndex == listIndex;
   }
 
-
-
   @override
   String toString() {
     return 'WorkCategory{id: $id, displayName: $displayName, icon: $icon, listIndex: $listIndex}';
@@ -56,12 +56,12 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
 
   @override
   int get hashCode => Object.hash(id, displayName, icon, listIndex);
-
 }
 
 @embedded
 class EmbeddedWorkCategory extends IWorkCategory {
   int? id;
+
   EmbeddedWorkCategory({String displayName = '', super.icon, this.id})
       : super(displayName);
 

@@ -1,22 +1,19 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_category.dart';
-import 'package:kgl_time/pages/settings_page.dart';
 import 'package:kgl_time/helpers.dart';
+import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'app_view.dart';
 import 'data_model/work_categories.dart';
 import 'data_model/work_entries.dart';
 import 'data_model/work_entry.dart';
-import 'pages/all_entries_page.dart';
-import 'pages/home_page.dart';
-import 'pages/new_entry_page.dart';
 
-class KglTimeApp extends StatelessWidget {
+class KglTimeApp extends StatefulWidget {
   final String appTitle;
 
   static const Color primaryColor = Color(0xff0067b1);
@@ -35,53 +32,52 @@ class KglTimeApp extends StatelessWidget {
       this.initialCategories = const [],
       this.initialKeyValueStorage = const {}});
 
+  @override
+  State<KglTimeApp> createState() => _KglTimeAppState();
+}
+
+class _KglTimeAppState extends State<KglTimeApp> {
+  final GlobalKey<NavigatorState> routerKey =
+      GlobalKey(debugLabel: "globalRouter");
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final router = GoRouter(
+    final GoRouter router = GoRouter(
+      navigatorKey: routerKey,
       routes: [
-        GoRoute(
-            path: '/',
-            builder: (context, state) => HomePage(
-                  appTitle: appTitle,
-                ),
-            routes: [
-              GoRoute(
-                  path: 'allEntries',
-                  builder: (context, state) =>
-                      AllEntriesPage(appTitle: appTitle)),
-              GoRoute(
-                  path: 'newEntry',
-                  builder: (context, state) {
-                    WorkEntry? existingEntry;
-                    if (state.extra is WorkEntry) {
-                      existingEntry = state.extra as WorkEntry;
-                    }
-                    return NewEntryPage(
-                        appTitle: appTitle, existingEntry: existingEntry);
-                  }),
-              GoRoute(
-                  path: 'settings',
-                  builder: (context, state) =>
-                      SettingsPage(appTitle: appTitle)),
-            ]),
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return AppView(navigationShell: navigationShell);
+          },
+          branches: [
+            NavBarAppRoute.home.statefulShellBranch(appTitle: widget.appTitle),
+            NavBarAppRoute.allEntries
+                .statefulShellBranch(appTitle: widget.appTitle),
+            NavBarAppRoute.categories
+                .statefulShellBranch(appTitle: widget.appTitle),
+          ],
+        ),
+        AppRoute.settings.goRoute(appTitle: widget.appTitle),
+        AppRoute.newEntry.goRoute(appTitle: widget.appTitle),
+        AppRoute.editCategories.goRoute(appTitle: widget.appTitle),
       ],
     );
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<WorkEntries>(
-          create: (context) => WorkEntries(initialEntries),
+          create: (context) => WorkEntries(widget.initialEntries),
         ),
         ChangeNotifierProvider<WorkCategories>(
-          create: (context) => WorkCategories(initialCategories),
+          create: (context) => WorkCategories(widget.initialCategories),
         ),
         ChangeNotifierProvider<KeyValues>(
-          create: (context) => KeyValues(initialKeyValueStorage),
+          create: (context) => KeyValues(widget.initialKeyValueStorage),
         ),
       ],
       builder: (context, _) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title: appTitle,
+        title: widget.appTitle,
         themeMode: parseThemeMode(
                 context.watch<KeyValues>().get<String>('themeMode')) ??
             ThemeMode.system,
@@ -92,7 +88,7 @@ class KglTimeApp extends StatelessWidget {
           ...GlobalMaterialLocalizations.delegates,
           AppLocalizations.delegate,
         ],
-        locale: kDebugMode ? Locale('de', 'CH') : null,
+        //locale: kDebugMode ? Locale('de', 'CH') : null,
         supportedLocales: [
           Locale('en'),
           Locale('de'),
@@ -104,16 +100,20 @@ class KglTimeApp extends StatelessWidget {
   }
 
   ThemeData theme({required Brightness brightness}) {
-    return ThemeData(
-      colorScheme:
-          ColorScheme.fromSeed(seedColor: primaryColor, brightness: brightness),
+    ThemeData theme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+          seedColor: KglTimeApp.primaryColor, brightness: brightness),
       useMaterial3: true,
       brightness: brightness,
       filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
-              backgroundColor: primaryColor, foregroundColor: Colors.white)),
+              backgroundColor: KglTimeApp.primaryColor,
+              foregroundColor: Colors.white)),
     ).copyWith(
-        appBarTheme: AppBarTheme(
-            backgroundColor: appBarColor, foregroundColor: Colors.white));
+      appBarTheme: AppBarTheme(
+          backgroundColor: KglTimeApp.appBarColor,
+          foregroundColor: Colors.white),
+    );
+    return theme;
   }
 }

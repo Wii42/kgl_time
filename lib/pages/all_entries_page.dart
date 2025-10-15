@@ -7,16 +7,18 @@ import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/enums/calendar_unit.dart';
 import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/hover_controls.dart';
+import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../kgl_time_app.dart';
+import '../width_constrained_list_view.dart';
 import 'kgl_page.dart';
 
 class AllEntriesPage extends KglPage {
   @override
   String? pageTitle(AppLocalizations? loc) => loc?.allEntries;
+
   const AllEntriesPage({super.key, required super.appTitle});
 
   @override
@@ -27,6 +29,7 @@ class AllEntriesPage extends KglPage {
 
 class _AllEntriesStatefulPage extends StatefulWidget {
   final WorkEntries workEntries;
+
   const _AllEntriesStatefulPage({super.key, required this.workEntries});
 
   @override
@@ -40,15 +43,11 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
 
   /// // GlobalKey to track the button size
   final GlobalKey _buttonKey = GlobalKey();
-  double _buttonHeight = 0; // Variable to store the height of the button
 
   @override
   void initState() {
     super.initState();
     _updateGroupedEntries();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getButtonHeight();
-    });
   }
 
   @override
@@ -60,62 +59,63 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
-    return Stack(
-      children: [
-        Align(
-          alignment: Alignment.topCenter,
-          child: Padding(
-            key: _buttonKey, // Assign the key to the button
-            padding: const EdgeInsets.all(12.0),
-            child: SegmentedButton<CalendarUnit>(
-              segments: [
-                ButtonSegment(
-                    value: CalendarUnit.week,
-                    label: Text(loc?.groupByWeek ?? '<byWeek>')),
-                ButtonSegment(
-                    value: CalendarUnit.month,
-                    label: Text(loc?.groupByMonth ?? '<byMonth>')),
-              ],
-              selected: {_selectedCalendarUnit},
-              onSelectionChanged: (Set<CalendarUnit> selected) {
-                assert(selected.length == 1);
-                setState(() {
-                  _selectedCalendarUnit = selected.single;
-                  _updateGroupedEntries();
-                });
-              },
-              style: solidUnselectedBackgroundStyle(context),
-            ),
+    return HoverControls(
+        controlsKey: _buttonKey,
+        hoveringControls: Padding(
+          key: _buttonKey, // Assign the key to the button
+          padding: const EdgeInsets.all(12.0),
+          child: SegmentedButton<CalendarUnit>(
+            segments: [
+              ButtonSegment(
+                  value: CalendarUnit.week,
+                  label: Text(loc?.groupByWeek ?? '<byWeek>')),
+              ButtonSegment(
+                  value: CalendarUnit.month,
+                  label: Text(loc?.groupByMonth ?? '<byMonth>')),
+            ],
+            selected: {_selectedCalendarUnit},
+            onSelectionChanged: (Set<CalendarUnit> selected) {
+              assert(selected.length == 1);
+              setState(() {
+                _selectedCalendarUnit = selected.single;
+                _updateGroupedEntries();
+              });
+            },
+            style: solidUnselectedBackgroundStyle(context),
           ),
         ),
-        LayoutBuilder(builder: (context, constraints) {
-          return ListView(
-              padding: const EdgeInsets.all(16),
-              children: _constrainWidth([
+        builder: (context, controlsHeight) {
+          return WidthConstrainedListView(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              children: [
                 SizedBox(
-                  height: max(_buttonHeight - 8, 0),
+                  height: max(controlsHeight - 8, 0),
                 ), // To avoid collision with the SegmentedButton
                 for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${formatCalendarUnitValue(entryGroup.calendarUnitValue, entryGroup.calendarUnit, loc: loc)} ${entryGroup.year}',
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Text(formatDuration(entryGroup.totalWorkDuration())),
-                    ],
-                  ),
+                  entriesGroupHeader(entryGroup, loc),
                   for (WorkEntry entry in entryGroup.entries)
                     WorkEntryDetails(workEntry: entry),
                   SizedBox(height: 16),
                 ],
-              ], constraints.maxWidth - 32) // Subtract padding,
-              );
-        }),
-      ].reversed.toList(),
+              ]);
+        });
+  }
+
+  Row entriesGroupHeader(GroupedWorkEntries entryGroup, AppLocalizations? loc) {
+    String calendarUnitOfGroup = formatCalendarUnitValue(
+        entryGroup.calendarUnitValue, entryGroup.calendarUnit,
+        loc: loc);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            '$calendarUnitOfGroup ${entryGroup.year}',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Text(formatDuration(entryGroup.totalWorkDuration())),
+      ],
     );
   }
 
@@ -147,35 +147,8 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
       case CalendarUnit.week:
         return '${loc?.calendarWeek} $calendarUnitValue,';
       case CalendarUnit.month:
-        return DateFormat('MMMM', loc?.localeName).format(DateTime(0, calendarUnitValue));
+        return DateFormat('MMMM', loc?.localeName)
+            .format(DateTime(0, calendarUnitValue));
     }
-  }
-
-  void _getButtonHeight() {
-    // Use the key to get the RenderBox of the button and measure its height
-    final RenderBox renderBox =
-        _buttonKey.currentContext?.findRenderObject() as RenderBox;
-    final double height = renderBox.size.height;
-
-    setState(() {
-      _buttonHeight = height; // Update the button height
-    });
-  }
-
-  List<Widget> _constrainWidth(
-      List<Widget> children, double maxAvailableWidth) {
-    return children
-        .map((child) => Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: min(KglTimeApp.maxPageWidth, maxAvailableWidth),
-                  ),
-                  child: child,
-                ),
-              ],
-            ))
-        .toList();
   }
 }

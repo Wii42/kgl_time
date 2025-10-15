@@ -1,5 +1,5 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 
-abstract class IsarStorable{
+abstract class IsarStorable {
   Id get id;
 }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/date_week.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/kgl_time_app.dart';
+import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/work_entry_time_tracker.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_preview.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'kgl_page.dart';
 
@@ -30,7 +31,7 @@ class HomePage extends KglPage {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 FilledButton(
-                  onPressed: () => context.go('/newEntry'),
+                  onPressed: () => context.push(AppRoute.newEntry.path),
                   child: Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Row(
@@ -65,9 +66,9 @@ class HomePage extends KglPage {
                       Text(loc?.recentEntries ?? '<recentEntries>'),
                       for (WorkEntry entry in workEntries.entries.take(3))
                         WorkEntryPreview(workEntry: entry),
-                      ElevatedButton(
-                          onPressed: () => context.go('/allEntries'),
-                          child: Text(loc?.showAllEntries ?? '')),
+                      //ElevatedButton(
+                      //    onPressed: () => context.go('/allEntries'),
+                      //    child: Text(loc?.showAllEntries ?? '')),
                     ],
                   )
                 else
@@ -82,6 +83,7 @@ class HomePage extends KglPage {
                     Text(
                         '${loc?.currentMonth}: ${formatDuration(totalThisMonth(workEntries.entries))}',
                         style: textTheme.bodyLarge),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ],
