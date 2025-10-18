@@ -76,6 +76,6 @@ abstract class WorkEntryWidget extends StatelessWidget {
           });
 
   void _deleteItem(WorkEntries workEntries) {
-    workEntries.remove(workEntry);
+    workEntries.moveToTrashBin(workEntry);
   }
 }

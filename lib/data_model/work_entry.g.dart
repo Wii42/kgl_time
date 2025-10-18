@@ -64,8 +64,13 @@ const WorkEntrySchema = CollectionSchema(
       name: r'wasEdited',
       type: IsarType.bool,
     ),
-    r'workDurationInSeconds': PropertySchema(
+    r'wasMovedToTrashAt': PropertySchema(
       id: 9,
+      name: r'wasMovedToTrashAt',
+      type: IsarType.dateTime,
+    ),
+    r'workDurationInSeconds': PropertySchema(
+      id: 10,
       name: r'workDurationInSeconds',
       type: IsarType.long,
     )
@@ -128,7 +133,8 @@ void _workEntrySerialize(
   writer.writeDateTime(offsets[6], object.startTime);
   writer.writeBool(offsets[7], object.tickedOff);
   writer.writeBool(offsets[8], object.wasEdited);
-  writer.writeLong(offsets[9], object.workDurationInSeconds);
+  writer.writeDateTime(offsets[9], object.wasMovedToTrashAt);
+  writer.writeLong(offsets[10], object.workDurationInSeconds);
 }
 
 WorkEntry _workEntryDeserialize(
@@ -154,7 +160,8 @@ WorkEntry _workEntryDeserialize(
     startTime: reader.readDateTimeOrNull(offsets[6]),
     tickedOff: reader.readBoolOrNull(offsets[7]) ?? false,
     wasEdited: reader.readBoolOrNull(offsets[8]) ?? false,
-    workDurationInSeconds: reader.readLong(offsets[9]),
+    wasMovedToTrashAt: reader.readDateTimeOrNull(offsets[9]),
+    workDurationInSeconds: reader.readLong(offsets[10]),
   );
   object.id = id;
   return object;
@@ -193,6 +200,8 @@ P _workEntryDeserializeProp<P>(
     case 8:
       return (reader.readBoolOrNull(offset) ?? false) as P;
     case 9:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 10:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -950,6 +959,80 @@ extension WorkEntryQueryFilter
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
+      wasMovedToTrashAtIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'wasMovedToTrashAt',
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
+      wasMovedToTrashAtIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'wasMovedToTrashAt',
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
+      wasMovedToTrashAtEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'wasMovedToTrashAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
+      wasMovedToTrashAtGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'wasMovedToTrashAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
+      wasMovedToTrashAtLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'wasMovedToTrashAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
+      wasMovedToTrashAtBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'wasMovedToTrashAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
       workDurationInSecondsEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
@@ -1116,6 +1199,19 @@ extension WorkEntryQuerySortBy on QueryBuilder<WorkEntry, WorkEntry, QSortBy> {
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByWasMovedToTrashAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'wasMovedToTrashAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
+      sortByWasMovedToTrashAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'wasMovedToTrashAt', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
       sortByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
@@ -1241,6 +1337,19 @@ extension WorkEntryQuerySortThenBy
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByWasMovedToTrashAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'wasMovedToTrashAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
+      thenByWasMovedToTrashAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'wasMovedToTrashAt', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
       thenByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
@@ -1304,6 +1413,12 @@ extension WorkEntryQueryWhereDistinct
   QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByWasEdited() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'wasEdited');
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByWasMovedToTrashAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'wasMovedToTrashAt');
     });
   }
 
@@ -1376,6 +1491,13 @@ extension WorkEntryQueryProperty
   QueryBuilder<WorkEntry, bool, QQueryOperations> wasEditedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'wasEdited');
+    });
+  }
+
+  QueryBuilder<WorkEntry, DateTime?, QQueryOperations>
+      wasMovedToTrashAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'wasMovedToTrashAt');
     });
   }
 

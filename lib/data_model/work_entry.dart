@@ -20,6 +20,7 @@ class WorkEntry implements IsarStorable {
   @Enumerated(EnumType.ordinal32)
   CreateWorkEntryType? createType;
   bool wasEdited;
+  DateTime? wasMovedToTrashAt;
 
   WorkEntry(
       {required this.workDurationInSeconds,
@@ -31,10 +32,14 @@ class WorkEntry implements IsarStorable {
       this.lastEdit,
       this.tickedOff = false,
       this.createType,
-      this.wasEdited = false});
+      this.wasEdited = false,
+      this.wasMovedToTrashAt});
 
   @ignore
   Duration get workDuration => Duration(seconds: workDurationInSeconds);
+
+  @ignore
+  bool get isInTrash => wasMovedToTrashAt != null;
 
   factory WorkEntry.fromDuration({
     required Duration duration,
@@ -45,6 +50,7 @@ class WorkEntry implements IsarStorable {
     bool tickedOff = false,
     CreateWorkEntryType? createType,
     bool wasEdited = false,
+    DateTime? wasMovedToTrashAt,
   }) {
     return WorkEntry(
       workDurationInSeconds: duration.inSeconds,
@@ -55,6 +61,7 @@ class WorkEntry implements IsarStorable {
       tickedOff: tickedOff,
       createType: createType,
       wasEdited: wasEdited,
+      wasMovedToTrashAt: wasMovedToTrashAt,
     );
   }
 
@@ -67,6 +74,7 @@ class WorkEntry implements IsarStorable {
     bool tickedOff = false,
     CreateWorkEntryType? createType,
     bool wasEdited = false,
+    DateTime? wasMovedToTrashAt,
   }) {
     return WorkEntry(
       workDurationInSeconds: endTime.difference(startTime).inSeconds,
@@ -79,7 +87,29 @@ class WorkEntry implements IsarStorable {
       tickedOff: tickedOff,
       createType: createType,
       wasEdited: wasEdited,
+      wasMovedToTrashAt: wasMovedToTrashAt,
     );
+  }
+
+  WorkEntry withTrashStatus(DateTime? movedToTrashAt) {
+    return WorkEntry(
+      workDurationInSeconds: workDurationInSeconds,
+      date: date,
+      description: description,
+      categories: categories,
+      startTime: startTime,
+      endTime: endTime,
+      lastEdit: lastEdit,
+      tickedOff: tickedOff,
+      createType: createType,
+      wasEdited: wasEdited,
+      wasMovedToTrashAt: movedToTrashAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'WorkEntry{id: $id, workDurationInSeconds: $workDurationInSeconds, date: $date, description: $description, categories: $categories, startTime: $startTime, endTime: $endTime, lastEdit: $lastEdit, tickedOff: $tickedOff, createType: $createType, wasEdited: $wasEdited, wasMovedToTrashAt: $wasMovedToTrashAt, isInTrash: $isInTrash}';
   }
 }
 

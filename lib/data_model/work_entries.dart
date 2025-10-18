@@ -15,9 +15,10 @@ class WorkEntries extends ChangeNotifier {
     sortEntriesInReverse(entriesList);
     _entries = CallbackNotifyingList<WorkEntry>(notifyListeners);
     _entries.addAll(entriesList);
+    _removeEntriesInTrashPermanentlyAfter(const Duration(days: 30));
   }
 
-  void sortEntriesInReverse(List<WorkEntry> entriesList) {
+  static void sortEntriesInReverse(List<WorkEntry> entriesList) {
     entriesList.sort((a, b) {
       DateTime aDate = a.startTime ?? a.endTime ?? a.date;
       DateTime bDate = b.startTime ?? b.endTime ?? b.date;
@@ -25,7 +26,12 @@ class WorkEntries extends ChangeNotifier {
     });
   }
 
-  List<WorkEntry> get entries => List.unmodifiable(_entries);
+  /// All entries that are not in the trash
+  List<WorkEntry> get entries =>
+      List.unmodifiable(_entries.where((entry) => !entry.isInTrash));
+
+  List<WorkEntry> get entriesInTrash =>
+      List.unmodifiable(_entries.where((entry) => entry.isInTrash));
 
   void add(WorkEntry entry) {
     _entries.add(entry);
@@ -33,9 +39,37 @@ class WorkEntries extends ChangeNotifier {
     _storedEntries.addEntry(entry);
   }
 
-  void remove(WorkEntry entry) {
+  void moveToTrashBin(WorkEntry entry) {
+    WorkEntry newEntry = entry.withTrashStatus(DateTime.now());
+    updateEntry(entry, newEntry);
+  }
+
+  void restoreFromTrashBin(WorkEntry entry) {
+    WorkEntry newEntry = entry.withTrashStatus(null);
+    updateEntry(entry, newEntry);
+  }
+
+  void _removeEntryPermanently(WorkEntry entry) {
     _entries.remove(entry);
     _storedEntries.deleteEntry(entry);
+  }
+
+  void _removeEntriesInTrashPermanentlyAfter(Duration duration){
+    DateTime cutoffDate = DateTime.now().subtract(duration);
+    _removeEntriesInTrashPermanentlyOlderThan(cutoffDate);
+  }
+  
+  void _removeEntriesInTrashPermanentlyOlderThan(DateTime cutoffDate) {
+    List<WorkEntry> entriesToRemove = _entries
+        .where((entry) =>
+            entry.isInTrash &&
+            (entry.wasMovedToTrashAt?.isBefore(cutoffDate) ?? false))
+        .toList();
+    for (var entry in entriesToRemove) {
+      _removeEntryPermanently(entry);
+      print(
+          'Permanently removed work entry with id ${entry.id} from trash bin.');
+    }
   }
 
   void updateEntry(WorkEntry workEntry, WorkEntry newEntry) {
