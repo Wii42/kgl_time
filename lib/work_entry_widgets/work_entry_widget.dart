@@ -8,6 +8,7 @@ import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../app_route.dart';
+import '../original_text_theme.dart';
 
 abstract class WorkEntryWidget extends StatelessWidget {
   final WorkEntry workEntry;
@@ -20,12 +21,15 @@ abstract class WorkEntryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    ThemeData parentTheme = Theme.of(context);
     return Theme(
       data: workEntry.tickedOff
-          ? theme.copyWith(
-              textTheme: theme.textTheme.apply(bodyColor: theme.disabledColor))
-          : theme,
+          ? parentTheme.copyWith(
+              textTheme: parentTheme.textTheme.apply(bodyColor: parentTheme.disabledColor), extensions: [
+        ...parentTheme.extensions.values,
+        OriginalTextTheme(textTheme: parentTheme.textTheme), // Save original text theme
+      ])
+          : parentTheme,
       child: Builder(builder: (context) {
         return Card(
           //margin: EdgeInsets.all(8),
