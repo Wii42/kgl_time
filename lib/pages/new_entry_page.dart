@@ -6,6 +6,7 @@ import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/select_categories.dart';
@@ -277,8 +278,14 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
             .map((e) => e.key.toEmbedded())
             .toList(),
         description: descriptionController.text,
-        startTime: widget.existingEntry?.startTime,
-        endTime: widget.existingEntry?.endTime,
+        startTime:
+            (widget.existingEntry?.startTime?.isSameDate(selectedDate) ?? false)
+                ? widget.existingEntry?.startTime
+                : null,
+        endTime:
+            (widget.existingEntry?.endTime?.isSameDate(selectedDate) ?? false)
+                ? widget.existingEntry?.endTime
+                : null,
         lastEdit: DateTime.now(),
         tickedOff: widget.existingEntry?.tickedOff ?? false,
         createType: widget.existingEntry != null
@@ -291,7 +298,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         workEntries.updateEntry(
             widget.existingEntry!,
             newEntry
-              ..startTime = widget.existingEntry!.startTime
+              //..startTime = widget.existingEntry!.startTime
               ..id = widget.existingEntry!.id);
       } else {
         workEntries.add(newEntry);

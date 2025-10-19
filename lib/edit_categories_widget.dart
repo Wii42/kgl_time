@@ -155,7 +155,7 @@ class EditCategoriesWidget extends StatelessWidget {
                         createType: entry.createType,
                         wasEdited: entry.wasEdited,
                       )..id = entry.id;
-                      workEntries.updateEntry(entry, newEntry);
+                      workEntries.updateEntry(entry, newEntry..id = entry.id);
                     }
                   } else {
                     categories.add(WorkCategory(controller.text,

@@ -24,6 +24,7 @@ class WorkEntries extends ChangeNotifier {
       DateTime bDate = b.startTime ?? b.endTime ?? b.date;
       return -aDate.compareTo(bDate);
     });
+    print('Sorted entries in reverse chronological order.');
   }
 
   /// All entries that are not in the trash
@@ -41,12 +42,12 @@ class WorkEntries extends ChangeNotifier {
 
   void moveToTrashBin(WorkEntry entry) {
     WorkEntry newEntry = entry.withTrashStatus(DateTime.now(), tickedOff: false);
-    updateEntry(entry, newEntry);
+    updateEntry(entry, newEntry..id = entry.id);
   }
 
   void restoreFromTrashBin(WorkEntry entry) {
     WorkEntry newEntry = entry.withTrashStatus(null);
-    updateEntry(entry, newEntry);
+    updateEntry(entry, newEntry.. id = entry.id);
   }
 
   void _removeEntryPermanently(WorkEntry entry) {
