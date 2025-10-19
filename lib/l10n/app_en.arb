@@ -44,7 +44,7 @@
   "privacyPolicyUrlFragment": "privacy-policy-for-kgl-time",
   "confirmDelete": "Confirm delete",
   "delete": "Delete",
-  "confirmDeleteDialog": "Do you really want to delete the entry?",
+  "confirmDeleteDialog": "Do you really want to delete the entry?\nThe entry will be moved to the trash bin and can be restored there for 30 days.",
   "selectCategory": "Select category",
   "runningForDuration": "running for {duration}",
   "trackTime": "Track time",
@@ -52,5 +52,6 @@
   "stop": "Stop",
   "home": "Home",
   "openTrashBin": "Open Trash Bin",
-  "restoreEntry": "Restore Entry"
+  "restoreEntry": "Restore Entry",
+  "trashBin": "Trash Bin"
 }

@@ -145,7 +145,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get delete => 'Löschen';
 
   @override
-  String get confirmDeleteDialog => 'Wollen Sie den Eintrag wirklich löschen?';
+  String get confirmDeleteDialog =>
+      'Wollen Sie den Eintrag wirklich löschen?\nDer Eintrag wird in den Papierkorb verschoben und kann dort 30 Tage lang wiederhergestellt werden.';
 
   @override
   String get selectCategory => 'Kategorie wählen';
@@ -172,6 +173,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get restoreEntry => 'Eintrag wiederherstellen';
+
+  @override
+  String get trashBin => 'Papierkorb';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).

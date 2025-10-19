@@ -367,7 +367,7 @@ abstract class AppLocalizations {
   /// No description provided for @confirmDeleteDialog.
   ///
   /// In en, this message translates to:
-  /// **'Do you really want to delete the entry?'**
+  /// **'Do you really want to delete the entry?\nThe entry will be moved to the trash bin and can be restored there for 30 days.'**
   String get confirmDeleteDialog;
 
   /// No description provided for @selectCategory.
@@ -417,6 +417,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Restore Entry'**
   String get restoreEntry;
+
+  /// No description provided for @trashBin.
+  ///
+  /// In en, this message translates to:
+  /// **'Trash Bin'**
+  String get trashBin;
 }
 
 class _AppLocalizationsDelegate

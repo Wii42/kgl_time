@@ -144,7 +144,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
-  String get confirmDeleteDialog => 'Do you really want to delete the entry?';
+  String get confirmDeleteDialog =>
+      'Do you really want to delete the entry?\nThe entry will be moved to the trash bin and can be restored there for 30 days.';
 
   @override
   String get selectCategory => 'Select category';
@@ -171,4 +172,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get restoreEntry => 'Restore Entry';
+
+  @override
+  String get trashBin => 'Trash Bin';
 }

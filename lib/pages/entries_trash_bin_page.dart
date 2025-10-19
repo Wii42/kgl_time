@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../data_model/work_entries.dart';
 import '../data_model/work_entry.dart';
+import '../l10n/generated/app_localizations.dart';
 
 class EntriesTrashBinPage extends KglPage {
   const EntriesTrashBinPage({super.key, required super.appTitle});
@@ -21,5 +22,9 @@ class EntriesTrashBinPage extends KglPage {
       children: [for (WorkEntry entry in trashedEntries) TrashedWorkEntry(workEntry: entry),
       ],
     );
+  }
+  @override
+  String? pageTitle(AppLocalizations? loc) {
+    return loc?.trashBin;
   }
 }

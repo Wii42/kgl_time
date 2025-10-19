@@ -44,7 +44,7 @@
   "privacyPolicyUrlFragment": "datenschutzrichtlinie-für-kgl-time",
   "confirmDelete": "Löschen bestätigen",
   "delete": "Löschen",
-  "confirmDeleteDialog": "Wollen Sie den Eintrag wirklich löschen?",
+  "confirmDeleteDialog": "Wollen Sie den Eintrag wirklich löschen?\nDer Eintrag wird in den Papierkorb verschoben und kann dort 30 Tage lang wiederhergestellt werden.",
   "selectCategory": "Kategorie wählen",
   "runningForDuration": "läuft seit {duration}",
   "trackTime": "Zeit erfassen",
@@ -52,5 +52,6 @@
   "stop": "Stopp",
   "home": "Startseite",
   "openTrashBin": "Papierkorb öffnen",
-  "restoreEntry": "Eintrag wiederherstellen"
+  "restoreEntry": "Eintrag wiederherstellen",
+  "trashBin": "Papierkorb"
 }
