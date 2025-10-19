@@ -33,6 +33,7 @@ dependencies:
   #extension_google_sign_in_as_googleapis_auth: ^2.0.12
   #googleapis_auth: ^1.6.0
   http: ^1.5.0
+  animated_list_plus: ^0.5.2
 
 dev_dependencies:
   flutter_test:

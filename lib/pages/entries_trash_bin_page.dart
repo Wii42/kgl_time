@@ -1,3 +1,4 @@
+import 'package:animated_list_plus/transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/width_constrained_list_view.dart';
@@ -17,12 +18,23 @@ class EntriesTrashBinPage extends KglPage {
         context.select<WorkEntries, List<WorkEntry>>(
       (workEntries) => workEntries.entriesInTrash,
     );
-    return WidthConstrainedListView(
+    return AnimatedWidthConstrainedListView<WorkEntry>(
+      items: trashedEntries,
       padding: const EdgeInsets.symmetric(vertical: 16),
-      children: [for (WorkEntry entry in trashedEntries) TrashedWorkEntry(workEntry: entry),
-      ],
+      itemBuilder: (context, animation, entry, index) => SizeFadeTransition(
+          animation: animation,
+          axis: Axis.vertical,
+          child: TrashedWorkEntry(workEntry: entry)),
+      areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) {
+        return oldItem.id == newItem.id;
+      },
+      removeItemBuilder: (context, animation, entry) => SizeFadeTransition(
+          animation: animation,
+          axis: Axis.vertical,
+          child: TrashedWorkEntry(workEntry: entry)),
     );
   }
+
   @override
   String? pageTitle(AppLocalizations? loc) {
     return loc?.trashBin;
