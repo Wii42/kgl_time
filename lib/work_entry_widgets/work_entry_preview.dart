@@ -21,7 +21,7 @@ class WorkEntryPreview extends WorkEntryWidget {
           formatDuration(workEntry.workDuration),
           style: textTheme.headlineSmall,
         ),
-        Text(formattedDate(loc)),
+        Text(WorkEntryWidget.formattedDate(workEntry, loc)),
       ],
     );
   }

@@ -166,6 +166,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get home => 'Startseite';
+
+  @override
+  String get openTrashBin => 'Papierkorb öffnen';
+
+  @override
+  String get restoreEntry => 'Eintrag wiederherstellen';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).

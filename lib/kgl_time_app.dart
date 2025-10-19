@@ -61,6 +61,7 @@ class _KglTimeAppState extends State<KglTimeApp> {
         AppRoute.settings.goRoute(appTitle: widget.appTitle),
         AppRoute.newEntry.goRoute(appTitle: widget.appTitle),
         AppRoute.editCategories.goRoute(appTitle: widget.appTitle),
+        AppRoute.entriesTrashBin.goRoute(appTitle: widget.appTitle),
       ],
     );
     return MultiProvider(

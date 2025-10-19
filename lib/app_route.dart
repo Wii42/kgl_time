@@ -4,6 +4,7 @@ import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/all_entries_page.dart';
 import 'package:kgl_time/pages/categories_page.dart';
 import 'package:kgl_time/pages/edit_categories_page.dart';
+import 'package:kgl_time/pages/entries_trash_bin_page.dart';
 import 'package:kgl_time/pages/home_page.dart';
 import 'package:kgl_time/pages/new_entry_page.dart';
 import 'package:kgl_time/pages/settings_page.dart';
@@ -52,6 +53,12 @@ class AppRoute {
       path: '/editCategories',
       body: (context, state, appTitle) =>
           EditCategoriesPage(appTitle: appTitle));
+
+  static final AppRoute entriesTrashBin = AppRoute(
+      name: 'entriesTrashBin',
+      path: '/entriesTrashBin',
+      body: (context, state, appTitle) =>
+          EntriesTrashBinPage(appTitle: appTitle));
 }
 
 class NavBarAppRoute extends AppRoute {

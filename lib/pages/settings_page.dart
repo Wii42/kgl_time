@@ -41,6 +41,16 @@ class SettingsPage extends KglPage {
                     Icon(Icons.link)
                   ],
                 )),
+            ElevatedButton(
+                onPressed: () => context.push(AppRoute.entriesTrashBin.path),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(loc?.openTrashBin ?? '<open entriesTrashBin>'),
+                    SizedBox(width: 8),
+                    Icon(Icons.restore)
+                  ],
+                )),
             infos(context),
           ].withSpaceBetween(height: 16),
         ),

@@ -405,6 +405,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Home'**
   String get home;
+
+  /// No description provided for @openTrashBin.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Trash Bin'**
+  String get openTrashBin;
+
+  /// No description provided for @restoreEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Entry'**
+  String get restoreEntry;
 }
 
 class _AppLocalizationsDelegate

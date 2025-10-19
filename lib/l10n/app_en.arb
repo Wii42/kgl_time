@@ -50,5 +50,7 @@
   "trackTime": "Track time",
   "start": "Start",
   "stop": "Stop",
-  "home": "Home"
+  "home": "Home",
+  "openTrashBin": "Open Trash Bin",
+  "restoreEntry": "Restore Entry"
 }

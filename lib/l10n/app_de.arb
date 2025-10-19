@@ -50,5 +50,7 @@
   "trackTime": "Zeit erfassen",
   "start": "Start",
   "stop": "Stopp",
-  "home": "Startseite"
+  "home": "Startseite",
+  "openTrashBin": "Papierkorb öffnen",
+  "restoreEntry": "Eintrag wiederherstellen"
 }

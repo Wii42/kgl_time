@@ -47,7 +47,7 @@ abstract class WorkEntryWidget extends StatelessWidget {
     );
   }
 
-  String formattedDate(AppLocalizations? loc) =>
+  static String formattedDate(WorkEntry workEntry, AppLocalizations? loc) =>
       formatDate(workEntry.date, loc);
 
   List<Widget> rightSideButtons(BuildContext context) {

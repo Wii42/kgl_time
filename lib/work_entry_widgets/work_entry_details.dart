@@ -4,6 +4,7 @@ import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import '../data_model/work_entries.dart';
+import '../data_model/work_entry.dart';
 import '../format_duration.dart';
 import 'work_entry_widget.dart';
 
@@ -35,42 +36,46 @@ class WorkEntryDetails extends WorkEntryWidget {
         ),
         SizedBox(width: 6),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                formatDuration(workEntry.workDuration),
-                style: textTheme.headlineSmall,
-              ),
-              if (workEntry.startTime != null && workEntry.endTime != null)
-                Text(
-                    '${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
-              Text(formattedDate(loc)),
-              if (workEntry.categories.isNotEmpty) ...[
-                SizedBox(height: 8),
-                Wrap(
-                  children: [
-                    for (IWorkCategory category in workEntry.categories) ...[
-                      RawChip(
-                        isEnabled: !workEntry.tickedOff,
-                        //avatar: category.icon != null? Icon(category.icon): null,
-                        padding: EdgeInsets.zero,
-                        label: Text(category.displayName),
-                      ),
-                      SizedBox(width: 8),
-                    ],
-                  ],
-                ),
-              ],
-              if (workEntry.description != null &&
-                  workEntry.description!.isNotEmpty) ...[
-                SizedBox(height: 8),
-                Text('${loc?.description}: ${workEntry.description}'),
-              ],
-            ],
-          ),
+          child: workEntryDetails(workEntry, textTheme, loc),
         ),
       ],
     );
+  }
+
+  static Widget workEntryDetails(WorkEntry workEntry, TextTheme textTheme, AppLocalizations? loc) {
+    return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              formatDuration(workEntry.workDuration),
+              style: textTheme.headlineSmall,
+            ),
+            if (workEntry.startTime != null && workEntry.endTime != null)
+              Text(
+                  '${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
+            Text(WorkEntryWidget.formattedDate(workEntry, loc)),
+            if (workEntry.categories.isNotEmpty) ...[
+              SizedBox(height: 8),
+              Wrap(
+                children: [
+                  for (IWorkCategory category in workEntry.categories) ...[
+                    RawChip(
+                      isEnabled: !workEntry.tickedOff,
+                      //avatar: category.icon != null? Icon(category.icon): null,
+                      padding: EdgeInsets.zero,
+                      label: Text(category.displayName),
+                    ),
+                    SizedBox(width: 8),
+                  ],
+                ],
+              ),
+            ],
+            if (workEntry.description != null &&
+                workEntry.description!.isNotEmpty) ...[
+              SizedBox(height: 8),
+              Text('${loc?.description}: ${workEntry.description}'),
+            ],
+          ],
+        );
   }
 }

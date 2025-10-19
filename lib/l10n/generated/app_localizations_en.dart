@@ -165,4 +165,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get home => 'Home';
+
+  @override
+  String get openTrashBin => 'Open Trash Bin';
+
+  @override
+  String get restoreEntry => 'Restore Entry';
 }
