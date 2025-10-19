@@ -112,8 +112,9 @@ class AnimatedWidthConstrainedListView<E extends Object> extends ImplicitlyAnima
     super.shrinkWrap = false,
     EdgeInsetsGeometry? padding,
     super.clipBehavior = Clip.hardEdge,
+    bool addHorizontalPadding = true,
   }) : super(
-      padding: WidthConstrainedListView.addHorizontalPadding(padding),
+      padding: addHorizontalPadding? WidthConstrainedListView.addHorizontalPadding(padding) : padding,
       itemBuilder: (BuildContext context, Animation<double> animation, E item, int index) {
         Widget? child = itemBuilder(context, animation, item, index);
         return WidthConstrainedListView.constrainWidthOfWidget(child);

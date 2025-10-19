@@ -39,4 +39,7 @@ class EntriesTrashBinPage extends KglPage {
   String? pageTitle(AppLocalizations? loc) {
     return loc?.trashBin;
   }
+
+  @override
+  bool get showSettingsButton => false;
 }

@@ -1,3 +1,4 @@
+import 'package:animated_list_plus/transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
@@ -11,6 +12,7 @@ import 'package:kgl_time/work_entry_time_tracker.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_preview.dart';
 import 'package:provider/provider.dart';
 
+import '../width_constrained_list_view.dart';
 import 'kgl_page.dart';
 
 class HomePage extends KglPage {
@@ -64,13 +66,40 @@ class HomePage extends KglPage {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(loc?.recentEntries ?? '<recentEntries>'),
-                      for (WorkEntry entry in workEntries.entries.take(3))
-                        WorkEntryPreview(workEntry: entry),
-                      //ElevatedButton(
-                      //    onPressed: () => context.go('/allEntries'),
-                      //    child: Text(loc?.showAllEntries ?? '')),
+                      AnimatedWidthConstrainedListView<WorkEntry>(
+                        items: workEntries.entries.take(3).toList(),
+                        //padding: const EdgeInsets.symmetric(vertical: 16),
+                        itemBuilder: (context, animation, entry, index) =>
+                            SizeFadeTransition(
+                                animation: animation,
+                                axis: Axis.vertical,
+                                child: WorkEntryPreview(workEntry: entry)),
+                        areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) {
+                          return oldItem.id == newItem.id;
+                        },
+                        removeItemBuilder: (context, animation, entry) =>
+                            SizeFadeTransition(
+                                animation: animation,
+                                axis: Axis.vertical,
+                                child: WorkEntryPreview(workEntry: entry)),
+                        //children: [for (WorkEntry entry in trashedEntries) TrashedWorkEntry(workEntry: entry),
+                        //],
+                        shrinkWrap: true,
+                        addHorizontalPadding: false,
+                      ),
                     ],
                   )
+                //Column(
+                //  crossAxisAlignment: CrossAxisAlignment.stretch,
+                //  children: [
+                //    Text(loc?.recentEntries ?? '<recentEntries>'),
+                //    for (WorkEntry entry in workEntries.entries.take(3))
+                //      WorkEntryPreview(workEntry: entry),
+                //    //ElevatedButton(
+                //    //    onPressed: () => context.go('/allEntries'),
+                //    //    child: Text(loc?.showAllEntries ?? '')),
+                //  ],
+                //)
                 else
                   Center(child: Text(loc?.noExistingEntries ?? '<noEntries>')),
                 const SizedBox(height: 32),
