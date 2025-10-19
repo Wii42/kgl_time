@@ -40,7 +40,7 @@ class WorkEntries extends ChangeNotifier {
   }
 
   void moveToTrashBin(WorkEntry entry) {
-    WorkEntry newEntry = entry.withTrashStatus(DateTime.now());
+    WorkEntry newEntry = entry.withTrashStatus(DateTime.now(), tickedOff: false);
     updateEntry(entry, newEntry);
   }
 

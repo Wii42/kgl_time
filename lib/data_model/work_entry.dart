@@ -91,7 +91,7 @@ class WorkEntry implements IsarStorable {
     );
   }
 
-  WorkEntry withTrashStatus(DateTime? movedToTrashAt) {
+  WorkEntry withTrashStatus(DateTime? movedToTrashAt, {bool? tickedOff}) {
     return WorkEntry(
       workDurationInSeconds: workDurationInSeconds,
       date: date,
@@ -100,7 +100,7 @@ class WorkEntry implements IsarStorable {
       startTime: startTime,
       endTime: endTime,
       lastEdit: lastEdit,
-      tickedOff: tickedOff,
+      tickedOff: tickedOff ?? this.tickedOff,
       createType: createType,
       wasEdited: wasEdited,
       wasMovedToTrashAt: movedToTrashAt,

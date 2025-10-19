@@ -34,7 +34,10 @@ class TrashedWorkEntry extends WorkEntryWidget {
               padding: const EdgeInsets.all(5.0),
               child: Icon(Icons.restore_from_trash),
             ),
-            Text(loc?.restoreEntry?? "<restore Entry>", style: textTheme.labelSmall,)
+            Text(
+              loc?.restoreEntry ?? "<restore Entry>",
+              style: textTheme.labelSmall?.apply(color: Colors.white),
+            )
           ])),
     ];
   }
