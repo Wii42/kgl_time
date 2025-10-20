@@ -44,6 +44,11 @@ The app can, in principle, be built for all platforms that Flutter provides, exc
    ```
    
 ## Changelog
+#### v0.3.1
+- Added trash bin, allowing users to recover deleted work entries for 30 days
+- Added animations on adding/deleting work entries, to give better visual feedback to the user
+- Minor bug fixes and improvements
+
 #### v0.3.0
 - Added a navigation bar
 - Minor bug fixes and adjustments
