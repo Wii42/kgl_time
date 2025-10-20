@@ -24,7 +24,6 @@ class WorkEntries extends ChangeNotifier {
       DateTime bDate = b.startTime ?? b.endTime ?? b.date;
       return -aDate.compareTo(bDate);
     });
-    print('Sorted entries in reverse chronological order.');
   }
 
   /// All entries that are not in the trash

@@ -86,6 +86,7 @@ class HomePage extends KglPage {
                         //],
                         shrinkWrap: true,
                         addHorizontalPadding: false,
+                        primary: false,
                       ),
                     ],
                   )
