@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:animated_list_plus/transitions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kgl_time/data_model/grouped_work_entries.dart';
@@ -85,20 +86,59 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
           ),
         ),
         builder: (context, controlsHeight) {
-          return WidthConstrainedListView(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              children: [
-                SizedBox(
-                  height: max(controlsHeight - 8, 0),
-                ), // To avoid collision with the SegmentedButton
-                for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
-                  entriesGroupHeader(entryGroup, loc),
-                  for (WorkEntry entry in entryGroup.entries)
-                    WorkEntryDetails(workEntry: entry),
-                  SizedBox(height: 16),
-                ],
-              ]);
+          return AnimatedWidthConstrainedListView<Object>(
+            padding: EdgeInsets.fromLTRB(16, max(controlsHeight - 8, 0), 16,
+                0), // tp padding to avoid collision with the SegmentedButton
+            items: [
+              for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
+                entryGroup,
+                for (WorkEntry entry in entryGroup.entries) entry
+              ],
+            ],
+            itemBuilder: (BuildContext context, Animation<double> animation,
+                Object item, int index) {
+              if (item is GroupedWorkEntries) {
+                return SizeFadeTransition(
+                  animation: animation,
+                  axis: Axis.vertical,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
+                    child: entriesGroupHeader(item, loc),
+                  ),
+                );
+              }
+              if (item is WorkEntry) {
+                return SizeFadeTransition(
+                  animation: animation,
+                  axis: Axis.vertical,
+                  child: WorkEntryDetails(workEntry: item),
+                );
+              }
+              return SizedBox(); // Fallback, should not reach here
+            },
+            areItemsTheSame: itemsAreTheSame,
+          );
         });
+  }
+
+  bool itemsAreTheSame(Object oldItem, Object newItem) {
+    if (oldItem is GroupedWorkEntries) {
+      if (newItem is GroupedWorkEntries) {
+        return oldItem.calendarUnit == newItem.calendarUnit &&
+            oldItem.calendarUnitValue == newItem.calendarUnitValue &&
+            oldItem.year == newItem.year;
+      } else {
+        return false;
+      }
+    } else if (oldItem is WorkEntry) {
+      if (newItem is WorkEntry) {
+        return oldItem.id == newItem.id;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   Row entriesGroupHeader(GroupedWorkEntries entryGroup, AppLocalizations? loc) {
