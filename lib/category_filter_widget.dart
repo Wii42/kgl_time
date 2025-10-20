@@ -1,3 +1,4 @@
+import 'package:animated_list_plus/transitions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
@@ -8,6 +9,7 @@ import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:provider/provider.dart';
 
 import 'data_model/work_entries.dart';
+import 'data_model/work_entry.dart';
 
 class CategoryFilterWidget extends StatefulWidget {
   final WorkCategories categories;
@@ -48,16 +50,26 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
             for (var e in idMapSelectedCategories.entries)
               if (e.value) e.key
           ];
-          return WidthConstrainedListView(
+          return AnimatedWidthConstrainedListView<WorkEntry>(
             shrinkWrap: true,
-            children: [
-              SizedBox(height: controlsHeight),
-              for (var entry in workEntries.entries)
-                if (entry.categories
-                    .map((c) => c.id)
-                    .any(selectedCategoryIds.contains))
-                  WorkEntryDetails(workEntry: entry)
-            ],
+            items: [for (var entry in workEntries.entries)
+              if (entry.categories
+                  .map((c) => c.id)
+                  .any(selectedCategoryIds.contains)) entry],
+            itemBuilder: (BuildContext context, Animation<double> animation, WorkEntry entry, int index) { return SizeFadeTransition(
+                animation: animation,
+                axis: Axis.vertical,
+                child: WorkEntryDetails(workEntry: entry)); },
+            areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) => oldItem.id == newItem.id,
+            //children: [
+            //  SizedBox(height: controlsHeight),
+            //  for (var entry in workEntries.entries)
+            //    if (entry.categories
+            //        .map((c) => c.id)
+            //        .any(selectedCategoryIds.contains))
+            //      WorkEntryDetails(workEntry: entry)
+            //],
+            padding: EdgeInsetsGeometry.only(top: controlsHeight),
           );
         });
       },
