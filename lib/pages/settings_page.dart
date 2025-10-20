@@ -31,26 +31,16 @@ class SettingsPage extends KglPage {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             withCard(themeMode(context)),
-            ElevatedButton(
+            ElevatedButton.icon(
                 onPressed: () => context.push(AppRoute.editCategories.path),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(loc?.editCategories ?? '<editCategories>'),
-                    SizedBox(width: 8),
-                    Icon(Icons.link)
-                  ],
-                )),
-            ElevatedButton(
-                onPressed: () => context.push(AppRoute.entriesTrashBin.path),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(loc?.openTrashBin ?? '<open entriesTrashBin>'),
-                    SizedBox(width: 8),
-                    Icon(Icons.restore)
-                  ],
-                )),
+                label: Text(loc?.editCategories ?? '<editCategories>'),
+                //SizedBox(width: 8),
+                icon: Icon(Icons.edit_outlined)),
+            ElevatedButton.icon(
+              onPressed: () => context.push(AppRoute.entriesTrashBin.path),
+              label: Text(loc?.openTrashBin ?? '<open entriesTrashBin>'),
+              icon: Icon(Icons.recycling_outlined),
+            ),
             infos(context),
           ].withSpaceBetween(height: 16),
         ),

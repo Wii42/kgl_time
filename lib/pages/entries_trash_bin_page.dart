@@ -18,20 +18,25 @@ class EntriesTrashBinPage extends KglPage {
         context.select<WorkEntries, List<WorkEntry>>(
       (workEntries) => workEntries.entriesInTrash,
     );
-    return AnimatedWidthConstrainedListView<WorkEntry>(
-      items: trashedEntries,
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      itemBuilder: (context, animation, entry, index) => SizeFadeTransition(
-          animation: animation,
-          axis: Axis.vertical,
-          child: TrashedWorkEntry(workEntry: entry)),
-      areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) {
-        return oldItem.id == newItem.id;
-      },
-      removeItemBuilder: (context, animation, entry) => SizeFadeTransition(
-          animation: animation,
-          axis: Axis.vertical,
-          child: TrashedWorkEntry(workEntry: entry)),
+    if (trashedEntries.isNotEmpty) {
+      return AnimatedWidthConstrainedListView<WorkEntry>(
+        items: trashedEntries,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        itemBuilder: (context, animation, entry, index) => SizeFadeTransition(
+            animation: animation,
+            axis: Axis.vertical,
+            child: TrashedWorkEntry(workEntry: entry, key: ValueKey(entry.id))),
+        areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) {
+          return oldItem.id == newItem.id;
+        },
+      );
+    }
+    return Center(
+      child: Text(
+        AppLocalizations.of(context)?.trashBinEmpty ?? "<trash bin empty>",
+        style: Theme.of(context).textTheme.bodyMedium,
+        textAlign: TextAlign.center,
+      ),
     );
   }
 

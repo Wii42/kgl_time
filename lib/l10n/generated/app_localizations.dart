@@ -423,6 +423,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Trash Bin'**
   String get trashBin;
+
+  /// No description provided for @noMatchingEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching entries found'**
+  String get noMatchingEntries;
+
+  /// No description provided for @trashBinEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'The trash bin is empty'**
+  String get trashBinEmpty;
 }
 
 class _AppLocalizationsDelegate

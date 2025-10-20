@@ -73,34 +73,16 @@ class HomePage extends KglPage {
                             SizeFadeTransition(
                                 animation: animation,
                                 axis: Axis.vertical,
-                                child: WorkEntryPreview(workEntry: entry)),
+                                child: WorkEntryPreview(workEntry: entry, key: ValueKey(entry.id))),
                         areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) {
                           return oldItem.id == newItem.id;
                         },
-                        removeItemBuilder: (context, animation, entry) =>
-                            SizeFadeTransition(
-                                animation: animation,
-                                axis: Axis.vertical,
-                                child: WorkEntryPreview(workEntry: entry)),
-                        //children: [for (WorkEntry entry in trashedEntries) TrashedWorkEntry(workEntry: entry),
-                        //],
                         shrinkWrap: true,
                         addHorizontalPadding: false,
                         primary: false,
                       ),
                     ],
                   )
-                //Column(
-                //  crossAxisAlignment: CrossAxisAlignment.stretch,
-                //  children: [
-                //    Text(loc?.recentEntries ?? '<recentEntries>'),
-                //    for (WorkEntry entry in workEntries.entries.take(3))
-                //      WorkEntryPreview(workEntry: entry),
-                //    //ElevatedButton(
-                //    //    onPressed: () => context.go('/allEntries'),
-                //    //    child: Text(loc?.showAllEntries ?? '')),
-                //  ],
-                //)
                 else
                   Center(child: Text(loc?.noExistingEntries ?? '<noEntries>')),
                 const SizedBox(height: 32),

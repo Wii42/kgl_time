@@ -53,5 +53,7 @@
   "home": "Home",
   "openTrashBin": "Open Trash Bin",
   "restoreEntry": "Restore Entry",
-  "trashBin": "Trash Bin"
+  "trashBin": "Trash Bin",
+  "noMatchingEntries": "No matching entries found",
+    "trashBinEmpty": "The trash bin is empty"
 }

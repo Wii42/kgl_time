@@ -176,6 +176,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get trashBin => 'Papierkorb';
+
+  @override
+  String get noMatchingEntries => 'Keine passenden Einträge gefunden';
+
+  @override
+  String get trashBinEmpty => 'Der Papierkorb ist leer';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).

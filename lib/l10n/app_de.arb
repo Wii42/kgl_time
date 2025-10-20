@@ -53,5 +53,7 @@
   "home": "Startseite",
   "openTrashBin": "Papierkorb öffnen",
   "restoreEntry": "Eintrag wiederherstellen",
-  "trashBin": "Papierkorb"
+  "trashBin": "Papierkorb",
+  "noMatchingEntries": "Keine passenden Einträge gefunden",
+  "trashBinEmpty": "Der Papierkorb ist leer"
 }

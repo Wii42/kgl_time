@@ -175,4 +175,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trashBin => 'Trash Bin';
+
+  @override
+  String get noMatchingEntries => 'No matching entries found';
+
+  @override
+  String get trashBinEmpty => 'The trash bin is empty';
 }

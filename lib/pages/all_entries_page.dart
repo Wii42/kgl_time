@@ -141,12 +141,14 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
     }
   }
 
-  Row entriesGroupHeader(GroupedWorkEntries entryGroup, AppLocalizations? loc) {
+  Widget entriesGroupHeader(GroupedWorkEntries entryGroup, AppLocalizations? loc) {
     String calendarUnitOfGroup = formatCalendarUnitValue(
         entryGroup.calendarUnitValue, entryGroup.calendarUnit,
         loc: loc);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      key: ValueKey(
+          'group_${entryGroup.calendarUnit}_${entryGroup.calendarUnitValue}_${entryGroup.year}'),
       children: [
         Expanded(
           child: Text(
