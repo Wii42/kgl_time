@@ -70,7 +70,6 @@ abstract class KglPage extends StatelessWidget {
       double maxWidth = double.infinity}) {
     assert(child != null || builder != null);
     return LayoutBuilder(builder: (context, constraints) {
-      print("available width: ${constraints.maxWidth}, ");
       return SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
