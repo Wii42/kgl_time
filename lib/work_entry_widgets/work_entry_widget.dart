@@ -25,10 +25,13 @@ abstract class WorkEntryWidget extends StatelessWidget {
     return Theme(
       data: workEntry.tickedOff
           ? parentTheme.copyWith(
-              textTheme: parentTheme.textTheme.apply(bodyColor: parentTheme.disabledColor), extensions: [
-        ...parentTheme.extensions.values,
-        OriginalTextTheme(textTheme: parentTheme.textTheme), // Save original text theme
-      ])
+              textTheme: parentTheme.textTheme
+                  .apply(bodyColor: parentTheme.disabledColor),
+              extensions: [
+                  ...parentTheme.extensions.values,
+                  OriginalTextTheme(textTheme: parentTheme.textTheme),
+                  // Save original text theme
+                ])
           : parentTheme,
       child: Builder(builder: (context) {
         return Card(

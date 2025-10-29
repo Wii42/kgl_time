@@ -4,6 +4,7 @@ class OriginalTextTheme extends ThemeExtension<OriginalTextTheme> {
   final TextTheme textTheme;
 
   OriginalTextTheme({required this.textTheme});
+
   @override
   ThemeExtension<OriginalTextTheme> copyWith({TextTheme? textTheme}) {
     return OriginalTextTheme(textTheme: textTheme ?? this.textTheme);

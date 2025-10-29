@@ -40,13 +40,14 @@ class WorkEntries extends ChangeNotifier {
   }
 
   void moveToTrashBin(WorkEntry entry) {
-    WorkEntry newEntry = entry.withTrashStatus(DateTime.now(), tickedOff: false);
+    WorkEntry newEntry =
+        entry.withTrashStatus(DateTime.now(), tickedOff: false);
     updateEntry(entry, newEntry..id = entry.id);
   }
 
   void restoreFromTrashBin(WorkEntry entry) {
     WorkEntry newEntry = entry.withTrashStatus(null);
-    updateEntry(entry, newEntry.. id = entry.id);
+    updateEntry(entry, newEntry..id = entry.id);
   }
 
   void _removeEntryPermanently(WorkEntry entry) {
@@ -54,11 +55,11 @@ class WorkEntries extends ChangeNotifier {
     _storedEntries.deleteEntry(entry);
   }
 
-  void _removeEntriesInTrashPermanentlyAfter(Duration duration){
+  void _removeEntriesInTrashPermanentlyAfter(Duration duration) {
     DateTime cutoffDate = DateTime.now().subtract(duration);
     _removeEntriesInTrashPermanentlyOlderThan(cutoffDate);
   }
-  
+
   void _removeEntriesInTrashPermanentlyOlderThan(DateTime cutoffDate) {
     List<WorkEntry> entriesToRemove = _entries
         .where((entry) =>

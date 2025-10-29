@@ -14,6 +14,7 @@ import 'l10n/generated/app_localizations.dart';
 
 class CategoryFilterWidget extends StatefulWidget {
   final WorkCategories categories;
+
   const CategoryFilterWidget({super.key, required this.categories});
 
   @override
@@ -23,6 +24,7 @@ class CategoryFilterWidget extends StatefulWidget {
 class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
   late Map<WorkCategory, bool> _selectedCategories;
   final GlobalKey _controlsKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
@@ -57,27 +59,27 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
                   .any(selectedCategoryIds.contains))
               .toList();
 
-
-          if(filteredEntries.isNotEmpty) {
+          if (filteredEntries.isNotEmpty) {
             return AnimatedWidthConstrainedListView<WorkEntry>(
-            shrinkWrap: true,
-            items: filteredEntries,
-            itemBuilder: (BuildContext context, Animation<double> animation,
-                WorkEntry entry, int index) {
-              return SizeFadeTransition(
-                  animation: animation,
-                  axis: Axis.vertical,
-                  child: WorkEntryDetails(
-                      workEntry: entry, key: ValueKey(entry.id)));
-            },
-            areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) =>
-                oldItem.id == newItem.id,
-            padding: EdgeInsetsGeometry.only(top: controlsHeight),
-          );
+              shrinkWrap: true,
+              items: filteredEntries,
+              itemBuilder: (BuildContext context, Animation<double> animation,
+                  WorkEntry entry, int index) {
+                return SizeFadeTransition(
+                    animation: animation,
+                    axis: Axis.vertical,
+                    child: WorkEntryDetails(
+                        workEntry: entry, key: ValueKey(entry.id)));
+              },
+              areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) =>
+                  oldItem.id == newItem.id,
+              padding: EdgeInsetsGeometry.only(top: controlsHeight),
+            );
           }
           return Center(
             child: Text(AppLocalizations.of(context)?.noMatchingEntries ??
-                '<noMatchingEntries>'),);
+                '<noMatchingEntries>'),
+          );
         });
       },
     );

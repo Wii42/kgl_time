@@ -33,8 +33,7 @@ class _HoverControlsState extends State<HoverControls> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      Positioned.fill(child:
-      widget.builder(context, _controlsHeight)),
+      Positioned.fill(child: widget.builder(context, _controlsHeight)),
       NotificationListener<LayoutChangedNotification>(
         onNotification: (notification) {
           _updateControlsHeight();

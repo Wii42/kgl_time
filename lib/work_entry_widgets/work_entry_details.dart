@@ -42,40 +42,41 @@ class WorkEntryDetails extends WorkEntryWidget {
     );
   }
 
-  static Widget workEntryDetails(WorkEntry workEntry, TextTheme textTheme, AppLocalizations? loc) {
+  static Widget workEntryDetails(
+      WorkEntry workEntry, TextTheme textTheme, AppLocalizations? loc) {
     return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              formatDuration(workEntry.workDuration),
-              style: textTheme.headlineSmall,
-            ),
-            if (workEntry.startTime != null && workEntry.endTime != null)
-              Text(
-                  '${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
-            Text(WorkEntryWidget.formattedDate(workEntry, loc)),
-            if (workEntry.categories.isNotEmpty) ...[
-              SizedBox(height: 8),
-              Wrap(
-                children: [
-                  for (IWorkCategory category in workEntry.categories) ...[
-                    RawChip(
-                      isEnabled: !workEntry.tickedOff,
-                      //avatar: category.icon != null? Icon(category.icon): null,
-                      padding: EdgeInsets.zero,
-                      label: Text(category.displayName),
-                    ),
-                    SizedBox(width: 8),
-                  ],
-                ],
-              ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          formatDuration(workEntry.workDuration),
+          style: textTheme.headlineSmall,
+        ),
+        if (workEntry.startTime != null && workEntry.endTime != null)
+          Text(
+              '${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
+        Text(WorkEntryWidget.formattedDate(workEntry, loc)),
+        if (workEntry.categories.isNotEmpty) ...[
+          SizedBox(height: 8),
+          Wrap(
+            children: [
+              for (IWorkCategory category in workEntry.categories) ...[
+                RawChip(
+                  isEnabled: !workEntry.tickedOff,
+                  //avatar: category.icon != null? Icon(category.icon): null,
+                  padding: EdgeInsets.zero,
+                  label: Text(category.displayName),
+                ),
+                SizedBox(width: 8),
+              ],
             ],
-            if (workEntry.description != null &&
-                workEntry.description!.isNotEmpty) ...[
-              SizedBox(height: 8),
-              Text('${loc?.description}: ${workEntry.description}'),
-            ],
-          ],
-        );
+          ),
+        ],
+        if (workEntry.description != null &&
+            workEntry.description!.isNotEmpty) ...[
+          SizedBox(height: 8),
+          Text('${loc?.description}: ${workEntry.description}'),
+        ],
+      ],
+    );
   }
 }
