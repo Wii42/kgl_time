@@ -64,5 +64,8 @@
   "fileSavedSuccessfully": "File saved successfully",
   "failedToSaveFile": "Failed to save file",
   "fileSharedSuccessfully": "File shared successfully",
-  "failedToShareFile": "Failed to share file"
+  "failedToShareFile": "Failed to share file",
+  "saveBackup": "Save backup of work entries",
+  "exportCsvExplanation": "Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.",
+  "exportJsonExplanation": "Creates a backup of all work entries  and categories as a JSON file. This file can be used to restore your entries later or to import them into another device."
 }

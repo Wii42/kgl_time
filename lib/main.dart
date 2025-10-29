@@ -9,10 +9,13 @@ import 'kgl_time_app.dart';
 
 const String appVersion = '0.3.1';
 
+const int schemaVersion = 1;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PersistentStorageService.initializeImplementation(
       IsarPersistentStorage());
+  await _checkSchemaVersion((_,_){});
   List<WorkEntry> initialEntries =
       await PersistentStorageService.instance.workEntries.loadEntries();
   List<WorkCategory> initialCategories =
@@ -67,3 +70,21 @@ List<WorkEntry> get mockWorkEntries => [
         ],
       ),
     ];
+
+
+/// Checks the stored schema version and calls [onSchemaVersionChanged]
+/// if the stored version is different from the current [schemaVersion].
+Future<void> _checkSchemaVersion(void Function(int oldVersion, int newVersion) onSchemaVersionChanged) async {
+  final storage = PersistentStorageService.instance;
+  final kvStorage = storage.keyValueStorage;
+  final int? storedSchemaVersion =
+      await kvStorage.get<int>('schemaVersion');
+  if (storedSchemaVersion == null) {
+    await kvStorage.set<int>('schemaVersion', schemaVersion);
+    return;
+  }
+  if (storedSchemaVersion != schemaVersion) {
+    onSchemaVersionChanged(storedSchemaVersion, schemaVersion);
+    await kvStorage.set<int>('schemaVersion', schemaVersion);
+  }
+}

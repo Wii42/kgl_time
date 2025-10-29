@@ -63,7 +63,7 @@ import 'app_localizations_en.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -86,18 +86,18 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('de'),
     Locale('de', 'AT'),
     Locale('de', 'CH'),
-    Locale('en')
+    Locale('en'),
   ];
 
   /// No description provided for @allEntries.
@@ -489,6 +489,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to share file'**
   String get failedToShareFile;
+
+  /// No description provided for @saveBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Save backup of work entries'**
+  String get saveBackup;
+
+  /// No description provided for @exportCsvExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.'**
+  String get exportCsvExplanation;
+
+  /// No description provided for @exportJsonExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Creates a backup of all work entries  and categories as a JSON file. This file can be used to restore your entries later or to import them into another device.'**
+  String get exportJsonExplanation;
 }
 
 class _AppLocalizationsDelegate
@@ -532,8 +550,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

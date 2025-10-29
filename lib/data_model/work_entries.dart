@@ -30,6 +30,8 @@ class WorkEntries extends ChangeNotifier {
   List<WorkEntry> get entries =>
       List.unmodifiable(_entries.where((entry) => !entry.isInTrash));
 
+
+  /// All entries that are in the trash
   List<WorkEntry> get entriesInTrash =>
       List.unmodifiable(_entries.where((entry) => entry.isInTrash));
 
@@ -77,4 +79,8 @@ class WorkEntries extends ChangeNotifier {
     sortEntriesInReverse(_entries);
     _storedEntries.updateEntry(newEntry, workEntry);
   }
+
+  /// All entries including those in the trash
+  List<WorkEntry> get entriesIncludingTrash => List.unmodifiable(_entries);
+
 }

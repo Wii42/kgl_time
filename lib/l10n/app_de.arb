@@ -64,5 +64,8 @@
   "fileSavedSuccessfully": "Datei erfolgreich gespeichert",
   "failedToSaveFile": "Speichern der Datei fehlgeschlagen",
   "fileSharedSuccessfully": "Datei erfolgreich geteilt",
-  "failedToShareFile": "Teilen der Datei fehlgeschlagen"
+  "failedToShareFile": "Teilen der Datei fehlgeschlagen",
+  "saveBackup": "Backup der Arbeitseinträge speichern",
+  "exportCsvExplanation": "Exportiert alle Einträge als CSV-Tabelle. Diese Datei kann in Tabellenkalkulationsprogrammen wie Excel oder Google Sheets geöffnet werden.",
+  "exportJsonExplanation": "Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf ein anderes Gerät zu importieren."
 }
