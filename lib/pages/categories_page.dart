@@ -13,9 +13,8 @@ class CategoriesPage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
-    return Consumer<WorkCategories>(
-      builder: (context, categories, _) {
-        return
-    CategoryFilterWidget(categories: categories);});
+    return Consumer<WorkCategories>(builder: (context, categories, _) {
+      return CategoryFilterWidget(categories: categories);
+    });
   }
 }

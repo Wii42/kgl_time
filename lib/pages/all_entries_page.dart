@@ -141,7 +141,8 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
     }
   }
 
-  Widget entriesGroupHeader(GroupedWorkEntries entryGroup, AppLocalizations? loc) {
+  Widget entriesGroupHeader(
+      GroupedWorkEntries entryGroup, AppLocalizations? loc) {
     String calendarUnitOfGroup = formatCalendarUnitValue(
         entryGroup.calendarUnitValue, entryGroup.calendarUnit,
         loc: loc);

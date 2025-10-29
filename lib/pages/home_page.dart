@@ -73,8 +73,10 @@ class HomePage extends KglPage {
                             SizeFadeTransition(
                                 animation: animation,
                                 axis: Axis.vertical,
-                                child: WorkEntryPreview(workEntry: entry, key: ValueKey(entry.id))),
-                        areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) {
+                                child: WorkEntryPreview(
+                                    workEntry: entry, key: ValueKey(entry.id))),
+                        areItemsTheSame:
+                            (WorkEntry oldItem, WorkEntry newItem) {
                           return oldItem.id == newItem.id;
                         },
                         shrinkWrap: true,

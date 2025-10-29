@@ -40,7 +40,9 @@ class ExportImportPage extends KglPage {
                       ? onSaveAsCsv(context)
                       : null,
                 )),
-                SizedBox(width: 8,),
+                SizedBox(
+                  width: 8,
+                ),
                 OutlinedButton.icon(
                   label: Text(loc?.share ?? "<share>"),
                   icon: Icon(Icons.share),

@@ -43,7 +43,8 @@ class SettingsPage extends KglPage {
             ),
             ElevatedButton.icon(
                 onPressed: () => context.push(AppRoute.exportImport.path),
-                label: Text(loc?.exportImportEntries??"<Export/import entries>"),
+                label:
+                    Text(loc?.exportImportEntries ?? "<Export/import entries>"),
                 icon: Icon(Icons.import_export_outlined)),
             infos(context),
           ].withSpaceBetween(height: 16),
