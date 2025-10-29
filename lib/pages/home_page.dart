@@ -24,10 +24,10 @@ class HomePage extends KglPage {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
-        return KglPage.alwaysFillingScrollView(
-          maxWidth: KglTimeApp.maxPageWidth,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: KglPage.alwaysFillingScrollView(
+            maxWidth: KglTimeApp.maxPageWidth,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.stretch,

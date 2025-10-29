@@ -87,8 +87,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         ),
         builder: (context, controlsHeight) {
           return AnimatedWidthConstrainedListView<Object>(
-            padding: EdgeInsets.fromLTRB(16, max(controlsHeight - 8, 0), 16,
-                0), // tp padding to avoid collision with the SegmentedButton
+            padding: EdgeInsets.only(top:max(controlsHeight - 8, 0)), // tp padding to avoid collision with the SegmentedButton
             items: [
               for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
                 entryGroup,
