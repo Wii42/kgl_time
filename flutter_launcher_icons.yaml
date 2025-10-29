@@ -31,3 +31,7 @@ flutter_launcher_icons:
   macos:
     generate: true
     image_path: "assets/playstore-icon.png"
+
+  linux:
+    generate: true
+    image_path: "assets/playstore-icon.png"
