@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:isar_community/isar.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'isar_storable.dart';
 
 part 'work_category.g.dart';
-
 abstract class IWorkCategory {
   String displayName;
 
@@ -24,9 +24,12 @@ abstract class IWorkCategory {
 
   @override
   int get hashCode => Object.hash(displayName, icon);
+
+  Map<String,dynamic> toJson();
 }
 
 @Collection(accessor: 'workCategories', inheritance: true)
+@JsonSerializable()
 class WorkCategory extends IWorkCategory implements IsarStorable {
   @override
   Id id = Isar.autoIncrement;
@@ -56,9 +59,16 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
 
   @override
   int get hashCode => Object.hash(id, displayName, icon, listIndex);
+
+  @override
+  Map<String, dynamic> toJson() => _$WorkCategoryToJson(this);
+
+  factory WorkCategory.fromJson(Map<String, dynamic> json) =>
+      _$WorkCategoryFromJson(json);
 }
 
 @embedded
+@JsonSerializable()
 class EmbeddedWorkCategory extends IWorkCategory {
   int? id;
 
@@ -72,6 +82,12 @@ class EmbeddedWorkCategory extends IWorkCategory {
     }
     return category;
   }
+
+  @override
+  Map<String, dynamic> toJson() => _$EmbeddedWorkCategoryToJson(this);
+
+  factory EmbeddedWorkCategory.fromJson(Map<String, dynamic> json) =>
+      _$EmbeddedWorkCategoryFromJson(json);
 }
 
 enum CategoryIcon {

@@ -1525,3 +1525,57 @@ extension WorkEntryQueryProperty
     });
   }
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+WorkEntry _$WorkEntryFromJson(Map<String, dynamic> json) => WorkEntry(
+  workDurationInSeconds: (json['workDurationInSeconds'] as num).toInt(),
+  date: DateTime.parse(json['date'] as String),
+  description: json['description'] as String?,
+  categories:
+      (json['categories'] as List<dynamic>?)
+          ?.map((e) => EmbeddedWorkCategory.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
+  startTime: json['startTime'] == null
+      ? null
+      : DateTime.parse(json['startTime'] as String),
+  endTime: json['endTime'] == null
+      ? null
+      : DateTime.parse(json['endTime'] as String),
+  lastEdit: json['lastEdit'] == null
+      ? null
+      : DateTime.parse(json['lastEdit'] as String),
+  tickedOff: json['tickedOff'] as bool? ?? false,
+  createType: $enumDecodeNullable(
+    _$CreateWorkEntryTypeEnumMap,
+    json['createType'],
+  ),
+  wasEdited: json['wasEdited'] as bool? ?? false,
+  wasMovedToTrashAt: json['wasMovedToTrashAt'] == null
+      ? null
+      : DateTime.parse(json['wasMovedToTrashAt'] as String),
+)..id = (json['id'] as num).toInt();
+
+Map<String, dynamic> _$WorkEntryToJson(WorkEntry instance) => <String, dynamic>{
+  'id': instance.id,
+  'workDurationInSeconds': instance.workDurationInSeconds,
+  'date': instance.date.toIso8601String(),
+  'description': instance.description,
+  'categories': instance.categories,
+  'startTime': instance.startTime?.toIso8601String(),
+  'endTime': instance.endTime?.toIso8601String(),
+  'lastEdit': instance.lastEdit?.toIso8601String(),
+  'tickedOff': instance.tickedOff,
+  'createType': _$CreateWorkEntryTypeEnumMap[instance.createType],
+  'wasEdited': instance.wasEdited,
+  'wasMovedToTrashAt': instance.wasMovedToTrashAt?.toIso8601String(),
+};
+
+const _$CreateWorkEntryTypeEnumMap = {
+  CreateWorkEntryType.timeTracker: 'timeTracker',
+  CreateWorkEntryType.manualDuration: 'manualDuration',
+  CreateWorkEntryType.manualStartAndEndTime: 'manualStartAndEndTime',
+};
