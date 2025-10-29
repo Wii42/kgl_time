@@ -55,5 +55,14 @@
   "restoreEntry": "Restore Entry",
   "trashBin": "Trash Bin",
   "noMatchingEntries": "No matching entries found",
-    "trashBinEmpty": "The trash bin is empty"
+  "trashBinEmpty": "The trash bin is empty",
+  "exportImportEntries": "Export/Import Entries",
+  "saveEntriesAs": "Save entries as {fileType}",
+  "share": "Share",
+  "workingTime": "Working Time",
+  "fromTo": "From-To",
+  "fileSavedSuccessfully": "File saved successfully",
+  "failedToSaveFile": "Failed to save file",
+  "fileSharedSuccessfully": "File shared successfully",
+  "failedToShareFile": "Failed to share file"
 }

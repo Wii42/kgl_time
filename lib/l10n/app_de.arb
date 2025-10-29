@@ -55,5 +55,14 @@
   "restoreEntry": "Eintrag wiederherstellen",
   "trashBin": "Papierkorb",
   "noMatchingEntries": "Keine passenden Einträge gefunden",
-  "trashBinEmpty": "Der Papierkorb ist leer"
+  "trashBinEmpty": "Der Papierkorb ist leer",
+  "exportImportEntries": "Einträge exportieren/importieren",
+  "saveEntriesAs": "Einträge speichern als {fileType}",
+  "share": "Teilen",
+  "workingTime": "Arbeitszeit",
+  "fromTo": "Von-Bis",
+  "fileSavedSuccessfully": "Datei erfolgreich gespeichert",
+  "failedToSaveFile": "Speichern der Datei fehlgeschlagen",
+  "fileSharedSuccessfully": "Datei erfolgreich geteilt",
+  "failedToShareFile": "Teilen der Datei fehlgeschlagen"
 }

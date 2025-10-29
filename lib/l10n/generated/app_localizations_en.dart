@@ -181,4 +181,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trashBinEmpty => 'The trash bin is empty';
+
+  @override
+  String get exportImportEntries => 'Export/Import Entries';
+
+  @override
+  String saveEntriesAs(Object fileType) {
+    return 'Save entries as $fileType';
+  }
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get workingTime => 'Working Time';
+
+  @override
+  String get fromTo => 'From-To';
+
+  @override
+  String get fileSavedSuccessfully => 'File saved successfully';
+
+  @override
+  String get failedToSaveFile => 'Failed to save file';
+
+  @override
+  String get fileSharedSuccessfully => 'File shared successfully';
+
+  @override
+  String get failedToShareFile => 'Failed to share file';
 }
