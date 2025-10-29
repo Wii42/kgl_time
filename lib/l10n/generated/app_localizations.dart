@@ -435,6 +435,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The trash bin is empty'**
   String get trashBinEmpty;
+
+  /// No description provided for @exportImportEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Export/Import Entries'**
+  String get exportImportEntries;
+
+  /// No description provided for @saveEntriesAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Save entries as {fileType}'**
+  String saveEntriesAs(Object fileType);
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @workingTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Working Time'**
+  String get workingTime;
+
+  /// No description provided for @fromTo.
+  ///
+  /// In en, this message translates to:
+  /// **'From-To'**
+  String get fromTo;
+
+  /// No description provided for @fileSavedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'File saved successfully'**
+  String get fileSavedSuccessfully;
+
+  /// No description provided for @failedToSaveFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save file'**
+  String get failedToSaveFile;
+
+  /// No description provided for @fileSharedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'File shared successfully'**
+  String get fileSharedSuccessfully;
+
+  /// No description provided for @failedToShareFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to share file'**
+  String get failedToShareFile;
 }
 
 class _AppLocalizationsDelegate

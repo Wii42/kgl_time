@@ -67,8 +67,6 @@ class WorkEntries extends ChangeNotifier {
         .toList();
     for (var entry in entriesToRemove) {
       _removeEntryPermanently(entry);
-      print(
-          'Permanently removed work entry with id ${entry.id} from trash bin.');
     }
   }
 

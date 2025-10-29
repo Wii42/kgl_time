@@ -182,6 +182,35 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get trashBinEmpty => 'Der Papierkorb ist leer';
+
+  @override
+  String get exportImportEntries => 'Einträge exportieren/importieren';
+
+  @override
+  String saveEntriesAs(Object fileType) {
+    return 'Einträge speichern als $fileType';
+  }
+
+  @override
+  String get share => 'Teilen';
+
+  @override
+  String get workingTime => 'Arbeitszeit';
+
+  @override
+  String get fromTo => 'Von-Bis';
+
+  @override
+  String get fileSavedSuccessfully => 'Datei erfolgreich gespeichert';
+
+  @override
+  String get failedToSaveFile => 'Speichern der Datei fehlgeschlagen';
+
+  @override
+  String get fileSharedSuccessfully => 'Datei erfolgreich geteilt';
+
+  @override
+  String get failedToShareFile => 'Teilen der Datei fehlgeschlagen';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).

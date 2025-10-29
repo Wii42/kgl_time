@@ -41,6 +41,10 @@ class SettingsPage extends KglPage {
               label: Text(loc?.openTrashBin ?? '<open entriesTrashBin>'),
               icon: Icon(Icons.recycling_outlined),
             ),
+            ElevatedButton.icon(
+                onPressed: () => context.push(AppRoute.exportImport.path),
+                label: Text(loc?.exportImportEntries??"<Export/import entries>"),
+                icon: Icon(Icons.import_export_outlined)),
             infos(context),
           ].withSpaceBetween(height: 16),
         ),

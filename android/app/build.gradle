@@ -18,7 +18,7 @@ dependencies {
 
 android {
     namespace = "com.wi42.kgl_time"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     //ndkVersion = flutter.ndkVersion
     ndkVersion = "27.0.12077973"
 
@@ -39,6 +39,7 @@ android {
         targetSdk = 36
         versionCode = 12
         versionName = "0.3.1"
+        compileSdk = 36
     }
 
     buildTypes {

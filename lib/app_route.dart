@@ -5,6 +5,7 @@ import 'package:kgl_time/pages/all_entries_page.dart';
 import 'package:kgl_time/pages/categories_page.dart';
 import 'package:kgl_time/pages/edit_categories_page.dart';
 import 'package:kgl_time/pages/entries_trash_bin_page.dart';
+import 'package:kgl_time/pages/export_import_page.dart';
 import 'package:kgl_time/pages/home_page.dart';
 import 'package:kgl_time/pages/new_entry_page.dart';
 import 'package:kgl_time/pages/settings_page.dart';
@@ -59,6 +60,11 @@ class AppRoute {
       path: '/entriesTrashBin',
       body: (context, state, appTitle) =>
           EntriesTrashBinPage(appTitle: appTitle));
+
+  static final AppRoute exportImport = AppRoute(
+      name: 'exportImport',
+      path: '/exportImport',
+      body: (context, state, appTitle) => ExportImportPage(appTitle: appTitle));
 }
 
 class NavBarAppRoute extends AppRoute {

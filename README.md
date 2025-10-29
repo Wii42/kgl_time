@@ -19,7 +19,10 @@ KGL Time is licensed under the [GNU General Public License v3.0](https://www.gnu
 
 ## Platform Compatibility
 
-The app can, in principle, be built for all platforms that Flutter provides, except for the web. However, the application has only been tested on **Windows** and **Android**.
+The app can, in principle, be built for all platforms that Flutter provides, except for the web. However, the application has only been tested on **Windows**, **Android**, **Linux**.
+
+As this app is primarily developped for Android devices, some features features may not be available on other platforms.
+ - Exporting data as CSV via share dialog is not supported on Linux, saving to a file directly is only supported on Android and iOS.
 
 ## Getting Started
 
