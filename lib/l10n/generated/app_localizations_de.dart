@@ -211,6 +211,17 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get failedToShareFile => 'Teilen der Datei fehlgeschlagen';
+
+  @override
+  String get saveBackup => 'Backup der Arbeitseinträge speichern';
+
+  @override
+  String get exportCsvExplanation =>
+      'Exportiert alle Einträge als CSV-Tabelle. Diese Datei kann in Tabellenkalkulationsprogrammen wie Excel oder Google Sheets geöffnet werden.';
+
+  @override
+  String get exportJsonExplanation =>
+      'Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf ein anderes Gerät zu importieren.';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).

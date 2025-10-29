@@ -489,6 +489,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to share file'**
   String get failedToShareFile;
+
+  /// No description provided for @saveBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Save backup of work entries'**
+  String get saveBackup;
+
+  /// No description provided for @exportCsvExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.'**
+  String get exportCsvExplanation;
+
+  /// No description provided for @exportJsonExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Creates a backup of all work entries  and categories as a JSON file. This file can be used to restore your entries later or to import them into another device.'**
+  String get exportJsonExplanation;
 }
 
 class _AppLocalizationsDelegate

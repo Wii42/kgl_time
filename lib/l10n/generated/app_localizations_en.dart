@@ -210,4 +210,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get failedToShareFile => 'Failed to share file';
+
+  @override
+  String get saveBackup => 'Save backup of work entries';
+
+  @override
+  String get exportCsvExplanation =>
+      'Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.';
+
+  @override
+  String get exportJsonExplanation =>
+      'Creates a backup of all work entries  and categories as a JSON file. This file can be used to restore your entries later or to import them into another device.';
 }
