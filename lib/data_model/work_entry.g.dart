@@ -21,6 +21,7 @@ const WorkEntrySchema = CollectionSchema(
       id: 0,
       name: r'categories',
       type: IsarType.objectList,
+
       target: r'EmbeddedWorkCategory',
     ),
     r'createType': PropertySchema(
@@ -29,11 +30,7 @@ const WorkEntrySchema = CollectionSchema(
       type: IsarType.int,
       enumMap: _WorkEntrycreateTypeEnumValueMap,
     ),
-    r'date': PropertySchema(
-      id: 2,
-      name: r'date',
-      type: IsarType.dateTime,
-    ),
+    r'date': PropertySchema(id: 2, name: r'date', type: IsarType.dateTime),
     r'description': PropertySchema(
       id: 3,
       name: r'description',
@@ -73,8 +70,9 @@ const WorkEntrySchema = CollectionSchema(
       id: 10,
       name: r'workDurationInSeconds',
       type: IsarType.long,
-    )
+    ),
   },
+
   estimateSize: _workEntryEstimateSize,
   serialize: _workEntrySerialize,
   deserialize: _workEntryDeserialize,
@@ -83,6 +81,7 @@ const WorkEntrySchema = CollectionSchema(
   indexes: {},
   links: {},
   embeddedSchemas: {r'EmbeddedWorkCategory': EmbeddedWorkCategorySchema},
+
   getId: _workEntryGetId,
   getLinks: _workEntryGetLinks,
   attach: _workEntryAttach,
@@ -100,8 +99,11 @@ int _workEntryEstimateSize(
     final offsets = allOffsets[EmbeddedWorkCategory]!;
     for (var i = 0; i < object.categories.length; i++) {
       final value = object.categories[i];
-      bytesCount +=
-          EmbeddedWorkCategorySchema.estimateSize(value, offsets, allOffsets);
+      bytesCount += EmbeddedWorkCategorySchema.estimateSize(
+        value,
+        offsets,
+        allOffsets,
+      );
     }
   }
   {
@@ -144,7 +146,8 @@ WorkEntry _workEntryDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = WorkEntry(
-    categories: reader.readObjectList<EmbeddedWorkCategory>(
+    categories:
+        reader.readObjectList<EmbeddedWorkCategory>(
           offsets[0],
           EmbeddedWorkCategorySchema.deserialize,
           allOffsets,
@@ -176,12 +179,13 @@ P _workEntryDeserializeProp<P>(
   switch (propertyId) {
     case 0:
       return (reader.readObjectList<EmbeddedWorkCategory>(
-            offset,
-            EmbeddedWorkCategorySchema.deserialize,
-            allOffsets,
-            EmbeddedWorkCategory(),
-          ) ??
-          const []) as P;
+                offset,
+                EmbeddedWorkCategorySchema.deserialize,
+                allOffsets,
+                EmbeddedWorkCategory(),
+              ) ??
+              const [])
+          as P;
     case 1:
       return (_WorkEntrycreateTypeValueEnumMap[reader.readIntOrNull(offset)])
           as P;
@@ -244,10 +248,7 @@ extension WorkEntryQueryWhere
     on QueryBuilder<WorkEntry, WorkEntry, QWhereClause> {
   QueryBuilder<WorkEntry, WorkEntry, QAfterWhereClause> idEqualTo(Id id) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
-      ));
+      return query.addWhereClause(IdWhereClause.between(lower: id, upper: id));
     });
   }
 
@@ -273,8 +274,10 @@ extension WorkEntryQueryWhere
     });
   }
 
-  QueryBuilder<WorkEntry, WorkEntry, QAfterWhereClause> idGreaterThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<WorkEntry, WorkEntry, QAfterWhereClause> idGreaterThan(
+    Id id, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: id, includeLower: include),
@@ -282,8 +285,10 @@ extension WorkEntryQueryWhere
     });
   }
 
-  QueryBuilder<WorkEntry, WorkEntry, QAfterWhereClause> idLessThan(Id id,
-      {bool include = false}) {
+  QueryBuilder<WorkEntry, WorkEntry, QAfterWhereClause> idLessThan(
+    Id id, {
+    bool include = false,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: id, includeUpper: include),
@@ -298,12 +303,14 @@ extension WorkEntryQueryWhere
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
-        includeLower: includeLower,
-        upper: upperId,
-        includeUpper: includeUpper,
-      ));
+      return query.addWhereClause(
+        IdWhereClause.between(
+          lower: lowerId,
+          includeLower: includeLower,
+          upper: upperId,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -311,78 +318,42 @@ extension WorkEntryQueryWhere
 extension WorkEntryQueryFilter
     on QueryBuilder<WorkEntry, WorkEntry, QFilterCondition> {
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesLengthEqualTo(int length) {
+  categoriesLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'categories',
-        length,
-        true,
-        length,
-        true,
-      );
+      return query.listLength(r'categories', length, true, length, true);
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesIsEmpty() {
+  categoriesIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'categories',
-        0,
-        true,
-        0,
-        true,
-      );
+      return query.listLength(r'categories', 0, true, 0, true);
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesIsNotEmpty() {
+  categoriesIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'categories',
-        0,
-        false,
-        999999,
-        true,
-      );
+      return query.listLength(r'categories', 0, false, 999999, true);
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesLengthLessThan(
-    int length, {
-    bool include = false,
-  }) {
+  categoriesLengthLessThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'categories',
-        0,
-        true,
-        length,
-        include,
-      );
+      return query.listLength(r'categories', 0, true, length, include);
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesLengthGreaterThan(
-    int length, {
-    bool include = false,
-  }) {
+  categoriesLengthGreaterThan(int length, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'categories',
-        length,
-        include,
-        999999,
-        true,
-      );
+      return query.listLength(r'categories', length, include, 999999, true);
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      categoriesLengthBetween(
+  categoriesLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -401,42 +372,41 @@ extension WorkEntryQueryFilter
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> createTypeIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'createType',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'createType'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      createTypeIsNotNull() {
+  createTypeIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'createType',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'createType'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> createTypeEqualTo(
-      CreateWorkEntryType? value) {
+    CreateWorkEntryType? value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createType',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'createType', value: value),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      createTypeGreaterThan(
-    CreateWorkEntryType? value, {
-    bool include = false,
-  }) {
+  createTypeGreaterThan(CreateWorkEntryType? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'createType',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'createType',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -445,11 +415,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'createType',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'createType',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -460,23 +432,25 @@ extension WorkEntryQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'createType',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'createType',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> dateEqualTo(
-      DateTime value) {
+    DateTime value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'date',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'date', value: value),
+      );
     });
   }
 
@@ -485,11 +459,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'date',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'date',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -498,11 +474,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'date',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'date',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -513,31 +491,33 @@ extension WorkEntryQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'date',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'date',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      descriptionIsNull() {
+  descriptionIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'description',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'description'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      descriptionIsNotNull() {
+  descriptionIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'description',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'description'),
+      );
     });
   }
 
@@ -546,27 +526,31 @@ extension WorkEntryQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'description',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      descriptionGreaterThan(
+  descriptionGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'description',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -576,12 +560,14 @@ extension WorkEntryQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'description',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -593,28 +579,29 @@ extension WorkEntryQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'description',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'description',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      descriptionStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
+  descriptionStartsWith(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'description',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
@@ -623,81 +610,87 @@ extension WorkEntryQueryFilter
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'description',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> descriptionContains(
-      String value,
-      {bool caseSensitive = true}) {
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'description',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> descriptionMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'description',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'description',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      descriptionIsEmpty() {
+  descriptionIsEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'description', value: ''),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      descriptionIsNotEmpty() {
+  descriptionIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'description',
-        value: '',
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'description', value: ''),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> endTimeIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'endTime',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'endTime'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> endTimeIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'endTime',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'endTime'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> endTimeEqualTo(
-      DateTime? value) {
+    DateTime? value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'endTime',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'endTime', value: value),
+      );
     });
   }
 
@@ -706,11 +699,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'endTime',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'endTime',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -719,11 +714,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'endTime',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'endTime',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -734,23 +731,25 @@ extension WorkEntryQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'endTime',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'endTime',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> idEqualTo(
-      Id value) {
+    Id value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'id', value: value),
+      );
     });
   }
 
@@ -759,11 +758,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -772,11 +773,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'id',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -787,40 +790,42 @@ extension WorkEntryQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'id',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'lastEdit',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'lastEdit'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      lastEditIsNotNull() {
+  lastEditIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'lastEdit',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'lastEdit'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditEqualTo(
-      DateTime? value) {
+    DateTime? value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'lastEdit',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'lastEdit', value: value),
+      );
     });
   }
 
@@ -829,11 +834,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'lastEdit',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'lastEdit',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -842,11 +849,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'lastEdit',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'lastEdit',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -857,54 +866,55 @@ extension WorkEntryQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'lastEdit',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'lastEdit',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> startTimeIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'startTime',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'startTime'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      startTimeIsNotNull() {
+  startTimeIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'startTime',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'startTime'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> startTimeEqualTo(
-      DateTime? value) {
+    DateTime? value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'startTime',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'startTime', value: value),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      startTimeGreaterThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
+  startTimeGreaterThan(DateTime? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'startTime',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'startTime',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -913,11 +923,13 @@ extension WorkEntryQueryFilter
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'startTime',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'startTime',
+          value: value,
+        ),
+      );
     });
   }
 
@@ -928,163 +940,166 @@ extension WorkEntryQueryFilter
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'startTime',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'startTime',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> tickedOffEqualTo(
-      bool value) {
+    bool value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'tickedOff',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'tickedOff', value: value),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> wasEditedEqualTo(
-      bool value) {
+    bool value,
+  ) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'wasEdited',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'wasEdited', value: value),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      wasMovedToTrashAtIsNull() {
+  wasMovedToTrashAtIsNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'wasMovedToTrashAt',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'wasMovedToTrashAt'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      wasMovedToTrashAtIsNotNull() {
+  wasMovedToTrashAtIsNotNull() {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'wasMovedToTrashAt',
-      ));
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'wasMovedToTrashAt'),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      wasMovedToTrashAtEqualTo(DateTime? value) {
+  wasMovedToTrashAtEqualTo(DateTime? value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'wasMovedToTrashAt',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'wasMovedToTrashAt', value: value),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      wasMovedToTrashAtGreaterThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
+  wasMovedToTrashAtGreaterThan(DateTime? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'wasMovedToTrashAt',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'wasMovedToTrashAt',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      wasMovedToTrashAtLessThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
+  wasMovedToTrashAtLessThan(DateTime? value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'wasMovedToTrashAt',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'wasMovedToTrashAt',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      wasMovedToTrashAtBetween(
+  wasMovedToTrashAtBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'wasMovedToTrashAt',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'wasMovedToTrashAt',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      workDurationInSecondsEqualTo(int value) {
+  workDurationInSecondsEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'workDurationInSeconds',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'workDurationInSeconds',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      workDurationInSecondsGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
+  workDurationInSecondsGreaterThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'workDurationInSeconds',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'workDurationInSeconds',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      workDurationInSecondsLessThan(
-    int value, {
-    bool include = false,
-  }) {
+  workDurationInSecondsLessThan(int value, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'workDurationInSeconds',
-        value: value,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'workDurationInSeconds',
+          value: value,
+        ),
+      );
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-      workDurationInSecondsBetween(
+  workDurationInSecondsBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'workDurationInSeconds',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'workDurationInSeconds',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
     });
   }
 }
@@ -1092,7 +1107,8 @@ extension WorkEntryQueryFilter
 extension WorkEntryQueryObject
     on QueryBuilder<WorkEntry, WorkEntry, QFilterCondition> {
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> categoriesElement(
-      FilterQuery<EmbeddedWorkCategory> q) {
+    FilterQuery<EmbeddedWorkCategory> q,
+  ) {
     return QueryBuilder.apply(this, (query) {
       return query.object(q, r'categories');
     });
@@ -1206,21 +1222,21 @@ extension WorkEntryQuerySortBy on QueryBuilder<WorkEntry, WorkEntry, QSortBy> {
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
-      sortByWasMovedToTrashAtDesc() {
+  sortByWasMovedToTrashAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'wasMovedToTrashAt', Sort.desc);
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
-      sortByWorkDurationInSeconds() {
+  sortByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'workDurationInSeconds', Sort.asc);
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
-      sortByWorkDurationInSecondsDesc() {
+  sortByWorkDurationInSecondsDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'workDurationInSeconds', Sort.desc);
     });
@@ -1344,21 +1360,21 @@ extension WorkEntryQuerySortThenBy
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
-      thenByWasMovedToTrashAtDesc() {
+  thenByWasMovedToTrashAtDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'wasMovedToTrashAt', Sort.desc);
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
-      thenByWorkDurationInSeconds() {
+  thenByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'workDurationInSeconds', Sort.asc);
     });
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy>
-      thenByWorkDurationInSecondsDesc() {
+  thenByWorkDurationInSecondsDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'workDurationInSeconds', Sort.desc);
     });
@@ -1379,8 +1395,9 @@ extension WorkEntryQueryWhereDistinct
     });
   }
 
-  QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByDescription(
-      {bool caseSensitive = true}) {
+  QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByDescription({
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
     });
@@ -1423,7 +1440,7 @@ extension WorkEntryQueryWhereDistinct
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QDistinct>
-      distinctByWorkDurationInSeconds() {
+  distinctByWorkDurationInSeconds() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'workDurationInSeconds');
     });
@@ -1439,14 +1456,14 @@ extension WorkEntryQueryProperty
   }
 
   QueryBuilder<WorkEntry, List<EmbeddedWorkCategory>, QQueryOperations>
-      categoriesProperty() {
+  categoriesProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'categories');
     });
   }
 
   QueryBuilder<WorkEntry, CreateWorkEntryType?, QQueryOperations>
-      createTypeProperty() {
+  createTypeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'createType');
     });
@@ -1495,16 +1512,70 @@ extension WorkEntryQueryProperty
   }
 
   QueryBuilder<WorkEntry, DateTime?, QQueryOperations>
-      wasMovedToTrashAtProperty() {
+  wasMovedToTrashAtProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'wasMovedToTrashAt');
     });
   }
 
   QueryBuilder<WorkEntry, int, QQueryOperations>
-      workDurationInSecondsProperty() {
+  workDurationInSecondsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'workDurationInSeconds');
     });
   }
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+WorkEntry _$WorkEntryFromJson(Map<String, dynamic> json) => WorkEntry(
+  workDurationInSeconds: (json['workDurationInSeconds'] as num).toInt(),
+  date: DateTime.parse(json['date'] as String),
+  description: json['description'] as String?,
+  categories:
+      (json['categories'] as List<dynamic>?)
+          ?.map((e) => EmbeddedWorkCategory.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const [],
+  startTime: json['startTime'] == null
+      ? null
+      : DateTime.parse(json['startTime'] as String),
+  endTime: json['endTime'] == null
+      ? null
+      : DateTime.parse(json['endTime'] as String),
+  lastEdit: json['lastEdit'] == null
+      ? null
+      : DateTime.parse(json['lastEdit'] as String),
+  tickedOff: json['tickedOff'] as bool? ?? false,
+  createType: $enumDecodeNullable(
+    _$CreateWorkEntryTypeEnumMap,
+    json['createType'],
+  ),
+  wasEdited: json['wasEdited'] as bool? ?? false,
+  wasMovedToTrashAt: json['wasMovedToTrashAt'] == null
+      ? null
+      : DateTime.parse(json['wasMovedToTrashAt'] as String),
+)..id = (json['id'] as num).toInt();
+
+Map<String, dynamic> _$WorkEntryToJson(WorkEntry instance) => <String, dynamic>{
+  'id': instance.id,
+  'workDurationInSeconds': instance.workDurationInSeconds,
+  'date': instance.date.toIso8601String(),
+  'description': instance.description,
+  'categories': instance.categories,
+  'startTime': instance.startTime?.toIso8601String(),
+  'endTime': instance.endTime?.toIso8601String(),
+  'lastEdit': instance.lastEdit?.toIso8601String(),
+  'tickedOff': instance.tickedOff,
+  'createType': _$CreateWorkEntryTypeEnumMap[instance.createType],
+  'wasEdited': instance.wasEdited,
+  'wasMovedToTrashAt': instance.wasMovedToTrashAt?.toIso8601String(),
+};
+
+const _$CreateWorkEntryTypeEnumMap = {
+  CreateWorkEntryType.timeTracker: 'timeTracker',
+  CreateWorkEntryType.manualDuration: 'manualDuration',
+  CreateWorkEntryType.manualStartAndEndTime: 'manualStartAndEndTime',
+};
