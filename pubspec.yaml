@@ -18,8 +18,8 @@ dependencies:
   go_router: ^16.3.0
   intl: any
   week_number: ^1.1.1
-  isar_community: 3.3.0-dev.1
-  isar_community_flutter_libs: 3.3.0-dev.1
+  isar_community: ^3.3.0-dev.3
+  isar_community_flutter_libs: ^3.3.0-dev.3
   path_provider: ^2.1.5
   path_provider_linux: ^2.2.1
   url_launcher: ^6.3.2
@@ -36,9 +36,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  isar_community_generator: 3.3.0-dev.1
-  build_runner: 2.4.15
+  isar_community_generator: ^3.3.0-dev.3
+  build_runner: ^2.7.1
   flutter_launcher_icons: ^0.14.4
+  analyzer: 8.3.0 # To resolve a dependency conflict with isar_generator
 
 flutter:
   uses-material-design: true
