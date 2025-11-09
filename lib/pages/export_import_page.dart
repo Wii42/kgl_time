@@ -47,10 +47,37 @@ class ExportImportPage extends KglPage {
               onShare: onShareJson(context),
               explanationLabel: (loc) => loc?.exportJsonExplanation,
             ),
-            //ElevatedButton(
-            //  onPressed: onShareJson(context),
-            //  child: Text("<export as json>"),
-            //),
+            ElevatedButton(
+              onPressed: ()async{
+                final OpenFileDialogParams params = OpenFileDialogParams(
+                  dialogType: OpenFileDialogType.document,
+                  sourceType: SourceType.photoLibrary,
+                );
+                String? filePath = await FlutterFileDialog.pickFile(params: params);
+                if (filePath != null) {
+                  String data = await XFile(filePath).readAsString();
+                  dynamic decoded;
+                  try {
+                    decoded = jsonDecode(data);
+                  } catch (e, stacktrace) {
+                    log("$filePath does not contain valid JSON", error: e, stackTrace: stacktrace);
+                    decoded = null;
+                  }
+
+                  WorkData? t = WorkData.tryFromJson(decoded);
+                  if(t == null){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text( "<Import failed.>"),
+                      ),
+                    );
+                    return;
+                  }
+
+                }
+              },
+              child: Text("<import json>"),
+            ),
           ],
         ),
       ),
@@ -191,7 +218,6 @@ class ExportImportPage extends KglPage {
     required BuildContext context,
     String? mimeType,
   }) => () async {
-    print("Sharing file: $fileName");
     XFile file = XFile.fromData(
       fileContent,
       mimeType: mimeType,
