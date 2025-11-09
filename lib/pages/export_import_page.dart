@@ -33,14 +33,14 @@ class ExportImportPage extends KglPage {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            shareSaveButtonRow(
+            exportEntriesCard(
               context: context,
               title: (loc) => loc?.exportTable ?? "<export as table>",
               onSave: onSaveAsCsv(context),
               onShare: onShareCsv(context),
               explanationLabel: (loc) => loc?.exportCsvExplanation,
             ),
-            shareSaveButtonRow(
+            exportEntriesCard(
               context: context,
               title: (loc) => loc?.exportBackup??"<export backup>",
               onSave: onSaveJson(context),
@@ -84,7 +84,7 @@ class ExportImportPage extends KglPage {
     );
   }
 
-  Widget shareSaveButtonRow({
+  Widget exportEntriesCard({
     required BuildContext context,
     required Function(AppLocalizations? loc) title,
     required VoidCallback onSave,
@@ -94,33 +94,33 @@ class ExportImportPage extends KglPage {
     AppLocalizations? loc = AppLocalizations.of(context);
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.all(12),
         child: Column(
           children: [
             Text(title(loc), style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,),
-            Divider(height: 8,),
+            Divider(height: 12,),
+            SizedBox(height: 4,),
             if (explanationLabel != null) ...[
-
               Text(
                 explanationLabel(loc),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 4),
             ],
 
-            Row(
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
               children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    label: Text(
-                      loc?.saveLocally ?? "<save locally>",
-                    ),
-                    icon: Icon(Icons.save_alt_outlined),
-                    onPressed: (Platform.isAndroid | Platform.isIOS) ? onSave : null,
+                TextButton.icon(
+                  label: Text(
+                    loc?.saveLocally ?? "<save locally>",
                   ),
+                  icon: Icon(Icons.save_alt_outlined),
+                  onPressed: (Platform.isAndroid | Platform.isIOS) ? onSave : null,
                 ),
-                SizedBox(width: 8),
-                OutlinedButton.icon(
+
+                TextButton.icon(
                   label: Text(loc?.share ?? "<share>"),
                   icon: Icon(Icons.share),
                   onPressed: !Platform.isLinux ? onShare : null,
