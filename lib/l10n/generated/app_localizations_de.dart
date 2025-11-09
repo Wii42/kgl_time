@@ -187,12 +187,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get exportImportEntries => 'Einträge exportieren/importieren';
 
   @override
-  String saveEntriesAs(Object fileType) {
-    return 'Einträge speichern als $fileType';
-  }
+  String get share => 'Teilen';
 
   @override
-  String get share => 'Teilen';
+  String get saveLocally => 'Lokal speichern';
 
   @override
   String get workingTime => 'Arbeitszeit';
@@ -213,7 +211,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get failedToShareFile => 'Teilen der Datei fehlgeschlagen';
 
   @override
-  String get saveBackup => 'Backup der Arbeitseinträge speichern';
+  String get exportTable => 'Einträge als Tabelle exportieren';
+
+  @override
+  String get exportBackup => 'Backup der Einträge exportieren';
 
   @override
   String get exportCsvExplanation =>
@@ -221,7 +222,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get exportJsonExplanation =>
-      'Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf ein anderes Gerät zu importieren.';
+      'Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf einem anderen Gerät zu importieren.';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).
