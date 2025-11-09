@@ -57,15 +57,16 @@
   "noMatchingEntries": "Keine passenden Einträge gefunden",
   "trashBinEmpty": "Der Papierkorb ist leer",
   "exportImportEntries": "Einträge exportieren/importieren",
-  "saveEntriesAs": "Einträge speichern als {fileType}",
   "share": "Teilen",
+  "saveLocally": "Lokal speichern",
   "workingTime": "Arbeitszeit",
   "fromTo": "Von-Bis",
   "fileSavedSuccessfully": "Datei erfolgreich gespeichert",
   "failedToSaveFile": "Speichern der Datei fehlgeschlagen",
   "fileSharedSuccessfully": "Datei erfolgreich geteilt",
   "failedToShareFile": "Teilen der Datei fehlgeschlagen",
-  "saveBackup": "Backup der Arbeitseinträge speichern",
+  "exportTable": "Einträge als Tabelle exportieren",
+  "exportBackup": "Backup der Einträge exportieren",
   "exportCsvExplanation": "Exportiert alle Einträge als CSV-Tabelle. Diese Datei kann in Tabellenkalkulationsprogrammen wie Excel oder Google Sheets geöffnet werden.",
-  "exportJsonExplanation": "Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf ein anderes Gerät zu importieren."
+  "exportJsonExplanation": "Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf einem anderen Gerät zu importieren."
 }

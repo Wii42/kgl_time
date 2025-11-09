@@ -186,12 +186,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportImportEntries => 'Export/Import Entries';
 
   @override
-  String saveEntriesAs(Object fileType) {
-    return 'Save entries as $fileType';
-  }
+  String get share => 'Share';
 
   @override
-  String get share => 'Share';
+  String get saveLocally => 'Save locally';
 
   @override
   String get workingTime => 'Working Time';
@@ -212,7 +210,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToShareFile => 'Failed to share file';
 
   @override
-  String get saveBackup => 'Save backup of work entries';
+  String get exportTable => 'Export work entries as table';
+
+  @override
+  String get exportBackup => 'Export backup of work entries';
 
   @override
   String get exportCsvExplanation =>

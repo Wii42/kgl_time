@@ -442,17 +442,17 @@ abstract class AppLocalizations {
   /// **'Export/Import Entries'**
   String get exportImportEntries;
 
-  /// No description provided for @saveEntriesAs.
-  ///
-  /// In en, this message translates to:
-  /// **'Save entries as {fileType}'**
-  String saveEntriesAs(Object fileType);
-
   /// No description provided for @share.
   ///
   /// In en, this message translates to:
   /// **'Share'**
   String get share;
+
+  /// No description provided for @saveLocally.
+  ///
+  /// In en, this message translates to:
+  /// **'Save locally'**
+  String get saveLocally;
 
   /// No description provided for @workingTime.
   ///
@@ -490,11 +490,17 @@ abstract class AppLocalizations {
   /// **'Failed to share file'**
   String get failedToShareFile;
 
-  /// No description provided for @saveBackup.
+  /// No description provided for @exportTable.
   ///
   /// In en, this message translates to:
-  /// **'Save backup of work entries'**
-  String get saveBackup;
+  /// **'Export work entries as table'**
+  String get exportTable;
+
+  /// No description provided for @exportBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Export backup of work entries'**
+  String get exportBackup;
 
   /// No description provided for @exportCsvExplanation.
   ///

@@ -28,21 +28,21 @@ class ExportImportPage extends KglPage {
     return KglPage.alwaysFillingScrollView(
       maxWidth: KglTimeApp.maxPageWidth,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             shareSaveButtonRow(
               context: context,
-              saveButtonLabel: (loc) => loc?.saveEntriesAs("CSV") ?? "<save entries as CSV>",
+              title: (loc) => loc?.exportTable ?? "<export as table>",
               onSave: onSaveAsCsv(context),
               onShare: onShareCsv(context),
               explanationLabel: (loc) => loc?.exportCsvExplanation,
             ),
             shareSaveButtonRow(
               context: context,
-              saveButtonLabel: (loc) => loc?.saveBackup??"<save backup>",
+              title: (loc) => loc?.exportBackup??"<export backup>",
               onSave: onSaveJson(context),
               onShare: onShareJson(context),
               explanationLabel: (loc) => loc?.exportJsonExplanation,
@@ -86,41 +86,51 @@ class ExportImportPage extends KglPage {
 
   Widget shareSaveButtonRow({
     required BuildContext context,
-    required Function(AppLocalizations? loc) saveButtonLabel,
+    required Function(AppLocalizations? loc) title,
     required VoidCallback onSave,
     required VoidCallback onShare,
     Function(AppLocalizations? loc)? explanationLabel,
   }) {
     AppLocalizations? loc = AppLocalizations.of(context);
-    return Column(
-      children: [
-        Row(
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(8),
+        child: Column(
           children: [
-            Expanded(
-              child: OutlinedButton.icon(
-                label: Text(
-                  saveButtonLabel(loc),
-                ),
-                icon: Icon(Icons.save_alt_outlined),
-                onPressed: (Platform.isAndroid | Platform.isIOS) ? onSave : null,
+            Text(title(loc), style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,),
+            Divider(height: 8,),
+            if (explanationLabel != null) ...[
+
+              Text(
+                explanationLabel(loc),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
+              SizedBox(height: 8),
+            ],
+
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    label: Text(
+                      loc?.saveLocally ?? "<save locally>",
+                    ),
+                    icon: Icon(Icons.save_alt_outlined),
+                    onPressed: (Platform.isAndroid | Platform.isIOS) ? onSave : null,
+                  ),
+                ),
+                SizedBox(width: 8),
+                OutlinedButton.icon(
+                  label: Text(loc?.share ?? "<share>"),
+                  icon: Icon(Icons.share),
+                  onPressed: !Platform.isLinux ? onShare : null,
+                ),
+              ],
             ),
-            SizedBox(width: 8),
-            OutlinedButton.icon(
-              label: Text(loc?.share ?? "<share>"),
-              icon: Icon(Icons.share),
-              onPressed: !Platform.isLinux ? onShare : null,
-            ),
+
           ],
         ),
-        if (explanationLabel != null) ...[
-          SizedBox(height: 4),
-          Text(
-            explanationLabel(loc),
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
-        ],
-      ],
+      ),
     );
   }
 
