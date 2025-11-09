@@ -42,38 +42,41 @@ class ExportImportPage extends KglPage {
             ),
             exportEntriesCard(
               context: context,
-              title: (loc) => loc?.exportBackup??"<export backup>",
+              title: (loc) => loc?.exportBackup ?? "<export backup>",
               onSave: onSaveJson(context),
               onShare: onShareJson(context),
               explanationLabel: (loc) => loc?.exportJsonExplanation,
             ),
             ElevatedButton(
-              onPressed: ()async{
+              onPressed: () async {
                 final OpenFileDialogParams params = OpenFileDialogParams(
                   dialogType: OpenFileDialogType.document,
                   sourceType: SourceType.photoLibrary,
                 );
-                String? filePath = await FlutterFileDialog.pickFile(params: params);
+                String? filePath = await FlutterFileDialog.pickFile(
+                  params: params,
+                );
                 if (filePath != null) {
                   String data = await XFile(filePath).readAsString();
                   dynamic decoded;
                   try {
                     decoded = jsonDecode(data);
                   } catch (e, stacktrace) {
-                    log("$filePath does not contain valid JSON", error: e, stackTrace: stacktrace);
+                    log(
+                      "$filePath does not contain valid JSON",
+                      error: e,
+                      stackTrace: stacktrace,
+                    );
                     decoded = null;
                   }
 
                   WorkData? t = WorkData.tryFromJson(decoded);
-                  if(t == null){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text( "<Import failed.>"),
-                      ),
-                    );
+                  if (t == null) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("<Import failed.>")));
                     return;
                   }
-
                 }
               },
               child: Text("<import json>"),
@@ -97,9 +100,13 @@ class ExportImportPage extends KglPage {
         padding: EdgeInsets.all(12),
         child: Column(
           children: [
-            Text(title(loc), style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,),
-            Divider(height: 12,),
-            SizedBox(height: 4,),
+            Text(
+              title(loc),
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
+            ),
+            Divider(height: 12),
+            SizedBox(height: 4),
             if (explanationLabel != null) ...[
               Text(
                 explanationLabel(loc),
@@ -113,11 +120,11 @@ class ExportImportPage extends KglPage {
               runSpacing: 8,
               children: [
                 TextButton.icon(
-                  label: Text(
-                    loc?.saveLocally ?? "<save locally>",
-                  ),
+                  label: Text(loc?.saveLocally ?? "<save locally>"),
                   icon: Icon(Icons.save_alt_outlined),
-                  onPressed: (Platform.isAndroid | Platform.isIOS) ? onSave : null,
+                  onPressed: (Platform.isAndroid | Platform.isIOS)
+                      ? onSave
+                      : null,
                 ),
 
                 TextButton.icon(
@@ -127,7 +134,6 @@ class ExportImportPage extends KglPage {
                 ),
               ],
             ),
-
           ],
         ),
       ),
@@ -149,10 +155,10 @@ class ExportImportPage extends KglPage {
   String exportEntriesToCsv(List<WorkEntry> entries, AppLocalizations? loc) {
     List<List<dynamic>> rows = [
       [
-        "WorkDuration",
+        loc?.workingTime ?? "Working Time",
         loc?.date ?? "Date",
         loc?.description ?? "Description",
-        "FromTo",
+        loc?.fromTo ?? "From-To",
         loc?.categories ?? "Categories",
       ],
       ...entries.map(
