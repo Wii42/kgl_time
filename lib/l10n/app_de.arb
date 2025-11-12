@@ -68,5 +68,16 @@
   "exportTable": "Einträge als Tabelle exportieren",
   "exportBackup": "Backup der Einträge exportieren",
   "exportCsvExplanation": "Exportiert alle Einträge als CSV-Tabelle. Diese Datei kann in Tabellenkalkulationsprogrammen wie Excel oder Google Sheets geöffnet werden.",
-  "exportJsonExplanation": "Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf einem anderen Gerät zu importieren."
+  "exportJsonExplanation": "Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf einem anderen Gerät zu importieren.",
+  "importBackup": "Backup importieren",
+  "importBackupExplanation": "Importieren Sie eine zuvor exportierte JSON-Backup-Datei, um Ihre Arbeitseinträge und Kategorien wiederherzustellen.",
+  "importBacupAndReplaceExistingEntries": "Backup importieren und vorhandene Einträge ersetzen",
+  "importBacupAndReplace": "Backup importieren und ersetzen",
+  "importSuccess": "Import erfolgreich",
+  "importFailed": "Import fehlgeschlagen",
+  "undo": "Rückgängig",
+  "dateOfBackup": "Datum des Backups: {date}",
+  "nrOfEntriesAndCategories": "{nrOfEntries} Einträge, {nrOfCategories} Kategorien",
+  "backupFromNewerVersionWarning": "Warnung: Das Backup wurde mit einer neueren Version der App erstellt. Einträge oder Kategorien werden möglicherweise nicht korrekt importiert. Aktualisieren Sie wenn möglich die App auf die neueste Version, bevor Sie das Backup importieren.",
+  "importReplaceConfirmationDialog": "Möchten Sie das Backup wirklich importieren und alle vorhandenen Einträge und Kategorien ersetzen? Dieser Vorgang kann nach Abschluss der Importierung nicht rückgängig gemacht werden."
 }

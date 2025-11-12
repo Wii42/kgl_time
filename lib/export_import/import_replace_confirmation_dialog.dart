@@ -20,7 +20,7 @@ class ImportReplaceConfirmationDialog extends StatelessWidget {
     ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
     AppLocalizations? loc = AppLocalizations.of(context);
     return AlertDialog(
-      title: Text("<Import Data>"),
+      title: Text(loc?.importBacupAndReplace ?? "<Import Data>"),
       content: dialogContent(loc),
       actions: [
         ElevatedButton(
@@ -28,7 +28,10 @@ class ImportReplaceConfirmationDialog extends StatelessWidget {
           child: Text(loc?.cancel ?? "<Cancel>"),
         ),
         TextButton(
-          child: Text("<Import and Replace>"),
+          child: Text(
+            loc?.importBacupAndReplaceExistingEntries ?? "<Import and Replace>",
+            textAlign: TextAlign.center,
+          ),
           onPressed: () {
             WorkEntries entriesList = context.read<WorkEntries>();
             WorkCategories categoriesList = context.read<WorkCategories>();
@@ -40,9 +43,9 @@ class ImportReplaceConfirmationDialog extends StatelessWidget {
             Navigator.of(context).pop();
             messenger.showSnackBar(
               SnackBar(
-                content: Text("<Import successful.>"),
+                content: Text(loc?.importSuccess ?? "<Import successful.>"),
                 action: SnackBarAction(
-                  label: "rückgängig",
+                  label: loc?.undo ?? "<undo>",
                   onPressed: revertImport,
                 ),
               ),
@@ -59,20 +62,29 @@ class ImportReplaceConfirmationDialog extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "Date of backup: ${formatDate(loadedData.exportedAt, loc)}, ${formatTime(loadedData.exportedAt)}",
+          loc?.dateOfBackup(
+                "${formatDate(loadedData.exportedAt, loc)}, ${formatTime(loadedData.exportedAt)}",
+              ) ??
+              "<date of backup>",
         ),
         Text(
-          "Work entries: ${loadedData.workEntries.length}, categories: ${loadedData.workCategories.length}",
+          loc?.nrOfEntriesAndCategories(
+                loadedData.workEntries.length,
+                loadedData.workCategories.length,
+              ) ??
+              "<Number of entries and categories>",
         ),
         if (loadedData.schemaVersion > schemaVersion) ...[
           SizedBox(height: 12),
           Text(
-            "<Warning: The backup was created with a newer version of the app (schema version ${loadedData.schemaVersion}) than the current app version (schema version $schemaVersion). Importing the data may lead to loss of information or app instability. Proceed with caution.>",
+            loc?.backupFromNewerVersionWarning ??
+                "<Warning backup is form newer version>",
           ),
         ],
         SizedBox(height: 12),
         Text(
-          "<Are you sure you want to import the data from the selected file? This will delete all your current entries and categories and replace with the backup.>",
+          loc?.importReplaceConfirmationDialog ??
+              "<import replace confirmation dialog>",
         ),
       ],
     );

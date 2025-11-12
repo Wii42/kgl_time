@@ -68,5 +68,18 @@
   "exportTable": "Export work entries as table",
   "exportBackup": "Export backup of work entries",
   "exportCsvExplanation": "Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.",
-  "exportJsonExplanation": "Creates a backup of all work entries  and categories as a JSON file. This file can be used to restore your entries later or to import them into another device."
+  "exportJsonExplanation": "Creates a backup of all work entries  and categories as a JSON file. This file can be used to restore your entries later or to import them into another device.",
+  "importBackup": "Import backup",
+  "importBackupExplanation": "Import a previously exported JSON backup file to restore your work entries and categories.",
+  "importBacupAndReplaceExistingEntries": "Import backup and replace existing entries",
+  "importBacupAndReplace": "Import backup and replace",
+  "importSuccess": "Import successful",
+  "importFailed": "Import failed",
+  "undo": "Undo",
+  "dateOfBackup": "Date of backup: {date}",
+  "nrOfEntriesAndCategories": "{nrOfEntries} entries, {nrOfCategories} categories",
+  "backupFromNewerVersionWarning": "Warning: The backup was created with a newer version of the app. Some data might not be imported correctly. Consider updating the app first",
+  "importReplaceConfirmationDialog": "Do you really want to import the backup and replace all existing entries and categories?\nThis action cannot be undone after the action is completed."
+
+
 }

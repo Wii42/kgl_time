@@ -30,6 +30,7 @@ class ExportImportPage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     return KglPage.alwaysFillingScrollView(
       maxWidth: KglTimeApp.maxPageWidth,
       child: Padding(
@@ -53,11 +54,12 @@ class ExportImportPage extends KglPage {
               explanationLabel: (loc) => loc?.exportJsonExplanation,
             ),
             ImportExportCard(
-              title: (_) => "<import json>",
+              title: (loc) => loc?.importBackup ?? "<import json>",
+              explanationLabel: (loc) => loc?.importBackupExplanation,
               actions: [
                 ElevatedButton.icon(
                   onPressed: onImportJsonBackup(context),
-                  label: Text("<import json and replace data>"),
+                  label: Text(loc?.importBacupAndReplaceExistingEntries ?? "<import json and replace data>"),
                   icon: Icon(Icons.upload_outlined),
                 ),
               ],
@@ -83,10 +85,11 @@ class ExportImportPage extends KglPage {
   }
 
   VoidCallback onImportJsonBackup(BuildContext context) => () async {
+    AppLocalizations? loc = AppLocalizations.of(context);
     WorkData? loadedData = await ImportService().loadJsonBackup(
       onError: (error) => ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("<Import failed.>"))),
+      ).showSnackBar(SnackBar(content: Text(loc?.importFailed??"<Import failed.>"))),
     );
     if (loadedData == null) {
       return;
