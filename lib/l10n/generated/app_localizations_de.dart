@@ -223,6 +223,47 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get exportJsonExplanation =>
       'Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf einem anderen Gerät zu importieren.';
+
+  @override
+  String get importBackup => 'Backup importieren';
+
+  @override
+  String get importBackupExplanation =>
+      'Importieren Sie eine zuvor exportierte JSON-Backup-Datei, um Ihre Arbeitseinträge und Kategorien wiederherzustellen.';
+
+  @override
+  String get importBacupAndReplaceExistingEntries =>
+      'Backup importieren und vorhandene Einträge ersetzen';
+
+  @override
+  String get importBacupAndReplace => 'Backup importieren und ersetzen';
+
+  @override
+  String get importSuccess => 'Import erfolgreich';
+
+  @override
+  String get importFailed => 'Import fehlgeschlagen';
+
+  @override
+  String get undo => 'Rückgängig';
+
+  @override
+  String dateOfBackup(Object date) {
+    return 'Datum des Backups: $date';
+  }
+
+  @override
+  String nrOfEntriesAndCategories(Object nrOfCategories, Object nrOfEntries) {
+    return '$nrOfEntries Einträge, $nrOfCategories Kategorien';
+  }
+
+  @override
+  String get backupFromNewerVersionWarning =>
+      'Warnung: Das Backup wurde mit einer neueren Version der App erstellt. Einträge oder Kategorien werden möglicherweise nicht korrekt importiert. Aktualisieren Sie wenn möglich die App auf die neueste Version, bevor Sie das Backup importieren.';
+
+  @override
+  String get importReplaceConfirmationDialog =>
+      'Möchten Sie das Backup wirklich importieren und alle vorhandenen Einträge und Kategorien ersetzen? Dieser Vorgang kann nach Abschluss der Importierung nicht rückgängig gemacht werden.';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).

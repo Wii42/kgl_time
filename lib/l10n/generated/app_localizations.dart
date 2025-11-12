@@ -513,6 +513,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Creates a backup of all work entries  and categories as a JSON file. This file can be used to restore your entries later or to import them into another device.'**
   String get exportJsonExplanation;
+
+  /// No description provided for @importBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Import backup'**
+  String get importBackup;
+
+  /// No description provided for @importBackupExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a previously exported JSON backup file to restore your work entries and categories.'**
+  String get importBackupExplanation;
+
+  /// No description provided for @importBacupAndReplaceExistingEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Import backup and replace existing entries'**
+  String get importBacupAndReplaceExistingEntries;
+
+  /// No description provided for @importBacupAndReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Import backup and replace'**
+  String get importBacupAndReplace;
+
+  /// No description provided for @importSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Import successful'**
+  String get importSuccess;
+
+  /// No description provided for @importFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed'**
+  String get importFailed;
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @dateOfBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Date of backup: {date}'**
+  String dateOfBackup(Object date);
+
+  /// No description provided for @nrOfEntriesAndCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'{nrOfEntries} entries, {nrOfCategories} categories'**
+  String nrOfEntriesAndCategories(Object nrOfCategories, Object nrOfEntries);
+
+  /// No description provided for @backupFromNewerVersionWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: The backup was created with a newer version of the app. Some data might not be imported correctly. Consider updating the app first'**
+  String get backupFromNewerVersionWarning;
+
+  /// No description provided for @importReplaceConfirmationDialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you really want to import the backup and replace all existing entries and categories?\nThis action cannot be undone after the action is completed.'**
+  String get importReplaceConfirmationDialog;
 }
 
 class _AppLocalizationsDelegate
