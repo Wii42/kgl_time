@@ -18,6 +18,7 @@ import 'package:share_plus/share_plus.dart';
 import '../data_model/work_categories.dart';
 import '../data_model/work_category.dart';
 import '../data_model/work_entry.dart';
+import '../export_import/work_data.dart';
 import '../kgl_time_app.dart';
 
 class ExportImportPage extends KglPage {
@@ -47,39 +48,17 @@ class ExportImportPage extends KglPage {
               onShare: onShareJson(context),
               explanationLabel: (loc) => loc?.exportJsonExplanation,
             ),
-            ElevatedButton(
-              onPressed: () async {
-                final OpenFileDialogParams params = OpenFileDialogParams(
-                  dialogType: OpenFileDialogType.document,
-                  sourceType: SourceType.photoLibrary,
-                );
-                String? filePath = await FlutterFileDialog.pickFile(
-                  params: params,
-                );
-                if (filePath != null) {
-                  String data = await XFile(filePath).readAsString();
-                  dynamic decoded;
-                  try {
-                    decoded = jsonDecode(data);
-                  } catch (e, stacktrace) {
-                    log(
-                      "$filePath does not contain valid JSON",
-                      error: e,
-                      stackTrace: stacktrace,
-                    );
-                    decoded = null;
-                  }
+            importExportCard(
+              context: context,
+              title: (_) => "<import json>",
+              actions: [
+                ElevatedButton.icon(
+                  onPressed: onImportJsonBackup(context),
+                  label: Text("<import json and replace data>"),
+                  icon: Icon(Icons.upload_outlined),
 
-                  WorkData? t = WorkData.tryFromJson(decoded);
-                  if (t == null) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text("<Import failed.>")));
-                    return;
-                  }
-                }
-              },
-              child: Text("<import json>"),
+                ),
+              ],
             ),
           ],
         ),
@@ -92,6 +71,33 @@ class ExportImportPage extends KglPage {
     required Function(AppLocalizations? loc) title,
     required VoidCallback onSave,
     required VoidCallback onShare,
+    Function(AppLocalizations? loc)? explanationLabel,
+  }) {
+    AppLocalizations? loc = AppLocalizations.of(context);
+    return importExportCard(
+      context: context,
+      title: title,
+      explanationLabel: explanationLabel,
+      actions: [
+        TextButton.icon(
+          label: Text(loc?.saveLocally ?? "<save locally>"),
+          icon: Icon(Icons.save_alt_outlined),
+          onPressed: (Platform.isAndroid | Platform.isIOS) ? onSave : null,
+        ),
+
+        TextButton.icon(
+          label: Text(loc?.share ?? "<share>"),
+          icon: Icon(Icons.share),
+          onPressed: !Platform.isLinux ? onShare : null,
+        ),
+      ],
+    );
+  }
+
+  Widget importExportCard({
+    required BuildContext context,
+    required Function(AppLocalizations? loc) title,
+    List<Widget> actions = const [],
     Function(AppLocalizations? loc)? explanationLabel,
   }) {
     AppLocalizations? loc = AppLocalizations.of(context);
@@ -115,25 +121,7 @@ class ExportImportPage extends KglPage {
               SizedBox(height: 4),
             ],
 
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                TextButton.icon(
-                  label: Text(loc?.saveLocally ?? "<save locally>"),
-                  icon: Icon(Icons.save_alt_outlined),
-                  onPressed: (Platform.isAndroid | Platform.isIOS)
-                      ? onSave
-                      : null,
-                ),
-
-                TextButton.icon(
-                  label: Text(loc?.share ?? "<share>"),
-                  icon: Icon(Icons.share),
-                  onPressed: !Platform.isLinux ? onShare : null,
-                ),
-              ],
-            ),
+            Wrap(spacing: 8, runSpacing: 8, children: actions),
           ],
         ),
       ),
@@ -298,51 +286,75 @@ class ExportImportPage extends KglPage {
   }
 
   String jsonFileName() => 'kgl_time_backup_${fileTimestamp()}.json';
-}
 
-class WorkData {
-  final List<WorkEntry> workEntries;
-  final List<WorkCategory> workCategories;
-  final int schemaVersion;
-  final DateTime exportedAt;
-
-  const WorkData({
-    required this.workEntries,
-    required this.workCategories,
-    required this.schemaVersion,
-    required this.exportedAt,
-  });
-
-  Map<String, dynamic> toJson() => {
-    'schemaVersion': schemaVersion,
-    'exportedAt': exportedAt.toIso8601String(),
-    'workEntries': workEntries.map((e) => e.toJson()).toList(),
-    'workCategories': workCategories.map((c) => c.toJson()).toList(),
-  };
-
-  factory WorkData.fromJson(Map<String, dynamic> json) {
-    return WorkData(
-      schemaVersion: json['schemaVersion'],
-      exportedAt: DateTime.parse(json['exportedAt']),
-      workEntries: (json['workEntries'] as List<dynamic>)
-          .map((e) => WorkEntry.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      workCategories: (json['workCategories'] as List<dynamic>)
-          .map((c) => WorkCategory.fromJson(c as Map<String, dynamic>))
-          .toList(),
-    );
-  }
-
-  static WorkData? tryFromJson(Map<String, dynamic> json) {
-    try {
-      return WorkData.fromJson(json);
-    } catch (e, stacktrace) {
-      log(
-        "Failed to parse WorkData from JSON",
-        error: e,
-        stackTrace: stacktrace,
+  VoidCallback onImportJsonBackup(BuildContext context) => () async {
+    ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    void showError() {
+      messenger.showSnackBar(
+        SnackBar(content: Text("<Import failed.>")),
       );
-      return null;
     }
-  }
+    AppLocalizations? loc = AppLocalizations.of(context);
+    final OpenFileDialogParams params = OpenFileDialogParams(
+      dialogType: OpenFileDialogType.document,
+      //mimeTypesFilter: ['application/json'],
+    );
+    String? filePath = await FlutterFileDialog.pickFile(params: params);
+    if (filePath != null) {
+      String data = await XFile(filePath).readAsString();
+      dynamic decoded;
+      try {
+        decoded = jsonDecode(data);
+      } catch (e) {
+        log(
+          "$filePath does not contain valid JSON",
+          error: e,
+        );
+        showError();
+        return;
+      }
+
+      WorkData? t = WorkData.tryFromJson(decoded);
+      if (t == null) {
+        showError();
+        return;
+      }
+      showDialog(context: context, builder: (context) => AlertDialog(
+        title: Text( "<Import Data>"),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Date of backup: ${formatDate(t.exportedAt, loc)}, ${formatTime(t.exportedAt)}"),
+            Text("Work entries: ${t.workEntries.length}, categories: ${t.workCategories.length}"),
+            SizedBox(height: 12),
+            Text("<Are you sure you want to import the data from the selected file? This will delete all your current entries and categories and replace with the backup.>"),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(loc?.cancel ?? "<Cancel>"),
+          ),
+          TextButton(
+            onPressed: () {
+              WorkEntries entriesList = context.read<WorkEntries>();
+              WorkCategories categoriesList = context.read<WorkCategories>();
+              entriesList.replaceAllEntries(t.workEntries);
+              categoriesList.replaceAllEntries(t.workCategories);
+              Navigator.of(context).pop();
+              messenger.showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "<Import successful.>",
+                  ),
+                ),
+              );
+            },
+            child: Text("<Import and Replace>"),
+          ),
+        ],
+      ));
+    }
+  };
 }
