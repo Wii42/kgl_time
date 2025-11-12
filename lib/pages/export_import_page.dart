@@ -56,7 +56,6 @@ class ExportImportPage extends KglPage {
                   onPressed: onImportJsonBackup(context),
                   label: Text("<import json and replace data>"),
                   icon: Icon(Icons.upload_outlined),
-
                 ),
               ],
             ),
@@ -290,10 +289,9 @@ class ExportImportPage extends KglPage {
   VoidCallback onImportJsonBackup(BuildContext context) => () async {
     ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
     void showError() {
-      messenger.showSnackBar(
-        SnackBar(content: Text("<Import failed.>")),
-      );
+      messenger.showSnackBar(SnackBar(content: Text("<Import failed.>")));
     }
+
     AppLocalizations? loc = AppLocalizations.of(context);
     final OpenFileDialogParams params = OpenFileDialogParams(
       dialogType: OpenFileDialogType.document,
@@ -306,10 +304,7 @@ class ExportImportPage extends KglPage {
       try {
         decoded = jsonDecode(data);
       } catch (e) {
-        log(
-          "$filePath does not contain valid JSON",
-          error: e,
-        );
+        log("$filePath does not contain valid JSON", error: e);
         showError();
         return;
       }
@@ -319,42 +314,70 @@ class ExportImportPage extends KglPage {
         showError();
         return;
       }
-      showDialog(context: context, builder: (context) => AlertDialog(
-        title: Text( "<Import Data>"),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Date of backup: ${formatDate(t.exportedAt, loc)}, ${formatTime(t.exportedAt)}"),
-            Text("Work entries: ${t.workEntries.length}, categories: ${t.workCategories.length}"),
-            SizedBox(height: 12),
-            Text("<Are you sure you want to import the data from the selected file? This will delete all your current entries and categories and replace with the backup.>"),
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("<Import Data>"),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Date of backup: ${formatDate(t.exportedAt, loc)}, ${formatTime(t.exportedAt)}",
+              ),
+              Text(
+                "Work entries: ${t.workEntries.length}, categories: ${t.workCategories.length}",
+              ),
+              if (t.schemaVersion > schemaVersion) ...[
+                SizedBox(height: 12),
+                Text(
+                  "<Warning: The backup was created with a newer version of the app (schema version ${t.schemaVersion}) than the current app version (schema version $schemaVersion). Importing the data may lead to loss of information or app instability. Proceed with caution.>",
+                ),
+              ],
+              SizedBox(height: 12),
+              Text(
+                "<Are you sure you want to import the data from the selected file? This will delete all your current entries and categories and replace with the backup.>",
+              ),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(loc?.cancel ?? "<Cancel>"),
+            ),
+            TextButton(
+              child: Text("<Import and Replace>"),
+              onPressed: () {
+                WorkEntries entriesList = context.read<WorkEntries>();
+                WorkCategories categoriesList = context.read<WorkCategories>();
+                WorkData currentData = WorkData(
+                  workEntries: entriesList.entriesIncludingTrash,
+                  workCategories: categoriesList.entries,
+                  schemaVersion: schemaVersion,
+                  exportedAt: DateTime.now(),
+                );
+                entriesList.replaceAllEntries(t.workEntries);
+                categoriesList.replaceAllEntries(t.workCategories);
+                Navigator.of(context).pop();
+                messenger.showSnackBar(
+                  SnackBar(
+                    content: Text("<Import successful.>"),
+                    action: SnackBarAction(
+                      label: "rückgängig",
+                      onPressed: () {
+                        entriesList.replaceAllEntries(currentData.workEntries);
+                        categoriesList.replaceAllEntries(
+                          currentData.workCategories,
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
           ],
         ),
-        actions: [
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(loc?.cancel ?? "<Cancel>"),
-          ),
-          TextButton(
-            onPressed: () {
-              WorkEntries entriesList = context.read<WorkEntries>();
-              WorkCategories categoriesList = context.read<WorkCategories>();
-              entriesList.replaceAllEntries(t.workEntries);
-              categoriesList.replaceAllEntries(t.workCategories);
-              Navigator.of(context).pop();
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Text(
-                    "<Import successful.>",
-                  ),
-                ),
-              );
-            },
-            child: Text("<Import and Replace>"),
-          ),
-        ],
-      ));
+      );
     }
   };
 }
