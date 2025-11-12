@@ -15,18 +15,18 @@ dependencies:
   cupertino_icons: ^1.0.8
   provider: ^6.1.5+1
   notifying_list: ^0.1.0
-  go_router: ^16.3.0
+  go_router: ^17.0.0
   intl: any
   week_number: ^1.1.1
-  isar_community: ^3.3.0-dev.3
-  isar_community_flutter_libs: ^3.3.0-dev.3
+  isar_community: ^3.3.0
+  isar_community_flutter_libs: ^3.3.0
   path_provider: ^2.1.5
   path_provider_linux: ^2.2.1
   url_launcher: ^6.3.2
   animated_toggle_switch: ^0.8.5
   timer_builder: ^2.0.0
   collection: any
-  http: ^1.5.0
+  http: ^1.6.0
   animated_list_plus: ^0.5.2
   share_plus: ^12.0.1
   csv: ^6.0.0
@@ -37,11 +37,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  isar_community_generator: ^3.3.0-dev.3
+  isar_community_generator: ^3.3.0
   build_runner: ^2.7.1
   flutter_launcher_icons: ^0.14.4
   json_serializable: ^6.11.1
-  analyzer: 8.3.0 # To resolve a dependency conflict with isar_generator
 
 flutter:
   uses-material-design: true
