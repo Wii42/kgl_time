@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:isar_community/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../format_duration.dart';
 import 'isar_storable.dart';
 
 part 'work_category.g.dart';
 abstract class IWorkCategory {
   String displayName;
+  @JsonKey(defaultValue: "")
+  String uuid;
+  @JsonKey(defaultValue: dateTimeEpoch)
+  DateTime? lastEdit;
 
   @Enumerated(EnumType.name)
   CategoryIcon? icon;
 
-  IWorkCategory(this.displayName, {this.icon});
+  IWorkCategory(this.displayName, {this.icon, required this.uuid, required this.lastEdit});
 
   @override
   bool operator ==(Object other) {
@@ -19,7 +24,7 @@ abstract class IWorkCategory {
 
     return other is IWorkCategory &&
         other.displayName == displayName &&
-        other.icon == icon;
+        other.icon == icon && other.uuid == uuid;
   }
 
   @override
@@ -35,10 +40,10 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
   Id id = Isar.autoIncrement;
   int listIndex;
 
-  WorkCategory(super.displayName, {super.icon, this.listIndex = -1});
+  WorkCategory(super.displayName, {super.icon, this.listIndex = -1, required super.uuid, required super.lastEdit});
 
   EmbeddedWorkCategory toEmbedded() {
-    return EmbeddedWorkCategory(displayName: displayName, icon: icon, id: id);
+    return EmbeddedWorkCategory(displayName: displayName, icon: icon, id: id, uuid: uuid, lastEdit: lastEdit);
   }
 
   @override
@@ -49,7 +54,7 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
         other.id == id &&
         other.displayName == displayName &&
         other.icon == icon &&
-        other.listIndex == listIndex;
+        other.listIndex == listIndex && other.uuid == uuid;
   }
 
   @override
@@ -72,11 +77,11 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
 class EmbeddedWorkCategory extends IWorkCategory {
   int? id;
 
-  EmbeddedWorkCategory({String displayName = '', super.icon, this.id})
+  EmbeddedWorkCategory({String displayName = '', super.icon, this.id, super.uuid = '', super.lastEdit})
       : super(displayName);
 
   WorkCategory toWorkCategory() {
-    WorkCategory category = WorkCategory(displayName, icon: icon);
+    WorkCategory category = WorkCategory(displayName, icon: icon, uuid: uuid, lastEdit: lastEdit);
     if (id != null) {
       category.id = id!;
     }

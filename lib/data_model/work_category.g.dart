@@ -29,11 +29,17 @@ const WorkCategorySchema = CollectionSchema(
       type: IsarType.string,
       enumMap: _WorkCategoryiconEnumValueMap,
     ),
-    r'listIndex': PropertySchema(
+    r'lastEdit': PropertySchema(
       id: 3,
+      name: r'lastEdit',
+      type: IsarType.dateTime,
+    ),
+    r'listIndex': PropertySchema(
+      id: 4,
       name: r'listIndex',
       type: IsarType.long,
     ),
+    r'uuid': PropertySchema(id: 5, name: r'uuid', type: IsarType.string),
   },
 
   estimateSize: _workCategoryEstimateSize,
@@ -64,6 +70,7 @@ int _workCategoryEstimateSize(
       bytesCount += 3 + value.name.length * 3;
     }
   }
+  bytesCount += 3 + object.uuid.length * 3;
   return bytesCount;
 }
 
@@ -76,7 +83,9 @@ void _workCategorySerialize(
   writer.writeString(offsets[0], object.displayName);
   writer.writeLong(offsets[1], object.hashCode);
   writer.writeString(offsets[2], object.icon?.name);
-  writer.writeLong(offsets[3], object.listIndex);
+  writer.writeDateTime(offsets[3], object.lastEdit);
+  writer.writeLong(offsets[4], object.listIndex);
+  writer.writeString(offsets[5], object.uuid);
 }
 
 WorkCategory _workCategoryDeserialize(
@@ -88,7 +97,9 @@ WorkCategory _workCategoryDeserialize(
   final object = WorkCategory(
     reader.readString(offsets[0]),
     icon: _WorkCategoryiconValueEnumMap[reader.readStringOrNull(offsets[2])],
-    listIndex: reader.readLongOrNull(offsets[3]) ?? -1,
+    lastEdit: reader.readDateTimeOrNull(offsets[3]),
+    listIndex: reader.readLongOrNull(offsets[4]) ?? -1,
+    uuid: reader.readString(offsets[5]),
   );
   object.id = id;
   return object;
@@ -109,7 +120,11 @@ P _workCategoryDeserializeProp<P>(
       return (_WorkCategoryiconValueEnumMap[reader.readStringOrNull(offset)])
           as P;
     case 3:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 4:
       return (reader.readLongOrNull(offset) ?? -1) as P;
+    case 5:
+      return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -654,6 +669,79 @@ extension WorkCategoryQueryFilter
   }
 
   QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  lastEditIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'lastEdit'),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  lastEditIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'lastEdit'),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  lastEditEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'lastEdit', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  lastEditGreaterThan(DateTime? value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'lastEdit',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  lastEditLessThan(DateTime? value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'lastEdit',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  lastEditBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'lastEdit',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
   listIndexEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
@@ -707,6 +795,153 @@ extension WorkCategoryQueryFilter
       );
     });
   }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition> uuidEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  uuidGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition> uuidLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition> uuidBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'uuid',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  uuidStartsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition> uuidEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition> uuidContains(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition> uuidMatches(
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'uuid',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  uuidIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'uuid', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterFilterCondition>
+  uuidIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'uuid', value: ''),
+      );
+    });
+  }
 }
 
 extension WorkCategoryQueryObject
@@ -754,6 +989,18 @@ extension WorkCategoryQuerySortBy
     });
   }
 
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> sortByLastEdit() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastEdit', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> sortByLastEditDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastEdit', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> sortByListIndex() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'listIndex', Sort.asc);
@@ -763,6 +1010,18 @@ extension WorkCategoryQuerySortBy
   QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> sortByListIndexDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'listIndex', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> sortByUuid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> sortByUuidDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.desc);
     });
   }
 }
@@ -818,6 +1077,18 @@ extension WorkCategoryQuerySortThenBy
     });
   }
 
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> thenByLastEdit() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastEdit', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> thenByLastEditDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastEdit', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> thenByListIndex() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'listIndex', Sort.asc);
@@ -827,6 +1098,18 @@ extension WorkCategoryQuerySortThenBy
   QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> thenByListIndexDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'listIndex', Sort.desc);
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> thenByUuid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QAfterSortBy> thenByUuidDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.desc);
     });
   }
 }
@@ -855,9 +1138,23 @@ extension WorkCategoryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<WorkCategory, WorkCategory, QDistinct> distinctByLastEdit() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastEdit');
+    });
+  }
+
   QueryBuilder<WorkCategory, WorkCategory, QDistinct> distinctByListIndex() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'listIndex');
+    });
+  }
+
+  QueryBuilder<WorkCategory, WorkCategory, QDistinct> distinctByUuid({
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'uuid', caseSensitive: caseSensitive);
     });
   }
 }
@@ -888,9 +1185,21 @@ extension WorkCategoryQueryProperty
     });
   }
 
+  QueryBuilder<WorkCategory, DateTime?, QQueryOperations> lastEditProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastEdit');
+    });
+  }
+
   QueryBuilder<WorkCategory, int, QQueryOperations> listIndexProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'listIndex');
+    });
+  }
+
+  QueryBuilder<WorkCategory, String, QQueryOperations> uuidProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'uuid');
     });
   }
 }
@@ -919,6 +1228,12 @@ const EmbeddedWorkCategorySchema = Schema(
       enumMap: _EmbeddedWorkCategoryiconEnumValueMap,
     ),
     r'id': PropertySchema(id: 3, name: r'id', type: IsarType.long),
+    r'lastEdit': PropertySchema(
+      id: 4,
+      name: r'lastEdit',
+      type: IsarType.dateTime,
+    ),
+    r'uuid': PropertySchema(id: 5, name: r'uuid', type: IsarType.string),
   },
 
   estimateSize: _embeddedWorkCategoryEstimateSize,
@@ -940,6 +1255,7 @@ int _embeddedWorkCategoryEstimateSize(
       bytesCount += 3 + value.name.length * 3;
     }
   }
+  bytesCount += 3 + object.uuid.length * 3;
   return bytesCount;
 }
 
@@ -953,6 +1269,8 @@ void _embeddedWorkCategorySerialize(
   writer.writeLong(offsets[1], object.hashCode);
   writer.writeString(offsets[2], object.icon?.name);
   writer.writeLong(offsets[3], object.id);
+  writer.writeDateTime(offsets[4], object.lastEdit);
+  writer.writeString(offsets[5], object.uuid);
 }
 
 EmbeddedWorkCategory _embeddedWorkCategoryDeserialize(
@@ -968,6 +1286,8 @@ EmbeddedWorkCategory _embeddedWorkCategoryDeserialize(
           offsets[2],
         )],
     id: reader.readLongOrNull(offsets[3]),
+    lastEdit: reader.readDateTimeOrNull(offsets[4]),
+    uuid: reader.readStringOrNull(offsets[5]) ?? '',
   );
   return object;
 }
@@ -990,6 +1310,10 @@ P _embeddedWorkCategoryDeserializeProp<P>(
           as P;
     case 3:
       return (reader.readLongOrNull(offset)) as P;
+    case 4:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 5:
+      return (reader.readStringOrNull(offset) ?? '') as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1576,6 +1900,284 @@ extension EmbeddedWorkCategoryQueryFilter
       );
     });
   }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  lastEditIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'lastEdit'),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  lastEditIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'lastEdit'),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  lastEditEqualTo(DateTime? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'lastEdit', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  lastEditGreaterThan(DateTime? value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'lastEdit',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  lastEditLessThan(DateTime? value, {bool include = false}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'lastEdit',
+          value: value,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  lastEditBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'lastEdit',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidEqualTo(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'uuid',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidStartsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidEndsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'uuid',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'uuid', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<
+    EmbeddedWorkCategory,
+    EmbeddedWorkCategory,
+    QAfterFilterCondition
+  >
+  uuidIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'uuid', value: ''),
+      );
+    });
+  }
 }
 
 extension EmbeddedWorkCategoryQueryObject
@@ -1594,11 +2196,17 @@ WorkCategory _$WorkCategoryFromJson(Map<String, dynamic> json) => WorkCategory(
   json['displayName'] as String,
   icon: $enumDecodeNullable(_$CategoryIconEnumMap, json['icon']),
   listIndex: (json['listIndex'] as num?)?.toInt() ?? -1,
+  uuid: json['uuid'] as String? ?? '',
+  lastEdit: json['lastEdit'] == null
+      ? dateTimeEpoch()
+      : DateTime.parse(json['lastEdit'] as String),
 )..id = (json['id'] as num).toInt();
 
 Map<String, dynamic> _$WorkCategoryToJson(WorkCategory instance) =>
     <String, dynamic>{
       'displayName': instance.displayName,
+      'uuid': instance.uuid,
+      'lastEdit': instance.lastEdit?.toIso8601String(),
       'icon': _$CategoryIconEnumMap[instance.icon],
       'id': instance.id,
       'listIndex': instance.listIndex,
@@ -1620,12 +2228,18 @@ EmbeddedWorkCategory _$EmbeddedWorkCategoryFromJson(
   displayName: json['displayName'] as String? ?? '',
   icon: $enumDecodeNullable(_$CategoryIconEnumMap, json['icon']),
   id: (json['id'] as num?)?.toInt(),
+  uuid: json['uuid'] as String? ?? '',
+  lastEdit: json['lastEdit'] == null
+      ? dateTimeEpoch()
+      : DateTime.parse(json['lastEdit'] as String),
 );
 
 Map<String, dynamic> _$EmbeddedWorkCategoryToJson(
   EmbeddedWorkCategory instance,
 ) => <String, dynamic>{
   'displayName': instance.displayName,
+  'uuid': instance.uuid,
+  'lastEdit': instance.lastEdit?.toIso8601String(),
   'icon': _$CategoryIconEnumMap[instance.icon],
   'id': instance.id,
 };
