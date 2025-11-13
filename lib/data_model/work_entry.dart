@@ -3,6 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:uuid/uuid.dart';
 
+import '../format_duration.dart';
 import 'isar_storable.dart';
 
 part 'work_entry.g.dart';
@@ -12,8 +13,10 @@ part 'work_entry.g.dart';
 class WorkEntry implements IsarStorable {
   @override
   Id id = Isar.autoIncrement;
+  @JsonKey(defaultValue: "")
   final String uuid;
   int workDurationInSeconds;
+  @JsonKey(defaultValue: dateTimeEpoch)
   DateTime date;
   String? description;
   List<EmbeddedWorkCategory> categories;
