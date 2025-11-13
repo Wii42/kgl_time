@@ -94,7 +94,6 @@ class WorkEntryTimeTracker extends StatelessWidget {
                         WorkEntry.fromStartAndEndTime(
                           startTime: startTime!,
                           endTime: DateTime.now(),
-                          lastEdit: DateTime.now(),
                           categories: selectedCategories
                               .map((e) => e.toEmbedded())
                               .toList(),
