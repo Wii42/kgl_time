@@ -177,6 +177,8 @@ class EditCategoriesWidget extends StatelessWidget {
                       WorkCategory(
                         controller.text,
                         listIndex: categories.entries.length,
+                        uuid: WorkEntry.generateUuid(),
+                        lastEdit: DateTime.timestamp(),
                       ),
                     );
                   }

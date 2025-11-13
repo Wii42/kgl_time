@@ -17,79 +17,113 @@ const int schemaVersion = 2;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await PersistentStorageService.initializeImplementation(
-      IsarPersistentStorage());
+    IsarPersistentStorage(),
+  );
   await _checkSchemaVersion([SchemaMigration1to2()]);
-  List<WorkEntry> initialEntries =
-      await PersistentStorageService.instance.workEntries.loadEntries();
-  List<WorkCategory> initialCategories =
-      await PersistentStorageService.instance.workCategories.loadEntries();
+  List<WorkEntry> initialEntries = await PersistentStorageService
+      .instance
+      .workEntries
+      .loadEntries();
+  List<WorkCategory> initialCategories = await PersistentStorageService
+      .instance
+      .workCategories
+      .loadEntries();
 
-  Map<String, dynamic> initialKeyValueStorage =
-      await PersistentStorageService.instance.keyValueStorage.getAll();
+  Map<String, dynamic> initialKeyValueStorage = await PersistentStorageService
+      .instance
+      .keyValueStorage
+      .getAll();
   bool isFirstRun = initialKeyValueStorage['isFirstRun'] ?? true;
   if (isFirstRun) {
-    await PersistentStorageService.instance.workCategories
-        .saveEntries(mockWorkCategories);
+    await PersistentStorageService.instance.workCategories.saveEntries(
+      mockWorkCategories,
+    );
     initialCategories.addAll(mockWorkCategories);
-    await PersistentStorageService.instance.keyValueStorage
-        .set('isFirstRun', false);
+    await PersistentStorageService.instance.keyValueStorage.set(
+      'isFirstRun',
+      false,
+    );
   }
   await initializeDateFormatting(); // initialize the date formatting for German
-  runApp(KglTimeApp(
-    appTitle: 'KGL Time',
-    initialEntries: initialEntries,
-    initialCategories: initialCategories,
-    initialKeyValueStorage: initialKeyValueStorage,
-  ));
+  runApp(
+    KglTimeApp(
+      appTitle: 'KGL Time',
+      initialEntries: initialEntries,
+      initialCategories: initialCategories,
+      initialKeyValueStorage: initialKeyValueStorage,
+    ),
+  );
 }
 
 List<WorkCategory> get mockWorkCategories => [
-      WorkCategory('Telefonanruf'),
-      WorkCategory('Kategorie 2'),
-      WorkCategory('Kategorie 3'),
-      WorkCategory('Kategorie 4'),
-      WorkCategory('Kategorie 5'),
-    ];
+  WorkCategory(
+    'Telefonanruf',
+    uuid: WorkEntry.generateUuid(),
+    lastEdit: DateTime.timestamp(),
+  ),
+  WorkCategory(
+    'Kategorie 2',
+    uuid: WorkEntry.generateUuid(),
+    lastEdit: DateTime.timestamp(),
+  ),
+  WorkCategory(
+    'Kategorie 3',
+    uuid: WorkEntry.generateUuid(),
+    lastEdit: DateTime.timestamp(),
+  ),
+  WorkCategory(
+    'Kategorie 4',
+    uuid: WorkEntry.generateUuid(),
+    lastEdit: DateTime.timestamp(),
+  ),
+  WorkCategory(
+    'Kategorie 5',
+    uuid: WorkEntry.generateUuid(),
+    lastEdit: DateTime.timestamp(),
+  ),
+];
 
 List<WorkEntry> get mockWorkEntries => [
-      WorkEntry.fromDuration(
-        duration: const Duration(hours: 1),
-        date: DateTime.now(),
-        description: 'Test',
-        categories: [mockWorkCategories[0].toEmbedded()],
-      ),
-      WorkEntry.fromDuration(
-        duration: const Duration(minutes: 30),
-        date: DateTime.now().subtract(const Duration(days: 1, hours: 12)),
-        description: 'Test2',
-        categories: [mockWorkCategories[1].toEmbedded()],
-      ),
-      WorkEntry.fromDuration(
-        duration: const Duration(hours: 1, minutes: 30),
-        date: DateTime.now().subtract(const Duration(days: 7)),
-        description: 'old entry',
-        categories: [
-          mockWorkCategories[3].toEmbedded(),
-          mockWorkCategories[4].toEmbedded()
-        ],
-      ),
-    ];
-
+  WorkEntry.fromDuration(
+    duration: const Duration(hours: 1),
+    date: DateTime.now(),
+    description: 'Test',
+    categories: [mockWorkCategories[0].toEmbedded()],
+  ),
+  WorkEntry.fromDuration(
+    duration: const Duration(minutes: 30),
+    date: DateTime.now().subtract(const Duration(days: 1, hours: 12)),
+    description: 'Test2',
+    categories: [mockWorkCategories[1].toEmbedded()],
+  ),
+  WorkEntry.fromDuration(
+    duration: const Duration(hours: 1, minutes: 30),
+    date: DateTime.now().subtract(const Duration(days: 7)),
+    description: 'old entry',
+    categories: [
+      mockWorkCategories[3].toEmbedded(),
+      mockWorkCategories[4].toEmbedded(),
+    ],
+  ),
+];
 
 /// Checks the stored schema version and executes all applicable [migrations]
 /// if the stored version is different from the current [schemaVersion].
 Future<void> _checkSchemaVersion(List<SchemaMigration> migrations) async {
   final storage = PersistentStorageService.instance;
   final kvStorage = storage.keyValueStorage;
-  int storedSchemaVersion =
-      await kvStorage.get<int>('schemaVersion') ?? 0;
+  int storedSchemaVersion = await kvStorage.get<int>('schemaVersion') ?? 0;
   if (storedSchemaVersion != schemaVersion) {
-    List<SchemaMigration> applicableMigrations = migrations
-        .where((migration) =>
-            migration.fromSchemaVersion >= storedSchemaVersion &&
-            migration.toSchemaVersion <= schemaVersion)
-        .toList()..sort();
-    for (SchemaMigration migration in applicableMigrations){
+    List<SchemaMigration> applicableMigrations =
+        migrations
+            .where(
+              (migration) =>
+                  migration.fromSchemaVersion >= storedSchemaVersion &&
+                  migration.toSchemaVersion <= schemaVersion,
+            )
+            .toList()
+          ..sort();
+    for (SchemaMigration migration in applicableMigrations) {
       await migration.migrate(storage);
     }
     //onSchemaVersionChanged(storedSchemaVersion, schemaVersion);
@@ -97,20 +131,21 @@ Future<void> _checkSchemaVersion(List<SchemaMigration> migrations) async {
   }
 }
 
-abstract class SchemaMigration implements Comparable<SchemaMigration>{
+abstract class SchemaMigration implements Comparable<SchemaMigration> {
   int get fromSchemaVersion;
   int get toSchemaVersion;
-  SchemaMigration(){assert(fromSchemaVersion+1 == toSchemaVersion);}
+  SchemaMigration() {
+    assert(fromSchemaVersion + 1 == toSchemaVersion);
+  }
   Future<void> migrate(PersistentStorageService storageService);
 
   @override
   int compareTo(SchemaMigration other) {
     return fromSchemaVersion.compareTo(other.fromSchemaVersion);
   }
-
 }
 
-class SchemaMigration1to2 extends SchemaMigration{
+class SchemaMigration1to2 extends SchemaMigration {
   @override
   int get fromSchemaVersion => 1;
 
@@ -125,19 +160,18 @@ class SchemaMigration1to2 extends SchemaMigration{
     for (WorkEntry entry in entries) {
       bool hasChanged = false;
       WorkEntry newEntry = entry.copyWith();
-      if(entry.uuid.isEmpty){
+      if (entry.uuid.isEmpty) {
         hasChanged = true;
-        newEntry = newEntry.copyWith(uuid:  WorkEntry.generateUuid());
+        newEntry = newEntry.copyWith(uuid: WorkEntry.generateUuid());
       }
-      if(entry.lastEdit == dateTimeEpoch()){
+      if (entry.lastEdit == dateTimeEpoch()) {
         hasChanged = true;
-        newEntry.lastEdit= entry.startTime?? entry.endTime ?? entry.date;
+        newEntry.lastEdit = entry.startTime ?? entry.endTime ?? entry.date;
       }
-      if(hasChanged){
-        newEntry.lastEdit= DateTime.now().toUtc();
+      if (hasChanged) {
+        newEntry.lastEdit = DateTime.now().toUtc();
         await storage.workEntries.updateEntry(newEntry, entry);
       }
     }
-
   }
 }

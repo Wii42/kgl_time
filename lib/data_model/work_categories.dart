@@ -37,6 +37,7 @@ class WorkCategories extends ChangeNotifier {
   }
 
   void updateEntry(WorkCategory workEntry, WorkCategory newEntry) {
+    newEntry.lastEdit = DateTime.timestamp();
     int index = _entries.indexOf(workEntry);
     _entries[index] = newEntry;
     storedEntries.updateEntry(newEntry, workEntry);
