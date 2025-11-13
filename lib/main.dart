@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
+import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/persistent_storage/isar_persistent_storage.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 
@@ -119,7 +120,7 @@ class SchemaMigration1to2 extends SchemaMigration{
   // Migrate work entries to have uuids and lastEdit set
   @override
   Future<void> migrate(PersistentStorageService storage) async {
-    print('Migrating schema from $fromSchemaVersion to $toSchemaVersion');
+    log('Migrating schema from $fromSchemaVersion to $toSchemaVersion');
     List<WorkEntry> entries = await storage.workEntries.loadEntries();
     for (WorkEntry entry in entries) {
       bool hasChanged = false;
@@ -128,7 +129,7 @@ class SchemaMigration1to2 extends SchemaMigration{
         hasChanged = true;
         newEntry = newEntry.copyWith(uuid:  WorkEntry.generateUuid());
       }
-      if(entry.lastEdit.millisecondsSinceEpoch == 0){
+      if(entry.lastEdit == dateTimeEpoch()){
         hasChanged = true;
         newEntry.lastEdit= entry.startTime?? entry.endTime ?? entry.date;
       }

@@ -1704,9 +1704,11 @@ extension WorkEntryQueryProperty
 // **************************************************************************
 
 WorkEntry _$WorkEntryFromJson(Map<String, dynamic> json) => WorkEntry(
-  uuid: json['uuid'] as String,
+  uuid: json['uuid'] as String? ?? '',
   workDurationInSeconds: (json['workDurationInSeconds'] as num).toInt(),
-  date: DateTime.parse(json['date'] as String),
+  date: json['date'] == null
+      ? dateTimeEpoch()
+      : DateTime.parse(json['date'] as String),
   description: json['description'] as String?,
   categories:
       (json['categories'] as List<dynamic>?)

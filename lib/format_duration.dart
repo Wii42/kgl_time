@@ -16,3 +16,4 @@ String formatDate(DateTime date, AppLocalizations? loc) =>
     DateFormat('EE dd.MM.yyyy', loc?.localeName).format(date);
 
 String formatTime(DateTime time) => DateFormat('HH:mm').format(time);
+DateTime dateTimeEpoch() => DateTime.fromMillisecondsSinceEpoch(0);
