@@ -15,7 +15,7 @@ class WorkEntries extends ChangeNotifier {
     sortEntriesInReverse(entriesList);
     _entries = CallbackNotifyingList<WorkEntry>(notifyListeners);
     _entries.addAll(entriesList);
-    _removeEntriesInTrashPermanentlyAfter(const Duration(days: 30));
+    //_removeEntriesInTrashPermanentlyAfter(const Duration(days: 30));
   }
 
   static void sortEntriesInReverse(List<WorkEntry> entriesList) {
@@ -74,6 +74,7 @@ class WorkEntries extends ChangeNotifier {
   }
 
   void updateEntry(WorkEntry workEntry, WorkEntry newEntry) {
+    newEntry.lastEdit = DateTime.now().toUtc();
     int index = _entries.indexOf(workEntry);
     _entries[index] = newEntry;
     sortEntriesInReverse(_entries);

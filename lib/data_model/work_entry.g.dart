@@ -56,18 +56,19 @@ const WorkEntrySchema = CollectionSchema(
       name: r'tickedOff',
       type: IsarType.bool,
     ),
+    r'uuid': PropertySchema(id: 8, name: r'uuid', type: IsarType.string),
     r'wasEdited': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'wasEdited',
       type: IsarType.bool,
     ),
     r'wasMovedToTrashAt': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'wasMovedToTrashAt',
       type: IsarType.dateTime,
     ),
     r'workDurationInSeconds': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'workDurationInSeconds',
       type: IsarType.long,
     ),
@@ -112,6 +113,7 @@ int _workEntryEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.uuid.length * 3;
   return bytesCount;
 }
 
@@ -134,9 +136,10 @@ void _workEntrySerialize(
   writer.writeDateTime(offsets[5], object.lastEdit);
   writer.writeDateTime(offsets[6], object.startTime);
   writer.writeBool(offsets[7], object.tickedOff);
-  writer.writeBool(offsets[8], object.wasEdited);
-  writer.writeDateTime(offsets[9], object.wasMovedToTrashAt);
-  writer.writeLong(offsets[10], object.workDurationInSeconds);
+  writer.writeString(offsets[8], object.uuid);
+  writer.writeBool(offsets[9], object.wasEdited);
+  writer.writeDateTime(offsets[10], object.wasMovedToTrashAt);
+  writer.writeLong(offsets[11], object.workDurationInSeconds);
 }
 
 WorkEntry _workEntryDeserialize(
@@ -159,12 +162,13 @@ WorkEntry _workEntryDeserialize(
     date: reader.readDateTime(offsets[2]),
     description: reader.readStringOrNull(offsets[3]),
     endTime: reader.readDateTimeOrNull(offsets[4]),
-    lastEdit: reader.readDateTimeOrNull(offsets[5]),
+    lastEdit: reader.readDateTime(offsets[5]),
     startTime: reader.readDateTimeOrNull(offsets[6]),
     tickedOff: reader.readBoolOrNull(offsets[7]) ?? false,
-    wasEdited: reader.readBoolOrNull(offsets[8]) ?? false,
-    wasMovedToTrashAt: reader.readDateTimeOrNull(offsets[9]),
-    workDurationInSeconds: reader.readLong(offsets[10]),
+    uuid: reader.readString(offsets[8]),
+    wasEdited: reader.readBoolOrNull(offsets[9]) ?? false,
+    wasMovedToTrashAt: reader.readDateTimeOrNull(offsets[10]),
+    workDurationInSeconds: reader.readLong(offsets[11]),
   );
   object.id = id;
   return object;
@@ -196,16 +200,18 @@ P _workEntryDeserializeProp<P>(
     case 4:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 6:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 7:
       return (reader.readBoolOrNull(offset) ?? false) as P;
     case 8:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
+      return (reader.readString(offset)) as P;
     case 9:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 10:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 11:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -802,25 +808,8 @@ extension WorkEntryQueryFilter
     });
   }
 
-  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        const FilterCondition.isNull(property: r'lastEdit'),
-      );
-    });
-  }
-
-  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition>
-  lastEditIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        const FilterCondition.isNotNull(property: r'lastEdit'),
-      );
-    });
-  }
-
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditEqualTo(
-    DateTime? value,
+    DateTime value,
   ) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
@@ -830,7 +819,7 @@ extension WorkEntryQueryFilter
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditGreaterThan(
-    DateTime? value, {
+    DateTime value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -845,7 +834,7 @@ extension WorkEntryQueryFilter
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditLessThan(
-    DateTime? value, {
+    DateTime value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -860,8 +849,8 @@ extension WorkEntryQueryFilter
   }
 
   QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> lastEditBetween(
-    DateTime? lower,
-    DateTime? upper, {
+    DateTime lower,
+    DateTime upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -958,6 +947,152 @@ extension WorkEntryQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'tickedOff', value: value),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'uuid',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidContains(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'uuid',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidMatches(
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'uuid',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'uuid', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterFilterCondition> uuidIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'uuid', value: ''),
       );
     });
   }
@@ -1203,6 +1338,18 @@ extension WorkEntryQuerySortBy on QueryBuilder<WorkEntry, WorkEntry, QSortBy> {
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByUuid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByUuidDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> sortByWasEdited() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'wasEdited', Sort.asc);
@@ -1341,6 +1488,18 @@ extension WorkEntryQuerySortThenBy
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByUuid() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.asc);
+    });
+  }
+
+  QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByUuidDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uuid', Sort.desc);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QAfterSortBy> thenByWasEdited() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'wasEdited', Sort.asc);
@@ -1427,6 +1586,14 @@ extension WorkEntryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByUuid({
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'uuid', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<WorkEntry, WorkEntry, QDistinct> distinctByWasEdited() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'wasEdited');
@@ -1487,7 +1654,7 @@ extension WorkEntryQueryProperty
     });
   }
 
-  QueryBuilder<WorkEntry, DateTime?, QQueryOperations> lastEditProperty() {
+  QueryBuilder<WorkEntry, DateTime, QQueryOperations> lastEditProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'lastEdit');
     });
@@ -1502,6 +1669,12 @@ extension WorkEntryQueryProperty
   QueryBuilder<WorkEntry, bool, QQueryOperations> tickedOffProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'tickedOff');
+    });
+  }
+
+  QueryBuilder<WorkEntry, String, QQueryOperations> uuidProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'uuid');
     });
   }
 
@@ -1531,6 +1704,7 @@ extension WorkEntryQueryProperty
 // **************************************************************************
 
 WorkEntry _$WorkEntryFromJson(Map<String, dynamic> json) => WorkEntry(
+  uuid: json['uuid'] as String,
   workDurationInSeconds: (json['workDurationInSeconds'] as num).toInt(),
   date: DateTime.parse(json['date'] as String),
   description: json['description'] as String?,
@@ -1545,9 +1719,7 @@ WorkEntry _$WorkEntryFromJson(Map<String, dynamic> json) => WorkEntry(
   endTime: json['endTime'] == null
       ? null
       : DateTime.parse(json['endTime'] as String),
-  lastEdit: json['lastEdit'] == null
-      ? null
-      : DateTime.parse(json['lastEdit'] as String),
+  lastEdit: DateTime.parse(json['lastEdit'] as String),
   tickedOff: json['tickedOff'] as bool? ?? false,
   createType: $enumDecodeNullable(
     _$CreateWorkEntryTypeEnumMap,
@@ -1561,13 +1733,14 @@ WorkEntry _$WorkEntryFromJson(Map<String, dynamic> json) => WorkEntry(
 
 Map<String, dynamic> _$WorkEntryToJson(WorkEntry instance) => <String, dynamic>{
   'id': instance.id,
+  'uuid': instance.uuid,
   'workDurationInSeconds': instance.workDurationInSeconds,
   'date': instance.date.toIso8601String(),
   'description': instance.description,
   'categories': instance.categories,
   'startTime': instance.startTime?.toIso8601String(),
   'endTime': instance.endTime?.toIso8601String(),
-  'lastEdit': instance.lastEdit?.toIso8601String(),
+  'lastEdit': instance.lastEdit.toIso8601String(),
   'tickedOff': instance.tickedOff,
   'createType': _$CreateWorkEntryTypeEnumMap[instance.createType],
   'wasEdited': instance.wasEdited,

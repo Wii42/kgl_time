@@ -1,6 +1,7 @@
 import 'package:isar_community/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kgl_time/data_model/work_category.dart';
+import 'package:uuid/uuid.dart';
 
 import 'isar_storable.dart';
 
@@ -11,13 +12,14 @@ part 'work_entry.g.dart';
 class WorkEntry implements IsarStorable {
   @override
   Id id = Isar.autoIncrement;
+  final String uuid;
   int workDurationInSeconds;
   DateTime date;
   String? description;
   List<EmbeddedWorkCategory> categories;
   DateTime? startTime;
   DateTime? endTime;
-  DateTime? lastEdit;
+  DateTime lastEdit;
   bool tickedOff;
   @Enumerated(EnumType.ordinal32)
   CreateWorkEntryType? createType;
@@ -25,17 +27,18 @@ class WorkEntry implements IsarStorable {
   DateTime? wasMovedToTrashAt;
 
   WorkEntry(
-      {required this.workDurationInSeconds,
+      {required this.uuid,
+        required this.workDurationInSeconds,
       required this.date,
       this.description,
       this.categories = const [],
       this.startTime,
       this.endTime,
-      this.lastEdit,
+      required this.lastEdit,
       this.tickedOff = false,
       this.createType,
       this.wasEdited = false,
-      this.wasMovedToTrashAt});
+      this.wasMovedToTrashAt,});
 
   @ignore
   Duration get workDuration => Duration(seconds: workDurationInSeconds);
@@ -53,21 +56,20 @@ class WorkEntry implements IsarStorable {
     required DateTime date,
     String? description,
     List<EmbeddedWorkCategory> categories = const [],
-    DateTime? lastEdit,
     bool tickedOff = false,
     CreateWorkEntryType? createType,
-    bool wasEdited = false,
     DateTime? wasMovedToTrashAt,
   }) {
     return WorkEntry(
+      uuid: generateUuid(),
       workDurationInSeconds: duration.inSeconds,
       date: date,
       description: description,
       categories: categories,
-      lastEdit: lastEdit,
+      lastEdit: DateTime.now(),
       tickedOff: tickedOff,
       createType: createType,
-      wasEdited: wasEdited,
+      wasEdited: false,
       wasMovedToTrashAt: wasMovedToTrashAt,
     );
   }
@@ -77,46 +79,70 @@ class WorkEntry implements IsarStorable {
     required DateTime endTime,
     String? description,
     List<EmbeddedWorkCategory> categories = const [],
-    DateTime? lastEdit,
     bool tickedOff = false,
     CreateWorkEntryType? createType,
-    bool wasEdited = false,
     DateTime? wasMovedToTrashAt,
   }) {
     return WorkEntry(
+      uuid: generateUuid(),
       workDurationInSeconds: endTime.difference(startTime).inSeconds,
       date: startTime,
       description: description,
       categories: categories,
       startTime: startTime,
       endTime: endTime,
-      lastEdit: lastEdit,
+      lastEdit: DateTime.now(),
       tickedOff: tickedOff,
       createType: createType,
-      wasEdited: wasEdited,
+      wasEdited: false,
       wasMovedToTrashAt: wasMovedToTrashAt,
     );
   }
 
   WorkEntry withTrashStatus(DateTime? movedToTrashAt, {bool? tickedOff}) {
-    return WorkEntry(
-      workDurationInSeconds: workDurationInSeconds,
-      date: date,
-      description: description,
-      categories: categories,
-      startTime: startTime,
-      endTime: endTime,
-      lastEdit: lastEdit,
+    return copyWith(
       tickedOff: tickedOff ?? this.tickedOff,
-      createType: createType,
-      wasEdited: wasEdited,
       wasMovedToTrashAt: movedToTrashAt,
     );
   }
 
+  WorkEntry copyWith({
+    String? uuid,
+    int? workDurationInSeconds,
+    DateTime? date,
+    String? description,
+    List<EmbeddedWorkCategory>? categories,
+    DateTime? startTime,
+    DateTime? endTime,
+    DateTime? lastEdit,
+    bool? tickedOff,
+    CreateWorkEntryType? createType,
+    bool? wasEdited,
+    DateTime? wasMovedToTrashAt,
+  }) {
+    return WorkEntry(
+      uuid: uuid ?? this.uuid,
+      workDurationInSeconds: workDurationInSeconds ?? this.workDurationInSeconds,
+      date: date ?? this.date,
+      description: description ?? this.description,
+      categories: categories ?? this.categories,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      lastEdit: lastEdit ?? this.lastEdit,
+      tickedOff: tickedOff ?? this.tickedOff,
+      createType: createType ?? this.createType,
+      wasEdited: wasEdited ?? this.wasEdited,
+      wasMovedToTrashAt: wasMovedToTrashAt ?? this.wasMovedToTrashAt,
+    )..id = id;
+  }
+
   @override
   String toString() {
-    return 'WorkEntry{id: $id, workDurationInSeconds: $workDurationInSeconds, date: $date, description: $description, categories: $categories, startTime: $startTime, endTime: $endTime, lastEdit: $lastEdit, tickedOff: $tickedOff, createType: $createType, wasEdited: $wasEdited, wasMovedToTrashAt: $wasMovedToTrashAt, isInTrash: $isInTrash}';
+    return 'WorkEntry{id: $id, uuid: $uuid, workDurationInSeconds: $workDurationInSeconds, date: $date, description: $description, categories: $categories, startTime: $startTime, endTime: $endTime, lastEdit: $lastEdit, tickedOff: $tickedOff, createType: $createType, wasEdited: $wasEdited, wasMovedToTrashAt: $wasMovedToTrashAt, isInTrash: $isInTrash}';
+  }
+
+  static String generateUuid() {
+    return Uuid().v4();
   }
 }
 
