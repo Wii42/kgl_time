@@ -143,10 +143,7 @@ class EditCategoriesWidget extends StatelessWidget {
                       existingCategory,
                       existingCategory..displayName = controller.text,
                     );
-                    WorkEntries workEntries = Provider.of<WorkEntries>(
-                      context,
-                      listen: false,
-                    );
+                    WorkEntries workEntries = context.read<WorkEntries>();
 
                     Iterable<WorkEntry> entriesWithThisCategory = workEntries
                         .entries

@@ -169,8 +169,24 @@ class SchemaMigration1to2 extends SchemaMigration {
         newEntry.lastEdit = entry.startTime ?? entry.endTime ?? entry.date;
       }
       if (hasChanged) {
-        newEntry.lastEdit = DateTime.now().toUtc();
+        newEntry.lastEdit = DateTime.timestamp();
         await storage.workEntries.updateEntry(newEntry, entry);
+      }
+    }
+    List<WorkCategory> categories = await storage.workCategories.loadEntries();
+    for (WorkCategory category in categories) {
+      bool hasChanged = false;
+      if (category.uuid.isEmpty) {
+        hasChanged = true;
+        category.uuid = WorkEntry.generateUuid();
+      }
+      if (category.lastEdit == dateTimeEpoch() || category.lastEdit == null) {
+        hasChanged = true;
+        category.lastEdit = DateTime.timestamp();
+      }
+      if (hasChanged) {
+        category.lastEdit = DateTime.timestamp();
+        await storage.workCategories.updateEntry(category, category);
       }
     }
   }
