@@ -49,3 +49,4 @@ firebase.json
 firebase_options.dart
 
 /android/app/.cxx/
+/signed_builds/
