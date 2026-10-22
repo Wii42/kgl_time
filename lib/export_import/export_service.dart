@@ -46,7 +46,7 @@ class ExportService {
         ],
       ),
     ];
-    return ListToCsvConverter(convertNullTo: '').convert(rows);
+    return csv.encode(rows);
   }
 
   String dataToJson(List<WorkEntry> entries, List<WorkCategory> categories) {
