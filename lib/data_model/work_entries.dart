@@ -57,7 +57,7 @@ class WorkEntries extends ChangeNotifier {
     _storedEntries.deleteEntry(entry);
   }
 
-  void _removeEntriesInTrashPermanentlyAfter(Duration duration) {
+  void removeEntriesInTrashPermanentlyAfter(Duration duration) {
     DateTime cutoffDate = DateTime.now().subtract(duration);
     _removeEntriesInTrashPermanentlyOlderThan(cutoffDate);
   }
