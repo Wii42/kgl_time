@@ -108,6 +108,12 @@ class _KglTimeAppState extends State<KglTimeApp> {
     );
   }
 
+  @override
+  void dispose() {
+    router.dispose();
+    super.dispose();
+  }
+
   ThemeData theme({required Brightness brightness}) {
     ThemeData theme = ThemeData(
       colorScheme: ColorScheme.fromSeed(
