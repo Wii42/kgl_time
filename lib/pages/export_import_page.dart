@@ -17,7 +17,7 @@ class ExportImportPage extends KglPage {
 
   @override
   String? pageTitle(AppLocalizations? loc) =>
-      loc?.exportImportEntries ?? "<Export / Import Data>";
+      loc?.exportEntries ?? "<Export / Import Data>";
 
   @override
   bool get showSettingsButton => false;

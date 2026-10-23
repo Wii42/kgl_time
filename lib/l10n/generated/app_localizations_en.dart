@@ -215,4 +215,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get exportCsvExplanation =>
       'Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.';
+
+  @override
+  String get exportEntries => 'Export Entries';
 }

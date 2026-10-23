@@ -66,5 +66,6 @@
   "fileSharedSuccessfully": "Datei erfolgreich geteilt",
   "failedToShareFile": "Teilen der Datei fehlgeschlagen",
   "exportTable": "Einträge als Tabelle exportieren",
-  "exportCsvExplanation": "Exportiert alle Einträge als CSV-Tabelle. Diese Datei kann in Tabellenkalkulationsprogrammen wie Excel oder Google Sheets geöffnet werden."
+  "exportCsvExplanation": "Exportiert alle Einträge als CSV-Tabelle. Diese Datei kann in Tabellenkalkulationsprogrammen wie Excel oder Google Sheets geöffnet werden.",
+  "exportEntries": "Einträge exportieren"
 }

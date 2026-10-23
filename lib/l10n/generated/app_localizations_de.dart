@@ -216,6 +216,9 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get exportCsvExplanation =>
       'Exportiert alle Einträge als CSV-Tabelle. Diese Datei kann in Tabellenkalkulationsprogrammen wie Excel oder Google Sheets geöffnet werden.';
+
+  @override
+  String get exportEntries => 'Einträge exportieren';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).

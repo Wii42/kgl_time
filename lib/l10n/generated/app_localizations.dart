@@ -501,6 +501,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.'**
   String get exportCsvExplanation;
+
+  /// No description provided for @exportEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Entries'**
+  String get exportEntries;
 }
 
 class _AppLocalizationsDelegate
