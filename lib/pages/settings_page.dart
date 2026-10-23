@@ -143,7 +143,7 @@ class SettingsPage extends KglPage {
                 'https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#${loc?.privacyPolicyUrlFragment}'),
             context: context),
         Text(''),
-        Text("v$appVersion", style: theme.textTheme.bodySmall),
+        Text("v${appInfo.version}", style: theme.textTheme.bodySmall),
       ],
     );
   }
