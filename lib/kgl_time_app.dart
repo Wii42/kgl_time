@@ -40,10 +40,12 @@ class _KglTimeAppState extends State<KglTimeApp> {
   final GlobalKey<NavigatorState> routerKey =
       GlobalKey(debugLabel: "globalRouter");
 
-  // This widget is the root of your application.
+  late final GoRouter router;
+
   @override
-  Widget build(BuildContext context) {
-    final GoRouter router = GoRouter(
+  void initState() {
+    super.initState();
+    router = GoRouter(
       navigatorKey: routerKey,
       routes: [
         StatefulShellRoute.indexedStack(
@@ -64,6 +66,11 @@ class _KglTimeAppState extends State<KglTimeApp> {
         AppRoute.entriesTrashBin.goRoute(appTitle: widget.appTitle),
       ],
     );
+  }
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<WorkEntries>(
@@ -98,6 +105,12 @@ class _KglTimeAppState extends State<KglTimeApp> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    router.dispose();
+    super.dispose();
   }
 
   ThemeData theme({required Brightness brightness}) {
