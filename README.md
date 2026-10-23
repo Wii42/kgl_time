@@ -44,6 +44,10 @@ The app can, in principle, be built for all platforms that Flutter provides, exc
    ```
    
 ## Changelog
+#### v0.3.2
+- Added CSV export of work entries, with options to save or share the file
+- Exported tables include working time, date, description, start/end times, and categories
+
 #### v0.3.1
 - Added trash bin, allowing users to recover deleted work entries for 30 days
 - Added animations on adding/deleting work entries, to give better visual feedback to the user
