@@ -30,6 +30,7 @@ class ExportImportPage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     return KglPage.alwaysFillingScrollView(
       maxWidth: KglTimeApp.maxPageWidth,
       child: Padding(

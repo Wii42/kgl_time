@@ -130,7 +130,7 @@ void main() {
           workDurationInSeconds: 3600,
           date: DateTime(2026, 10, 23),
           startTime: hasStartTime ? DateTime(2026, 10, 23, 8) : null,
-          endTime: hasStartTime ? null : DateTime(2026, 10, 23, 9),
+          endTime: hasStartTime ? null : DateTime(2026, 10, 23, 9), uuid: '', lastEdit: DateTime.fromMillisecondsSinceEpoch(0),
         );
 
         expect(csv.decode(service.entriesToCsv([entry], english))[1][3], '');
