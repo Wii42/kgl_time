@@ -3,14 +3,16 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/persistent_storage/isar_persistent_storage.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'data_model/work_category.dart';
 import 'kgl_time_app.dart';
 
-const String appVersion = '0.3.2';
+late final PackageInfo appInfo;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  appInfo = await PackageInfo.fromPlatform();
   await PersistentStorageService.initializeImplementation(
       IsarPersistentStorage());
   List<WorkEntry> initialEntries =
