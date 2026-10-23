@@ -9,9 +9,9 @@ import 'package:kgl_time/l10n/generated/app_localizations_de.dart';
 import 'package:kgl_time/l10n/generated/app_localizations_en.dart';
 
 void main() {
-  const service = ExportService();
-  final english = AppLocalizationsEn();
-  final german = AppLocalizationsDe();
+  const ExportService service = ExportService();
+  final AppLocalizationsEn english = AppLocalizationsEn();
+  final AppLocalizationsDe german = AppLocalizationsDe();
 
   setUpAll(() async {
     await initializeDateFormatting('en');
@@ -26,7 +26,7 @@ void main() {
     });
 
     test('exports all columns and preserves entry order', () {
-      final entries = [
+      final List<WorkEntry> entries = [
         WorkEntry.fromStartAndEndTime(
           startTime: DateTime(2026, 10, 23, 8, 5),
           endTime: DateTime(2026, 10, 23, 9, 35),
@@ -57,7 +57,7 @@ void main() {
     });
 
     test('localizes headers and dates in German', () {
-      final entry = WorkEntry.fromDuration(
+      final WorkEntry entry = WorkEntry.fromDuration(
         duration: const Duration(hours: 2),
         date: DateTime(2026, 10, 23),
       );
@@ -69,11 +69,11 @@ void main() {
     });
 
     test('uses fallback headers when localizations are absent', () {
-      final entry = WorkEntry.fromDuration(
+      final WorkEntry entry = WorkEntry.fromDuration(
         duration: Duration.zero,
         date: DateTime(2026, 10, 23),
       );
-      final output = Intl.withLocale(
+      final dynamic output = Intl.withLocale(
         'en',
         () => service.entriesToCsv([entry], null),
       );
@@ -85,16 +85,18 @@ void main() {
     });
 
     test('preserves commas, quotes, line breaks and Unicode in cells', () {
-      const description = 'Gespräch, "Büro"\nNächste Zeile\r\nGrüsse 👋';
-      const category = 'Team, "Süd"\nPlanung';
-      final entry = WorkEntry.fromDuration(
+      const String description = 'Gespräch, "Büro"\nNächste Zeile\r\nGrüsse 👋';
+      const String category = 'Team, "Süd"\nPlanung';
+      final WorkEntry entry = WorkEntry.fromDuration(
         duration: const Duration(minutes: 10),
         date: DateTime(2026, 10, 23),
         description: description,
         categories: [EmbeddedWorkCategory(displayName: category)],
       );
 
-      final rows = csv.decode(service.entriesToCsv([entry], english));
+      final List<List<dynamic>> rows = csv.decode(
+        service.entriesToCsv([entry], english),
+      );
 
       expect(rows, hasLength(2));
       expect(rows[1], ['10 min', 'Fri 23.10.2026', description, '', category]);
@@ -104,7 +106,7 @@ void main() {
       test(
         'exports empty cells for description $description and no categories',
         () {
-          final entry = WorkEntry.fromDuration(
+          final WorkEntry entry = WorkEntry.fromDuration(
             duration: Duration.zero,
             date: DateTime(2026, 10, 23),
             description: description,
@@ -124,7 +126,7 @@ void main() {
     for (final hasStartTime in [true, false]) {
       test('leaves the time range empty when ${hasStartTime ? 'end' : 'start'} '
           'time is missing', () {
-        final entry = WorkEntry(
+        final WorkEntry entry = WorkEntry(
           workDurationInSeconds: 3600,
           date: DateTime(2026, 10, 23),
           startTime: hasStartTime ? DateTime(2026, 10, 23, 8) : null,
