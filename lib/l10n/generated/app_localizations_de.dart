@@ -182,6 +182,40 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get trashBinEmpty => 'Der Papierkorb ist leer';
+
+  @override
+  String get exportImportEntries => 'Einträge exportieren/importieren';
+
+  @override
+  String get share => 'Teilen';
+
+  @override
+  String get saveLocally => 'Lokal speichern';
+
+  @override
+  String get workingTime => 'Arbeitszeit';
+
+  @override
+  String get fromTo => 'Von-Bis';
+
+  @override
+  String get fileSavedSuccessfully => 'Datei erfolgreich gespeichert';
+
+  @override
+  String get failedToSaveFile => 'Speichern der Datei fehlgeschlagen';
+
+  @override
+  String get fileSharedSuccessfully => 'Datei erfolgreich geteilt';
+
+  @override
+  String get failedToShareFile => 'Teilen der Datei fehlgeschlagen';
+
+  @override
+  String get exportTable => 'Einträge als Tabelle exportieren';
+
+  @override
+  String get exportCsvExplanation =>
+      'Exportiert alle Einträge als CSV-Tabelle. Diese Datei kann in Tabellenkalkulationsprogrammen wie Excel oder Google Sheets geöffnet werden.';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).

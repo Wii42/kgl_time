@@ -28,6 +28,9 @@ dependencies:
   collection: any
   http: ^1.6.0
   animated_list_plus: ^0.5.2
+  share_plus: ^13.3.1
+  csv: ^8.0.0
+  flutter_file_dialog: ^3.3.3
 
 dev_dependencies:
   flutter_test:
