@@ -341,28 +341,32 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     required AppLocalizations? localizations,
   }) {
     const int maxSaveValue = 4294967296; // 2^32
+    assert(factor > 0 && otherFactor > 0, 'Factors must be positive integers');
 
     if (value == null || value.isEmpty) {
       return null;
     }
     final int? parsedInt = int.tryParse(value);
-    final int? otherInt = otherValue == null || otherValue.isEmpty ? 0 : int.tryParse(otherValue);
-    if (parsedInt == null || otherInt == null) {
+    int? otherInt = int.tryParse(otherValue ?? '');
+    // Invalid input is reported by the other field's own validator.
+    if (otherInt == null || otherInt < 0) {
+      otherInt = 0;
+    }
+    if (parsedInt == null) {
       return localizations?.inputTooLargeOrNanException ?? '<tooLargeOrNan>';
     }
-    if (parsedInt < 0 || otherInt < 0) {
+    if (parsedInt < 0) {
       return localizations?.inputInvalidException ?? '<invalidInput>';
     }
-    // Bound the parsed values before performing arithmetic on them.
-    if (parsedInt > maxSaveValue || otherInt > maxSaveValue) {
-      return localizations?.inputTooLargeOrNanException ?? '<tooLarge>';
+    // Bound the parsed values before performing arithmetic on them..
+    if (parsedInt > (maxSaveValue ~/ factor)) {
+      return localizations?.inputTooLargeException ?? '<tooLarge>';
     }
-    // Check each conversion before multiplying, including on web.
-    if (parsedInt > maxSaveValue ~/ factor || otherInt > maxSaveValue ~/ otherFactor) {
-      return localizations?.inputTooLargeOrNanException ?? '<tooLarge>';
+    if (otherInt > (maxSaveValue ~/ otherFactor)) {
+      return localizations?.inputSumTooLargeException ?? '<sumTooLarge>';
     }
     // Each product is now bounded; check the combined limit without adding.
-    if (parsedInt * factor > maxSaveValue - otherInt * otherFactor) {
+    if ((parsedInt * factor) > (maxSaveValue - otherInt * otherFactor)) {
       return localizations?.inputSumTooLargeException ?? '<sumTooLarge>';
     }
 
