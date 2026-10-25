@@ -5,6 +5,9 @@
 # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
 # invoked from the command line by running `flutter analyze`.
 
+plugins:
+  many_lints: ^1.2.0
+
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
 analyzer:
@@ -35,3 +38,11 @@ linter:
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
+
+many_lints:
+  preset: core
+  rules:
+    missing_provider_scope: false
+
+formatter:
+  page_width: 100
