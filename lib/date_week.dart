@@ -2,14 +2,16 @@ class DateWeek {
   final DateTime start;
   final DateTime end;
 
-  static const Duration weekDuration = Duration(days: 7);
-
   DateWeek(this.start, this.end);
 
   factory DateWeek.from(DateTime dateTime) {
-    DateTime date = DateTime(dateTime.year, dateTime.month, dateTime.day);
-    DateTime startOfWeek = date.subtract(Duration(days: date.weekday - 1));
-    DateTime endOfWeek = startOfWeek.add(weekDuration);
+    // Calendar dates keep boundaries at midnight across daylight-saving changes.
+    DateTime startOfWeek = DateTime(
+      dateTime.year,
+      dateTime.month,
+      dateTime.day - (dateTime.weekday - DateTime.monday),
+    );
+    DateTime endOfWeek = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day + 7);
     return DateWeek(startOfWeek, endOfWeek);
   }
 
@@ -22,10 +24,10 @@ class DateWeek {
   }
 
   DateWeek next() {
-    return DateWeek(end, end.add(weekDuration));
+    return DateWeek(end, DateTime(end.year, end.month, end.day + 7));
   }
 
   DateWeek previous() {
-    return DateWeek(start.subtract(Duration(days: 7)), start);
+    return DateWeek(DateTime(start.year, start.month, start.day - 7), start);
   }
 }
