@@ -505,6 +505,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Export Entries'**
   String get exportEntries;
+
+  /// No description provided for @withoutCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Without Category'**
+  String get withoutCategory;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
