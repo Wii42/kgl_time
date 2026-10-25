@@ -229,4 +229,183 @@ void main() {
     await toggle(tester, 'Category A');
     expectVisible(tester, {1, 3});
   });
+
+  for (final (int from, int to) in [(0, 2), (1, 0)]) {
+    testWidgets(
+      'reordering categories from $from to $to preserves selections',
+      (WidgetTester tester) async {
+        await launch(tester);
+        await toggle(tester, 'Category A');
+
+        categories.reorder(from, to);
+        await tester.pumpAndSettle();
+
+        final List<ChoiceChip> chips = tester
+            .widgetList<ChoiceChip>(find.byType(ChoiceChip))
+            .toList();
+        expect(chips.map((ChoiceChip chip) => (chip.label as Text).data), [
+          'Category B',
+          'Category A',
+        ]);
+        expect(
+          tester.getTopLeft(chip('Category B')).dx,
+          lessThan(tester.getTopLeft(chip('Category A')).dx),
+        );
+        expectSelected(tester, 'Category A', false);
+        expectSelected(tester, 'Category B', true);
+        expectVisible(tester, {2, 3});
+
+        // The reordered chips must still change the selection for the right ID.
+        await toggle(tester, 'Category A');
+        expectVisible(tester, {1, 2, 3});
+        await toggle(tester, 'Category B');
+        expectSelected(tester, 'Category A', true);
+        expectSelected(tester, 'Category B', false);
+        expectVisible(tester, {1, 3});
+      },
+    );
+  }
+
+  testWidgets(
+    'editing entry categories removes and restores the matching row',
+    (WidgetTester tester) async {
+      await launch(tester);
+      await toggle(tester, 'Category B');
+      final WorkEntry original = entries.entries.singleWhere(
+        (WorkEntry entry) => entry.id == 1,
+      );
+      final WorkEntry reassigned = WorkEntry.fromDuration(
+        duration: original.workDuration,
+        date: original.date,
+        description: 'Reassigned to B',
+        categories: [categoryB.toEmbedded()],
+      )..id = original.id;
+
+      entries.updateEntry(original, reassigned);
+      await tester.pumpAndSettle();
+      expectSelected(tester, 'Category A', true);
+      expectSelected(tester, 'Category B', false);
+      expectVisible(tester, {3});
+      expect(find.text('Description: Only A'), findsNothing);
+
+      entries.updateEntry(reassigned, original);
+      await tester.pumpAndSettle();
+      expectVisible(tester, {1, 3});
+      expect(find.text('Description: Reassigned to B'), findsNothing);
+      expectSelected(tester, 'Category A', true);
+      expectSelected(tester, 'Category B', false);
+    },
+  );
+
+  testWidgets(
+    'new entries follow the active filter without resetting selections',
+    (WidgetTester tester) async {
+      await launch(tester);
+      await toggle(tester, 'Category B');
+
+      entries.add(
+        WorkEntry.fromDuration(
+          duration: const Duration(minutes: 5),
+          date: DateTime(2026, 10, 24),
+          description: 'New B',
+          categories: [categoryB.toEmbedded()],
+        )..id = 5,
+      );
+      await tester.pumpAndSettle();
+      expectVisible(tester, {1, 3});
+
+      entries.add(
+        WorkEntry.fromDuration(
+          duration: const Duration(minutes: 5),
+          date: DateTime(2026, 10, 25),
+          description: 'New A',
+          categories: [categoryA.toEmbedded()],
+        )..id = 6,
+      );
+      await tester.pumpAndSettle();
+      expectVisible(tester, {1, 3, 6});
+
+      entries.add(
+        WorkEntry.fromDuration(
+          duration: const Duration(minutes: 5),
+          date: DateTime(2026, 10, 26),
+          description: 'New uncategorized',
+        )..id = 7,
+      );
+      await tester.pumpAndSettle();
+      expectVisible(tester, {1, 3, 6});
+      expectSelected(tester, 'Category A', true);
+      expectSelected(tester, 'Category B', false);
+    },
+  );
+
+  testWidgets(
+    'trashing and restoring entries updates the list and empty state',
+    (WidgetTester tester) async {
+      await launch(tester);
+      await toggle(tester, 'Category B');
+      final WorkEntry onlyA = entries.entries.singleWhere(
+        (WorkEntry entry) => entry.id == 1,
+      );
+      final WorkEntry both = entries.entries.singleWhere(
+        (WorkEntry entry) => entry.id == 3,
+      );
+
+      entries.moveToTrashBin(onlyA);
+      await tester.pumpAndSettle();
+      expectVisible(tester, {3});
+      expect(find.text('Description: Only A'), findsNothing);
+
+      entries.moveToTrashBin(both);
+      await tester.pumpAndSettle();
+      expectVisible(tester, {});
+      expectSelected(tester, 'Category A', true);
+      expectSelected(tester, 'Category B', false);
+
+      entries.restoreFromTrashBin(
+        entries.entriesInTrash.singleWhere(
+          (WorkEntry entry) => entry.id == onlyA.id,
+        ),
+      );
+      await tester.pumpAndSettle();
+      expectVisible(tester, {1});
+      expectSelected(tester, 'Category A', true);
+      expectSelected(tester, 'Category B', false);
+    },
+  );
+
+  testWidgets(
+    'editing an entry date updates row order while keeping the filter',
+    (WidgetTester tester) async {
+      await launch(tester);
+      await toggle(tester, 'Category B');
+      final WorkEntry original = entries.entries.singleWhere(
+        (WorkEntry entry) => entry.id == 3,
+      );
+      entries.updateEntry(
+        original,
+        WorkEntry.fromDuration(
+          duration: original.workDuration,
+          date: DateTime(2026, 10, 24),
+          description: original.description,
+          categories: original.categories,
+        )..id = original.id,
+      );
+      await tester.pumpAndSettle();
+
+      expectVisible(tester, {1, 3});
+      expect(
+        tester
+            .widgetList<WorkEntryDetails>(find.byType(WorkEntryDetails))
+            .map((WorkEntryDetails row) => row.workEntry.id),
+        [3, 1],
+      );
+      expect(
+        tester.getTopLeft(find.byKey(const ValueKey<int>(3))).dy,
+        lessThan(tester.getTopLeft(find.byKey(const ValueKey<int>(1))).dy),
+      );
+      expectSelected(tester, 'Category A', true);
+      expectSelected(tester, 'Category B', false);
+    },
+  );
 }
