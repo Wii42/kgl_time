@@ -12,7 +12,9 @@ class OriginalTextTheme extends ThemeExtension<OriginalTextTheme> {
 
   @override
   ThemeExtension<OriginalTextTheme> lerp(
-      covariant ThemeExtension<OriginalTextTheme>? other, double t) {
+    covariant ThemeExtension<OriginalTextTheme>? other,
+    double t,
+  ) {
     if (other is! OriginalTextTheme) {
       return this;
     }

@@ -22,9 +22,11 @@ class IsarPersistentStorage implements PersistentStorage {
   @override
   Future<void> initialize() async {
     dir = await getApplicationDocumentsDirectory();
-    isar = await Isar.open(
-        [WorkEntrySchema, WorkCategorySchema, KeyValueSchema],
-        directory: dir.path);
+    isar = await Isar.open([
+      WorkEntrySchema,
+      WorkCategorySchema,
+      KeyValueSchema,
+    ], directory: dir.path);
     workEntries = IsarTable<WorkEntry>(isar, isar.workEntries);
     workCategories = IsarTable<WorkCategory>(isar, isar.workCategories);
     keyValueStorage = IsarKeyValue(isar);

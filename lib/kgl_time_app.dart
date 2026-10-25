@@ -25,20 +25,20 @@ class KglTimeApp extends StatefulWidget {
   final List<WorkCategory> initialCategories;
   final Map<String, dynamic> initialKeyValueStorage;
 
-  const KglTimeApp(
-      {super.key,
-      required this.appTitle,
-      this.initialEntries = const [],
-      this.initialCategories = const [],
-      this.initialKeyValueStorage = const {}});
+  const KglTimeApp({
+    super.key,
+    required this.appTitle,
+    this.initialEntries = const [],
+    this.initialCategories = const [],
+    this.initialKeyValueStorage = const {},
+  });
 
   @override
   State<KglTimeApp> createState() => _KglTimeAppState();
 }
 
 class _KglTimeAppState extends State<KglTimeApp> {
-  final GlobalKey<NavigatorState> routerKey =
-      GlobalKey(debugLabel: "globalRouter");
+  final GlobalKey<NavigatorState> routerKey = GlobalKey(debugLabel: "globalRouter");
 
   late final GoRouter router;
 
@@ -54,10 +54,8 @@ class _KglTimeAppState extends State<KglTimeApp> {
           },
           branches: [
             NavBarAppRoute.home.statefulShellBranch(appTitle: widget.appTitle),
-            NavBarAppRoute.allEntries
-                .statefulShellBranch(appTitle: widget.appTitle),
-            NavBarAppRoute.categories
-                .statefulShellBranch(appTitle: widget.appTitle),
+            NavBarAppRoute.allEntries.statefulShellBranch(appTitle: widget.appTitle),
+            NavBarAppRoute.categories.statefulShellBranch(appTitle: widget.appTitle),
           ],
         ),
         AppRoute.settings.goRoute(appTitle: widget.appTitle),
@@ -87,9 +85,8 @@ class _KglTimeAppState extends State<KglTimeApp> {
       builder: (context, _) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: widget.appTitle,
-        themeMode: parseThemeMode(
-                context.watch<KeyValues>().get<String>('themeMode')) ??
-            ThemeMode.system,
+        themeMode:
+            parseThemeMode(context.watch<KeyValues>().get<String>('themeMode')) ?? ThemeMode.system,
         theme: theme(brightness: Brightness.light),
         darkTheme: theme(brightness: Brightness.dark),
         routerConfig: router,
@@ -115,20 +112,26 @@ class _KglTimeAppState extends State<KglTimeApp> {
   }
 
   ThemeData theme({required Brightness brightness}) {
-    ThemeData theme = ThemeData(
-      colorScheme: ColorScheme.fromSeed(
-          seedColor: KglTimeApp.primaryColor, brightness: brightness),
-      useMaterial3: true,
-      brightness: brightness,
-      filledButtonTheme: FilledButtonThemeData(
-          style: FilledButton.styleFrom(
+    ThemeData theme =
+        ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: KglTimeApp.primaryColor,
+            brightness: brightness,
+          ),
+          useMaterial3: true,
+          brightness: brightness,
+          filledButtonTheme: FilledButtonThemeData(
+            style: FilledButton.styleFrom(
               backgroundColor: KglTimeApp.primaryColor,
-              foregroundColor: Colors.white)),
-    ).copyWith(
-      appBarTheme: AppBarTheme(
-          backgroundColor: KglTimeApp.appBarColor,
-          foregroundColor: Colors.white),
-    );
+              foregroundColor: Colors.white,
+            ),
+          ),
+        ).copyWith(
+          appBarTheme: AppBarTheme(
+            backgroundColor: KglTimeApp.appBarColor,
+            foregroundColor: Colors.white,
+          ),
+        );
     return theme;
   }
 }

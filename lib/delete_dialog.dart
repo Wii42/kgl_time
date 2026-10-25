@@ -4,11 +4,11 @@ import 'package:kgl_time/original_text_theme.dart';
 
 /// Shows a dialog to confirm the deletion of an entry.
 /// [onDelete] is called when the user confirms the deletion.
-void showDeleteConfirmationDialog(
-    {required BuildContext context,
-    required void Function()? onDelete,
-    String? Function(AppLocalizations? loc) detailText =
-        defaultConfirmDeleteText}) {
+void showDeleteConfirmationDialog({
+  required BuildContext context,
+  required void Function()? onDelete,
+  String? Function(AppLocalizations? loc) detailText = defaultConfirmDeleteText,
+}) {
   AppLocalizations? loc = AppLocalizations.of(context);
   ThemeData theme = Theme.of(context);
   showDialog(
@@ -16,8 +16,8 @@ void showDeleteConfirmationDialog(
     builder: (BuildContext context) {
       return Theme(
         data: theme.copyWith(
-            textTheme: theme.extension<OriginalTextTheme>()?.textTheme ??
-                theme.textTheme),
+          textTheme: theme.extension<OriginalTextTheme>()?.textTheme ?? theme.textTheme,
+        ),
         child: AlertDialog(
           title: Text(loc?.confirmDelete ?? '<confirmDelete>'),
           content: Text(detailText(loc) ?? '<explanationText>'),
@@ -35,9 +35,7 @@ void showDeleteConfirmationDialog(
               },
               child: Text(
                 loc?.delete ?? '<delete>',
-                style: TextStyle(
-                    color:
-                        theme.colorScheme.error), // Highlight the Delete button
+                style: TextStyle(color: theme.colorScheme.error), // Highlight the Delete button
               ),
             ),
           ],
@@ -47,5 +45,4 @@ void showDeleteConfirmationDialog(
   );
 }
 
-String? defaultConfirmDeleteText(AppLocalizations? loc) =>
-    loc?.confirmDeleteDialog;
+String? defaultConfirmDeleteText(AppLocalizations? loc) => loc?.confirmDeleteDialog;

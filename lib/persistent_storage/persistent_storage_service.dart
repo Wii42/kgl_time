@@ -7,8 +7,7 @@ import 'persistent_storage_interface.dart';
 ///
 /// Allows to access the persistent storage globally.
 class PersistentStorageService implements PersistentStorage {
-  static PersistentStorageService instance =
-      PersistentStorageService._internal();
+  static PersistentStorageService instance = PersistentStorageService._internal();
 
   PersistentStorageService._internal();
 
@@ -16,8 +15,7 @@ class PersistentStorageService implements PersistentStorage {
     instance._implementation = implementation;
   }
 
-  static Future<void> initializeImplementation(
-      PersistentStorage implementation) {
+  static Future<void> initializeImplementation(PersistentStorage implementation) {
     setImplementation(implementation);
     return instance.initialize();
   }
@@ -38,8 +36,7 @@ class PersistentStorageService implements PersistentStorage {
 
   void _checkHasImplementation() {
     if (_implementation == null) {
-      throw StateError(
-          'No PersistentStorage implementation provided for PersistentStorageService');
+      throw StateError('No PersistentStorage implementation provided for PersistentStorageService');
     }
   }
 

@@ -3,8 +3,7 @@ import 'package:kgl_time/persistent_storage/persistent_storage_interface.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 
 class KeyValues extends ChangeNotifier {
-  final KeyValueStorage storedEntries =
-      PersistentStorageService.instance.keyValueStorage;
+  final KeyValueStorage storedEntries = PersistentStorageService.instance.keyValueStorage;
   late final Map<String, dynamic> _entries;
 
   KeyValues(Map<String, dynamic> entries) {

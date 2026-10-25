@@ -38,8 +38,7 @@ void main() {
     expect(groups, hasLength(3));
     expect(
       {
-        for (final g in groups)
-          (g.year, g.calendarUnitValue): g.totalWorkDuration().inMinutes,
+        for (final g in groups) (g.year, g.calendarUnitValue): g.totalWorkDuration().inMinutes,
       },
       {(2025, 1): 30, (2026, 1): 105, (2026, 2): 15},
     );
@@ -63,8 +62,7 @@ void main() {
     ], CalendarUnit.week);
     expect(
       {
-        for (final g in groups)
-          (g.year, g.calendarUnitValue): g.totalWorkDuration().inMinutes,
+        for (final g in groups) (g.year, g.calendarUnitValue): g.totalWorkDuration().inMinutes,
       },
       {(2020, 53): 75, (2021, 1): 60},
     );
@@ -78,8 +76,7 @@ void main() {
     ], CalendarUnit.week);
     expect(
       {
-        for (final g in groups)
-          (g.year, g.calendarUnitValue): g.totalWorkDuration().inMinutes,
+        for (final g in groups) (g.year, g.calendarUnitValue): g.totalWorkDuration().inMinutes,
       },
       {(2024, 1): 10, (2025, 1): 50},
     );

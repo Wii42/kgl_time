@@ -1,5 +1,6 @@
 import 'package:csv/csv.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -7,7 +8,6 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/export_import/export_service.dart';
 import 'package:kgl_time/l10n/generated/app_localizations_en.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 import '../support/memory_storage.dart';
 

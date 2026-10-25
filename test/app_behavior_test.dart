@@ -41,8 +41,7 @@ void main() {
   }
 
   GoRouter router(WidgetTester tester) =>
-      tester.widget<MaterialApp>(find.byType(MaterialApp)).routerConfig!
-          as GoRouter;
+      tester.widget<MaterialApp>(find.byType(MaterialApp)).routerConfig! as GoRouter;
 
   Future<AppLocalizations> openForm(WidgetTester tester) async {
     await launch(tester);
@@ -52,9 +51,7 @@ void main() {
   }
 
   void fillDuration(WidgetTester tester, String hours, String minutes) {
-    final fields = tester
-        .widgetList<TextFormField>(find.byType(TextFormField))
-        .toList();
+    final fields = tester.widgetList<TextFormField>(find.byType(TextFormField)).toList();
     // Set controllers directly so validator tests can also exercise values
     // normally blocked by the digits-only keyboard formatter.
     fields[0].controller!.text = hours;
@@ -137,10 +134,7 @@ void main() {
     expect(router(tester), same(originalRouter));
     expect(find.byType(NewEntryPage), findsOneWidget);
     expect(
-      tester
-          .widget<TextFormField>(find.byType(TextFormField).at(2))
-          .controller!
-          .text,
+      tester.widget<TextFormField>(find.byType(TextFormField).at(2)).controller!.text,
       'Unsaved draft',
     );
     expect(await storage.workEntries.loadEntries(), isEmpty);
