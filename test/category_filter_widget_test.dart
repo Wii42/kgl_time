@@ -25,8 +25,8 @@ void main() {
   setUp(() {
     storage = MemoryStorage();
     PersistentStorageService.setImplementation(storage);
-    categoryA = WorkCategory('Category A', listIndex: 0)..id = 1;
-    categoryB = WorkCategory('Category B', listIndex: 1)..id = 2;
+    categoryA = WorkCategory('Category A', listIndex: 0, uuid: '1', lastEdit: null)..id = 1;
+    categoryB = WorkCategory('Category B', listIndex: 1, uuid: '2', lastEdit: null)..id = 2;
     categories = WorkCategories([categoryA, categoryB]);
     entries = WorkEntries([
       WorkEntry.fromDuration(
@@ -173,7 +173,7 @@ void main() {
     (WidgetTester tester) async {
       await launch(tester);
       await toggle(tester, 'Category A');
-      final WorkCategory categoryC = WorkCategory('Category C', listIndex: 2)..id = 3;
+      final WorkCategory categoryC = WorkCategory('Category C', listIndex: 2, uuid: '3', lastEdit: null)..id = 3;
       entries.add(
         WorkEntry.fromDuration(
           duration: const Duration(minutes: 15),
@@ -201,7 +201,7 @@ void main() {
     await toggle(tester, 'Category A');
     categories.updateEntry(
       categoryA,
-      WorkCategory('Renamed A', listIndex: 0)..id = categoryA.id,
+      WorkCategory('Renamed A', listIndex: 0, uuid: '', lastEdit: null)..id = categoryA.id,
     );
     await tester.pumpAndSettle();
 

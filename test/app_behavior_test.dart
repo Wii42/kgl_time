@@ -161,7 +161,7 @@ void main() {
     tester,
   ) async {
     final start = DateTime.now().subtract(const Duration(minutes: 95));
-    final category = WorkCategory('Office', listIndex: 0)..id = 7;
+    final category = WorkCategory('Office', listIndex: 0, uuid: '', lastEdit: null)..id = 7;
     await storage.keyValueStorage.set('timeTrackerStart', start);
     await storage.keyValueStorage.set(SelectCategoryDialog.storageKey, '7');
     final savedSettings = await storage.keyValueStorage.getAll<dynamic>();
