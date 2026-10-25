@@ -56,8 +56,8 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
         return Consumer<WorkEntries>(
           builder: (context, workEntries, _) {
             Iterable<int> selectedCategoryIds = [
-              for (var e in idMapSelectedCategories.entries)
-                if (e.value) e.key,
+              for (var e in _selectedCategories.entries)
+                if (e.value) e.key.id,
             ];
             List<WorkEntry> filteredEntries = workEntries.entries
                 .where(
@@ -98,12 +98,8 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
   void _updateCategoriesOnChanged() {
     const IterableEquality<WorkCategory> equality = IterableEquality();
     if (!equality.equals(widget.categories.entries, _selectedCategories.keys)) {
-      Map<int, bool> idMap = idMapSelectedCategories;
+      Map<int, bool> idMap = {for (final e in _selectedCategories.entries) e.key.id: e.value};
       _selectedCategories = {for (var e in widget.categories.entries) e: idMap[e.id] ?? true};
     }
-  }
-
-  Map<int, bool> get idMapSelectedCategories {
-    return {for (var e in _selectedCategories.entries) e.key.id: e.value};
   }
 }
