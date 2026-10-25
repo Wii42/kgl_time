@@ -122,30 +122,32 @@ void main() {
       find.text('No matching entries found'),
       expectedIds.isEmpty ? findsOneWidget : findsNothing,
     );
-    // An uncategorized entry never matches the selected-category filter,
-    // including when every category or no category is selected.
-    expect(find.text('Description: Neither A nor B'), findsNothing);
   }
 
-  for (final (bool a, bool b, Set<int> visible) in [
-    (true, true, {1, 2, 3}),
-    (true, false, {1, 3}),
-    (false, true, {2, 3}),
-    (false, false, <int>{}),
-  ]) {
-    testWidgets('selected A=$a, B=$b updates chips and matching rows', (
-      WidgetTester tester,
-    ) async {
-      await launch(tester);
-      expectSelected(tester, 'Category A', true);
-      expectSelected(tester, 'Category B', true);
-      expectVisible(tester, {1, 2, 3});
-      if (!a) await toggle(tester, 'Category A');
-      if (!b) await toggle(tester, 'Category B');
-      expectSelected(tester, 'Category A', a);
-      expectSelected(tester, 'Category B', b);
-      expectVisible(tester, visible);
-    });
+  for (final withoutCategory in [true, false]) {
+    for (final (bool a, bool b, Set<int> visible) in [
+      (true, true, {1, 2, 3}),
+      (true, false, {1, 3}),
+      (false, true, {2, 3}),
+      (false, false, <int>{}),
+    ]) {
+      testWidgets('selected A=$a, B=$b, without category=$withoutCategory updates matching rows', (
+        WidgetTester tester,
+      ) async {
+        await launch(tester);
+        expectSelected(tester, 'Category A', true);
+        expectSelected(tester, 'Category B', true);
+        expectSelected(tester, 'Without Category', true);
+        expectVisible(tester, {1, 2, 3, 4});
+        if (!a) await toggle(tester, 'Category A');
+        if (!b) await toggle(tester, 'Category B');
+        if (!withoutCategory) await toggle(tester, 'Without Category');
+        expectSelected(tester, 'Category A', a);
+        expectSelected(tester, 'Category B', b);
+        expectSelected(tester, 'Without Category', withoutCategory);
+        expectVisible(tester, {...visible, if (withoutCategory) 4});
+      });
+    }
   }
 
   testWidgets(
@@ -154,17 +156,17 @@ void main() {
       await launch(tester);
       await toggle(tester, 'Category A');
       await toggle(tester, 'Category B');
-      expectVisible(tester, {});
+      expectVisible(tester, {4});
 
       await toggle(tester, 'Category A');
       expectSelected(tester, 'Category A', true);
       expectSelected(tester, 'Category B', false);
-      expectVisible(tester, {1, 3});
+      expectVisible(tester, {1, 3, 4});
 
       await toggle(tester, 'Category B');
       expectSelected(tester, 'Category A', true);
       expectSelected(tester, 'Category B', true);
-      expectVisible(tester, {1, 2, 3});
+      expectVisible(tester, {1, 2, 3, 4});
     },
   );
 
@@ -188,9 +190,9 @@ void main() {
       expectSelected(tester, 'Category A', false);
       expectSelected(tester, 'Category B', true);
       expectSelected(tester, 'Category C', true);
-      expectVisible(tester, {2, 3, 5});
+      expectVisible(tester, {2, 3, 4, 5});
       await toggle(tester, 'Category C');
-      expectVisible(tester, {2, 3});
+      expectVisible(tester, {2, 3, 4});
     },
   );
 
@@ -209,9 +211,9 @@ void main() {
     expect(chip('Category A'), findsNothing);
     expectSelected(tester, 'Renamed A', false);
     expectSelected(tester, 'Category B', true);
-    expectVisible(tester, {2, 3});
+    expectVisible(tester, {2, 3, 4});
     await toggle(tester, 'Renamed A');
-    expectVisible(tester, {1, 2, 3});
+    expectVisible(tester, {1, 2, 3, 4});
   });
 
   testWidgets('removing a selected category preserves other deselections', (
@@ -224,9 +226,9 @@ void main() {
 
     expect(chip('Category B'), findsNothing);
     expectSelected(tester, 'Category A', false);
-    expectVisible(tester, {});
+    expectVisible(tester, {4});
     await toggle(tester, 'Category A');
-    expectVisible(tester, {1, 3});
+    expectVisible(tester, {1, 3, 4});
   });
 
   for (final (int from, int to) in [(0, 1), (1, 0)]) {
@@ -245,6 +247,7 @@ void main() {
         expect(chips.map((ChoiceChip chip) => (chip.label as Text).data), [
           'Category B',
           'Category A',
+          'Without Category',
         ]);
         expect(
           tester.getTopLeft(chip('Category B')).dx,
@@ -252,15 +255,15 @@ void main() {
         );
         expectSelected(tester, 'Category A', false);
         expectSelected(tester, 'Category B', true);
-        expectVisible(tester, {2, 3});
+        expectVisible(tester, {2, 3, 4});
 
         // The reordered chips must still change the selection for the right ID.
         await toggle(tester, 'Category A');
-        expectVisible(tester, {1, 2, 3});
+        expectVisible(tester, {1, 2, 3, 4});
         await toggle(tester, 'Category B');
         expectSelected(tester, 'Category A', true);
         expectSelected(tester, 'Category B', false);
-        expectVisible(tester, {1, 3});
+        expectVisible(tester, {1, 3, 4});
       },
     );
   }
@@ -284,12 +287,12 @@ void main() {
       await tester.pumpAndSettle();
       expectSelected(tester, 'Category A', true);
       expectSelected(tester, 'Category B', false);
-      expectVisible(tester, {3});
+      expectVisible(tester, {3, 4});
       expect(find.text('Description: Only A'), findsNothing);
 
       entries.updateEntry(reassigned, original);
       await tester.pumpAndSettle();
-      expectVisible(tester, {1, 3});
+      expectVisible(tester, {1, 3, 4});
       expect(find.text('Description: Reassigned to B'), findsNothing);
       expectSelected(tester, 'Category A', true);
       expectSelected(tester, 'Category B', false);
@@ -311,7 +314,7 @@ void main() {
         )..id = 5,
       );
       await tester.pumpAndSettle();
-      expectVisible(tester, {1, 3});
+      expectVisible(tester, {1, 3, 4});
 
       entries.add(
         WorkEntry.fromDuration(
@@ -322,7 +325,7 @@ void main() {
         )..id = 6,
       );
       await tester.pumpAndSettle();
-      expectVisible(tester, {1, 3, 6});
+      expectVisible(tester, {1, 3, 4, 6});
 
       entries.add(
         WorkEntry.fromDuration(
@@ -332,16 +335,153 @@ void main() {
         )..id = 7,
       );
       await tester.pumpAndSettle();
-      expectVisible(tester, {1, 3, 6});
+      expectVisible(tester, {1, 3, 4, 6, 7});
       expectSelected(tester, 'Category A', true);
       expectSelected(tester, 'Category B', false);
     },
   );
 
+  testWidgets('without-category chip toggles repeatedly without changing category selections', (
+    tester,
+  ) async {
+    await launch(tester);
+    await toggle(tester, 'Category A');
+    expectVisible(tester, {2, 3, 4});
+
+    await toggle(tester, 'Without Category');
+    expectVisible(tester, {2, 3});
+    expectSelected(tester, 'Without Category', false);
+    expectSelected(tester, 'Category A', false);
+    expectSelected(tester, 'Category B', true);
+
+    await toggle(tester, 'Without Category');
+    expectVisible(tester, {2, 3, 4});
+    expectSelected(tester, 'Without Category', true);
+    expectSelected(tester, 'Category A', false);
+    expectSelected(tester, 'Category B', true);
+  });
+
+  testWidgets('without-category chip works when no categories remain', (tester) async {
+    categories.remove(categoryA);
+    categories.remove(categoryB);
+    await launch(tester);
+
+    expect(find.byType(ChoiceChip), findsOneWidget);
+    expectSelected(tester, 'Without Category', true);
+    // References to deleted categories are not empty category lists.
+    expectVisible(tester, {4});
+    await toggle(tester, 'Without Category');
+    expectVisible(tester, {});
+    await toggle(tester, 'Without Category');
+    expectVisible(tester, {4});
+  });
+
+  testWidgets('new uncategorized entries follow the current without-category selection', (
+    tester,
+  ) async {
+    await launch(tester);
+    await toggle(tester, 'Category A');
+    await toggle(tester, 'Category B');
+    await toggle(tester, 'Without Category');
+    entries.add(
+      WorkEntry.fromDuration(
+        duration: const Duration(minutes: 5),
+        date: DateTime(2026, 10, 24),
+        description: 'Added without category',
+      )..id = 5,
+    );
+    await tester.pumpAndSettle();
+    expectSelected(tester, 'Without Category', false);
+    expectVisible(tester, {});
+
+    await toggle(tester, 'Without Category');
+    expectVisible(tester, {4, 5});
+    await toggle(tester, 'Without Category');
+    expectVisible(tester, {});
+  });
+
+  testWidgets('category changes preserve the disabled without-category chip', (tester) async {
+    await launch(tester);
+    await toggle(tester, 'Category A');
+    await toggle(tester, 'Without Category');
+
+    Future<void> check() async {
+      await tester.pumpAndSettle();
+      expectSelected(tester, 'Without Category', false);
+      expectVisible(tester, {2, 3});
+    }
+
+    categories.reorder(0, 1);
+    await check();
+    final renamed = WorkCategory('Renamed A', listIndex: 1)..id = categoryA.id;
+    categories.updateEntry(categoryA, renamed);
+    await check();
+    final categoryC = WorkCategory('Category C', listIndex: 2)..id = 3;
+    categories.add(categoryC);
+    await check();
+    expectSelected(tester, 'Category C', true);
+    expectSelected(tester, 'Renamed A', false);
+    categories.remove(categoryC);
+    await check();
+
+    await toggle(tester, 'Without Category');
+    expectVisible(tester, {2, 3, 4});
+  });
+
+  for (final withoutCategory in [true, false]) {
+    testWidgets('editing to and from uncategorized respects chip selection=$withoutCategory', (
+      tester,
+    ) async {
+      await launch(tester);
+      await toggle(tester, 'Category A');
+      await toggle(tester, 'Category B');
+      if (!withoutCategory) await toggle(tester, 'Without Category');
+      final original = entries.entries.singleWhere((entry) => entry.id == 4);
+      final assigned = WorkEntry.fromDuration(
+        duration: original.workDuration,
+        date: original.date,
+        description: original.description,
+        categories: [categoryA.toEmbedded()],
+      )..id = original.id;
+
+      entries.updateEntry(original, assigned);
+      await tester.pumpAndSettle();
+      expectVisible(tester, {});
+      await toggle(tester, 'Category A');
+      expectVisible(tester, {1, 3, 4});
+
+      entries.updateEntry(assigned, original);
+      await tester.pumpAndSettle();
+      expectSelected(tester, 'Without Category', withoutCategory);
+      expectVisible(tester, {1, 3, if (withoutCategory) 4});
+    });
+
+    testWidgets('uncategorized trash and restore respect chip selection=$withoutCategory', (
+      tester,
+    ) async {
+      await launch(tester);
+      await toggle(tester, 'Category A');
+      await toggle(tester, 'Category B');
+      if (!withoutCategory) await toggle(tester, 'Without Category');
+      final original = entries.entries.singleWhere((entry) => entry.id == 4);
+
+      entries.moveToTrashBin(original);
+      await tester.pumpAndSettle();
+      expectVisible(tester, {});
+      expect(find.text('Description: Neither A nor B'), findsNothing);
+
+      entries.restoreFromTrashBin(entries.entriesInTrash.single);
+      await tester.pumpAndSettle();
+      expectSelected(tester, 'Without Category', withoutCategory);
+      expectVisible(tester, {if (withoutCategory) 4});
+    });
+  }
+
   testWidgets(
     'trashing and restoring entries updates the list and empty state',
     (WidgetTester tester) async {
       await launch(tester);
+      await toggle(tester, 'Without Category');
       await toggle(tester, 'Category B');
       final WorkEntry onlyA = entries.entries.singleWhere(
         (WorkEntry entry) => entry.id == 1,
@@ -377,6 +517,7 @@ void main() {
     'editing an entry date updates row order while keeping the filter',
     (WidgetTester tester) async {
       await launch(tester);
+      await toggle(tester, 'Without Category');
       await toggle(tester, 'Category B');
       final WorkEntry original = entries.entries.singleWhere(
         (WorkEntry entry) => entry.id == 3,

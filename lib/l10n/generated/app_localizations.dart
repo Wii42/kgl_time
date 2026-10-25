@@ -577,6 +577,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Do you really want to import the backup and replace all existing entries and categories?\nThis action cannot be undone after the action is completed.'**
   String get importReplaceConfirmationDialog;
+
+  /// No description provided for @withoutCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Without Category'**
+  String get withoutCategory;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

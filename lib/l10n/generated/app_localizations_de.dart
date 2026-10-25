@@ -262,6 +262,9 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get importReplaceConfirmationDialog =>
       'Möchten Sie das Backup wirklich importieren und alle vorhandenen Einträge und Kategorien ersetzen? Dieser Vorgang kann nach Abschluss der Importierung nicht rückgängig gemacht werden.';
+
+  @override
+  String get withoutCategory => 'Ohne Kategorie';
 }
 
 /// The translations for German, as used in Austria (`de_AT`).

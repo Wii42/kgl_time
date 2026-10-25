@@ -79,5 +79,6 @@
   "dateOfBackup": "Datum des Backups: {date}",
   "nrOfEntriesAndCategories": "{nrOfEntries} Einträge, {nrOfCategories} Kategorien",
   "backupFromNewerVersionWarning": "Warnung: Das Backup wurde mit einer neueren Version der App erstellt. Einträge oder Kategorien werden möglicherweise nicht korrekt importiert. Aktualisieren Sie wenn möglich die App auf die neueste Version, bevor Sie das Backup importieren.",
-  "importReplaceConfirmationDialog": "Möchten Sie das Backup wirklich importieren und alle vorhandenen Einträge und Kategorien ersetzen? Dieser Vorgang kann nach Abschluss der Importierung nicht rückgängig gemacht werden."
+  "importReplaceConfirmationDialog": "Möchten Sie das Backup wirklich importieren und alle vorhandenen Einträge und Kategorien ersetzen? Dieser Vorgang kann nach Abschluss der Importierung nicht rückgängig gemacht werden.",
+  "withoutCategory": "Ohne Kategorie"
 }

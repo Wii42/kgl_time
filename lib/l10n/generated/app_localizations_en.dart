@@ -261,4 +261,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get importReplaceConfirmationDialog =>
       'Do you really want to import the backup and replace all existing entries and categories?\nThis action cannot be undone after the action is completed.';
+
+  @override
+  String get withoutCategory => 'Without Category';
 }

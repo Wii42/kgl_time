@@ -25,7 +25,7 @@ class CategoryFilterWidget extends StatefulWidget {
 class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
   late Map<WorkCategory, bool> _selectedCategories;
   final GlobalKey _controlsKey = GlobalKey();
-
+  bool isWithoutCategoryChipSelected = true;
   @override
   void initState() {
     super.initState();
@@ -52,19 +52,37 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
               _selectedCategories = categories;
             });
           },
+          showWithoutCategoryChip: true,
+          isWithoutCategoryChipSelected: isWithoutCategoryChipSelected,
+          onToggleWithoutCategory: (bool isSelected) {
+            setState(() {
+              isWithoutCategoryChipSelected = isSelected;
+            });
+          },
         ),
       ),
       builder: (_, controlsHeight) {
         return Consumer<WorkEntries>(
           builder: (context, workEntries, _) {
             Iterable<int> selectedCategoryIds = [
-              for (var e in idMapSelectedCategories.entries)
-                if (e.value) e.key,
+              for (var e in _selectedCategories.entries)
+                if (e.value) e.key.id,
             ];
             List<WorkEntry> filteredEntries = workEntries.entries
                 .where(
-                  (entry) => entry.categories.map((c) => c.id).any(selectedCategoryIds.contains),
-                )
+              (entry) {
+                bool isInSelectedCategory = entry.categories
+                    .map((c) => c.id)
+                    .any(selectedCategoryIds.contains);
+                if (isInSelectedCategory) {
+                  return true;
+                }
+                if (entry.categories.isEmpty && isWithoutCategoryChipSelected) {
+                  return true;
+                }
+                return false;
+              },
+            )
                 .toList();
 
             if (filteredEntries.isNotEmpty) {
@@ -100,12 +118,8 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
   void _updateCategoriesOnChanged() {
     const IterableEquality<WorkCategory> equality = IterableEquality();
     if (!equality.equals(widget.categories.entries, _selectedCategories.keys)) {
-      Map<int, bool> idMap = idMapSelectedCategories;
+      Map<int, bool> idMap = {for (final e in _selectedCategories.entries) e.key.id: e.value};
       _selectedCategories = {for (var e in widget.categories.entries) e: idMap[e.id] ?? true};
     }
-  }
-
-  Map<int, bool> get idMapSelectedCategories {
-    return {for (var e in _selectedCategories.entries) e.key.id: e.value};
   }
 }
