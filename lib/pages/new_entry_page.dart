@@ -162,6 +162,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                     value,
                     factor: Duration.secondsPerHour,
                     otherValue: durationMinuteController.text,
+                    otherFactor: Duration.secondsPerMinute,
                     localizations: localizations,
                   ),
                 ),
@@ -189,6 +190,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                       value,
                       factor: Duration.secondsPerMinute,
                       otherValue: durationHourController.text,
+                      otherFactor: Duration.secondsPerHour,
                       localizations: localizations,
                     );
                   },
@@ -335,6 +337,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     String? value, {
     int factor = 1,
     String? otherValue,
+    int otherFactor = 1,
     required AppLocalizations? localizations,
   }) {
     const int maxSaveValue = 4294967296; // 2^32
@@ -342,33 +345,25 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     if (value == null || value.isEmpty) {
       return null;
     }
-    int parsedValue;
-    try {
-      parsedValue = int.parse(value);
-      //print('Parsed number: $result');
-    } catch (e) {
-      if (e is FormatException) {
-        return localizations?.inputTooLargeOrNanException ?? '<tooLargeOrNan>';
-      } else {
-        return '${localizations?.unexpectedError}: $e';
-      }
+    final int? parsedInt = int.tryParse(value);
+    final int? otherInt = otherValue == null || otherValue.isEmpty ? 0 : int.tryParse(otherValue);
+    if (parsedInt == null || otherInt == null) {
+      return localizations?.inputTooLargeOrNanException ?? '<tooLargeOrNan>';
     }
-
-    //print('number of binary digits: ${log(parsedValue) / log(2)}');
-    if (parsedValue > (maxSaveValue / factor)) {
+    if (parsedInt < 0 || otherInt < 0) {
+      return localizations?.inputInvalidException ?? '<invalidInput>';
+    }
+    // Bound the parsed values before performing arithmetic on them.
+    if (parsedInt > maxSaveValue || otherInt > maxSaveValue) {
       return localizations?.inputTooLargeOrNanException ?? '<tooLarge>';
     }
-
-    if (otherValue != null) {
-      int? otherInt = int.tryParse(otherValue);
-      if (otherInt != null) {
-        if (parsedValue > ((maxSaveValue / factor) - otherInt)) {
-          return localizations?.inputSumTooLargeException ?? '<sumTooLarge>';
-        }
-      }
+    // Check each conversion before multiplying, including on web.
+    if (parsedInt > maxSaveValue ~/ factor || otherInt > maxSaveValue ~/ otherFactor) {
+      return localizations?.inputTooLargeOrNanException ?? '<tooLarge>';
     }
-    if (parsedValue * factor < 0) {
-      return localizations?.inputInvalidException ?? '<invalidInput>';
+    // Each product is now bounded; check the combined limit without adding.
+    if (parsedInt * factor > maxSaveValue - otherInt * otherFactor) {
+      return localizations?.inputSumTooLargeException ?? '<sumTooLarge>';
     }
 
     return null;
