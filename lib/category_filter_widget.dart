@@ -24,6 +24,7 @@ class CategoryFilterWidget extends StatefulWidget {
 class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
   late Map<WorkCategory, bool> _selectedCategories;
   final GlobalKey _controlsKey = GlobalKey();
+  bool isWithoutCategoryChipSelected = true;
   @override
   void initState() {
     super.initState();
@@ -50,6 +51,13 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
               _selectedCategories = categories;
             });
           },
+          showWithoutCategoryChip: true,
+          isWithoutCategoryChipSelected: isWithoutCategoryChipSelected,
+          onToggleWithoutCategory: (bool isSelected) {
+            setState(() {
+              isWithoutCategoryChipSelected = isSelected;
+            });
+          },
         ),
       ),
       builder: (_, controlsHeight) {
@@ -61,8 +69,19 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
             ];
             List<WorkEntry> filteredEntries = workEntries.entries
                 .where(
-                  (entry) => entry.categories.map((c) => c.id).any(selectedCategoryIds.contains),
-                )
+              (entry) {
+                bool isInSelectedCategory = entry.categories
+                    .map((c) => c.id)
+                    .any(selectedCategoryIds.contains);
+                if (isInSelectedCategory) {
+                  return true;
+                }
+                if (entry.categories.isEmpty && isWithoutCategoryChipSelected) {
+                  return true;
+                }
+                return false;
+              },
+            )
                 .toList();
 
             if (filteredEntries.isNotEmpty) {
