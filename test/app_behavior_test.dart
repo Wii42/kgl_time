@@ -9,7 +9,7 @@ import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/new_entry_page.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
-import 'package:kgl_time/select_categories.dart';
+import 'package:kgl_time/select_category_dialog.dart';
 
 import 'support/memory_storage.dart';
 
