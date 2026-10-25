@@ -343,8 +343,7 @@ extension KeyValueQueryWhere on QueryBuilder<KeyValue, KeyValue, QWhereClause> {
   }
 }
 
-extension KeyValueQueryFilter
-    on QueryBuilder<KeyValue, KeyValue, QFilterCondition> {
+extension KeyValueQueryFilter on QueryBuilder<KeyValue, KeyValue, QFilterCondition> {
   QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> boolValueIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
@@ -371,8 +370,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  dateTimeValueIsNull() {
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> dateTimeValueIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNull(property: r'dateTimeValue'),
@@ -380,8 +378,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  dateTimeValueIsNotNull() {
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> dateTimeValueIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'dateTimeValue'),
@@ -404,8 +401,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  dateTimeValueGreaterThan(
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> dateTimeValueGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -460,8 +456,10 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  dateTimeValueStartsWith(String value, {bool caseSensitive = true}) {
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> dateTimeValueStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.startsWith(
@@ -518,8 +516,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  dateTimeValueIsEmpty() {
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> dateTimeValueIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.equalTo(property: r'dateTimeValue', value: ''),
@@ -527,8 +524,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  dateTimeValueIsNotEmpty() {
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> dateTimeValueIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'dateTimeValue', value: ''),
@@ -544,8 +540,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  doubleValueIsNotNull() {
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> doubleValueIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'doubleValue'),
@@ -569,8 +564,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  doubleValueGreaterThan(
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> doubleValueGreaterThan(
     double? value, {
     bool include = false,
     double epsilon = Query.epsilon,
@@ -914,8 +908,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  stringValueIsNotNull() {
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> stringValueIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const FilterCondition.isNotNull(property: r'stringValue'),
@@ -938,8 +931,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  stringValueGreaterThan(
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> stringValueGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1062,8 +1054,7 @@ extension KeyValueQueryFilter
     });
   }
 
-  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition>
-  stringValueIsNotEmpty() {
+  QueryBuilder<KeyValue, KeyValue, QAfterFilterCondition> stringValueIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         FilterCondition.greaterThan(property: r'stringValue', value: ''),
@@ -1072,11 +1063,9 @@ extension KeyValueQueryFilter
   }
 }
 
-extension KeyValueQueryObject
-    on QueryBuilder<KeyValue, KeyValue, QFilterCondition> {}
+extension KeyValueQueryObject on QueryBuilder<KeyValue, KeyValue, QFilterCondition> {}
 
-extension KeyValueQueryLinks
-    on QueryBuilder<KeyValue, KeyValue, QFilterCondition> {}
+extension KeyValueQueryLinks on QueryBuilder<KeyValue, KeyValue, QFilterCondition> {}
 
 extension KeyValueQuerySortBy on QueryBuilder<KeyValue, KeyValue, QSortBy> {
   QueryBuilder<KeyValue, KeyValue, QAfterSortBy> sortByBoolValue() {
@@ -1152,8 +1141,7 @@ extension KeyValueQuerySortBy on QueryBuilder<KeyValue, KeyValue, QSortBy> {
   }
 }
 
-extension KeyValueQuerySortThenBy
-    on QueryBuilder<KeyValue, KeyValue, QSortThenBy> {
+extension KeyValueQuerySortThenBy on QueryBuilder<KeyValue, KeyValue, QSortThenBy> {
   QueryBuilder<KeyValue, KeyValue, QAfterSortBy> thenByBoolValue() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'boolValue', Sort.asc);
@@ -1239,8 +1227,7 @@ extension KeyValueQuerySortThenBy
   }
 }
 
-extension KeyValueQueryWhereDistinct
-    on QueryBuilder<KeyValue, KeyValue, QDistinct> {
+extension KeyValueQueryWhereDistinct on QueryBuilder<KeyValue, KeyValue, QDistinct> {
   QueryBuilder<KeyValue, KeyValue, QDistinct> distinctByBoolValue() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'boolValue');
@@ -1287,8 +1274,7 @@ extension KeyValueQueryWhereDistinct
   }
 }
 
-extension KeyValueQueryProperty
-    on QueryBuilder<KeyValue, KeyValue, QQueryProperty> {
+extension KeyValueQueryProperty on QueryBuilder<KeyValue, KeyValue, QQueryProperty> {
   QueryBuilder<KeyValue, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');

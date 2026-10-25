@@ -22,17 +22,18 @@ class NewEntryPage extends KglPage {
 
   @override
   Widget body(BuildContext context) => Consumer<WorkCategories>(
-        builder: (context, workCategories, _) => _NewEntryStatefulPage(
-          existingEntry: existingEntry,
-          categories: List.of(workCategories.entries)
-            ..addAll(existingEntry?.categories
-                    .where((element) =>
-                        workCategories.entries.every((e) => e.id != element.id))
-                    .map((e) => e.toWorkCategory()) ??
-                []),
-          key: key,
+    builder: (context, workCategories, _) => _NewEntryStatefulPage(
+      existingEntry: existingEntry,
+      categories: List.of(workCategories.entries)
+        ..addAll(
+          existingEntry?.categories
+                  .where((element) => workCategories.entries.every((e) => e.id != element.id))
+                  .map((e) => e.toWorkCategory()) ??
+              [],
         ),
-      );
+      key: key,
+    ),
+  );
 
   @override
   String? pageTitle(AppLocalizations? loc) =>
@@ -43,8 +44,7 @@ class _NewEntryStatefulPage extends StatefulWidget {
   final WorkEntry? existingEntry;
   final List<WorkCategory> categories;
 
-  const _NewEntryStatefulPage(
-      {super.key, required this.existingEntry, required this.categories});
+  const _NewEntryStatefulPage({super.key, required this.existingEntry, required this.categories});
 
   @override
   _NewEntryStatefulPageState createState() => _NewEntryStatefulPageState();
@@ -63,34 +63,34 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   @override
   void initState() {
     super.initState();
-    categorySelection = Map.fromIterable(widget.categories, value: (category) {
-      if (widget.existingEntry == null) {
-        return false;
-      } else {
-        return widget.existingEntry!.categories
-            .any((element) => element.id == category.id);
-      }
-    });
+    categorySelection = Map.fromIterable(
+      widget.categories,
+      value: (category) {
+        if (widget.existingEntry == null) {
+          return false;
+        } else {
+          return widget.existingEntry!.categories.any((element) => element.id == category.id);
+        }
+      },
+    );
 
     selectedDate = widget.existingEntry?.date ?? DateTime.now();
     dateController = TextEditingController();
     Duration? workDuration = widget.existingEntry?.workDuration;
     durationMinuteController = TextEditingController(
-        text: workDuration != null
-            ? (workDuration.inMinutes % Duration.minutesPerHour).toString()
-            : '');
+      text: workDuration != null
+          ? (workDuration.inMinutes % Duration.minutesPerHour).toString()
+          : '',
+    );
     String workHours = workDuration?.inHours.toString() ?? '';
-    durationHourController =
-        TextEditingController(text: workHours != '0' ? workHours : '');
-    descriptionController =
-        TextEditingController(text: widget.existingEntry?.description ?? '');
+    durationHourController = TextEditingController(text: workHours != '0' ? workHours : '');
+    descriptionController = TextEditingController(text: widget.existingEntry?.description ?? '');
   }
 
   @override
   void didChangeDependencies() {
     if (dateController.text.isEmpty) {
-      dateController.text =
-          formatDate(selectedDate, AppLocalizations.of(context));
+      dateController.text = formatDate(selectedDate, AppLocalizations.of(context));
     }
     super.didChangeDependencies();
   }
@@ -112,19 +112,20 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
               workDurationField(textTheme, localizations: loc),
               SizedBox(height: 16),
               SelectCategoriesWidget(
-                  categories: categorySelection,
-                  onSelectedCategoriesChanged: (selected) {
-                    setState(() {
-                      categorySelection = selected;
-                    });
-                  }),
+                categories: categorySelection,
+                onSelectedCategoriesChanged: (selected) {
+                  setState(() {
+                    categorySelection = selected;
+                  });
+                },
+              ),
               SizedBox(height: 16),
               descriptionField(localizations: loc),
               SizedBox(height: 16),
               selectDateWidget(context),
               SizedBox(height: 16),
               bottomButtons(localizations: loc),
-              SizedBox()
+              SizedBox(),
             ],
           ),
         ),
@@ -132,8 +133,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     );
   }
 
-  Widget workDurationField(TextTheme textTheme,
-      {required AppLocalizations? localizations}) {
+  Widget workDurationField(TextTheme textTheme, {required AppLocalizations? localizations}) {
     int errorMaxLines = 5;
 
     return Padding(
@@ -152,15 +152,18 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                   controller: durationHourController,
                   style: textTheme.displaySmall,
                   decoration: InputDecoration(
-                      labelText: localizations?.hours,
-                      suffixText: 'h',
-                      errorMaxLines: errorMaxLines),
+                    labelText: localizations?.hours,
+                    suffixText: 'h',
+                    errorMaxLines: errorMaxLines,
+                  ),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
-                  validator: (value) => _intValidator(value,
-                      factor: Duration.secondsPerHour,
-                      otherValue: durationMinuteController.text,
-                      localizations: localizations),
+                  validator: (value) => _intValidator(
+                    value,
+                    factor: Duration.secondsPerHour,
+                    otherValue: durationMinuteController.text,
+                    localizations: localizations,
+                  ),
                 ),
               ),
               SizedBox(width: 8),
@@ -171,9 +174,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                   style: textTheme.displaySmall,
                   autofocus: true,
                   decoration: InputDecoration(
-                      labelText: localizations?.minutes,
-                      suffixText: 'min',
-                      errorMaxLines: errorMaxLines),
+                    labelText: localizations?.minutes,
+                    suffixText: 'min',
+                    errorMaxLines: errorMaxLines,
+                  ),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   validator: (value) {
@@ -181,10 +185,12 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
                       return localizations?.noInputError;
                     }
 
-                    return _intValidator(value,
-                        factor: Duration.secondsPerMinute,
-                        otherValue: durationHourController.text,
-                        localizations: localizations);
+                    return _intValidator(
+                      value,
+                      factor: Duration.secondsPerMinute,
+                      otherValue: durationHourController.text,
+                      localizations: localizations,
+                    );
                   },
                 ),
               ),
@@ -233,33 +239,37 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
   }
 
   Widget bottomButtons({required AppLocalizations? localizations}) {
-    return LayoutBuilder(builder: (context, constraints) {
-      return ConstrainedBox(
-        constraints: BoxConstraints(minWidth: constraints.maxWidth),
-        child: Wrap(
-          alignment: WrapAlignment.spaceBetween,
-          runSpacing: 8,
-          spacing: 8,
-          runAlignment: WrapAlignment.center,
-          children: [
-            ElevatedButton(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ConstrainedBox(
+          constraints: BoxConstraints(minWidth: constraints.maxWidth),
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            runSpacing: 8,
+            spacing: 8,
+            runAlignment: WrapAlignment.center,
+            children: [
+              ElevatedButton(
                 onPressed: () {
                   context.pop();
                 },
                 child: Text(
                   localizations?.cancel ?? "<cancel>",
-                )),
-            FilledButton(
+                ),
+              ),
+              FilledButton(
                 onPressed: () {
                   saveEntry(context);
                 },
                 child: Text(
                   localizations?.save ?? "<save>",
-                )),
-          ],
-        ),
-      );
-    });
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void saveEntry(BuildContext context) {
@@ -270,22 +280,21 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
           : 0;
       WorkEntry newEntry = WorkEntry(
         workDurationInSeconds: Duration(
-                hours: hours, minutes: int.parse(durationMinuteController.text))
-            .inSeconds,
+          hours: hours,
+          minutes: int.parse(durationMinuteController.text),
+        ).inSeconds,
         date: selectedDate,
         categories: categorySelection.entries
             .where((element) => element.value)
             .map((e) => e.key.toEmbedded())
             .toList(),
         description: descriptionController.text,
-        startTime:
-            (widget.existingEntry?.startTime?.isSameDate(selectedDate) ?? false)
-                ? widget.existingEntry?.startTime
-                : null,
-        endTime:
-            (widget.existingEntry?.endTime?.isSameDate(selectedDate) ?? false)
-                ? widget.existingEntry?.endTime
-                : null,
+        startTime: (widget.existingEntry?.startTime?.isSameDate(selectedDate) ?? false)
+            ? widget.existingEntry?.startTime
+            : null,
+        endTime: (widget.existingEntry?.endTime?.isSameDate(selectedDate) ?? false)
+            ? widget.existingEntry?.endTime
+            : null,
         lastEdit: DateTime.now(),
         tickedOff: widget.existingEntry?.tickedOff ?? false,
         createType: widget.existingEntry != null
@@ -296,16 +305,19 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
       WorkEntries workEntries = context.read<WorkEntries>();
       if (widget.existingEntry != null) {
         workEntries.updateEntry(
-            widget.existingEntry!,
-            newEntry
-              //..startTime = widget.existingEntry!.startTime
-              ..id = widget.existingEntry!.id);
+          widget.existingEntry!,
+          newEntry
+            //..startTime = widget.existingEntry!.startTime
+            ..id = widget.existingEntry!.id,
+        );
       } else {
         workEntries.add(newEntry);
       }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(loc?.entrySaved ?? ''),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(loc?.entrySaved ?? ''),
+        ),
+      );
       context.pop();
     }
   }
@@ -319,10 +331,12 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     super.dispose();
   }
 
-  String? _intValidator(String? value,
-      {int factor = 1,
-      String? otherValue,
-      required AppLocalizations? localizations}) {
+  String? _intValidator(
+    String? value, {
+    int factor = 1,
+    String? otherValue,
+    required AppLocalizations? localizations,
+  }) {
     const int maxSaveValue = 4294967296; // 2^32
 
     if (value == null || value.isEmpty) {

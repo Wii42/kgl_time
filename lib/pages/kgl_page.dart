@@ -48,9 +48,10 @@ abstract class KglPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (smallTitle != null)
-          Text(smallTitle,
-              style: textTheme.bodySmall
-                  ?.copyWith(color: theme.appBarTheme.foregroundColor)),
+          Text(
+            smallTitle,
+            style: textTheme.bodySmall?.copyWith(color: theme.appBarTheme.foregroundColor),
+          ),
         Text(largeTitle),
       ],
     );
@@ -64,23 +65,26 @@ abstract class KglPage extends StatelessWidget {
   /// Note the provided [constraints] in [builder] are measured before the
   /// ScrollView is applied, e.g. the visible available space, not the space
   /// inside the ScrollView.
-  static Widget alwaysFillingScrollView(
-      {Widget? child,
-      Widget Function(BuildContext, BoxConstraints)? builder,
-      double maxWidth = double.infinity}) {
+  static Widget alwaysFillingScrollView({
+    Widget? child,
+    Widget Function(BuildContext, BoxConstraints)? builder,
+    double maxWidth = double.infinity,
+  }) {
     assert(child != null || builder != null);
-    return LayoutBuilder(builder: (context, constraints) {
-      return SingleChildScrollView(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: constraints.maxHeight,
-              maxWidth: maxWidth,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
+                maxWidth: maxWidth,
+              ),
+              child: child ?? builder?.call(context, constraints),
             ),
-            child: child ?? builder?.call(context, constraints),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }

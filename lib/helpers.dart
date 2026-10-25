@@ -27,20 +27,19 @@ extension SpacedList on List<Widget> {
   }
 }
 
-extension MapGetWhere<K,V> on Map<K,V>{
-  V? getWhere(bool Function(K) predicate){
+extension MapGetWhere<K, V> on Map<K, V> {
+  V? getWhere(bool Function(K) predicate) {
     K? key = keys.firstWhereOrNull(predicate);
-    if(key == null){
+    if (key == null) {
       return null;
     } else {
       return this[key];
     }
   }
-
 }
 
-extension IsSameDate on DateTime{
-  bool isSameDate(DateTime other){
+extension IsSameDate on DateTime {
+  bool isSameDate(DateTime other) {
     return year == other.year && month == other.month && day == other.day;
   }
 }

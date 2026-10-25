@@ -10,34 +10,41 @@ class GroupedWorkEntries {
   final int calendarUnitValue; // e.g. week number or month number
   final int year;
 
-  const GroupedWorkEntries(
-      {required this.entries,
-      required this.calendarUnit,
-      required this.calendarUnitValue,
-      required this.year});
+  const GroupedWorkEntries({
+    required this.entries,
+    required this.calendarUnit,
+    required this.calendarUnitValue,
+    required this.year,
+  });
 
   Duration totalWorkDuration() {
-    return entries.fold(Duration.zero,
-        (previousValue, element) => previousValue + element.workDuration);
+    return entries.fold(
+      Duration.zero,
+      (previousValue, element) => previousValue + element.workDuration,
+    );
   }
 
   static List<GroupedWorkEntries> groupEntriesByCalendarUnit(
-      List<WorkEntry> entries, CalendarUnit calendarUnit) {
+    List<WorkEntry> entries,
+    CalendarUnit calendarUnit,
+  ) {
     Map<(int, int), List<WorkEntry>> entriesByCalendarUnit = {};
     for (WorkEntry entry in entries) {
       int calendarUnitNumber = switch (calendarUnit) {
         CalendarUnit.week => entry.date.weekNumber,
         CalendarUnit.month => entry.date.month,
       };
-      entriesByCalendarUnit.putIfAbsent(
-          (calendarUnitNumber, entry.date.year), () => []).add(entry);
+      entriesByCalendarUnit.putIfAbsent((calendarUnitNumber, entry.date.year), () => []).add(entry);
     }
     return entriesByCalendarUnit.entries
-        .map((entry) => GroupedWorkEntries(
+        .map(
+          (entry) => GroupedWorkEntries(
             entries: entry.value,
             calendarUnit: calendarUnit,
             calendarUnitValue: entry.key.$1,
-            year: entry.key.$2))
+            year: entry.key.$2,
+          ),
+        )
         .toList();
   }
 }

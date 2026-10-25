@@ -14,19 +14,18 @@ class AppView extends StatelessWidget {
     AppLocalizations? loc = AppLocalizations.of(context);
 
     return Scaffold(
-        body: navigationShell,
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: navigationShell.currentIndex,
-          onDestinationSelected: (newIndex) {
-            // go to the initial Location of the branch, if active destination is clicked again.
-            bool goToInitialLocation = newIndex == navigationShell.currentIndex;
-            navigationShell.goBranch(newIndex,
-                initialLocation: goToInitialLocation);
-          },
-          destinations: [
-            for (NavBarAppRoute item in NavBarAppRoute.navBarItems)
-              item.navigationDestination(loc)
-          ],
-        ));
+      body: navigationShell,
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: navigationShell.currentIndex,
+        onDestinationSelected: (newIndex) {
+          // go to the initial Location of the branch, if active destination is clicked again.
+          bool goToInitialLocation = newIndex == navigationShell.currentIndex;
+          navigationShell.goBranch(newIndex, initialLocation: goToInitialLocation);
+        },
+        destinations: [
+          for (NavBarAppRoute item in NavBarAppRoute.navBarItems) item.navigationDestination(loc),
+        ],
+      ),
+    );
   }
 }

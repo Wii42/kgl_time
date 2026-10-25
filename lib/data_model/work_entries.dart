@@ -6,8 +6,7 @@ import 'package:notifying_list/notifying_list.dart';
 import 'work_entry.dart';
 
 class WorkEntries extends ChangeNotifier {
-  final Table<WorkEntry> _storedEntries =
-      PersistentStorageService.instance.workEntries;
+  final Table<WorkEntry> _storedEntries = PersistentStorageService.instance.workEntries;
   late final CallbackNotifyingList<WorkEntry> _entries;
 
   WorkEntries(List<WorkEntry> entriesList) {
@@ -27,8 +26,7 @@ class WorkEntries extends ChangeNotifier {
   }
 
   /// All entries that are not in the trash
-  List<WorkEntry> get entries =>
-      List.unmodifiable(_entries.where((entry) => !entry.isInTrash));
+  List<WorkEntry> get entries => List.unmodifiable(_entries.where((entry) => !entry.isInTrash));
 
   List<WorkEntry> get entriesInTrash =>
       List.unmodifiable(_entries.where((entry) => entry.isInTrash));
@@ -46,7 +44,7 @@ class WorkEntries extends ChangeNotifier {
 
   void restoreFromTrashBin(WorkEntry entry) {
     WorkEntry newEntry = entry.withTrashStatus(null);
-    updateEntry(entry, newEntry.. id = entry.id);
+    updateEntry(entry, newEntry..id = entry.id);
   }
 
   void _removeEntryPermanently(WorkEntry entry) {
@@ -54,21 +52,20 @@ class WorkEntries extends ChangeNotifier {
     _storedEntries.deleteEntry(entry);
   }
 
-  void _removeEntriesInTrashPermanentlyAfter(Duration duration){
+  void _removeEntriesInTrashPermanentlyAfter(Duration duration) {
     DateTime cutoffDate = DateTime.now().subtract(duration);
     _removeEntriesInTrashPermanentlyOlderThan(cutoffDate);
   }
-  
+
   void _removeEntriesInTrashPermanentlyOlderThan(DateTime cutoffDate) {
     List<WorkEntry> entriesToRemove = _entries
-        .where((entry) =>
-            entry.isInTrash &&
-            (entry.wasMovedToTrashAt?.isBefore(cutoffDate) ?? false))
+        .where(
+          (entry) => entry.isInTrash && (entry.wasMovedToTrashAt?.isBefore(cutoffDate) ?? false),
+        )
         .toList();
     for (var entry in entriesToRemove) {
       _removeEntryPermanently(entry);
-      print(
-          'Permanently removed work entry with id ${entry.id} from trash bin.');
+      print('Permanently removed work entry with id ${entry.id} from trash bin.');
     }
   }
 

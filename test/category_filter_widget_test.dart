@@ -82,9 +82,8 @@ void main() {
             // Match CategoriesPage: category notifications rebuild the filter
             // configuration while preserving its State and user selections.
             body: Consumer<WorkCategories>(
-              builder:
-                  (BuildContext context, WorkCategories model, Widget? _) =>
-                      CategoryFilterWidget(categories: model),
+              builder: (BuildContext context, WorkCategories model, Widget? _) =>
+                  CategoryFilterWidget(categories: model),
             ),
           ),
         ),
@@ -174,8 +173,7 @@ void main() {
     (WidgetTester tester) async {
       await launch(tester);
       await toggle(tester, 'Category A');
-      final WorkCategory categoryC = WorkCategory('Category C', listIndex: 2)
-        ..id = 3;
+      final WorkCategory categoryC = WorkCategory('Category C', listIndex: 2)..id = 3;
       entries.add(
         WorkEntry.fromDuration(
           duration: const Duration(minutes: 15),

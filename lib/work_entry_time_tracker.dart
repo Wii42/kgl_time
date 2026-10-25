@@ -20,7 +20,8 @@ class WorkEntryTimeTracker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime? startTime = context.select<KeyValues, DateTime?>(
-        (keyValues) => keyValues.get<DateTime?>(_storageKey));
+      (keyValues) => keyValues.get<DateTime?>(_storageKey),
+    );
     bool isTrackingTime = startTime != null;
 
     double height = 50;
@@ -49,30 +50,28 @@ class WorkEntryTimeTracker extends StatelessWidget {
                         children: [
                           IconButton.filledTonal(
                             onPressed: () =>
-                                SelectCategoriesWidget.showSelectCategoryDialog(
-                                    context),
+                                SelectCategoriesWidget.showSelectCategoryDialog(context),
                             icon: Icon(
                               Icons.category,
                             ),
                             tooltip: loc?.selectCategory,
                           ),
                           Text(
-                              loc?.runningForDuration(_trackTime(
-                                      startTime ?? DateTime.now())) ??
-                                  '<runningForDuration>',
-                              style: Theme.of(context).textTheme.bodyLarge),
-                          SizedBox()
+                            loc?.runningForDuration(_trackTime(startTime ?? DateTime.now())) ??
+                                '<runningForDuration>',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          SizedBox(),
                         ],
                       ),
                     )
-                  : Text(loc?.trackTime ?? '<trackTime>',
-                      style: Theme.of(context).textTheme.bodyLarge),
+                  : Text(
+                      loc?.trackTime ?? '<trackTime>',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
               iconBuilder: (isTracking) => Text(
                 (isTracking ? loc?.stop : loc?.start) ?? '<start/stop>',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.apply(color: Colors.white),
+                style: Theme.of(context).textTheme.bodyLarge?.apply(color: Colors.white),
               ),
               onChanged: (isTracking) {
                 KeyValues keyValues = context.read<KeyValues>();
@@ -80,27 +79,26 @@ class WorkEntryTimeTracker extends StatelessWidget {
                   keyValues.set<DateTime>(_storageKey, DateTime.now());
                 } else {
                   keyValues.remove(_storageKey);
-                  String? serializedCategories =
-                      keyValues.get<String>(SelectCategoryDialog.storageKey);
+                  String? serializedCategories = keyValues.get<String>(
+                    SelectCategoryDialog.storageKey,
+                  );
                   List<WorkCategory> selectedCategories = [];
                   if (serializedCategories != null) {
-                    selectedCategories =
-                        SelectCategoryDialog.deserializeCategories(
-                            serializedCategories,
-                            context.read<WorkCategories>().entries);
+                    selectedCategories = SelectCategoryDialog.deserializeCategories(
+                      serializedCategories,
+                      context.read<WorkCategories>().entries,
+                    );
                   }
                   keyValues.remove(SelectCategoryDialog.storageKey);
                   context.read<WorkEntries>().add(
-                        WorkEntry.fromStartAndEndTime(
-                          startTime: startTime!,
-                          endTime: DateTime.now(),
-                          lastEdit: DateTime.now(),
-                          categories: selectedCategories
-                              .map((e) => e.toEmbedded())
-                              .toList(),
-                          createType: CreateWorkEntryType.timeTracker,
-                        ),
-                      );
+                    WorkEntry.fromStartAndEndTime(
+                      startTime: startTime!,
+                      endTime: DateTime.now(),
+                      lastEdit: DateTime.now(),
+                      categories: selectedCategories.map((e) => e.toEmbedded()).toList(),
+                      createType: CreateWorkEntryType.timeTracker,
+                    ),
+                  );
                 }
               },
               height: height,
@@ -110,9 +108,10 @@ class WorkEntryTimeTracker extends StatelessWidget {
                 indicatorColor: indicatorColor(isTracking),
                 borderColor: indicatorColor(isTracking),
                 indicatorBorder: Border.all(
-                    width: 6,
-                    strokeAlign: BorderSide.strokeAlignOutside - 0.1,
-                    color: indicatorColor(isTracking)),
+                  width: 6,
+                  strokeAlign: BorderSide.strokeAlignOutside - 0.1,
+                  color: indicatorColor(isTracking),
+                ),
               ),
               clipBehavior: Clip.none,
             ),
@@ -124,8 +123,7 @@ class WorkEntryTimeTracker extends StatelessWidget {
 
   String _trackTime(DateTime startTime) {
     int hours = DateTime.now().difference(startTime).inHours;
-    int minutes = DateTime.now().difference(startTime).inMinutes %
-        Duration.minutesPerHour;
+    int minutes = DateTime.now().difference(startTime).inMinutes % Duration.minutesPerHour;
     return [if (hours > 0) "${hours}h", "$minutes min"].join(" ");
   }
 }

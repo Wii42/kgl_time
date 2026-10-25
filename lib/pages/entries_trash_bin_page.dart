@@ -14,8 +14,7 @@ class EntriesTrashBinPage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
-    List<WorkEntry> trashedEntries =
-        context.select<WorkEntries, List<WorkEntry>>(
+    List<WorkEntry> trashedEntries = context.select<WorkEntries, List<WorkEntry>>(
       (workEntries) => workEntries.entriesInTrash,
     );
     if (trashedEntries.isNotEmpty) {
@@ -23,9 +22,10 @@ class EntriesTrashBinPage extends KglPage {
         items: trashedEntries,
         padding: const EdgeInsets.symmetric(vertical: 16),
         itemBuilder: (context, animation, entry, index) => SizeFadeTransition(
-            animation: animation,
-            axis: Axis.vertical,
-            child: TrashedWorkEntry(workEntry: entry, key: ValueKey(entry.id))),
+          animation: animation,
+          axis: Axis.vertical,
+          child: TrashedWorkEntry(workEntry: entry, key: ValueKey(entry.id)),
+        ),
         areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) {
           return oldItem.id == newItem.id;
         },

@@ -19,98 +19,99 @@ class AppRoute {
 
   const AppRoute({required this.path, required this.body, required this.name});
 
-  GoRoute goRoute(
-      {List<RouteBase> subRoutes = const [], required String appTitle}) {
+  GoRoute goRoute({List<RouteBase> subRoutes = const [], required String appTitle}) {
     return GoRoute(
-        path: path,
-        builder: (context, state) => body(context, state, appTitle),
-        routes: subRoutes);
+      path: path,
+      builder: (context, state) => body(context, state, appTitle),
+      routes: subRoutes,
+    );
   }
 
   static final AppRoute newEntry = AppRoute(
-      name: 'newEntry',
-      path: '/newEntry',
-      body: (context, state, appTitle) {
-        WorkEntry? existingEntry;
-        if (state.extra is WorkEntry) {
-          existingEntry = state.extra as WorkEntry;
-        }
-        return NewEntryPage(appTitle: appTitle, existingEntry: existingEntry);
-      });
+    name: 'newEntry',
+    path: '/newEntry',
+    body: (context, state, appTitle) {
+      WorkEntry? existingEntry;
+      if (state.extra is WorkEntry) {
+        existingEntry = state.extra as WorkEntry;
+      }
+      return NewEntryPage(appTitle: appTitle, existingEntry: existingEntry);
+    },
+  );
 
   static final AppRoute settings = AppRoute(
-      name: 'settings',
-      path: '/settings',
-      body: (context, state, appTitle) => SettingsPage(appTitle: appTitle));
+    name: 'settings',
+    path: '/settings',
+    body: (context, state, appTitle) => SettingsPage(appTitle: appTitle),
+  );
 
-  static final List<AppRoute> routes = [
-    newEntry,
-    settings,
-    ...NavBarAppRoute.navBarItems
-  ];
+  static final List<AppRoute> routes = [newEntry, settings, ...NavBarAppRoute.navBarItems];
 
   static final AppRoute editCategories = AppRoute(
-      name: 'editCategories',
-      path: '/editCategories',
-      body: (context, state, appTitle) =>
-          EditCategoriesPage(appTitle: appTitle));
+    name: 'editCategories',
+    path: '/editCategories',
+    body: (context, state, appTitle) => EditCategoriesPage(appTitle: appTitle),
+  );
 
   static final AppRoute entriesTrashBin = AppRoute(
-      name: 'entriesTrashBin',
-      path: '/entriesTrashBin',
-      body: (context, state, appTitle) =>
-          EntriesTrashBinPage(appTitle: appTitle));
+    name: 'entriesTrashBin',
+    path: '/entriesTrashBin',
+    body: (context, state, appTitle) => EntriesTrashBinPage(appTitle: appTitle),
+  );
 
   static final AppRoute exportImport = AppRoute(
-      name: 'exportImport',
-      path: '/exportImport',
-      body: (context, state, appTitle) => ExportImportPage(appTitle: appTitle));
+    name: 'exportImport',
+    path: '/exportImport',
+    body: (context, state, appTitle) => ExportImportPage(appTitle: appTitle),
+  );
 }
 
 class NavBarAppRoute extends AppRoute {
   final String Function(AppLocalizations?) title;
   final IconData icon;
 
-  const NavBarAppRoute(
-      {required super.path,
-      required super.body,
-      required super.name,
-      required this.title,
-      required this.icon});
+  const NavBarAppRoute({
+    required super.path,
+    required super.body,
+    required super.name,
+    required this.title,
+    required this.icon,
+  });
 
   NavigationDestination navigationDestination(AppLocalizations? loc) {
     return NavigationDestination(icon: Icon(icon), label: title(loc));
   }
 
-  StatefulShellBranch statefulShellBranch(
-          {List<RouteBase> subRoutes = const [], required String appTitle}) =>
-      StatefulShellBranch(
-          routes: [goRoute(subRoutes: subRoutes, appTitle: appTitle)]);
+  StatefulShellBranch statefulShellBranch({
+    List<RouteBase> subRoutes = const [],
+    required String appTitle,
+  }) => StatefulShellBranch(
+    routes: [goRoute(subRoutes: subRoutes, appTitle: appTitle)],
+  );
 
   static final NavBarAppRoute home = NavBarAppRoute(
-      name: 'home',
-      path: '/',
-      body: (context, state, appTitle) => HomePage(appTitle: appTitle),
-      title: (loc) => loc?.home ?? "<Home>",
-      icon: Icons.home);
+    name: 'home',
+    path: '/',
+    body: (context, state, appTitle) => HomePage(appTitle: appTitle),
+    title: (loc) => loc?.home ?? "<Home>",
+    icon: Icons.home,
+  );
 
   static final allEntries = NavBarAppRoute(
-      name: 'allEntries',
-      path: '/allEntries',
-      body: (context, state, appTitle) => AllEntriesPage(appTitle: appTitle),
-      title: (loc) => loc?.allEntries ?? "<allEntries>",
-      icon: Icons.list);
+    name: 'allEntries',
+    path: '/allEntries',
+    body: (context, state, appTitle) => AllEntriesPage(appTitle: appTitle),
+    title: (loc) => loc?.allEntries ?? "<allEntries>",
+    icon: Icons.list,
+  );
 
   static final categories = NavBarAppRoute(
-      name: 'categories',
-      path: '/categories',
-      body: (context, state, appTitle) => CategoriesPage(appTitle: appTitle),
-      title: (loc) => loc?.categories ?? "<categories>",
-      icon: Icons.category);
+    name: 'categories',
+    path: '/categories',
+    body: (context, state, appTitle) => CategoriesPage(appTitle: appTitle),
+    title: (loc) => loc?.categories ?? "<categories>",
+    icon: Icons.category,
+  );
 
-  static final List<NavBarAppRoute> navBarItems = [
-    home,
-    allEntries,
-    categories
-  ];
+  static final List<NavBarAppRoute> navBarItems = [home, allEntries, categories];
 }

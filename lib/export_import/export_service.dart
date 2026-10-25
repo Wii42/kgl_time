@@ -15,8 +15,7 @@ class ExportService {
 
   String csvFileName() => 'work_entries_export_${fileTimestamp()}.csv';
 
-  String fileTimestamp() =>
-      DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
+  String fileTimestamp() => DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
 
   String entriesToCsv(List<WorkEntry> entries, AppLocalizations? loc) {
     List<List<dynamic>> rows = [

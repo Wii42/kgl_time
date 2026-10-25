@@ -22,18 +22,19 @@ class WorkEntry implements IsarStorable {
   bool wasEdited;
   DateTime? wasMovedToTrashAt;
 
-  WorkEntry(
-      {required this.workDurationInSeconds,
-      required this.date,
-      this.description,
-      this.categories = const [],
-      this.startTime,
-      this.endTime,
-      this.lastEdit,
-      this.tickedOff = false,
-      this.createType,
-      this.wasEdited = false,
-      this.wasMovedToTrashAt});
+  WorkEntry({
+    required this.workDurationInSeconds,
+    required this.date,
+    this.description,
+    this.categories = const [],
+    this.startTime,
+    this.endTime,
+    this.lastEdit,
+    this.tickedOff = false,
+    this.createType,
+    this.wasEdited = false,
+    this.wasMovedToTrashAt,
+  });
 
   @ignore
   Duration get workDuration => Duration(seconds: workDurationInSeconds);

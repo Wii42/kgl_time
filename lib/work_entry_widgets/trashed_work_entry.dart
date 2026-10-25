@@ -25,11 +25,12 @@ class TrashedWorkEntry extends WorkEntryWidget {
     AppLocalizations? loc = AppLocalizations.of(context);
     return [
       FilledButton(
-          onPressed: () {
-            WorkEntries entries = context.read<WorkEntries>();
-            entries.restoreFromTrashBin(workEntry);
-          },
-          child: Column(children: [
+        onPressed: () {
+          WorkEntries entries = context.read<WorkEntries>();
+          entries.restoreFromTrashBin(workEntry);
+        },
+        child: Column(
+          children: [
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Icon(Icons.restore_from_trash),
@@ -37,8 +38,10 @@ class TrashedWorkEntry extends WorkEntryWidget {
             Text(
               loc?.restoreEntry ?? "<restore Entry>",
               style: textTheme.labelSmall?.apply(color: Colors.white),
-            )
-          ])),
+            ),
+          ],
+        ),
+      ),
     ];
   }
 }

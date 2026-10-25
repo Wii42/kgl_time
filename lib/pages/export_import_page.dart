@@ -16,8 +16,7 @@ class ExportImportPage extends KglPage {
   const ExportImportPage({super.key, required super.appTitle});
 
   @override
-  String? pageTitle(AppLocalizations? loc) =>
-      loc?.exportEntries ?? "<Export / Import Data>";
+  String? pageTitle(AppLocalizations? loc) => loc?.exportEntries ?? "<Export / Import Data>";
 
   @override
   bool get showSettingsButton => false;

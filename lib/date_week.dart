@@ -18,8 +18,7 @@ class DateWeek {
   }
 
   bool contains(DateTime date) {
-    return (date.isAtSameMomentAs(start) || date.isAfter(start)) &&
-        date.isBefore(end);
+    return (date.isAtSameMomentAs(start) || date.isAfter(start)) && date.isBefore(end);
   }
 
   DateWeek next() {

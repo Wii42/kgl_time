@@ -4,8 +4,7 @@ import 'package:kgl_time/persistent_storage/persistent_storage_interface.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 
 class WorkCategories extends ChangeNotifier {
-  final Table<WorkCategory> storedEntries =
-      PersistentStorageService.instance.workCategories;
+  final Table<WorkCategory> storedEntries = PersistentStorageService.instance.workCategories;
   late final List<WorkCategory> _entries;
 
   WorkCategories(List<WorkCategory> entriesList) {
