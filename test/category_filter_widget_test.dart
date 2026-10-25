@@ -413,10 +413,12 @@ void main() {
 
     categories.reorder(0, 1);
     await check();
-    final renamed = WorkCategory('Renamed A', listIndex: 1)..id = categoryA.id;
+    final renamed = WorkCategory('Renamed A', listIndex: 1, uuid: '${categoryA.id}', lastEdit: null)
+      ..id = categoryA.id;
     categories.updateEntry(categoryA, renamed);
     await check();
-    final categoryC = WorkCategory('Category C', listIndex: 2)..id = 3;
+    final categoryC = WorkCategory('Category C', listIndex: 2, uuid: '3', lastEdit: null)
+      ..id = 3;
     categories.add(categoryC);
     await check();
     expectSelected(tester, 'Category C', true);
