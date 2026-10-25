@@ -46,3 +46,4 @@ many_lints:
 
 formatter:
   page_width: 100
+  trailing_commas: preserve
