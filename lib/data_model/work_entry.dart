@@ -1,5 +1,6 @@
 import 'package:isar_community/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:kgl_time/data_model/value.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:uuid/uuid.dart';
 
@@ -105,7 +106,7 @@ class WorkEntry implements IsarStorable {
   WorkEntry withTrashStatus(DateTime? movedToTrashAt, {bool? tickedOff}) {
     return copyWith(
       tickedOff: tickedOff ?? this.tickedOff,
-      wasMovedToTrashAt: movedToTrashAt,
+      wasMovedToTrashAt: Value<DateTime?>(movedToTrashAt),
     );
   }
 
@@ -113,29 +114,31 @@ class WorkEntry implements IsarStorable {
     String? uuid,
     int? workDurationInSeconds,
     DateTime? date,
-    String? description,
+    Value<String?>? description,
     List<EmbeddedWorkCategory>? categories,
-    DateTime? startTime,
-    DateTime? endTime,
+    Value<DateTime?>? startTime,
+    Value<DateTime?>? endTime,
     DateTime? lastEdit,
     bool? tickedOff,
-    CreateWorkEntryType? createType,
+    Value<CreateWorkEntryType?>? createType,
     bool? wasEdited,
-    DateTime? wasMovedToTrashAt,
+    Value<DateTime?>? wasMovedToTrashAt,
   }) {
     return WorkEntry(
       uuid: uuid ?? this.uuid,
       workDurationInSeconds: workDurationInSeconds ?? this.workDurationInSeconds,
       date: date ?? this.date,
-      description: description ?? this.description,
+      description: description == null ? this.description : description.value,
       categories: categories ?? this.categories,
-      startTime: startTime ?? this.startTime,
-      endTime: endTime ?? this.endTime,
+      startTime: startTime == null ? this.startTime : startTime.value,
+      endTime: endTime == null ? this.endTime : endTime.value,
       lastEdit: lastEdit ?? this.lastEdit,
       tickedOff: tickedOff ?? this.tickedOff,
-      createType: createType ?? this.createType,
+      createType: createType == null ? this.createType : createType.value,
       wasEdited: wasEdited ?? this.wasEdited,
-      wasMovedToTrashAt: wasMovedToTrashAt ?? this.wasMovedToTrashAt,
+      wasMovedToTrashAt: wasMovedToTrashAt == null
+          ? this.wasMovedToTrashAt
+          : wasMovedToTrashAt.value,
     )..id = id;
   }
 
