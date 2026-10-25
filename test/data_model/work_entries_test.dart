@@ -27,11 +27,11 @@ void main() {
       endTime: DateTime(2026, 10, 23, 9, 30),
       description: 'Planning',
       categories: [category],
-      lastEdit: DateTime(2026, 10, 23, 10),
       tickedOff: true,
       createType: CreateWorkEntryType.timeTracker,
-      wasEdited: true,
-    )..id = 42;
+    )
+      ..id = 42
+      ..lastEdit = DateTime.utc(2020);
     await storage.workEntries.addEntry(original);
     final model = WorkEntries([original]);
     addTearDown(model.dispose);
@@ -44,7 +44,9 @@ void main() {
     expect(trashed.id, 42);
     expect(trashed.wasMovedToTrashAt, isNotNull);
     expect(trashed.tickedOff, isFalse);
+    final DateTime beforeRestore = DateTime.now().toUtc();
     model.restoreFromTrashBin(trashed);
+    final DateTime afterRestore = DateTime.now().toUtc();
 
     expect(model.entriesInTrash, isEmpty);
     final restored = model.entries.single;
@@ -55,7 +57,10 @@ void main() {
     expect(restored.endTime, original.endTime);
     expect(restored.description, original.description);
     expect(restored.categories, original.categories);
-    expect(restored.lastEdit, original.lastEdit);
+    expect(restored.lastEdit.isUtc, isTrue);
+    expect(restored.lastEdit.isBefore(beforeRestore), isFalse);
+    expect(restored.lastEdit.isAfter(afterRestore), isFalse);
+    expect(restored.lastEdit.isAfter(original.lastEdit), isTrue);
     expect(restored.createType, original.createType);
     expect(restored.wasEdited, original.wasEdited);
     expect(notifications, greaterThanOrEqualTo(2));
@@ -136,7 +141,7 @@ void main() {
     Future<WorkCategories> categories() async {
       final entries = List.generate(
         4,
-        (i) => WorkCategory('Category $i', listIndex: i)..id = i + 1,
+        (i) => WorkCategory('Category $i', listIndex: i, uuid: '${i+1}', lastEdit: null)..id = i + 1,
       );
       await storage.workCategories.saveEntries(entries);
       final model = WorkCategories(entries.reversed.toList());
@@ -169,7 +174,7 @@ void main() {
 
     test('inserting a category updates order and persisted indices', () async {
       final model = await categories();
-      model.add(WorkCategory('Inserted')..id = 5, index: 1);
+      model.add(WorkCategory('Inserted', uuid: '5', lastEdit: null)..id = 5, index: 1);
       await Future<void>.delayed(Duration.zero);
       expect(model.entries.map((e) => e.id), [1, 5, 2, 3, 4]);
       final reloaded = WorkCategories(

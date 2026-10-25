@@ -201,7 +201,8 @@ void main() {
     await toggle(tester, 'Category A');
     categories.updateEntry(
       categoryA,
-      WorkCategory('Renamed A', listIndex: 0, uuid: '', lastEdit: null)..id = categoryA.id,
+      WorkCategory('Renamed A', listIndex: 0, uuid: categoryA.uuid, lastEdit: null)
+        ..id = categoryA.id,
     );
     await tester.pumpAndSettle();
 
