@@ -230,8 +230,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Import a previously exported JSON backup file to restore your work entries and categories.';
 
   @override
-  String get importBacupAndReplaceExistingEntries =>
-      'Import backup and replace existing entries';
+  String get importBacupAndReplaceExistingEntries => 'Import backup and replace existing entries';
 
   @override
   String get importBacupAndReplace => 'Import backup and replace';
