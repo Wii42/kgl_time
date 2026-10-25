@@ -69,7 +69,7 @@ void main() {
   });
 
   test(
-    'startup deletes expired trash but preserves recent trash and active data',
+    'startup preserves old tombstones and excludes them from active entries',
     () async {
       final now = DateTime.now();
       WorkEntry make(int id, DateTime? trashedAt) => WorkEntry.fromDuration(
@@ -78,17 +78,17 @@ void main() {
         wasMovedToTrashAt: trashedAt,
       )..id = id;
       final active = make(1, null);
-      final expired = make(2, now.subtract(const Duration(days: 31)));
+      final oldTombstone = make(2, now.subtract(const Duration(days: 31)));
       final recent = make(3, now.subtract(const Duration(days: 29)));
-      await storage.workEntries.saveEntries([active, expired, recent]);
+      await storage.workEntries.saveEntries([active, oldTombstone, recent]);
 
-      final model = WorkEntries([active, expired, recent]);
+      final model = WorkEntries([active, oldTombstone, recent]);
       addTearDown(model.dispose);
       expect(model.entries, [active]);
-      expect(model.entriesInTrash, [recent]);
+      expect(model.entriesInTrash, unorderedEquals([oldTombstone, recent]));
       expect(
         (await storage.workEntries.loadEntries()).map((e) => e.id),
-        unorderedEquals([1, 3]),
+        unorderedEquals([1, 2, 3]),
       );
     },
   );
