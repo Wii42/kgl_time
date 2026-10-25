@@ -1,4 +1,5 @@
 import 'package:animated_list_plus/transitions.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
@@ -89,7 +90,8 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
   }
 
   void _updateCategoriesOnChanged() {
-    if (widget.categories.entries != _selectedCategories.keys) {
+    const IterableEquality<WorkCategory> equality = IterableEquality();
+    if (!equality.equals(widget.categories.entries, _selectedCategories.keys)) {
       Map<int, bool> idMap = idMapSelectedCategories;
       _selectedCategories = {
         for (var e in widget.categories.entries) e: idMap[e.id] ?? true
