@@ -18,7 +18,9 @@ void main() {
     PersistentStorageService.setImplementation(storage);
     final entries = List.generate(
       4,
-      (i) => WorkCategory('Category ${i + 1}', listIndex: i)..id = i + 1,
+      (i) =>
+          WorkCategory('Category ${i + 1}', listIndex: i, uuid: '${i + 1}', lastEdit: null)
+            ..id = i + 1,
     );
     await storage.workCategories.saveEntries(entries);
     categories = WorkCategories(entries);
