@@ -30,8 +30,13 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didUpdateWidget(covariant CategoryFilterWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
     _updateCategoriesOnChanged();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return HoverControls(
       controlsKey: _controlsKey,
       hoveringControls: Padding(
