@@ -8,7 +8,7 @@ class GroupedWorkEntries {
   final List<WorkEntry> entries;
   final CalendarUnit calendarUnit;
   final int calendarUnitValue; // e.g. week number or month number
-  final int year;
+  final int year; // ISO week-year for weeks, calendar year for months.
 
   const GroupedWorkEntries({
     required this.entries,
@@ -34,7 +34,12 @@ class GroupedWorkEntries {
         CalendarUnit.week => entry.date.weekNumber,
         CalendarUnit.month => entry.date.month,
       };
-      entriesByCalendarUnit.putIfAbsent((calendarUnitNumber, entry.date.year), () => []).add(entry);
+      // An ISO week belongs to the year containing its Thursday.
+      int year = switch (calendarUnit) {
+        CalendarUnit.week => yearOfIsoWeek(entry),
+        CalendarUnit.month => entry.date.year,
+      };
+      entriesByCalendarUnit.putIfAbsent((calendarUnitNumber, year), () => []).add(entry);
     }
     return entriesByCalendarUnit.entries
         .map(
@@ -46,5 +51,13 @@ class GroupedWorkEntries {
           ),
         )
         .toList();
+  }
+
+  static int yearOfIsoWeek(WorkEntry entry) {
+    return DateTime(
+      entry.date.year,
+      entry.date.month,
+      entry.date.day + DateTime.thursday - entry.date.weekday,
+    ).year;
   }
 }

@@ -95,6 +95,9 @@ void main() {
     ('-1', '30'),
     ('0', '-1'),
     ('999999999999999999999999999999', '0'),
+    ('0', '999999999999999999999999999999'),
+    ('0', '4294967297'),
+    ('0', '71582789'),
     ('1193047', '0'),
     ('1193046', '29'),
   ]) {
@@ -108,6 +111,39 @@ void main() {
       expect(await storage.workEntries.loadEntries(), isEmpty);
       expect(find.byType(NewEntryPage), findsOneWidget);
       expect(tester.takeException(), isNull);
+    });
+  }
+
+  for (final values in [
+    ('invalid', '30', 'parse', null),
+    ('1', 'invalid', null, 'parse'),
+    ('-1', '30', 'invalid', null),
+    ('1', '-1', null, 'invalid'),
+    ('4294967297', '30', 'large', 'sum'),
+    ('1', '4294967297', 'sum', 'large'),
+    ('1193047', '30', 'large', 'sum'),
+    ('1', '71582789', 'sum', 'large'),
+    ('1193046', '29', 'sum', 'sum'),
+  ]) {
+    testWidgets('duration errors belong to the correct field for $values', (tester) async {
+      final loc = await openForm(tester);
+      fillDuration(tester, values.$1, values.$2);
+      tester.state<FormState>(find.byType(Form)).validate();
+      await tester.pump();
+      final messages = {
+        'parse': loc.inputTooLargeOrNanException,
+        'invalid': loc.inputInvalidException,
+        'large': loc.inputTooLargeException,
+        'sum': loc.inputSumTooLargeException,
+      };
+      expect(
+        tester.state<FormFieldState<String>>(find.byType(TextFormField).at(0)).errorText,
+        messages[values.$3],
+      );
+      expect(
+        tester.state<FormFieldState<String>>(find.byType(TextFormField).at(1)).errorText,
+        messages[values.$4],
+      );
     });
   }
 
