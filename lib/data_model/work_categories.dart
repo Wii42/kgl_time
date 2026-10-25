@@ -43,6 +43,7 @@ class WorkCategories extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Moves a category to its final index after removal from [oldIndex].
   void reorder(int oldIndex, int newIndex) {
     _reorderEntries(oldIndex, newIndex);
     _recalculateListIndices();
@@ -52,9 +53,8 @@ class WorkCategories extends ChangeNotifier {
   }
 
   void _reorderEntries(int oldIndex, int newIndex) {
-    WorkCategory entry = _entries[oldIndex];
+    WorkCategory entry = _entries.removeAt(oldIndex);
     _entries.insert(newIndex, entry);
-    _entries.removeAt(oldIndex + (oldIndex < newIndex ? 0 : 1));
   }
 
   void _recalculateListIndices() {

@@ -229,7 +229,7 @@ void main() {
     expectVisible(tester, {1, 3});
   });
 
-  for (final (int from, int to) in [(0, 2), (1, 0)]) {
+  for (final (int from, int to) in [(0, 1), (1, 0)]) {
     testWidgets(
       'reordering categories from $from to $to preserves selections',
       (WidgetTester tester) async {
