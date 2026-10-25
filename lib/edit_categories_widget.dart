@@ -31,7 +31,7 @@ class EditCategoriesWidget extends StatelessWidget {
               ReorderableListView(
                 primary: false,
                 shrinkWrap: true,
-                onReorder: categories.reorder,
+                onReorderItem: categories.reorder,
                 children: [
                   for ((int, WorkCategory) category in categories.entries.indexed)
                     ListTile(

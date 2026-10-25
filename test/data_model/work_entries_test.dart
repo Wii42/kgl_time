@@ -145,12 +145,14 @@ void main() {
     }
 
     for (final move in [
-      (0, 4, [2, 3, 4, 1]),
+      (0, 3, [2, 3, 4, 1]),
       (3, 0, [4, 1, 2, 3]),
+      (1, 2, [1, 3, 2, 4]),
+      (2, 1, [1, 3, 2, 4]),
       (1, 1, [1, 2, 3, 4]),
     ]) {
       test(
-        'move ${move.$1} to insertion index ${move.$2} survives model reload',
+        'move ${move.$1} to final index ${move.$2} survives model reload',
         () async {
           final model = await categories();
           model.reorder(move.$1, move.$2);
