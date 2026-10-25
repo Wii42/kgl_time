@@ -42,7 +42,16 @@ The app can, in principle, be built for all platforms that Flutter provides, exc
    ```bash
    flutter build apk
    ```
-   
+
+## Code Generation
+
+To automatically regenerate code when source files change, run the following command from the
+project root in a separate terminal:
+
+```bash
+dart run build_runner watch --delete-conflicting-outputs
+```
+
 ## Changelog
 #### v0.3.2
 - Added CSV export of work entries, with options to save or share the file
