@@ -55,9 +55,9 @@ class GroupedWorkEntries {
 
   static int yearOfIsoWeek(WorkEntry entry) {
     return DateTime(
-        entry.date.year,
-        entry.date.month,
-        entry.date.day + DateTime.thursday - entry.date.weekday,
-      ).year;
+      entry.date.year,
+      entry.date.month,
+      entry.date.day + DateTime.thursday - entry.date.weekday,
+    ).year;
   }
 }
