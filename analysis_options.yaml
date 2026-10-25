@@ -43,3 +43,6 @@ many_lints:
   preset: core
   rules:
     missing_provider_scope: false
+
+formatter:
+  page_width: 100
