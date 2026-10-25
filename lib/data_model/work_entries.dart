@@ -6,8 +6,7 @@ import 'package:notifying_list/notifying_list.dart';
 import 'work_entry.dart';
 
 class WorkEntries extends ChangeNotifier {
-  final Table<WorkEntry> _storedEntries =
-      PersistentStorageService.instance.workEntries;
+  final Table<WorkEntry> _storedEntries = PersistentStorageService.instance.workEntries;
   late final CallbackNotifyingList<WorkEntry> _entries;
 
   WorkEntries(List<WorkEntry> entriesList) {
@@ -27,9 +26,7 @@ class WorkEntries extends ChangeNotifier {
   }
 
   /// All entries that are not in the trash
-  List<WorkEntry> get entries =>
-      List.unmodifiable(_entries.where((entry) => !entry.isInTrash));
-
+  List<WorkEntry> get entries => List.unmodifiable(_entries.where((entry) => !entry.isInTrash));
 
   /// All entries that are in the trash
   List<WorkEntry> get entriesInTrash =>
@@ -42,8 +39,7 @@ class WorkEntries extends ChangeNotifier {
   }
 
   void moveToTrashBin(WorkEntry entry) {
-    WorkEntry newEntry =
-        entry.withTrashStatus(DateTime.now(), tickedOff: false);
+    WorkEntry newEntry = entry.withTrashStatus(DateTime.now(), tickedOff: false);
     updateEntry(entry, newEntry..id = entry.id);
   }
 
@@ -64,9 +60,9 @@ class WorkEntries extends ChangeNotifier {
 
   void _removeEntriesInTrashPermanentlyOlderThan(DateTime cutoffDate) {
     List<WorkEntry> entriesToRemove = _entries
-        .where((entry) =>
-            entry.isInTrash &&
-            (entry.wasMovedToTrashAt?.isBefore(cutoffDate) ?? false))
+        .where(
+          (entry) => entry.isInTrash && (entry.wasMovedToTrashAt?.isBefore(cutoffDate) ?? false),
+        )
         .toList();
     for (var entry in entriesToRemove) {
       _removeEntryPermanently(entry);
@@ -92,5 +88,4 @@ class WorkEntries extends ChangeNotifier {
     _storedEntries.saveEntries(_entries);
     notifyListeners();
   }
-
 }

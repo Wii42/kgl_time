@@ -24,8 +24,7 @@ class WorkEntryDetails extends WorkEntryWidget {
           value: workEntry.tickedOff,
           onChanged: (_) {
             WorkEntries entriesList = context.read<WorkEntries>();
-            entriesList.updateEntry(
-                workEntry, workEntry..tickedOff = !workEntry.tickedOff);
+            entriesList.updateEntry(workEntry, workEntry..tickedOff = !workEntry.tickedOff);
           },
           shape: CircleBorder(),
           side: BorderSide(
@@ -42,8 +41,7 @@ class WorkEntryDetails extends WorkEntryWidget {
     );
   }
 
-  static Widget workEntryDetails(
-      WorkEntry workEntry, TextTheme textTheme, AppLocalizations? loc) {
+  static Widget workEntryDetails(WorkEntry workEntry, TextTheme textTheme, AppLocalizations? loc) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -52,8 +50,7 @@ class WorkEntryDetails extends WorkEntryWidget {
           style: textTheme.headlineSmall,
         ),
         if (workEntry.startTime != null && workEntry.endTime != null)
-          Text(
-              '${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
+          Text('${formatTime(workEntry.startTime!)} - ${formatTime(workEntry.endTime!)}'),
         Text(WorkEntryWidget.formattedDate(workEntry, loc)),
         if (workEntry.categories.isNotEmpty) ...[
           SizedBox(height: 8),
@@ -71,8 +68,7 @@ class WorkEntryDetails extends WorkEntryWidget {
             ],
           ),
         ],
-        if (workEntry.description != null &&
-            workEntry.description!.isNotEmpty) ...[
+        if (workEntry.description != null && workEntry.description!.isNotEmpty) ...[
           SizedBox(height: 8),
           Text('${loc?.description}: ${workEntry.description}'),
         ],

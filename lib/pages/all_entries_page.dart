@@ -24,8 +24,9 @@ class AllEntriesPage extends KglPage {
 
   @override
   Widget body(BuildContext context) => Consumer<WorkEntries>(
-      builder: (context, workEntries, _) =>
-          _AllEntriesStatefulPage(workEntries: workEntries, key: key));
+    builder: (context, workEntries, _) =>
+        _AllEntriesStatefulPage(workEntries: workEntries, key: key),
+  );
 }
 
 class _AllEntriesStatefulPage extends StatefulWidget {
@@ -61,63 +62,61 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
   Widget build(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
     return HoverControls(
-        controlsKey: _buttonKey,
-        hoveringControls: Padding(
-          key: _buttonKey, // Assign the key to the button
-          padding: const EdgeInsets.all(12.0),
-          child: SegmentedButton<CalendarUnit>(
-            segments: [
-              ButtonSegment(
-                  value: CalendarUnit.week,
-                  label: Text(loc?.groupByWeek ?? '<byWeek>')),
-              ButtonSegment(
-                  value: CalendarUnit.month,
-                  label: Text(loc?.groupByMonth ?? '<byMonth>')),
-            ],
-            selected: {_selectedCalendarUnit},
-            onSelectionChanged: (Set<CalendarUnit> selected) {
-              assert(selected.length == 1);
-              setState(() {
-                _selectedCalendarUnit = selected.single;
-                _updateGroupedEntries();
-              });
-            },
-            style: solidUnselectedBackgroundStyle(context),
-          ),
+      controlsKey: _buttonKey,
+      hoveringControls: Padding(
+        key: _buttonKey, // Assign the key to the button
+        padding: const EdgeInsets.all(12.0),
+        child: SegmentedButton<CalendarUnit>(
+          segments: [
+            ButtonSegment(value: CalendarUnit.week, label: Text(loc?.groupByWeek ?? '<byWeek>')),
+            ButtonSegment(value: CalendarUnit.month, label: Text(loc?.groupByMonth ?? '<byMonth>')),
+          ],
+          selected: {_selectedCalendarUnit},
+          onSelectionChanged: (Set<CalendarUnit> selected) {
+            assert(selected.length == 1);
+            setState(() {
+              _selectedCalendarUnit = selected.single;
+              _updateGroupedEntries();
+            });
+          },
+          style: solidUnselectedBackgroundStyle(context),
         ),
-        builder: (context, controlsHeight) {
-          return AnimatedWidthConstrainedListView<Object>(
-            padding: EdgeInsets.only(top:max(controlsHeight - 8, 0)), // tp padding to avoid collision with the SegmentedButton
-            items: [
-              for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
-                entryGroup,
-                for (WorkEntry entry in entryGroup.entries) entry
-              ],
+      ),
+      builder: (context, controlsHeight) {
+        return AnimatedWidthConstrainedListView<Object>(
+          padding: EdgeInsets.only(
+            top: max(controlsHeight - 8, 0),
+          ), // tp padding to avoid collision with the SegmentedButton
+          items: [
+            for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
+              entryGroup,
+              for (WorkEntry entry in entryGroup.entries) entry,
             ],
-            itemBuilder: (BuildContext context, Animation<double> animation,
-                Object item, int index) {
-              if (item is GroupedWorkEntries) {
-                return SizeFadeTransition(
-                  animation: animation,
-                  axis: Axis.vertical,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                    child: entriesGroupHeader(item, loc),
-                  ),
-                );
-              }
-              if (item is WorkEntry) {
-                return SizeFadeTransition(
-                  animation: animation,
-                  axis: Axis.vertical,
-                  child: WorkEntryDetails(workEntry: item),
-                );
-              }
-              return SizedBox(); // Fallback, should not reach here
-            },
-            areItemsTheSame: itemsAreTheSame,
-          );
-        });
+          ],
+          itemBuilder: (BuildContext context, Animation<double> animation, Object item, int index) {
+            if (item is GroupedWorkEntries) {
+              return SizeFadeTransition(
+                animation: animation,
+                axis: Axis.vertical,
+                child: Padding(
+                  padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
+                  child: entriesGroupHeader(item, loc),
+                ),
+              );
+            }
+            if (item is WorkEntry) {
+              return SizeFadeTransition(
+                animation: animation,
+                axis: Axis.vertical,
+                child: WorkEntryDetails(workEntry: item),
+              );
+            }
+            return SizedBox(); // Fallback, should not reach here
+          },
+          areItemsTheSame: itemsAreTheSame,
+        );
+      },
+    );
   }
 
   bool itemsAreTheSame(Object oldItem, Object newItem) {
@@ -140,15 +139,17 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
     }
   }
 
-  Widget entriesGroupHeader(
-      GroupedWorkEntries entryGroup, AppLocalizations? loc) {
+  Widget entriesGroupHeader(GroupedWorkEntries entryGroup, AppLocalizations? loc) {
     String calendarUnitOfGroup = formatCalendarUnitValue(
-        entryGroup.calendarUnitValue, entryGroup.calendarUnit,
-        loc: loc);
+      entryGroup.calendarUnitValue,
+      entryGroup.calendarUnit,
+      loc: loc,
+    );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       key: ValueKey(
-          'group_${entryGroup.calendarUnit}_${entryGroup.calendarUnitValue}_${entryGroup.year}'),
+        'group_${entryGroup.calendarUnit}_${entryGroup.calendarUnitValue}_${entryGroup.year}',
+      ),
       children: [
         Expanded(
           child: Text(
@@ -162,35 +163,36 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
   }
 
   /// Sets the background color of the button if not selected to [color] if provided or the default background color
-  ButtonStyle solidUnselectedBackgroundStyle(BuildContext context,
-      {Color? color}) {
-    return ButtonStyle(backgroundColor:
-        WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
-      if (states.contains(WidgetState.selected)) {
-        return Theme.of(context)
-            .segmentedButtonTheme
-            .style
-            ?.backgroundColor
-            ?.resolve(states); // use default
-      }
-      return color ?? Theme.of(context).canvasColor;
-    }));
+  ButtonStyle solidUnselectedBackgroundStyle(BuildContext context, {Color? color}) {
+    return ButtonStyle(
+      backgroundColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
+        if (states.contains(WidgetState.selected)) {
+          return Theme.of(
+            context,
+          ).segmentedButtonTheme.style?.backgroundColor?.resolve(states); // use default
+        }
+        return color ?? Theme.of(context).canvasColor;
+      }),
+    );
   }
 
   void _updateGroupedEntries() {
     _groupedEntries = GroupedWorkEntries.groupEntriesByCalendarUnit(
-        widget.workEntries.entries, _selectedCalendarUnit);
+      widget.workEntries.entries,
+      _selectedCalendarUnit,
+    );
   }
 
   String formatCalendarUnitValue(
-      int calendarUnitValue, CalendarUnit calendarUnit,
-      {required AppLocalizations? loc}) {
+    int calendarUnitValue,
+    CalendarUnit calendarUnit, {
+    required AppLocalizations? loc,
+  }) {
     switch (calendarUnit) {
       case CalendarUnit.week:
         return '${loc?.calendarWeek} $calendarUnitValue,';
       case CalendarUnit.month:
-        return DateFormat('MMMM', loc?.localeName)
-            .format(DateTime(0, calendarUnitValue));
+        return DateFormat('MMMM', loc?.localeName).format(DateTime(0, calendarUnitValue));
     }
   }
 }

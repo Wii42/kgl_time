@@ -25,32 +25,34 @@ abstract class WorkEntryWidget extends StatelessWidget {
     return Theme(
       data: workEntry.tickedOff
           ? parentTheme.copyWith(
-              textTheme: parentTheme.textTheme
-                  .apply(bodyColor: parentTheme.disabledColor),
+              textTheme: parentTheme.textTheme.apply(bodyColor: parentTheme.disabledColor),
               extensions: [
-                  ...parentTheme.extensions.values,
-                  OriginalTextTheme(textTheme: parentTheme.textTheme),
-                  // Save original text theme
-                ])
-          : parentTheme,
-      child: Builder(builder: (context) {
-        return Card(
-          //margin: EdgeInsets.all(8),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(child: details(context)),
-                switch (rightSideButtonsAxis) {
-                  Axis.horizontal => Row(children: rightSideButtons(context)),
-                  Axis.vertical => Column(children: rightSideButtons(context)),
-                },
+                ...parentTheme.extensions.values,
+                OriginalTextTheme(textTheme: parentTheme.textTheme),
+                // Save original text theme
               ],
+            )
+          : parentTheme,
+      child: Builder(
+        builder: (context) {
+          return Card(
+            //margin: EdgeInsets.all(8),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: details(context)),
+                  switch (rightSideButtonsAxis) {
+                    Axis.horizontal => Row(children: rightSideButtons(context)),
+                    Axis.vertical => Column(children: rightSideButtons(context)),
+                  },
+                ],
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   }
 
@@ -60,27 +62,28 @@ abstract class WorkEntryWidget extends StatelessWidget {
   List<Widget> rightSideButtons(BuildContext context) {
     return [
       IconButton(
-          onPressed: () {
-            context.push(AppRoute.newEntry.path, extra: workEntry);
-          },
-          icon: Icon(Icons.edit_outlined)),
+        onPressed: () {
+          context.push(AppRoute.newEntry.path, extra: workEntry);
+        },
+        icon: Icon(Icons.edit_outlined),
+      ),
       SizedBox(width: 12),
       IconButton(
-          onPressed: () {
-            _showDeleteConfirmationDialog(context);
-          },
-          icon: Icon(Icons.delete_outline_outlined))
+        onPressed: () {
+          _showDeleteConfirmationDialog(context);
+        },
+        icon: Icon(Icons.delete_outline_outlined),
+      ),
     ];
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context) =>
-      showDeleteConfirmationDialog(
-          context: context,
-          onDelete: () {
-            WorkEntries workEntries =
-                context.read<WorkEntries>(); // Close the dialog
-            _deleteItem(workEntries); // Call the delete function
-          });
+  void _showDeleteConfirmationDialog(BuildContext context) => showDeleteConfirmationDialog(
+    context: context,
+    onDelete: () {
+      WorkEntries workEntries = context.read<WorkEntries>(); // Close the dialog
+      _deleteItem(workEntries); // Call the delete function
+    },
+  );
 
   void _deleteItem(WorkEntries workEntries) {
     workEntries.moveToTrashBin(workEntry);

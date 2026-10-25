@@ -33,8 +33,7 @@ class EditCategoriesWidget extends StatelessWidget {
                 shrinkWrap: true,
                 onReorder: categories.reorder,
                 children: [
-                  for ((int, WorkCategory) category
-                      in categories.entries.indexed)
+                  for ((int, WorkCategory) category in categories.entries.indexed)
                     ListTile(
                       key: Key("${category.$1} ${category.$2.id}"),
                       title: Text(category.$2.displayName),
@@ -52,10 +51,9 @@ class EditCategoriesWidget extends StatelessWidget {
                             icon: Icon(Icons.delete_outline_outlined),
                             onPressed: () => showDeleteConfirmationDialog(
                               context: context,
-                              detailText: (l) =>
-                                  l?.deleteCategoryConfirmationDialog(
-                                    category.$2.displayName,
-                                  ),
+                              detailText: (l) => l?.deleteCategoryConfirmationDialog(
+                                category.$2.displayName,
+                              ),
                               onDelete: () => categories.remove(category.$2),
                             ),
                           ),
@@ -106,10 +104,7 @@ class EditCategoriesWidget extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            (existingCategory == null
-                    ? loc?.addNewCategory
-                    : loc?.editCategory) ??
-                '',
+            (existingCategory == null ? loc?.addNewCategory : loc?.editCategory) ?? '',
           ),
           content: Form(
             key: formKey,
@@ -145,20 +140,16 @@ class EditCategoriesWidget extends StatelessWidget {
                     );
                     WorkEntries workEntries = context.read<WorkEntries>();
 
-                    Iterable<WorkEntry> entriesWithThisCategory = workEntries
-                        .entries
-                        .where(
-                          (entry) => entry.categories.any(
-                            (category) =>
-                                category.displayName == oldName &&
-                                category.id == existingCategory.id,
-                          ),
-                        );
+                    Iterable<WorkEntry> entriesWithThisCategory = workEntries.entries.where(
+                      (entry) => entry.categories.any(
+                        (category) =>
+                            category.displayName == oldName && category.id == existingCategory.id,
+                      ),
+                    );
                     for (WorkEntry entry in entriesWithThisCategory) {
                       WorkEntry newEntry = entry.copyWith(
                         categories: [
-                          for (EmbeddedWorkCategory category
-                              in entry.categories)
+                          for (EmbeddedWorkCategory category in entry.categories)
                             if (category.id == existingCategory.id &&
                                 category.displayName == oldName)
                               category..displayName = controller.text
@@ -183,8 +174,7 @@ class EditCategoriesWidget extends StatelessWidget {
                 }
               },
               child: Text(
-                (existingCategory == null ? loc?.add : loc?.save) ??
-                    '<add/save>',
+                (existingCategory == null ? loc?.add : loc?.save) ?? '<add/save>',
               ),
             ),
           ],

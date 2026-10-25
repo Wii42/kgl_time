@@ -22,13 +22,9 @@ void main() async {
     IsarPersistentStorage(),
   );
   await _checkSchemaVersion([SchemaMigration1to2()]);
-  List<WorkEntry> initialEntries = await PersistentStorageService
-      .instance
-      .workEntries
+  List<WorkEntry> initialEntries = await PersistentStorageService.instance.workEntries
       .loadEntries();
-  List<WorkCategory> initialCategories = await PersistentStorageService
-      .instance
-      .workCategories
+  List<WorkCategory> initialCategories = await PersistentStorageService.instance.workCategories
       .loadEntries();
 
   Map<String, dynamic> initialKeyValueStorage = await PersistentStorageService

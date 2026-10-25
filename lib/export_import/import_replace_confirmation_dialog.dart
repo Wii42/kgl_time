@@ -77,14 +77,12 @@ class ImportReplaceConfirmationDialog extends StatelessWidget {
         if (loadedData.schemaVersion > schemaVersion) ...[
           SizedBox(height: 12),
           Text(
-            loc?.backupFromNewerVersionWarning ??
-                "<Warning backup is form newer version>",
+            loc?.backupFromNewerVersionWarning ?? "<Warning backup is form newer version>",
           ),
         ],
         SizedBox(height: 12),
         Text(
-          loc?.importReplaceConfirmationDialog ??
-              "<import replace confirmation dialog>",
+          loc?.importReplaceConfirmationDialog ?? "<import replace confirmation dialog>",
         ),
       ],
     );

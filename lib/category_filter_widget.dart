@@ -46,47 +46,53 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
         key: _controlsKey,
         padding: const EdgeInsets.all(8.0),
         child: SelectCategoriesWidget(
-            categories: _selectedCategories,
-            onSelectedCategoriesChanged: (categories) {
-              setState(() {
-                _selectedCategories = categories;
-              });
-            }),
+          categories: _selectedCategories,
+          onSelectedCategoriesChanged: (categories) {
+            setState(() {
+              _selectedCategories = categories;
+            });
+          },
+        ),
       ),
       builder: (_, controlsHeight) {
-        return Consumer<WorkEntries>(builder: (context, workEntries, _) {
-          Iterable<int> selectedCategoryIds = [
-            for (var e in idMapSelectedCategories.entries)
-              if (e.value) e.key
-          ];
-          List<WorkEntry> filteredEntries = workEntries.entries
-              .where((entry) => entry.categories
-                  .map((c) => c.id)
-                  .any(selectedCategoryIds.contains))
-              .toList();
+        return Consumer<WorkEntries>(
+          builder: (context, workEntries, _) {
+            Iterable<int> selectedCategoryIds = [
+              for (var e in idMapSelectedCategories.entries)
+                if (e.value) e.key,
+            ];
+            List<WorkEntry> filteredEntries = workEntries.entries
+                .where(
+                  (entry) => entry.categories.map((c) => c.id).any(selectedCategoryIds.contains),
+                )
+                .toList();
 
-          if (filteredEntries.isNotEmpty) {
-            return AnimatedWidthConstrainedListView<WorkEntry>(
-              shrinkWrap: true,
-              items: filteredEntries,
-              itemBuilder: (BuildContext context, Animation<double> animation,
-                  WorkEntry entry, int index) {
-                return SizeFadeTransition(
-                    animation: animation,
-                    axis: Axis.vertical,
-                    child: WorkEntryDetails(
-                        workEntry: entry, key: ValueKey(entry.id)));
-              },
-              areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) =>
-                  oldItem.id == newItem.id,
-              padding: EdgeInsetsGeometry.only(top: controlsHeight),
+            if (filteredEntries.isNotEmpty) {
+              return AnimatedWidthConstrainedListView<WorkEntry>(
+                shrinkWrap: true,
+                items: filteredEntries,
+                itemBuilder:
+                    (
+                      BuildContext context,
+                      Animation<double> animation,
+                      WorkEntry entry,
+                      int index,
+                    ) {
+                      return SizeFadeTransition(
+                        animation: animation,
+                        axis: Axis.vertical,
+                        child: WorkEntryDetails(workEntry: entry, key: ValueKey(entry.id)),
+                      );
+                    },
+                areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) => oldItem.id == newItem.id,
+                padding: EdgeInsetsGeometry.only(top: controlsHeight),
+              );
+            }
+            return Center(
+              child: Text(AppLocalizations.of(context)?.noMatchingEntries ?? '<noMatchingEntries>'),
             );
-          }
-          return Center(
-            child: Text(AppLocalizations.of(context)?.noMatchingEntries ??
-                '<noMatchingEntries>'),
-          );
-        });
+          },
+        );
       },
     );
   }
@@ -95,9 +101,7 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
     const IterableEquality<WorkCategory> equality = IterableEquality();
     if (!equality.equals(widget.categories.entries, _selectedCategories.keys)) {
       Map<int, bool> idMap = idMapSelectedCategories;
-      _selectedCategories = {
-        for (var e in widget.categories.entries) e: idMap[e.id] ?? true
-      };
+      _selectedCategories = {for (var e in widget.categories.entries) e: idMap[e.id] ?? true};
     }
   }
 

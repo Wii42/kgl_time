@@ -6,6 +6,7 @@ import '../format_duration.dart';
 import 'isar_storable.dart';
 
 part 'work_category.g.dart';
+
 abstract class IWorkCategory {
   String displayName;
   @JsonKey(defaultValue: "")
@@ -24,13 +25,14 @@ abstract class IWorkCategory {
 
     return other is IWorkCategory &&
         other.displayName == displayName &&
-        other.icon == icon && other.uuid == uuid;
+        other.icon == icon &&
+        other.uuid == uuid;
   }
 
   @override
   int get hashCode => Object.hash(displayName, icon);
 
-  Map<String,dynamic> toJson();
+  Map<String, dynamic> toJson();
 }
 
 @Collection(accessor: 'workCategories', inheritance: true)
@@ -40,10 +42,22 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
   Id id = Isar.autoIncrement;
   int listIndex;
 
-  WorkCategory(super.displayName, {super.icon, this.listIndex = -1, required super.uuid, required super.lastEdit});
+  WorkCategory(
+    super.displayName, {
+    super.icon,
+    this.listIndex = -1,
+    required super.uuid,
+    required super.lastEdit,
+  });
 
   EmbeddedWorkCategory toEmbedded() {
-    return EmbeddedWorkCategory(displayName: displayName, icon: icon, id: id, uuid: uuid, lastEdit: lastEdit);
+    return EmbeddedWorkCategory(
+      displayName: displayName,
+      icon: icon,
+      id: id,
+      uuid: uuid,
+      lastEdit: lastEdit,
+    );
   }
 
   @override
@@ -54,7 +68,8 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
         other.id == id &&
         other.displayName == displayName &&
         other.icon == icon &&
-        other.listIndex == listIndex && other.uuid == uuid;
+        other.listIndex == listIndex &&
+        other.uuid == uuid;
   }
 
   @override
@@ -68,8 +83,7 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
   @override
   Map<String, dynamic> toJson() => _$WorkCategoryToJson(this);
 
-  factory WorkCategory.fromJson(Map<String, dynamic> json) =>
-      _$WorkCategoryFromJson(json);
+  factory WorkCategory.fromJson(Map<String, dynamic> json) => _$WorkCategoryFromJson(json);
 }
 
 @embedded
@@ -77,8 +91,13 @@ class WorkCategory extends IWorkCategory implements IsarStorable {
 class EmbeddedWorkCategory extends IWorkCategory {
   int? id;
 
-  EmbeddedWorkCategory({String displayName = '', super.icon, this.id, super.uuid = '', super.lastEdit})
-      : super(displayName);
+  EmbeddedWorkCategory({
+    String displayName = '',
+    super.icon,
+    this.id,
+    super.uuid = '',
+    super.lastEdit,
+  }) : super(displayName);
 
   WorkCategory toWorkCategory() {
     WorkCategory category = WorkCategory(displayName, icon: icon, uuid: uuid, lastEdit: lastEdit);
@@ -102,8 +121,7 @@ enum CategoryIcon {
   school(Icons.school),
   shopping(Icons.shopping_cart),
   sport(Icons.sports),
-  transport(Icons.directions_bus),
-  ;
+  transport(Icons.directions_bus);
 
   const CategoryIcon(IconData icon);
 }

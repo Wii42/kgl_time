@@ -22,8 +22,7 @@ class ExportImportPage extends KglPage {
   const ExportImportPage({super.key, required super.appTitle});
 
   @override
-  String? pageTitle(AppLocalizations? loc) =>
-      loc?.exportImportEntries ?? "<Export / Import Data>";
+  String? pageTitle(AppLocalizations? loc) => loc?.exportImportEntries ?? "<Export / Import Data>";
 
   @override
   bool get showSettingsButton => false;
@@ -59,7 +58,9 @@ class ExportImportPage extends KglPage {
               actions: [
                 ElevatedButton.icon(
                   onPressed: onImportJsonBackup(context),
-                  label: Text(loc?.importBacupAndReplaceExistingEntries ?? "<import json and replace data>"),
+                  label: Text(
+                    loc?.importBacupAndReplaceExistingEntries ?? "<import json and replace data>",
+                  ),
                   icon: Icon(Icons.upload_outlined),
                 ),
               ],
@@ -89,7 +90,7 @@ class ExportImportPage extends KglPage {
     WorkData? loadedData = await ImportService().loadJsonBackup(
       onError: (error) => ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(loc?.importFailed??"<Import failed.>"))),
+      ).showSnackBar(SnackBar(content: Text(loc?.importFailed ?? "<Import failed.>"))),
     );
     if (loadedData == null) {
       return;
@@ -97,8 +98,7 @@ class ExportImportPage extends KglPage {
     if (context.mounted) {
       showDialog(
         context: context,
-        builder: (context) =>
-            ImportReplaceConfirmationDialog(loadedData: loadedData),
+        builder: (context) => ImportReplaceConfirmationDialog(loadedData: loadedData),
       );
     }
   };

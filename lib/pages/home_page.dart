@@ -40,15 +40,16 @@ class HomePage extends KglPage {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text(loc?.createNewEntry ?? '<createNewEntry>',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                              softWrap: true,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.apply(color: Colors.white)),
+                          child: Text(
+                            loc?.createNewEntry ?? '<createNewEntry>',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            softWrap: true,
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyLarge?.apply(color: Colors.white),
+                          ),
                         ),
                         Icon(
                           Icons.add,
@@ -69,14 +70,12 @@ class HomePage extends KglPage {
                       AnimatedWidthConstrainedListView<WorkEntry>(
                         items: workEntries.entries.take(3).toList(),
                         //padding: const EdgeInsets.symmetric(vertical: 16),
-                        itemBuilder: (context, animation, entry, index) =>
-                            SizeFadeTransition(
-                                animation: animation,
-                                axis: Axis.vertical,
-                                child: WorkEntryPreview(
-                                    workEntry: entry, key: ValueKey(entry.id))),
-                        areItemsTheSame:
-                            (WorkEntry oldItem, WorkEntry newItem) {
+                        itemBuilder: (context, animation, entry, index) => SizeFadeTransition(
+                          animation: animation,
+                          axis: Axis.vertical,
+                          child: WorkEntryPreview(workEntry: entry, key: ValueKey(entry.id)),
+                        ),
+                        areItemsTheSame: (WorkEntry oldItem, WorkEntry newItem) {
                           return oldItem.id == newItem.id;
                         },
                         shrinkWrap: true,
@@ -95,8 +94,9 @@ class HomePage extends KglPage {
                       style: textTheme.bodyLarge,
                     ),
                     Text(
-                        '${loc?.currentMonth}: ${formatDuration(totalThisMonth(workEntries.entries))}',
-                        style: textTheme.bodyLarge),
+                      '${loc?.currentMonth}: ${formatDuration(totalThisMonth(workEntries.entries))}',
+                      style: textTheme.bodyLarge,
+                    ),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -110,8 +110,9 @@ class HomePage extends KglPage {
 
   Duration totalThisWeek(List<WorkEntry> workEntries) {
     DateWeek thisWeek = DateWeek.current();
-    List<WorkEntry> thisWeekEntries =
-        workEntries.where((entry) => thisWeek.contains(entry.date)).toList();
+    List<WorkEntry> thisWeekEntries = workEntries
+        .where((entry) => thisWeek.contains(entry.date))
+        .toList();
     return totalWorkDuration(thisWeekEntries);
   }
 
@@ -119,14 +120,15 @@ class HomePage extends KglPage {
     int currentMonth = DateTime.now().month;
     int currentYear = DateTime.now().year;
     List<WorkEntry> thisMonthEntries = workEntries
-        .where((entry) =>
-            entry.date.month == currentMonth && entry.date.year == currentYear)
+        .where((entry) => entry.date.month == currentMonth && entry.date.year == currentYear)
         .toList();
     return totalWorkDuration(thisMonthEntries);
   }
 
   Duration totalWorkDuration(List<WorkEntry> workEntries) {
-    return workEntries.fold(Duration.zero,
-        (previousValue, element) => previousValue + element.workDuration);
+    return workEntries.fold(
+      Duration.zero,
+      (previousValue, element) => previousValue + element.workDuration,
+    );
   }
 }

@@ -28,8 +28,7 @@ class NewEntryPage extends KglPage {
         ..addAll(
           existingEntry?.categories
                   .where(
-                    (element) =>
-                        workCategories.entries.every((e) => e.id != element.id),
+                    (element) => workCategories.entries.every((e) => e.id != element.id),
                   )
                   .map((e) => e.toWorkCategory()) ??
               [],
@@ -303,12 +302,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
             .map((e) => e.key.toEmbedded())
             .toList(),
         description: descriptionController.text,
-        startTime:
-            (widget.existingEntry?.startTime?.isSameDate(selectedDate) ?? false)
+        startTime: (widget.existingEntry?.startTime?.isSameDate(selectedDate) ?? false)
             ? widget.existingEntry?.startTime
             : null,
-        endTime:
-            (widget.existingEntry?.endTime?.isSameDate(selectedDate) ?? false)
+        endTime: (widget.existingEntry?.endTime?.isSameDate(selectedDate) ?? false)
             ? widget.existingEntry?.endTime
             : null,
         lastEdit: DateTime.now(),

@@ -13,12 +13,14 @@ class EditCategoriesPage extends KglPage {
 
   @override
   Widget body(BuildContext context) => KglPage.alwaysFillingScrollView(
-      child: Center(
-          child: Padding(
+    child: Center(
+      child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: EditCategoriesWidget(),
-      )),
-      maxWidth: KglTimeApp.maxPageWidth);
+      ),
+    ),
+    maxWidth: KglTimeApp.maxPageWidth,
+  );
 
   @override
   bool get showSettingsButton => false;

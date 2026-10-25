@@ -21,8 +21,7 @@ class ExportService {
 
   String jsonFileName() => 'kgl_time_backup_${fileTimestamp()}.json';
 
-  String fileTimestamp() =>
-      DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
+  String fileTimestamp() => DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
 
   String entriesToCsv(List<WorkEntry> entries, AppLocalizations? loc) {
     List<List<dynamic>> rows = [
