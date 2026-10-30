@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -101,7 +102,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Form(
       key: _formKey,
-      child: KglPage.alwaysFillingScrollView(
+      child: AlwaysFillingScrollView(
         maxWidth: KglTimeApp.maxPageWidth,
         child: Padding(
           padding: const EdgeInsets.all(16),

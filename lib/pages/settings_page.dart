@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
@@ -23,7 +24,7 @@ class SettingsPage extends KglPage {
   @override
   Widget body(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
-    return KglPage.alwaysFillingScrollView(
+    return AlwaysFillingScrollView(
       maxWidth: KglTimeApp.maxPageWidth,
       child: Padding(
         padding: const EdgeInsets.all(8.0),

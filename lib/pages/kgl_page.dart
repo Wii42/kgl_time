@@ -56,35 +56,4 @@ abstract class KglPage extends StatelessWidget {
       ],
     );
   }
-
-  /// Widget which assures the child uses all available space when smaller than
-  /// the available space, else scrolls vertically. Must not contain [Spacer]
-  /// widgets in Columns.
-  /// Either [child] or [builder] must be set.
-  ///
-  /// Note the provided [constraints] in [builder] are measured before the
-  /// ScrollView is applied, e.g. the visible available space, not the space
-  /// inside the ScrollView.
-  static Widget alwaysFillingScrollView({
-    Widget? child,
-    Widget Function(BuildContext, BoxConstraints)? builder,
-    double maxWidth = double.infinity,
-  }) {
-    assert(child != null || builder != null);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-                maxWidth: maxWidth,
-              ),
-              child: child ?? builder?.call(context, constraints),
-            ),
-          ),
-        );
-      },
-    );
-  }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
@@ -23,7 +24,7 @@ class ExportImportPage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
-    return KglPage.alwaysFillingScrollView(
+    return AlwaysFillingScrollView(
       maxWidth: KglTimeApp.maxPageWidth,
       child: Padding(
         padding: const EdgeInsets.all(8),
