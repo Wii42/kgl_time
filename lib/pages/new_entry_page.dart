@@ -90,10 +90,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
     if (dateController.text.isEmpty) {
       dateController.text = formatDate(selectedDate, AppLocalizations.of(context));
     }
-    super.didChangeDependencies();
   }
 
   @override
