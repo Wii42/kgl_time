@@ -136,6 +136,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     );
   }
 
+  // ignore: many_lints/avoid_returning_widgets
   Widget descriptionField({required AppLocalizations? localizations}) {
     return TextFormField(
       controller: descriptionController,
@@ -147,6 +148,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     );
   }
 
+  // ignore: many_lints/avoid_returning_widgets
   Widget selectDateWidget(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
     return TextFormField(
