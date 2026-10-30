@@ -29,7 +29,7 @@ class KeyValues extends ChangeNotifier {
     if (value is T || value == null) {
       return value;
     } else {
-      throw TypeError();
+      throw KeyValueTypeMismatchException(key, T, value.runtimeType);
     }
   }
 
@@ -46,4 +46,19 @@ class KeyValues extends ChangeNotifier {
     _entries.clear();
     notifyListeners();
   }
+}
+
+class KeyValueTypeMismatchException implements Exception {
+  final String key;
+  final Type expectedType;
+  final Type actualType;
+
+  const KeyValueTypeMismatchException(
+    this.key,
+    this.expectedType,
+    this.actualType,
+  );
+
+  @override
+  String toString() => 'Key "$key": expected $expectedType, got $actualType';
 }
