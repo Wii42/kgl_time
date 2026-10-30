@@ -1,12 +1,12 @@
 import 'package:animated_list_plus/transitions.dart';
 import 'package:collection/collection.dart';
-import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/hover_controls.dart';
 import 'package:kgl_time/select_categories.dart';
 import 'package:kgl_time/width_constrained_list_view.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 import 'data_model/work_entries.dart';
