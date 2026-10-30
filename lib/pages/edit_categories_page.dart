@@ -1,3 +1,4 @@
+import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/edit_categories_widget.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:material_ui/material_ui.dart';
@@ -12,14 +13,14 @@ class EditCategoriesPage extends KglPage {
   String? pageTitle(AppLocalizations? loc) => loc?.editCategories;
 
   @override
-  Widget body(BuildContext context) => KglPage.alwaysFillingScrollView(
+  Widget body(BuildContext context) => AlwaysFillingScrollView(
+    maxWidth: KglTimeApp.maxPageWidth,
     child: Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: EditCategoriesWidget(),
       ),
     ),
-    maxWidth: KglTimeApp.maxPageWidth,
   );
 
   @override

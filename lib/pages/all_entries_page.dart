@@ -100,7 +100,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
                 axis: Axis.vertical,
                 child: Padding(
                   padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                  child: entriesGroupHeader(item, loc),
+                  child: _WorkEntriesGroupHeader(item),
                 ),
               );
             }
@@ -139,31 +139,8 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
     }
   }
 
-  Widget entriesGroupHeader(GroupedWorkEntries entryGroup, AppLocalizations? loc) {
-    String calendarUnitOfGroup = formatCalendarUnitValue(
-      entryGroup.calendarUnitValue,
-      entryGroup.calendarUnit,
-      loc: loc,
-    );
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      key: ValueKey(
-        'group_${entryGroup.calendarUnit}_${entryGroup.calendarUnitValue}_${entryGroup.year}',
-      ),
-      children: [
-        Expanded(
-          child: Text(
-            '$calendarUnitOfGroup ${entryGroup.year}',
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        Text(formatDuration(entryGroup.totalWorkDuration())),
-      ],
-    );
-  }
-
   /// Sets the background color of the button if not selected to [color] if provided or the default background color
-  ButtonStyle solidUnselectedBackgroundStyle(BuildContext context, {Color? color}) {
+  static ButtonStyle solidUnselectedBackgroundStyle(BuildContext context, {Color? color}) {
     return ButtonStyle(
       backgroundColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
         if (states.contains(WidgetState.selected)) {
@@ -182,8 +159,39 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
       _selectedCalendarUnit,
     );
   }
+}
 
-  String formatCalendarUnitValue(
+class _WorkEntriesGroupHeader extends StatelessWidget {
+  final GroupedWorkEntries workEntryGroup;
+
+  const _WorkEntriesGroupHeader(this.workEntryGroup);
+
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
+    String calendarUnitOfGroup = formatCalendarUnitValue(
+      workEntryGroup.calendarUnitValue,
+      workEntryGroup.calendarUnit,
+      loc: loc,
+    );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      key: ValueKey(
+        'group_${workEntryGroup.calendarUnit}_${workEntryGroup.calendarUnitValue}_${workEntryGroup.year}',
+      ),
+      children: [
+        Expanded(
+          child: Text(
+            '$calendarUnitOfGroup ${workEntryGroup.year}',
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Text(formatDuration(workEntryGroup.totalWorkDuration())),
+      ],
+    );
+  }
+
+  static String formatCalendarUnitValue(
     int calendarUnitValue,
     CalendarUnit calendarUnit, {
     required AppLocalizations? loc,

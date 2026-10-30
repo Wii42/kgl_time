@@ -78,6 +78,7 @@ class NavBarAppRoute extends AppRoute {
     required this.icon,
   });
 
+  // ignore: many_lints/avoid_returning_widgets
   NavigationDestination navigationDestination(AppLocalizations? loc) {
     return NavigationDestination(icon: Icon(icon), label: title(loc));
   }

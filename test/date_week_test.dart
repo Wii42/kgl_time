@@ -35,7 +35,7 @@ void main() {
       DateTime(2026, 10, 26),
     ],
   ]) {
-    test('calendar boundaries stay at midnight around ${dates[0]}', () {
+    test('calendar boundaries stay at midnight around ${dates.first}', () {
       final week = DateWeek.from(dates[0]);
       expect(week.start, dates[1]);
       expect(week.end, dates[2]);

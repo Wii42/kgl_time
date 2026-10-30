@@ -1,5 +1,6 @@
 import 'package:animated_list_plus/transitions.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
@@ -24,7 +25,7 @@ class HomePage extends KglPage {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
-        return KglPage.alwaysFillingScrollView(
+        return AlwaysFillingScrollView(
           maxWidth: KglTimeApp.maxPageWidth + 32,
           child: Padding(
             padding: const EdgeInsets.all(16),

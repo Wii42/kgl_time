@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
@@ -23,14 +24,14 @@ class SettingsPage extends KglPage {
   @override
   Widget body(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
-    return KglPage.alwaysFillingScrollView(
+    return AlwaysFillingScrollView(
       maxWidth: KglTimeApp.maxPageWidth,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            withCard(themeMode(context)),
+            withCard(_ThemeModeSettings()),
             ElevatedButton.icon(
               onPressed: () => context.push(AppRoute.editCategories.path),
               label: Text(loc?.editCategories ?? '<editCategories>'),
@@ -47,13 +48,14 @@ class SettingsPage extends KglPage {
               label: Text(loc?.exportImportEntries ?? "<Export/import entries>"),
               icon: Icon(Icons.import_export_outlined),
             ),
-            infos(context),
+            _AboutSection(),
           ].withSpaceBetween(height: 16),
         ),
       ),
     );
   }
 
+  // ignore: many_lints/avoid_returning_widgets
   Widget withCard(Widget child) {
     return Card(
       child: Padding(
@@ -62,8 +64,11 @@ class SettingsPage extends KglPage {
       ),
     );
   }
+}
 
-  Widget themeMode(BuildContext context) {
+class _ThemeModeSettings extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
     Map<ThemeMode, String?> themeModeNames = {
       ThemeMode.system: loc?.systemBrightness,
@@ -133,8 +138,11 @@ class SettingsPage extends KglPage {
       },
     );
   }
+}
 
-  Widget infos(BuildContext context) {
+class _AboutSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
     ThemeData theme = Theme.of(context);
     return Column(
@@ -159,7 +167,8 @@ class SettingsPage extends KglPage {
     );
   }
 
-  Widget infoWithLink({
+  // ignore: many_lints/avoid_returning_widgets
+  static Widget infoWithLink({
     String? infoText,
     required String linkText,
     required Uri link,
@@ -169,8 +178,8 @@ class SettingsPage extends KglPage {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        RichText(
-          text: TextSpan(
+        Text.rich(
+          TextSpan(
             children: [
               if (infoText != null) TextSpan(text: infoText, style: theme.textTheme.bodyMedium),
               TooltipSpan(

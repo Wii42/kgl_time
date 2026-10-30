@@ -1,20 +1,16 @@
-import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_widget.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 import '../data_model/work_entries.dart';
 import '../l10n/generated/app_localizations.dart';
+import 'work_entry_details_content.dart';
 
 class TrashedWorkEntry extends WorkEntryWidget {
   const TrashedWorkEntry({super.key, required super.workEntry});
 
   @override
-  Widget details(BuildContext context) {
-    AppLocalizations? loc = AppLocalizations.of(context);
-    TextTheme textTheme = Theme.of(context).textTheme;
-    return WorkEntryDetails.workEntryDetails(workEntry, textTheme, loc);
-  }
+  Widget details(BuildContext context) => WorkEntryDetailsContent(workEntry: workEntry);
 
   @override
   Axis get rightSideButtonsAxis => Axis.vertical;

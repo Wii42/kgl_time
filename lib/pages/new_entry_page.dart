@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -101,22 +102,21 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
     if (dateController.text.isEmpty) {
       dateController.text = formatDate(
         selectedDate,
         AppLocalizations.of(context),
       );
     }
-    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Form(
       key: _formKey,
-      child: KglPage.alwaysFillingScrollView(
+      child: AlwaysFillingScrollView(
         maxWidth: KglTimeApp.maxPageWidth,
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -124,7 +124,10 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               SizedBox(),
-              workDurationField(textTheme, localizations: loc),
+              _WorkDurationField(
+                durationHourController: durationHourController,
+                durationMinuteController: durationMinuteController,
+              ),
               SizedBox(height: 16),
               SelectCategoriesWidget(
                 categories: categorySelection,
@@ -148,79 +151,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     );
   }
 
-  Widget workDurationField(
-    TextTheme textTheme, {
-    required AppLocalizations? localizations,
-  }) {
-    int errorMaxLines = 5;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          //Text('Arbeitsdauer', style: textTheme.bodyLarge),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Flexible(
-                flex: 2,
-                child: TextFormField(
-                  controller: durationHourController,
-                  style: textTheme.displaySmall,
-                  decoration: InputDecoration(
-                    labelText: localizations?.hours,
-                    suffixText: 'h',
-                    errorMaxLines: errorMaxLines,
-                  ),
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  keyboardType: TextInputType.number,
-                  validator: (value) => _intValidator(
-                    value,
-                    factor: Duration.secondsPerHour,
-                    otherValue: durationMinuteController.text,
-                    otherFactor: Duration.secondsPerMinute,
-                    localizations: localizations,
-                  ),
-                ),
-              ),
-              SizedBox(width: 8),
-              Flexible(
-                flex: 4,
-                child: TextFormField(
-                  controller: durationMinuteController,
-                  style: textTheme.displaySmall,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: localizations?.minutes,
-                    suffixText: 'min',
-                    errorMaxLines: errorMaxLines,
-                  ),
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return localizations?.noInputError;
-                    }
-
-                    return _intValidator(
-                      value,
-                      factor: Duration.secondsPerMinute,
-                      otherValue: durationHourController.text,
-                      otherFactor: Duration.secondsPerHour,
-                      localizations: localizations,
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
+  // ignore: many_lints/avoid_returning_widgets
   Widget descriptionField({required AppLocalizations? localizations}) {
     return TextFormField(
       controller: descriptionController,
@@ -230,6 +161,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     );
   }
 
+  // ignore: many_lints/avoid_returning_widgets
   Widget selectDateWidget(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
     return TextFormField(
@@ -246,6 +178,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
           firstDate: DateTime(1900),
           lastDate: DateTime(2100),
         );
+        if (!mounted) return;
         if (newDate != null) {
           setState(() {
             selectedDate = newDate;
@@ -341,8 +274,92 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     durationHourController.dispose();
     super.dispose();
   }
+}
 
-  String? _intValidator(
+class _WorkDurationField extends StatelessWidget {
+  final TextEditingController durationHourController;
+  final TextEditingController durationMinuteController;
+
+  const _WorkDurationField({
+    required this.durationHourController,
+    required this.durationMinuteController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final int errorMaxLines = 5;
+
+    final AppLocalizations? localizations = AppLocalizations.of(context);
+    final TextTheme textTheme = Theme.of(context).textTheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //Text('Arbeitsdauer', style: textTheme.bodyLarge),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Flexible(
+                flex: 2,
+                child: TextFormField(
+                  controller: durationHourController,
+                  style: textTheme.displaySmall,
+                  decoration: InputDecoration(
+                    labelText: localizations?.hours,
+                    suffixText: 'h',
+                    errorMaxLines: errorMaxLines,
+                  ),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
+                  validator: (value) => intValidator(
+                    value,
+                    factor: Duration.secondsPerHour,
+                    otherValue: durationMinuteController.text,
+                    otherFactor: Duration.secondsPerMinute,
+                    localizations: localizations,
+                  ),
+                ),
+              ),
+              SizedBox(width: 8),
+              Flexible(
+                flex: 4,
+                child: TextFormField(
+                  controller: durationMinuteController,
+                  style: textTheme.displaySmall,
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: localizations?.minutes,
+                    suffixText: 'min',
+                    errorMaxLines: errorMaxLines,
+                  ),
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return localizations?.noInputError;
+                    }
+
+                    return intValidator(
+                      value,
+                      factor: Duration.secondsPerMinute,
+                      otherValue: durationHourController.text,
+                      otherFactor: Duration.secondsPerHour,
+                      localizations: localizations,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String? intValidator(
     String? value, {
     int factor = 1,
     String? otherValue,

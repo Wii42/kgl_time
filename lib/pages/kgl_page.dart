@@ -9,6 +9,8 @@ abstract class KglPage extends StatelessWidget {
 
   Widget body(BuildContext context);
 
+  // Null means this page uses the app title; subclasses may provide a title.
+  // ignore: many_lints/function_always_returns_null
   String? pageTitle(AppLocalizations? loc) => null;
 
   bool get showSettingsButton => true;
@@ -19,7 +21,7 @@ abstract class KglPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: appbarTitle(context),
+        title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
         actions: [
           if (showSettingsButton)
             IconButton(
@@ -36,8 +38,19 @@ abstract class KglPage extends StatelessWidget {
       body: body(context),
     );
   }
+}
 
-  Widget appbarTitle(BuildContext context) {
+class _AppBarTitle extends StatelessWidget {
+  final String appTitle;
+  final String? Function(AppLocalizations? loc) pageTitle;
+
+  const new({
+    required this.appTitle,
+    required this.pageTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     AppLocalizations? localizations = AppLocalizations.of(context);
     TextTheme textTheme = theme.textTheme;
@@ -54,37 +67,6 @@ abstract class KglPage extends StatelessWidget {
           ),
         Text(largeTitle),
       ],
-    );
-  }
-
-  /// Widget which assures the child uses all available space when smaller than
-  /// the available space, else scrolls vertically. Must not contain [Spacer]
-  /// widgets in Columns.
-  /// Either [child] or [builder] must be set.
-  ///
-  /// Note the provided [constraints] in [builder] are measured before the
-  /// ScrollView is applied, e.g. the visible available space, not the space
-  /// inside the ScrollView.
-  static Widget alwaysFillingScrollView({
-    Widget? child,
-    Widget Function(BuildContext, BoxConstraints)? builder,
-    double maxWidth = double.infinity,
-  }) {
-    assert(child != null || builder != null);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
-                maxWidth: maxWidth,
-              ),
-              child: child ?? builder?.call(context, constraints),
-            ),
-          ),
-        );
-      },
     );
   }
 }

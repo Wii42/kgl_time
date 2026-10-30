@@ -10,7 +10,7 @@ class WorkEntries extends ChangeNotifier {
   late final CallbackNotifyingList<WorkEntry> _entries;
 
   WorkEntries(List<WorkEntry> entriesList) {
-    entriesList = List.from(entriesList);
+    entriesList = List.of(entriesList);
     sortEntriesInReverse(entriesList);
     _entries = CallbackNotifyingList<WorkEntry>(notifyListeners);
     _entries.addAll(entriesList);

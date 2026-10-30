@@ -54,27 +54,6 @@ List<WorkCategory> get mockWorkCategories => [
   WorkCategory('Kategorie 5', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
 ];
 
-List<WorkEntry> get mockWorkEntries => [
-  WorkEntry.fromDuration(
-    duration: const Duration(hours: 1),
-    date: DateTime.now(),
-    description: 'Test',
-    categories: [mockWorkCategories[0].toEmbedded()],
-  ),
-  WorkEntry.fromDuration(
-    duration: const Duration(minutes: 30),
-    date: DateTime.now().subtract(const Duration(days: 1, hours: 12)),
-    description: 'Test2',
-    categories: [mockWorkCategories[1].toEmbedded()],
-  ),
-  WorkEntry.fromDuration(
-    duration: const Duration(hours: 1, minutes: 30),
-    date: DateTime.now().subtract(const Duration(days: 7)),
-    description: 'old entry',
-    categories: [mockWorkCategories[3].toEmbedded(), mockWorkCategories[4].toEmbedded()],
-  ),
-];
-
 /// Checks the stored schema version and executes all applicable [migrations]
 /// if the stored version is different from the current [schemaVersion].
 Future<void> _checkSchemaVersion(List<SchemaMigration> migrations) async {
