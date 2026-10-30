@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -56,6 +56,14 @@ dart run build_runner watch --delete-conflicting-outputs
 ```
 
 ## Changelog
+
+#### v0.3.3
+
+- Added a filter for work entries without a category
+- Fixed week grouping around New Year and week boundaries during daylight-saving changes
+- Improved validation and error messages when entering work durations
+- Minor bug fixes and improvements
+
 #### v0.3.2
 - Added CSV export of work entries, with options to save or share the file
 - Exported tables include working time, date, description, start/end times, and categories

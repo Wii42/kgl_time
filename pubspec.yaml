@@ -2,7 +2,7 @@ name: kgl_time
 description: "Arbeitszeiterfassung für die Kirchgemeinde Lauterbrunnen"
 publish_to: 'none'
 
-version: 0.3.2+13
+version: 0.3.3+14
 
 environment:
   sdk: ^3.8.0
@@ -15,7 +15,7 @@ dependencies:
   cupertino_icons: ^2.0.0
   provider: ^6.1.5+1
   notifying_list: ^0.1.0
-  go_router: ^18.1.1
+  go_router: ^18.1.2
   intl: any
   week_number: ^1.1.1
   isar_community: ^3.4.1
@@ -35,6 +35,7 @@ dependencies:
   uuid: ^4.6.0
   package_info_plus: ^10.2.2
 
+  material_ui: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

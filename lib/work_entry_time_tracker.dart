@@ -1,5 +1,4 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:flutter/material.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -7,6 +6,7 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/select_category_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_builder/timer_builder.dart';
 
@@ -36,64 +36,72 @@ class WorkEntryTimeTracker extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
-            child: AnimatedToggleSwitch.dual(
-              first: false,
-              second: true,
-              current: isTrackingTime,
-              textBuilder: (isTracking) => isTracking
-                  ? TimerBuilder.periodic(
-                      Duration(seconds: 10),
-                      builder: (context) => Row(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton.filledTonal(
-                            onPressed: () => SelectCategoryDialog.showSelectCategoryDialog(context),
-                            icon: Icon(
-                              Icons.category,
+            // Bridge theme data, as animated_toggle_switch does not yet use material_ui
+            child: MaterialUiCompatibilityBridge(
+              child: LayoutBuilder(
+                // Force the toggle switch to rebuild on width change, so that the indicator size is updated
+                builder: (context, _) {
+                  return AnimatedToggleSwitch<bool>.dual(
+                    first: false,
+                    second: true,
+                    current: isTrackingTime,
+                    textBuilder: (isTracking) => isTracking
+                        ? TimerBuilder.periodic(
+                            Duration(seconds: 10),
+                            builder: (context) => Row(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton.filledTonal(
+                                  onPressed: () =>
+                                      SelectCategoryDialog.showSelectCategoryDialog(context),
+                                  icon: Icon(
+                                    Icons.category,
+                                  ),
+                                  tooltip: loc?.selectCategory,
+                                ),
+                                Text(
+                                  loc?.runningForDuration(
+                                        _trackTime(startTime ?? DateTime.now()),
+                                      ) ??
+                                      '<runningForDuration>',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                SizedBox(),
+                              ],
                             ),
-                            tooltip: loc?.selectCategory,
-                          ),
-                          Text(
-                            loc?.runningForDuration(_trackTime(startTime ?? DateTime.now())) ??
-                                '<runningForDuration>',
+                          )
+                        : Text(
+                            loc?.trackTime ?? '<trackTime>',
                             style: Theme.of(context).textTheme.bodyLarge,
                           ),
-                          SizedBox(),
-                        ],
-                      ),
-                    )
-                  : Text(
-                      loc?.trackTime ?? '<trackTime>',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                    iconBuilder: (isTracking) => Text(
+                      (isTracking ? loc?.stop : loc?.start) ?? '<start/stop>',
+                      style: Theme.of(context).textTheme.bodyLarge?.apply(color: Colors.white),
                     ),
-              iconBuilder: (isTracking) => Text(
-                (isTracking ? loc?.stop : loc?.start) ?? '<start/stop>',
-                style: Theme.of(context).textTheme.bodyLarge?.apply(color: Colors.white),
-              ),
-              onChanged: (isTracking) {
-                KeyValues keyValues = context.read<KeyValues>();
-                if (isTracking) {
-                  keyValues.set<DateTime>(_storageKey, DateTime.now());
-                } else {
-                  keyValues.remove(_storageKey);
-                  String? serializedCategories = keyValues.get<String>(
-                    SelectCategoryDialog.storageKey,
-                  );
-                  List<WorkCategory> selectedCategories = [];
-                  if (serializedCategories != null) {
-                    selectedCategories = SelectCategoryDialog.deserializeCategories(
-                      serializedCategories,
-                      context.read<WorkCategories>().entries,
-                    );
-                  }
-                  keyValues.remove(SelectCategoryDialog.storageKey);
-                  context.read<WorkEntries>().add(
-                    WorkEntry.fromStartAndEndTime(
-                      startTime: startTime!,
-                      endTime: DateTime.now(),
-                      categories: selectedCategories.map((e) => e.toEmbedded()).toList(),
+                    onChanged: (isTracking) {
+                      KeyValues keyValues = context.read<KeyValues>();
+                      if (isTracking) {
+                        keyValues.set<DateTime>(_storageKey, DateTime.now());
+                      } else {
+                        keyValues.remove(_storageKey);
+                        String? serializedCategories = keyValues.get<String>(
+                          SelectCategoryDialog.storageKey,
+                        );
+                        List<WorkCategory> selectedCategories = [];
+                        if (serializedCategories != null) {
+                          selectedCategories = SelectCategoryDialog.deserializeCategories(
+                            serializedCategories,
+                            context.read<WorkCategories>().entries,
+                          );
+                        }
+                        keyValues.remove(SelectCategoryDialog.storageKey);
+                        context.read<WorkEntries>().add(
+                          WorkEntry.fromStartAndEndTime(
+                            startTime: startTime!,
+                            endTime: DateTime.now(),
+                            categories: selectedCategories.map((e) => e.toEmbedded()).toList(),
                       createType: CreateWorkEntryType.timeTracker,
                     ),
                   );
@@ -111,7 +119,9 @@ class WorkEntryTimeTracker extends StatelessWidget {
                   color: indicatorColor(isTracking),
                 ),
               ),
-              clipBehavior: Clip.none,
+              clipBehavior: Clip.none,);
+                },
+              ),
             ),
           ),
         ],

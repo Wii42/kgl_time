@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:kgl_time/edit_categories_widget.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../kgl_time_app.dart';
 import '../l10n/generated/app_localizations.dart';
