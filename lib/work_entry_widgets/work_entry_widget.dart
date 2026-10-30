@@ -28,7 +28,8 @@ abstract class WorkEntryWidget extends StatelessWidget {
               textTheme: parentTheme.textTheme.apply(bodyColor: parentTheme.disabledColor),
               extensions: [
                 ...parentTheme.extensions.values,
-                OriginalTextTheme(textTheme: parentTheme.textTheme), // Save original text theme
+                OriginalTextTheme(textTheme: parentTheme.textTheme),
+                // Save original text theme
               ],
             )
           : parentTheme,

@@ -18,6 +18,7 @@ void main() async {
       .loadEntries();
   List<WorkCategory> initialCategories = await PersistentStorageService.instance.workCategories
       .loadEntries();
+
   Map<String, dynamic> initialKeyValueStorage = await PersistentStorageService
       .instance
       .keyValueStorage

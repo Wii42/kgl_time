@@ -15,6 +15,7 @@ import 'l10n/generated/app_localizations.dart';
 
 class CategoryFilterWidget extends StatefulWidget {
   final WorkCategories categories;
+
   const CategoryFilterWidget({super.key, required this.categories});
 
   @override
