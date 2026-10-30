@@ -55,6 +55,7 @@ class SettingsPage extends KglPage {
     );
   }
 
+  // ignore: many_lints/avoid_returning_widgets
   Widget withCard(Widget child) {
     return Card(
       child: Padding(
@@ -89,7 +90,7 @@ class SettingsPage extends KglPage {
     );
   }
 
-  Widget infoWithLink({
+  static Widget infoWithLink({
     String? infoText,
     required String linkText,
     required Uri link,
@@ -99,8 +100,8 @@ class SettingsPage extends KglPage {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        RichText(
-          text: TextSpan(
+        Text.rich(
+          TextSpan(
             children: [
               if (infoText != null) TextSpan(text: infoText, style: theme.textTheme.bodyMedium),
               TooltipSpan(
