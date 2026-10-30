@@ -1,4 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:clock/clock.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -63,7 +64,7 @@ class WorkEntryTimeTracker extends StatelessWidget {
                                 ),
                                 Text(
                                   loc?.runningForDuration(
-                                        _trackTime(startTime ?? DateTime.now()),
+                                        _trackTime(startTime ?? clock.now()),
                                       ) ??
                                       '<runningForDuration>',
                                   style: Theme.of(context).textTheme.bodyLarge,
@@ -83,7 +84,7 @@ class WorkEntryTimeTracker extends StatelessWidget {
                     onChanged: (isTracking) {
                       KeyValues keyValues = context.read<KeyValues>();
                       if (isTracking) {
-                        keyValues.set<DateTime>(_storageKey, DateTime.now());
+                        keyValues.set<DateTime>(_storageKey, clock.now());
                       } else {
                         keyValues.remove(_storageKey);
                         String? serializedCategories = keyValues.get<String>(
@@ -100,8 +101,8 @@ class WorkEntryTimeTracker extends StatelessWidget {
                         context.read<WorkEntries>().add(
                           WorkEntry.fromStartAndEndTime(
                             startTime: startTime!,
-                            endTime: DateTime.now(),
-                            lastEdit: DateTime.now(),
+                            endTime: clock.now(),
+                            lastEdit: clock.now(),
                             categories: selectedCategories.map((e) => e.toEmbedded()).toList(),
                             createType: CreateWorkEntryType.timeTracker,
                           ),
@@ -132,8 +133,8 @@ class WorkEntryTimeTracker extends StatelessWidget {
   }
 
   String _trackTime(DateTime startTime) {
-    int hours = DateTime.now().difference(startTime).inHours;
-    int minutes = DateTime.now().difference(startTime).inMinutes % Duration.minutesPerHour;
+    int hours = clock.now().difference(startTime).inHours;
+    int minutes = clock.now().difference(startTime).inMinutes % Duration.minutesPerHour;
     return [if (hours > 0) "${hours}h", "$minutes min"].join(" ");
   }
 }

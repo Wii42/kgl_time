@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/always_filling_scroll_view.dart';
@@ -75,7 +76,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
       },
     );
 
-    selectedDate = widget.existingEntry?.date ?? DateTime.now();
+    selectedDate = widget.existingEntry?.date ?? clock.now();
     dateController = TextEditingController();
     Duration? workDuration = widget.existingEntry?.workDuration;
     durationMinuteController = TextEditingController(
@@ -233,7 +234,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
         endTime: (widget.existingEntry?.endTime?.isSameDate(selectedDate) ?? false)
             ? widget.existingEntry?.endTime
             : null,
-        lastEdit: DateTime.now(),
+        lastEdit: clock.now(),
         tickedOff: widget.existingEntry?.tickedOff ?? false,
         createType: widget.existingEntry != null
             ? widget.existingEntry!.createType

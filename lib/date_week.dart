@@ -1,3 +1,5 @@
+import 'package:clock/clock.dart';
+
 class DateWeek {
   final DateTime start;
   final DateTime end;
@@ -16,7 +18,7 @@ class DateWeek {
   }
 
   factory DateWeek.current() {
-    return DateWeek.from(DateTime.now());
+    return DateWeek.from(clock.now());
   }
 
   bool contains(DateTime date) {
