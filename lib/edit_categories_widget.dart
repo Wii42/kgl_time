@@ -42,18 +42,15 @@ class EditCategoriesWidget extends StatelessWidget {
                         children: [
                           IconButton(
                             icon: Icon(Icons.edit_outlined),
-                            onPressed: () => _showNewCategoryDialog(
-                              context,
-                              existingCategory: category.$2,
-                            ),
+                            onPressed: () =>
+                                _showNewCategoryDialog(context, existingCategory: category.$2),
                           ),
                           IconButton(
                             icon: Icon(Icons.delete_outline_outlined),
                             onPressed: () => showDeleteConfirmationDialog(
                               context: context,
-                              detailText: (l) => l?.deleteCategoryConfirmationDialog(
-                                category.$2.displayName,
-                              ),
+                              detailText: (l) =>
+                                  l?.deleteCategoryConfirmationDialog(category.$2.displayName),
                               onDelete: () => categories.remove(category.$2),
                             ),
                           ),
@@ -90,22 +87,15 @@ class EditCategoriesWidget extends StatelessWidget {
     );
   }
 
-  void _showNewCategoryDialog(
-    BuildContext context, {
-    WorkCategory? existingCategory,
-  }) {
+  void _showNewCategoryDialog(BuildContext context, {WorkCategory? existingCategory}) {
     AppLocalizations? loc = AppLocalizations.of(context);
-    TextEditingController controller = TextEditingController(
-      text: existingCategory?.displayName,
-    );
+    TextEditingController controller = TextEditingController(text: existingCategory?.displayName);
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(
-            (existingCategory == null ? loc?.addNewCategory : loc?.editCategory) ?? '',
-          ),
+          title: Text((existingCategory == null ? loc?.addNewCategory : loc?.editCategory) ?? ''),
           content: Form(
             key: formKey,
             child: TextFormField(
@@ -128,10 +118,7 @@ class EditCategoriesWidget extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 if (formKey.currentState!.validate()) {
-                  WorkCategories categories = Provider.of<WorkCategories>(
-                    context,
-                    listen: false,
-                  );
+                  WorkCategories categories = Provider.of<WorkCategories>(context, listen: false);
                   if (existingCategory != null) {
                     String oldName = existingCategory.displayName;
                     categories.updateEntry(
@@ -173,9 +160,7 @@ class EditCategoriesWidget extends StatelessWidget {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text(
-                (existingCategory == null ? loc?.add : loc?.save) ?? '<add/save>',
-              ),
+              child: Text((existingCategory == null ? loc?.add : loc?.save) ?? '<add/save>'),
             ),
           ],
         );

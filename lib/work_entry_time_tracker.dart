@@ -102,24 +102,25 @@ class WorkEntryTimeTracker extends StatelessWidget {
                             startTime: startTime!,
                             endTime: DateTime.now(),
                             categories: selectedCategories.map((e) => e.toEmbedded()).toList(),
-                      createType: CreateWorkEntryType.timeTracker,
+                            createType: CreateWorkEntryType.timeTracker,
+                          ),
+                        );
+                      }
+                    },
+                    height: height,
+                    borderWidth: borderWidth,
+                    indicatorSize: Size.fromWidth(height - 2 * borderWidth),
+                    styleBuilder: (isTracking) => ToggleStyle(
+                      indicatorColor: indicatorColor(isTracking),
+                      borderColor: indicatorColor(isTracking),
+                      indicatorBorder: Border.all(
+                        width: 6,
+                        strokeAlign: BorderSide.strokeAlignOutside - 0.1,
+                        color: indicatorColor(isTracking),
+                      ),
                     ),
+                    clipBehavior: Clip.none,
                   );
-                }
-              },
-              height: height,
-              borderWidth: borderWidth,
-              indicatorSize: Size.fromWidth(height - 2 * borderWidth),
-              styleBuilder: (isTracking) => ToggleStyle(
-                indicatorColor: indicatorColor(isTracking),
-                borderColor: indicatorColor(isTracking),
-                indicatorBorder: Border.all(
-                  width: 6,
-                  strokeAlign: BorderSide.strokeAlignOutside - 0.1,
-                  color: indicatorColor(isTracking),
-                ),
-              ),
-              clipBehavior: Clip.none,);
                 },
               ),
             ),

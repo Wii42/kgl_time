@@ -1,5 +1,6 @@
-import 'package:intl/date_symbol_data_local.dart';
 import 'dart:developer';
+
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/persistent_storage/isar_persistent_storage.dart';
@@ -17,9 +18,7 @@ const int schemaVersion = 2;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   appInfo = await PackageInfo.fromPlatform();
-  await PersistentStorageService.initializeImplementation(
-    IsarPersistentStorage(),
-  );
+  await PersistentStorageService.initializeImplementation(IsarPersistentStorage());
   await _checkSchemaVersion([SchemaMigration1to2()]);
   List<WorkEntry> initialEntries = await PersistentStorageService.instance.workEntries
       .loadEntries();
@@ -32,14 +31,9 @@ void main() async {
       .getAll();
   bool isFirstRun = initialKeyValueStorage['isFirstRun'] ?? true;
   if (isFirstRun) {
-    await PersistentStorageService.instance.workCategories.saveEntries(
-      mockWorkCategories,
-    );
+    await PersistentStorageService.instance.workCategories.saveEntries(mockWorkCategories);
     initialCategories.addAll(mockWorkCategories);
-    await PersistentStorageService.instance.keyValueStorage.set(
-      'isFirstRun',
-      false,
-    );
+    await PersistentStorageService.instance.keyValueStorage.set('isFirstRun', false);
   }
   await initializeDateFormatting(); // initialize the date formatting for German
   runApp(
@@ -53,31 +47,11 @@ void main() async {
 }
 
 List<WorkCategory> get mockWorkCategories => [
-  WorkCategory(
-    'Telefonanruf',
-    uuid: WorkEntry.generateUuid(),
-    lastEdit: DateTime.timestamp(),
-  ),
-  WorkCategory(
-    'Kategorie 2',
-    uuid: WorkEntry.generateUuid(),
-    lastEdit: DateTime.timestamp(),
-  ),
-  WorkCategory(
-    'Kategorie 3',
-    uuid: WorkEntry.generateUuid(),
-    lastEdit: DateTime.timestamp(),
-  ),
-  WorkCategory(
-    'Kategorie 4',
-    uuid: WorkEntry.generateUuid(),
-    lastEdit: DateTime.timestamp(),
-  ),
-  WorkCategory(
-    'Kategorie 5',
-    uuid: WorkEntry.generateUuid(),
-    lastEdit: DateTime.timestamp(),
-  ),
+  WorkCategory('Telefonanruf', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
+  WorkCategory('Kategorie 2', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
+  WorkCategory('Kategorie 3', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
+  WorkCategory('Kategorie 4', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
+  WorkCategory('Kategorie 5', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
 ];
 
 List<WorkEntry> get mockWorkEntries => [
@@ -97,10 +71,7 @@ List<WorkEntry> get mockWorkEntries => [
     duration: const Duration(hours: 1, minutes: 30),
     date: DateTime.now().subtract(const Duration(days: 7)),
     description: 'old entry',
-    categories: [
-      mockWorkCategories[3].toEmbedded(),
-      mockWorkCategories[4].toEmbedded(),
-    ],
+    categories: [mockWorkCategories[3].toEmbedded(), mockWorkCategories[4].toEmbedded()],
   ),
 ];
 
