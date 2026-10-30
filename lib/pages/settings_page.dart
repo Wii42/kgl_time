@@ -48,7 +48,7 @@ class SettingsPage extends KglPage {
               label: Text(loc?.exportEntries ?? "<Export/import entries>"),
               icon: Icon(Icons.import_export_outlined),
             ),
-            infos(context),
+            _AboutSection(),
           ].withSpaceBetween(height: 16),
         ),
       ),
@@ -62,63 +62,6 @@ class SettingsPage extends KglPage {
         padding: const EdgeInsets.all(8.0),
         child: child,
       ),
-    );
-  }
-
-  Widget infos(BuildContext context) {
-    AppLocalizations? loc = AppLocalizations.of(context);
-    ThemeData theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        infoWithLink(
-          infoText: '${loc?.contact}: ',
-          linkText: 'wi42.dev@gmail.com',
-          link: Uri.parse('mailto:wi42.dev@gmail.com'),
-          context: context,
-        ),
-        infoWithLink(
-          linkText: loc?.privacyPolicy ?? '<privacyPolicy>',
-          link: Uri.parse(
-            'https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#${loc?.privacyPolicyUrlFragment}',
-          ),
-          context: context,
-        ),
-        Text(''),
-        Text("v${appInfo.version}", style: theme.textTheme.bodySmall),
-      ],
-    );
-  }
-
-  static Widget infoWithLink({
-    String? infoText,
-    required String linkText,
-    required Uri link,
-    required BuildContext context,
-  }) {
-    ThemeData theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text.rich(
-          TextSpan(
-            children: [
-              if (infoText != null) TextSpan(text: infoText, style: theme.textTheme.bodyMedium),
-              TooltipSpan(
-                message: link.toString(),
-                inlineSpan: TextSpan(
-                  text: linkText,
-                  style: theme.textTheme.bodyMedium?.apply(color: theme.colorScheme.primary),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      launchUrl(link);
-                    },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
@@ -193,6 +136,67 @@ class _ThemeModeSettings extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class _AboutSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
+    ThemeData theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        infoWithLink(
+          infoText: '${loc?.contact}: ',
+          linkText: 'wi42.dev@gmail.com',
+          link: Uri.parse('mailto:wi42.dev@gmail.com'),
+          context: context,
+        ),
+        infoWithLink(
+          linkText: loc?.privacyPolicy ?? '<privacyPolicy>',
+          link: Uri.parse(
+            'https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#${loc?.privacyPolicyUrlFragment}',
+          ),
+          context: context,
+        ),
+        Text(''),
+        Text("v${appInfo.version}", style: theme.textTheme.bodySmall),
+      ],
+    );
+  }
+
+  // ignore: many_lints/avoid_returning_widgets
+  static Widget infoWithLink({
+    String? infoText,
+    required String linkText,
+    required Uri link,
+    required BuildContext context,
+  }) {
+    ThemeData theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text.rich(
+          TextSpan(
+            children: [
+              if (infoText != null) TextSpan(text: infoText, style: theme.textTheme.bodyMedium),
+              TooltipSpan(
+                message: link.toString(),
+                inlineSpan: TextSpan(
+                  text: linkText,
+                  style: theme.textTheme.bodyMedium?.apply(color: theme.colorScheme.primary),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      launchUrl(link);
+                    },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
