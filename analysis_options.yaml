@@ -46,6 +46,7 @@ many_lints:
     avoid_returning_widgets:
       ignored_names:
         - body
+        - details
 
 formatter:
   page_width: 100
