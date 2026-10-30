@@ -10,11 +10,7 @@ class TrashedWorkEntry extends WorkEntryWidget {
   const TrashedWorkEntry({super.key, required super.workEntry});
 
   @override
-  Widget details(BuildContext context) {
-    AppLocalizations? loc = AppLocalizations.of(context);
-    TextTheme textTheme = Theme.of(context).textTheme;
-    return WorkEntryDetails.workEntryDetails(workEntry, textTheme, loc);
-  }
+  Widget details(BuildContext context) => WorkEntryDetails(workEntry: workEntry);
 
   @override
   Axis get rightSideButtonsAxis => Axis.vertical;
