@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
@@ -6,6 +5,7 @@ import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 import 'app_view.dart';

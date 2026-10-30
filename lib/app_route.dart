@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/all_entries_page.dart';
@@ -9,6 +8,7 @@ import 'package:kgl_time/pages/export_import_page.dart';
 import 'package:kgl_time/pages/home_page.dart';
 import 'package:kgl_time/pages/new_entry_page.dart';
 import 'package:kgl_time/pages/settings_page.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'data_model/work_entry.dart';
 

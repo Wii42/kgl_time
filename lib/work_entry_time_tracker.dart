@@ -1,5 +1,4 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:flutter/material.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -7,6 +6,7 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/select_category_dialog.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_builder/timer_builder.dart';
 

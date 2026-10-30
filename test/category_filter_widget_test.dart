@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kgl_time/category_filter_widget.dart';
@@ -9,6 +8,7 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 import 'support/memory_storage.dart';

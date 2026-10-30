@@ -1,8 +1,8 @@
 import 'package:animated_list_plus/transitions.dart';
-import 'package:flutter/material.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/width_constrained_list_view.dart';
 import 'package:kgl_time/work_entry_widgets/trashed_work_entry.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 import '../data_model/work_entries.dart';

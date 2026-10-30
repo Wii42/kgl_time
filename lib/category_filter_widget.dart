@@ -1,6 +1,6 @@
 import 'package:animated_list_plus/transitions.dart';
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/hover_controls.dart';

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/original_text_theme.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Shows a dialog to confirm the deletion of an entry.
 /// [onDelete] is called when the user confirms the deletion.
