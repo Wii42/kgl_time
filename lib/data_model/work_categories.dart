@@ -8,7 +8,7 @@ class WorkCategories extends ChangeNotifier {
   late final List<WorkCategory> _entries;
 
   WorkCategories(List<WorkCategory> entriesList) {
-    _entries = List.from(entriesList);
+    _entries = List.of(entriesList);
     _entries.sort((a, b) => a.listIndex.compareTo(b.listIndex));
     notifyListeners();
   }
