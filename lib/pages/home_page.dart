@@ -25,7 +25,7 @@ class HomePage extends KglPage {
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
         return KglPage.alwaysFillingScrollView(
-          maxWidth: KglTimeApp.maxPageWidth,
+          maxWidth: KglTimeApp.maxPageWidth + 32,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
