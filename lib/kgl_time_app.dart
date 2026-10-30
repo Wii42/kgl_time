@@ -1,4 +1,3 @@
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/key_values.dart';
