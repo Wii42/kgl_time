@@ -43,6 +43,9 @@ many_lints:
   preset: recommended
   rules:
     missing_provider_scope: false
+    avoid_returning_widgets:
+      ignored_names:
+        - body
 
 formatter:
   page_width: 100

@@ -9,6 +9,8 @@ abstract class KglPage extends StatelessWidget {
 
   Widget body(BuildContext context);
 
+  // Null means this page uses the app title; subclasses may provide a title.
+  // ignore: many_lints/function_always_returns_null
   String? pageTitle(AppLocalizations? loc) => null;
 
   bool get showSettingsButton => true;
