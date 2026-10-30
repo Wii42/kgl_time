@@ -40,7 +40,7 @@ linter:
 # https://dart.dev/guides/language/analysis-options
 
 many_lints:
-  preset: core
+  preset: recommended
   rules:
     missing_provider_scope: false
 
