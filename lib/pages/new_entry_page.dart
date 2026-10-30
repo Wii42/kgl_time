@@ -163,6 +163,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
           firstDate: DateTime(1900),
           lastDate: DateTime(2100),
         );
+        if (!mounted) return;
         if (newDate != null) {
           setState(() {
             selectedDate = newDate;
