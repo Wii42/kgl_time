@@ -47,6 +47,10 @@ many_lints:
       ignored_names:
         - body
         - details
+    banned_usage:
+      banned:
+        - deny: [ 'DateTime.now' ]
+          message: 'Use clock.now() so tests can control time.'
 
 formatter:
   page_width: 100
