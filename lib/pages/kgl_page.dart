@@ -21,7 +21,7 @@ abstract class KglPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: appbarTitle(context),
+        title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
         actions: [
           if (showSettingsButton)
             IconButton(
@@ -38,8 +38,19 @@ abstract class KglPage extends StatelessWidget {
       body: body(context),
     );
   }
+}
 
-  Widget appbarTitle(BuildContext context) {
+class _AppBarTitle extends StatelessWidget {
+  final String appTitle;
+  final String? Function(AppLocalizations? loc) pageTitle;
+
+  const new({
+    required this.appTitle,
+    required this.pageTitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     AppLocalizations? localizations = AppLocalizations.of(context);
     TextTheme textTheme = theme.textTheme;
