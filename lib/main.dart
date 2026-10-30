@@ -47,24 +47,3 @@ List<WorkCategory> get mockWorkCategories => [
   WorkCategory('Kategorie 4'),
   WorkCategory('Kategorie 5'),
 ];
-
-List<WorkEntry> get mockWorkEntries => [
-  WorkEntry.fromDuration(
-    duration: const Duration(hours: 1),
-    date: DateTime.now(),
-    description: 'Test',
-    categories: [mockWorkCategories[0].toEmbedded()],
-  ),
-  WorkEntry.fromDuration(
-    duration: const Duration(minutes: 30),
-    date: DateTime.now().subtract(const Duration(days: 1, hours: 12)),
-    description: 'Test2',
-    categories: [mockWorkCategories[1].toEmbedded()],
-  ),
-  WorkEntry.fromDuration(
-    duration: const Duration(hours: 1, minutes: 30),
-    date: DateTime.now().subtract(const Duration(days: 7)),
-    description: 'old entry',
-    categories: [mockWorkCategories[3].toEmbedded(), mockWorkCategories[4].toEmbedded()],
-  ),
-];
