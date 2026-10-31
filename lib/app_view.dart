@@ -21,27 +21,20 @@ class AppView extends StatelessWidget {
         final bool showLabels = !compact || constraints.maxWidth > navBarItems.length * 160;
         return Scaffold(
           body: navigationShell,
-          bottomNavigationBar: AnimatedSize(
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeInOut,
-            alignment: Alignment.bottomCenter,
-            child: NavigationBar(
-              selectedIndex: navigationShell.currentIndex,
-              onDestinationSelected: (newIndex) {
-                // go to the initial Location of the branch, if active destination is clicked again.
-                bool goToInitialLocation = newIndex == navigationShell.currentIndex;
-                navigationShell.goBranch(newIndex, initialLocation: goToInitialLocation);
-              },
-              destinations: [
-                for (NavBarAppRoute item in NavBarAppRoute.navBarItems)
-                  navigationDestination(loc, item),
-              ],
-              height: compact ? 48 : null,
-              labelBehavior: showLabels
-                  ? NavigationLabelBehavior.all
-                  : NavigationLabelBehavior.none,
-              layoutDirection: compact ? Axis.horizontal : Axis.vertical,
-            ),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: navigationShell.currentIndex,
+            onDestinationSelected: (newIndex) {
+              // go to the initial Location of the branch, if active destination is clicked again.
+              bool goToInitialLocation = newIndex == navigationShell.currentIndex;
+              navigationShell.goBranch(newIndex, initialLocation: goToInitialLocation);
+            },
+            destinations: [
+              for (NavBarAppRoute item in NavBarAppRoute.navBarItems)
+                navigationDestination(loc, item),
+            ],
+            height: compact ? 48 : null,
+            labelBehavior: showLabels ? NavigationLabelBehavior.all : NavigationLabelBehavior.none,
+            layoutDirection: compact ? Axis.horizontal : Axis.vertical,
           ),
         );
       },
