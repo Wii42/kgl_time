@@ -36,6 +36,7 @@ dependencies:
   package_info_plus: ^10.2.2
 
   material_ui: any
+  clock: ^1.1.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

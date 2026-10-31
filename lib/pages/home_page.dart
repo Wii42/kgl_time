@@ -1,4 +1,5 @@
 import 'package:animated_list_plus/transitions.dart';
+import 'package:clock/clock.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/app_route.dart';
@@ -118,8 +119,8 @@ class HomePage extends KglPage {
   }
 
   Duration totalThisMonth(List<WorkEntry> workEntries) {
-    int currentMonth = DateTime.now().month;
-    int currentYear = DateTime.now().year;
+    int currentMonth = clock.now().month;
+    int currentYear = clock.now().year;
     List<WorkEntry> thisMonthEntries = workEntries
         .where((entry) => entry.date.month == currentMonth && entry.date.year == currentYear)
         .toList();

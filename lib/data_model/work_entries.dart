@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_interface.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
@@ -39,7 +40,7 @@ class WorkEntries extends ChangeNotifier {
   }
 
   void moveToTrashBin(WorkEntry entry) {
-    WorkEntry newEntry = entry.withTrashStatus(DateTime.now(), tickedOff: false);
+    WorkEntry newEntry = entry.withTrashStatus(clock.now(), tickedOff: false);
     updateEntry(entry, newEntry..id = entry.id);
   }
 
@@ -54,7 +55,7 @@ class WorkEntries extends ChangeNotifier {
   }
 
   void removeEntriesInTrashPermanentlyAfter(Duration duration) {
-    DateTime cutoffDate = DateTime.now().subtract(duration);
+    DateTime cutoffDate = clock.now().subtract(duration);
     _removeEntriesInTrashPermanentlyOlderThan(cutoffDate);
   }
 

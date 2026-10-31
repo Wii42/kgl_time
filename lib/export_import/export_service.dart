@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:clock/clock.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:intl/intl.dart';
@@ -21,7 +22,7 @@ class ExportService {
 
   String jsonFileName() => 'kgl_time_backup_${fileTimestamp()}.json';
 
-  String fileTimestamp() => DateFormat('yyyy-MM-dd_HH-mm-ss').format(DateTime.now());
+  String fileTimestamp() => DateFormat('yyyy-MM-dd_HH-mm-ss').format(clock.now());
 
   String entriesToCsv(List<WorkEntry> entries, AppLocalizations? loc) {
     List<List<dynamic>> rows = [

@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -12,6 +13,7 @@ import 'package:kgl_time/select_category_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'support/memory_storage.dart';
+import 'support/test_clock.dart';
 
 void main() {
   late MemoryStorage storage;
@@ -58,7 +60,7 @@ void main() {
     fields[1].controller!.text = minutes;
   }
 
-  testWidgets('empty minutes prevent submission', (tester) async {
+  testWidgetsWithAdvancingClock('empty minutes prevent submission', (tester) async {
     final loc = await openForm(tester);
     await tester.tap(find.text(loc.save));
     await tester.pumpAndSettle();
@@ -68,14 +70,17 @@ void main() {
   });
 
   for (final values in [('', '45'), ('1', '30'), ('0', '0')]) {
-    testWidgets('saves ${values.$1} hours and ${values.$2} minutes once', (
+    testWidgetsWithAdvancingClock('saves ${values.$1} hours and ${values.$2} minutes once', (
       tester,
     ) async {
+      final beforeOpen = clock.now();
       final loc = await openForm(tester);
       fillDuration(tester, values.$1, values.$2);
       await tester.enterText(find.byType(TextFormField).at(2), 'Preparation');
+      final beforeSave = clock.now();
       await tester.tap(find.text(loc.save));
       await tester.pumpAndSettle();
+      final afterSave = clock.now();
       final entries = await storage.workEntries.loadEntries();
       expect(entries, hasLength(1));
       expect(
@@ -84,6 +89,14 @@ void main() {
           hours: int.tryParse(values.$1) ?? 0,
           minutes: int.parse(values.$2),
         ),
+      );
+      expect(
+        entries.single.date,
+        timeBetween(beforeOpen, beforeSave),
+      );
+      expect(
+        entries.single.lastEdit,
+        timeBetween(beforeSave, afterSave),
       );
       expect(entries.single.description, 'Preparation');
       expect(entries.single.createType, CreateWorkEntryType.manualDuration);
@@ -101,7 +114,7 @@ void main() {
     ('1193047', '0'),
     ('1193046', '29'),
   ]) {
-    testWidgets('rejects invalid duration $values without saving', (
+    testWidgetsWithAdvancingClock('rejects invalid duration $values without saving', (
       tester,
     ) async {
       final loc = await openForm(tester);
@@ -125,7 +138,9 @@ void main() {
     ('1', '71582789', 'sum', 'large'),
     ('1193046', '29', 'sum', 'sum'),
   ]) {
-    testWidgets('duration errors belong to the correct field for $values', (tester) async {
+    testWidgetsWithAdvancingClock('duration errors belong to the correct field for $values', (
+      tester,
+    ) async {
       final loc = await openForm(tester);
       fillDuration(tester, values.$1, values.$2);
       tester.state<FormState>(find.byType(Form)).validate();
@@ -147,7 +162,7 @@ void main() {
     });
   }
 
-  testWidgets('accepts the largest whole-minute duration below the limit', (
+  testWidgetsWithAdvancingClock('accepts the largest whole-minute duration below the limit', (
     tester,
   ) async {
     await openForm(tester);
@@ -156,7 +171,7 @@ void main() {
     await tester.pump();
   });
 
-  testWidgets('router and unsaved form survive root rebuild and reassembly', (
+  testWidgetsWithAdvancingClock('router and unsaved form survive root rebuild and reassembly', (
     tester,
   ) async {
     await openForm(tester);
@@ -176,27 +191,25 @@ void main() {
     expect(await storage.workEntries.loadEntries(), isEmpty);
   });
 
-  testWidgets('starting tracker persists its start without creating an entry', (
+  testWidgetsWithAdvancingClock('starting tracker persists its start without creating an entry', (
     tester,
   ) async {
     await launch(tester);
-    final before = DateTime.now();
+    final beforeStart = clock.now();
     await tester.tap(find.text('Start'));
     await tester.pumpAndSettle();
     final start = await storage.keyValueStorage.get<DateTime>(
       'timeTrackerStart',
     );
-    expect(start, isNotNull);
-    expect(start!.isBefore(before), isFalse);
-    expect(start.isAfter(DateTime.now()), isFalse);
+    expect(start, timeBetween(beforeStart, clock.now()));
     expect(await storage.workEntries.loadEntries(), isEmpty);
     expect(find.text('Stop'), findsOneWidget);
   });
 
-  testWidgets('tracker resumes from stored settings and stops exactly once', (
+  testWidgetsWithAdvancingClock('tracker resumes from stored settings and stops exactly once', (
     tester,
   ) async {
-    final start = DateTime.now().subtract(const Duration(minutes: 95));
+    final start = clock.now().subtract(const Duration(minutes: 95));
     final category = WorkCategory('Office', listIndex: 0, uuid: '', lastEdit: null)..id = 7;
     await storage.keyValueStorage.set('timeTrackerStart', start);
     await storage.keyValueStorage.set(SelectCategoryDialog.storageKey, '7');
@@ -208,8 +221,10 @@ void main() {
       categories: [category],
     );
     expect(find.text('Stop'), findsOneWidget);
+    final beforeStop = clock.now();
     await tester.tap(find.text('Stop'));
     await tester.pumpAndSettle();
+    final afterStop = clock.now();
     final entries = await storage.workEntries.loadEntries();
     expect(entries, hasLength(1));
     final entry = entries.single;
@@ -218,7 +233,18 @@ void main() {
       entry.workDuration.inSeconds,
       entry.endTime!.difference(start).inSeconds,
     );
-    expect(entry.workDuration.inMinutes, 95);
+    expect(entry.endTime, timeBetween(beforeStop, afterStop));
+    expect(
+      entry.lastEdit,
+      timeBetween(entry.endTime!, afterStop),
+    );
+    expect(
+      entry.workDuration.inSeconds,
+      inInclusiveRange(
+        beforeStop.difference(start).inSeconds,
+        afterStop.difference(start).inSeconds,
+      ),
+    );
     expect(entry.categories.single.id, category.id);
     expect(entry.createType, CreateWorkEntryType.timeTracker);
     expect(
