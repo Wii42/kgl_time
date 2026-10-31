@@ -35,6 +35,7 @@ dependencies:
 
   material_ui: any
   clock: ^1.1.3
+  material_navigation: ^0.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
