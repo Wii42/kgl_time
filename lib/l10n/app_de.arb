@@ -4,6 +4,7 @@
   "newEntry": "Neuer Eintrag",
   "editEntry": "Eintrag Bearbeiten",
   "settings": "Einstellungen",
+  "groupBy": "Gruppieren nach",
   "groupByDay": "Tag",
   "groupByWeek": "Woche",
   "groupByMonth": "Monat",

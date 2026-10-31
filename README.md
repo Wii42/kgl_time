@@ -63,7 +63,9 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Changed
 
-- Shortened grouping controls to Day, Week, and Month (Tag, Woche, Monat in German).
+- Shortened grouping controls to Day, Week, and Month (Tag, Woche, Monat in German), with a shared
+  "Group by" / "Gruppieren nach" caption on an opaque background to keep scrolling entries from
+  showing through the controls.
 - Improved category selector colors in light and dark mode and adjusted chip spacing.
 - Category selector chips keep a stable width when selected or deselected.
 

@@ -4,6 +4,7 @@
   "newEntry": "New Entry",
   "editEntry": "Edit Entry",
   "settings": "Settings",
+  "groupBy": "Group by",
   "groupByDay": "Day",
   "groupByWeek": "Week",
   "groupByMonth": "Month",

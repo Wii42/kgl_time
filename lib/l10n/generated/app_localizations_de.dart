@@ -22,6 +22,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settings => 'Einstellungen';
 
   @override
+  String get groupBy => 'Gruppieren nach';
+
+  @override
   String get groupByDay => 'Tag';
 
   @override
