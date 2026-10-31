@@ -36,10 +36,8 @@ class ImportService {
     }
 
     WorkData? workData = WorkData.tryFromJson(decoded);
-    if (workData == null) {
-      if (onError != null) {
-        onError(ArgumentError("Invalid WorkData"));
-      }
+    if (workData == null && onError != null) {
+      onError(ArgumentError("Invalid WorkData"));
     }
     return workData;
   }
