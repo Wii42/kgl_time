@@ -31,7 +31,7 @@ class SelectCategoriesWidget extends StatelessWidget {
       data: chipTheme(context),
       child: Wrap(
         spacing: 8,
-        runSpacing: 8,
+        runSpacing: Theme.of(context).materialTapTargetSize == MaterialTapTargetSize.padded ? 0 : 8,
         alignment: WrapAlignment.center,
         children: _buildCategoryChips(context),
       ),
