@@ -27,7 +27,7 @@ abstract class KglPage extends StatelessWidget {
             SliverAppBar(
               primary: false,
               floating: true,
-              forceElevated: innerBoxIsScrolled,
+              scrolledUnderElevation: 0,
               title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
               actions: [
                 if (showSettingsButton)
