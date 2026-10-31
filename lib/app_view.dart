@@ -12,11 +12,13 @@ class AppView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<NavBarAppRoute> navBarItems = NavBarAppRoute.navBarItems;
     AppLocalizations? loc = AppLocalizations.of(context);
 
     return LayoutBuilder(
       builder: (context, constraints) {
         final bool compact = constraints.maxHeight < 500;
+        final bool showLabels = !compact || constraints.maxWidth > navBarItems.length * 160;
         return Scaffold(
           body: navigationShell,
           bottomNavigationBar: AnimatedSize(
@@ -35,7 +37,10 @@ class AppView extends StatelessWidget {
                   navigationDestination(loc, item),
               ],
               height: compact ? 48 : null,
-              labelBehavior: compact ? NavigationLabelBehavior.none : NavigationLabelBehavior.all,
+              labelBehavior: showLabels
+                  ? NavigationLabelBehavior.all
+                  : NavigationLabelBehavior.none,
+              layoutDirection: compact ? Axis.horizontal : Axis.vertical,
             ),
           ),
         );
