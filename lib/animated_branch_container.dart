@@ -13,8 +13,8 @@ class AnimatedBranchContainer extends StatelessWidget {
     super.key,
     required this.currentIndex,
     required this.children,
-    this.duration = const Duration(milliseconds: 400),
-    this.curve = Curves.linear,
+    this.duration = const Duration(milliseconds: 180),
+    this.curve = Curves.easeInOut,
     this.transitionBuilder = _defaultTransition,
   });
 
@@ -27,14 +27,7 @@ class AnimatedBranchContainer extends StatelessWidget {
   static Widget _defaultTransition(
     BuildContext context,
     Animation<double> animation,
-    Widget child,
-  ) => FadeTransition(
-    opacity: animation,
-    child: ScaleTransition(
-      scale: Tween<double>(begin: 1.5, end: 1).animate(animation),
-      child: child,
-    ),
-  );
+    Widget child,) => FadeTransition(opacity: animation, child: child);
 
   /// The index (in [children]) of the branch Navigator to display.
   final int currentIndex;
