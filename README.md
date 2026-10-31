@@ -59,26 +59,19 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Added
 
-- Added a "What's new" link below the app version in Settings, opening the installed version's
-  release notes in the current README.
-- Added today's total work duration to Home, alongside the current week and month totals. Totals
-  refresh at midnight and when returning to the app.
-- Added daily grouping in All Entries, alongside week and month grouping.
+- Today's work total on Home, with totals updating at midnight and when returning to the app.
+- Daily grouping in All Entries.
+- A "What's new" link in Settings to the installed version's release notes.
 
 #### Changed
 
-- Shortened grouping controls to Day, Week, and Month (Tag, Woche, Monat in German), with a shared
-  "Group by" / "Gruppieren nach" caption in a card to keep scrolling entries from
-  showing through the controls.
-- Improved category selector colors in light and dark mode and adjusted chip spacing.
-- Category selector chips keep a stable width when selected or deselected.
+- Clearer grouping controls and improved category selection in light and dark mode.
 
 #### Fixed
 
 - Fixed the time tracker indicator appearing squashed after resizing or rotating the screen.
 - Aligned work entry card widths across Home, All Entries, and Categories.
-- Fixed list clearance not updating when the floating filter controls change height on "All Entries"
-  page.
+- Prevented entries from being hidden behind filters.
 
 ### v0.3.3
 
