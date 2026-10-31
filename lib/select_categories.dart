@@ -40,6 +40,7 @@ class SelectCategoriesWidget extends StatelessWidget {
       for (MapEntry<WorkCategory, bool> element in categories.entries)
         FilterChip(
           //avatar: category.icon != null? Icon(category.icon): null,
+          showCheckmark: false,
           label: Text(element.key.displayName),
           selected: element.value,
           onSelected: (selected) {
@@ -50,6 +51,7 @@ class SelectCategoriesWidget extends StatelessWidget {
         ),
       if (showWithoutCategoryChip)
         FilterChip(
+          showCheckmark: false,
           label: Text(AppLocalizations.of(context)?.withoutCategory ?? "<Without category>"),
           selected: isWithoutCategoryChipSelected ?? false,
           onSelected: onToggleWithoutCategory,
