@@ -146,12 +146,22 @@ class _KglTimeAppState extends State<KglTimeApp> {
       chipTheme: theme.chipTheme.copyWith(
         selectedColor: selectedChipColor,
         secondarySelectedColor: selectedChipColor,
+        backgroundColor:
+            theme.dialogTheme.backgroundColor ?? theme.colorScheme.surfaceContainerHigh,
         checkmarkColor: selectedChipLabelColor,
         labelStyle: TextStyle(
           color: WidgetStateColor.resolveWith(
             (states) => states.contains(WidgetState.selected)
                 ? selectedChipLabelColor
                 : unselectedChipLabelColor,
+          ),
+        ),
+        side: WidgetStateBorderSide.resolveWith(
+          (states) => BorderSide(
+            width: 1,
+            color: states.contains(WidgetState.selected)
+                ? Colors.transparent
+                : theme.colorScheme.outline,
           ),
         ),
       ),
