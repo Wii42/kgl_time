@@ -60,6 +60,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     return HoverControls(
       controlsKey: _buttonKey,
       hoveringControls: _CalendarUnitSelector(
@@ -73,6 +74,12 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         },
       ),
       builder: (context, controlsHeight) {
+        if (_groupedEntries.isEmpty) {
+          return Padding(
+            padding: EdgeInsets.all(16).add(EdgeInsets.only(top: max(controlsHeight, 0))),
+            child: Center(child: Text(loc?.noExistingEntries ?? '<noEntries>')),
+          );
+        }
         return AnimatedWidthConstrainedListView<Object>(
           padding: EdgeInsets.only(
             top: max(controlsHeight, 0),
