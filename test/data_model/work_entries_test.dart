@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -10,6 +11,7 @@ import 'package:kgl_time/l10n/generated/app_localizations_en.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 
 import '../support/memory_storage.dart';
+import '../support/test_clock.dart';
 
 void main() {
   late MemoryStorage storage;
@@ -20,7 +22,7 @@ void main() {
   });
   tearDown(() async => storage.close());
 
-  test('trash and restore preserve the ID and work data in storage', () async {
+  testWithAdvancingClock('trash and restore preserve the ID and work data in storage', () async {
     final category = EmbeddedWorkCategory(displayName: 'Office', id: 7);
     final original = WorkEntry.fromStartAndEndTime(
       startTime: DateTime(2026, 10, 23, 8),
@@ -37,12 +39,16 @@ void main() {
     addTearDown(model.dispose);
     var notifications = 0;
     model.addListener(() => notifications++);
+    final beforeTrash = clock.now();
     model.moveToTrashBin(original);
 
     expect(model.entries, isEmpty);
     final trashed = model.entriesInTrash.single;
     expect(trashed.id, 42);
-    expect(trashed.wasMovedToTrashAt, isNotNull);
+    expect(
+      trashed.wasMovedToTrashAt,
+      timeBetween(beforeTrash, clock.now()),
+    );
     expect(trashed.tickedOff, isFalse);
     model.restoreFromTrashBin(trashed);
 
@@ -63,10 +69,10 @@ void main() {
     expect((await storage.workEntries.loadEntries()).single.isInTrash, isFalse);
   });
 
-  test(
+  testWithAdvancingClock(
     'startup deletes expired trash but preserves recent trash and active data',
     () async {
-      final now = DateTime.now();
+      final now = clock.now();
       WorkEntry make(int id, DateTime? trashedAt) => WorkEntry.fromDuration(
         duration: const Duration(minutes: 30),
         date: DateTime(2020),
@@ -88,7 +94,7 @@ void main() {
     },
   );
 
-  test('export selection excludes trash and includes restored entries', () {
+  testWithAdvancingClock('export selection excludes trash and includes restored entries', () {
     final active = WorkEntry.fromDuration(
       duration: const Duration(minutes: 10),
       date: DateTime(2026, 10, 23),
@@ -98,7 +104,7 @@ void main() {
       duration: const Duration(minutes: 20),
       date: DateTime(2026, 10, 23),
       description: 'Trashed',
-      wasMovedToTrashAt: DateTime.now(),
+      wasMovedToTrashAt: clock.now(),
     )..id = 2;
     final model = WorkEntries([active, trash]);
     addTearDown(model.dispose);
@@ -117,7 +123,7 @@ void main() {
     expect(descriptions(), unorderedEquals(['Active', 'Trashed']));
   });
 
-  test('entries are sorted newest first after adding and editing', () {
+  testWithAdvancingClock('entries are sorted newest first after adding and editing', () {
     WorkEntry make(int id, int day) => WorkEntry.fromDuration(
       duration: const Duration(minutes: 10),
       date: DateTime(2026, 10, day),
@@ -151,7 +157,7 @@ void main() {
       (2, 1, [1, 3, 2, 4]),
       (1, 1, [1, 2, 3, 4]),
     ]) {
-      test(
+      testWithAdvancingClock(
         'move ${move.$1} to final index ${move.$2} survives model reload',
         () async {
           final model = await categories();
@@ -169,7 +175,7 @@ void main() {
       );
     }
 
-    test('inserting a category updates order and persisted indices', () async {
+    testWithAdvancingClock('inserting a category updates order and persisted indices', () async {
       final model = await categories();
       model.add(WorkCategory('Inserted')..id = 5, index: 1);
       await Future<void>.delayed(Duration.zero);
