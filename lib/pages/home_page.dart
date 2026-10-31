@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animated_list_plus/transitions.dart';
 import 'package:clock/clock.dart';
 import 'package:go_router/go_router.dart';
@@ -100,10 +102,29 @@ class HomePage extends KglPage {
   }
 }
 
-class _WorkDurationOfCurrentCalendarUnits extends StatelessWidget {
+class _WorkDurationOfCurrentCalendarUnits extends StatefulWidget {
   final List<WorkEntry> workEntries;
 
   const new({required this.workEntries});
+
+  @override
+  State<_WorkDurationOfCurrentCalendarUnits> createState() =>
+      _WorkDurationOfCurrentCalendarUnitsState();
+}
+
+class _WorkDurationOfCurrentCalendarUnitsState extends State<_WorkDurationOfCurrentCalendarUnits> {
+  Timer? _midnightTimer;
+  late final AppLifecycleListener _lifecycleListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycleListener = AppLifecycleListener(
+      onResume: _refresh,
+      onPause: () => _midnightTimer?.cancel(),
+    );
+    _scheduleNextMidnight();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,22 +133,22 @@ class _WorkDurationOfCurrentCalendarUnits extends StatelessWidget {
     return Column(
       children: [
         Text(
-          '${loc?.today}: ${formatDuration(totalToday(workEntries))}',
+          '${loc?.today}: ${formatDuration(totalToday(widget.workEntries))}',
           style: textTheme.bodyLarge,
         ),
         Text(
-          '${loc?.currentWeek}: ${formatDuration(totalThisWeek(workEntries))}',
+          '${loc?.currentWeek}: ${formatDuration(totalThisWeek(widget.workEntries))}',
           style: textTheme.bodyLarge,
         ),
         Text(
-          '${loc?.currentMonth}: ${formatDuration(totalThisMonth(workEntries))}',
+          '${loc?.currentMonth}: ${formatDuration(totalThisMonth(widget.workEntries))}',
           style: textTheme.bodyLarge,
         ),
       ],
     );
   }
 
-  Duration totalToday(List<WorkEntry> workEntries) {
+  static Duration totalToday(List<WorkEntry> workEntries) {
     final DateTime today = clock.now();
     return totalWorkDuration(
       workEntries.where((WorkEntry entry) => entry.date.isSameDate(today)).toList(),
@@ -156,5 +177,32 @@ class _WorkDurationOfCurrentCalendarUnits extends StatelessWidget {
       Duration.zero,
       (previousValue, element) => previousValue + element.workDuration,
     );
+  }
+
+  void _scheduleNextMidnight() {
+    _midnightTimer?.cancel();
+
+    final DateTime now = clock.now();
+    final DateTime nextMidnight = DateTime(now.year, now.month, now.day + 1);
+
+    _midnightTimer = Timer(
+      nextMidnight.difference(now),
+      _refresh,
+    );
+  }
+
+  void _refresh() {
+    if (!mounted) return;
+
+    setState(() {});
+    _scheduleNextMidnight();
+    print('Refreshed work duration of current calendar units at ${clock.now()}');
+  }
+
+  @override
+  void dispose() {
+    _midnightTimer?.cancel();
+    _lifecycleListener.dispose();
+    super.dispose();
   }
 }
