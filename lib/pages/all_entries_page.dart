@@ -60,55 +60,22 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations? loc = AppLocalizations.of(context);
     return HoverControls(
       controlsKey: _buttonKey,
-      hoveringControls: Card(
-        color: Theme.of(context).canvasColor,
-        margin: const EdgeInsets.all(8),
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                loc?.groupBy ?? '<groupBy>',
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: 4),
-              SegmentedButton<CalendarUnit>(
-                segments: [
-                  ButtonSegment(value: CalendarUnit.day, label: Text(loc?.groupByDay ?? '<day>')),
-                  ButtonSegment(
-                    value: CalendarUnit.week,
-                    label: Text(loc?.groupByWeek ?? '<byWeek>'),
-                  ),
-                  ButtonSegment(
-                    value: CalendarUnit.month,
-                    label: Text(loc?.groupByMonth ?? '<byMonth>'),
-                  ),
-                ],
-                selected: {_selectedCalendarUnit},
-                onSelectionChanged: (Set<CalendarUnit> selected) {
-                  assert(selected.length == 1);
-                  setState(() {
-                    _selectedCalendarUnit = selected.single;
-                    _updateGroupedEntries();
-                  });
-                },
-                style: solidUnselectedBackgroundStyle(context),
-              ),
-            ],
-          ),
-        ),
+      hoveringControls: _CalendarUnitSelector(
+        key: _buttonKey,
+        selectedCalendarUnit: _selectedCalendarUnit,
+        onSelectionChanged: (selected) {
+          setState(() {
+            _selectedCalendarUnit = selected;
+            _updateGroupedEntries();
+          });
+        },
       ),
       builder: (context, controlsHeight) {
         return AnimatedWidthConstrainedListView<Object>(
           padding: EdgeInsets.only(
-            top: max(controlsHeight - 8, 0),
+            top: max(controlsHeight, 0),
           ), // tp padding to avoid collision with the SegmentedButton
           items: [
             for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
@@ -160,20 +127,6 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
     } else {
       return false;
     }
-  }
-
-  /// Sets the background color of the button if not selected to [color] if provided or the default background color
-  static ButtonStyle solidUnselectedBackgroundStyle(BuildContext context, {Color? color}) {
-    return ButtonStyle(
-      backgroundColor: WidgetStateProperty.resolveWith<Color?>((Set<WidgetState> states) {
-        if (states.contains(WidgetState.selected)) {
-          return Theme.of(
-            context,
-          ).segmentedButtonTheme.style?.backgroundColor?.resolve(states); // use default
-        }
-        return color ?? Theme.of(context).canvasColor;
-      }),
-    );
   }
 
   void _updateGroupedEntries() {
@@ -229,5 +182,60 @@ class _WorkEntriesGroupHeader extends StatelessWidget {
       case CalendarUnit.month:
         return DateFormat.yMMMM(loc?.localeName).format(DateTime(year, calendarUnitValue));
     }
+  }
+}
+
+class _CalendarUnitSelector extends StatelessWidget {
+  final CalendarUnit selectedCalendarUnit;
+  final ValueChanged<CalendarUnit> onSelectionChanged;
+
+  const new({
+    super.key,
+    required this.selectedCalendarUnit,
+    required this.onSelectionChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
+    return Card(
+      color: Theme.of(context).canvasColor,
+      margin: const EdgeInsets.all(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              loc?.groupBy ?? '<groupBy>',
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 4),
+            SegmentedButton<CalendarUnit>(
+              segments: [
+                ButtonSegment(value: CalendarUnit.day, label: Text(loc?.groupByDay ?? '<day>')),
+                ButtonSegment(
+                  value: CalendarUnit.week,
+                  label: Text(loc?.groupByWeek ?? '<byWeek>'),
+                ),
+                ButtonSegment(
+                  value: CalendarUnit.month,
+                  label: Text(loc?.groupByMonth ?? '<byMonth>'),
+                ),
+              ],
+              selected: {selectedCalendarUnit},
+              onSelectionChanged: (Set<CalendarUnit> selected) {
+                assert(selected.length == 1);
+                onSelectionChanged(selected.single);
+              },
+              //style: solidUnselectedBackgroundStyle(context),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
