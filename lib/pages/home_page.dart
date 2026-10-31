@@ -123,7 +123,6 @@ class HomePage extends KglPage {
                   ),
                 const SizedBox(height: 32),
                 _WorkDurationOfCurrentCalendarUnits(workEntries: workEntries.entries),
-                const SizedBox(height: 16),
               ],
             ),
           ),
