@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:clock/clock.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:kgl_time/export_import/work_data.dart';
 import 'package:share_plus/share_plus.dart';
@@ -56,7 +57,7 @@ class ImportService {
       workEntries: entriesList.entriesIncludingTrash,
       workCategories: categoriesList.entries,
       schemaVersion: schemaVersion,
-      exportedAt: DateTime.now(),
+      exportedAt: clock.now(),
     );
     entriesList.replaceAllEntries(workData.workEntries);
     categoriesList.replaceAllEntries(workData.workCategories);

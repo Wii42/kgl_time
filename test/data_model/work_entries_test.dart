@@ -1,5 +1,5 @@
-import 'package:csv/csv.dart';
 import 'package:clock/clock.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
@@ -50,9 +50,9 @@ void main() {
       timeBetween(beforeTrash, clock.now()),
     );
     expect(trashed.tickedOff, isFalse);
-    final DateTime beforeRestore = DateTime.now().toUtc();
+    final DateTime beforeRestore = clock.now().toUtc();
     model.restoreFromTrashBin(trashed);
-    final DateTime afterRestore = DateTime.now().toUtc();
+    final DateTime afterRestore = clock.now().toUtc();
 
     expect(model.entriesInTrash, isEmpty);
     final restored = model.entries.single;

@@ -71,7 +71,7 @@ class WorkEntries extends ChangeNotifier {
   }
 
   void updateEntry(WorkEntry workEntry, WorkEntry newEntry) {
-    newEntry.lastEdit = DateTime.now().toUtc();
+    newEntry.lastEdit = clock.now().toUtc();
     int index = _entries.indexOf(workEntry);
     _entries[index] = newEntry;
     sortEntriesInReverse(_entries);

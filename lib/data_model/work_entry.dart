@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:isar_community/isar.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kgl_time/data_model/value.dart';
@@ -70,7 +71,7 @@ class WorkEntry implements IsarStorable {
       date: date,
       description: description,
       categories: categories,
-      lastEdit: DateTime.now(),
+      lastEdit: clock.now(),
       tickedOff: tickedOff,
       createType: createType,
       wasEdited: false,
@@ -95,7 +96,7 @@ class WorkEntry implements IsarStorable {
       categories: categories,
       startTime: startTime,
       endTime: endTime,
-      lastEdit: DateTime.now(),
+      lastEdit: clock.now(),
       tickedOff: tickedOff,
       createType: createType,
       wasEdited: false,

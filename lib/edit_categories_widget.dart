@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
@@ -143,7 +144,7 @@ class EditCategoriesWidget extends StatelessWidget {
                             else
                               category,
                         ],
-                        lastEdit: DateTime.now().toUtc(),
+                        lastEdit: clock.now().toUtc(),
                       );
                       workEntries.updateEntry(entry, newEntry..id = entry.id);
                     }

@@ -54,7 +54,7 @@ class ExportService {
       workEntries: entries,
       workCategories: categories,
       schemaVersion: schemaVersion,
-      exportedAt: DateTime.now(),
+      exportedAt: clock.now(),
     );
     return jsonEncode(workData.toJson());
   }
