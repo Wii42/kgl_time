@@ -88,6 +88,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noExistingEntries => 'No existing entries yet';
 
   @override
+  String get today => 'Today';
+
+  @override
   String get currentWeek => 'Current week';
 
   @override

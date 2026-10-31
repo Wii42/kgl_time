@@ -7,6 +7,7 @@ import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/date_week.dart';
 import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/work_entry_time_tracker.dart';
@@ -92,6 +93,10 @@ class HomePage extends KglPage {
                 Column(
                   children: [
                     Text(
+                      '${loc?.today}: ${formatDuration(totalToday(workEntries.entries))}',
+                      style: textTheme.bodyLarge,
+                    ),
+                    Text(
                       '${loc?.currentWeek}: ${formatDuration(totalThisWeek(workEntries.entries))}',
                       style: textTheme.bodyLarge,
                     ),
@@ -107,6 +112,13 @@ class HomePage extends KglPage {
           ),
         );
       },
+    );
+  }
+
+  Duration totalToday(List<WorkEntry> workEntries) {
+    final DateTime today = clock.now();
+    return totalWorkDuration(
+      workEntries.where((WorkEntry entry) => entry.date.isSameDate(today)).toList(),
     );
   }
 
