@@ -52,6 +52,14 @@ many_lints:
         - deny: [ 'DateTime.now' ]
           message: 'Use clock.now() so tests can control time.'
 
+
+    # type annotations
+    refer_type_over_var: true
+    prefer_explicit_function_type: true
+    prefer_correct_future_return_type: true
+    prefer_void_callback: true
+    prefer_async_callback: true
+
 formatter:
   page_width: 100
   trailing_commas: preserve
