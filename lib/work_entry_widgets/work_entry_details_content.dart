@@ -28,6 +28,8 @@ class WorkEntryDetailsContent extends StatelessWidget {
         if (workEntry.categories.isNotEmpty) ...[
           SizedBox(height: 8),
           Wrap(
+            spacing: 4,
+            runSpacing: 4,
             children: [
               for (IWorkCategory category in workEntry.categories) ...[
                 RawChip(
@@ -36,7 +38,7 @@ class WorkEntryDetailsContent extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   label: Text(category.displayName),
                 ),
-                SizedBox(width: 8),
+                //SizedBox(width: 8),
               ],
             ],
           ),
