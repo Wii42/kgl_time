@@ -20,43 +20,33 @@ abstract class KglPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ColoredBox(
-        color:
-            Theme.of(context).appBarTheme.backgroundColor ?? Theme.of(context).colorScheme.surface,
-        child: SafeArea(
-          left: false,
-          right: false,
-          bottom: false,
-          child: ColoredBox(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            child: NestedScrollView(
-              floatHeaderSlivers: true,
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverAppBar(
-                  primary: false,
-                  floating: true,
-                  forceElevated: innerBoxIsScrolled,
-                  title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
-                  actions: [
-                    if (showSettingsButton)
-                      IconButton(
-                        icon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(Icons.settings),
-                        ),
-                        onPressed: () {
-                          context.push(AppRoute.settings.path);
-                        },
-                      ),
-                  ],
-                ),
+      body: StatusBarSafeArea(
+        child: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              primary: false,
+              floating: true,
+              forceElevated: innerBoxIsScrolled,
+              title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
+              actions: [
+                if (showSettingsButton)
+                  IconButton(
+                    icon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(Icons.settings),
+                    ),
+                    onPressed: () {
+                      context.push(AppRoute.settings.path);
+                    },
+                  ),
               ],
-              body: SafeArea(
-                top: false, // The outer SafeArea keeps the status-bar area fixed.
-                bottom: false,
-                child: body(context),
-              ),
             ),
+          ],
+          body: SafeArea(
+            top: false, // The outer SafeArea keeps the status-bar area fixed.
+            bottom: false,
+            child: body(context),
           ),
         ),
       ),
@@ -91,6 +81,26 @@ class _AppBarTitle extends StatelessWidget {
           ),
         Text(largeTitle),
       ],
+    );
+  }
+}
+
+/// Makes sure that the status bar area is filled with a background color, even when the app bar scrolls out of view.
+class StatusBarSafeArea extends StatelessWidget {
+  final Widget? child;
+
+  const new({super.key, this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Theme.of(context).appBarTheme.backgroundColor ?? Theme.of(context).colorScheme.surface,
+      child: SafeArea(
+        left: false,
+        right: false,
+        bottom: false,
+        child: ColoredBox(color: Theme.of(context).scaffoldBackgroundColor, child: child),
+      ),
     );
   }
 }
