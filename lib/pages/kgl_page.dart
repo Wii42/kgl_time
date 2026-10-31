@@ -35,7 +35,11 @@ abstract class KglPage extends StatelessWidget {
             ),
         ],
       ),
-      body: body(context),
+      body: SafeArea(
+        top: false, // The app bar handles the top inset.
+        bottom: false,
+        child: body(context),
+      ),
     );
   }
 }
