@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animated_list_plus/transitions.dart';
 import 'package:clock/clock.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +9,7 @@ import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/date_week.dart';
 import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/work_entry_time_tracker.dart';
@@ -23,7 +26,6 @@ class HomePage extends KglPage {
   @override
   Widget body(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
         return AlwaysFillingScrollView(
@@ -89,19 +91,8 @@ class HomePage extends KglPage {
                 else
                   Center(child: Text(loc?.noExistingEntries ?? '<noEntries>')),
                 const SizedBox(height: 32),
-                Column(
-                  children: [
-                    Text(
-                      '${loc?.currentWeek}: ${formatDuration(totalThisWeek(workEntries.entries))}',
-                      style: textTheme.bodyLarge,
-                    ),
-                    Text(
-                      '${loc?.currentMonth}: ${formatDuration(totalThisMonth(workEntries.entries))}',
-                      style: textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+                _WorkDurationOfCurrentCalendarUnits(workEntries: workEntries.entries),
+                const SizedBox(height: 16),
               ],
             ),
           ),
@@ -109,8 +100,62 @@ class HomePage extends KglPage {
       },
     );
   }
+}
 
-  Duration totalThisWeek(List<WorkEntry> workEntries) {
+class _WorkDurationOfCurrentCalendarUnits extends StatefulWidget {
+  final List<WorkEntry> workEntries;
+
+  const new({required this.workEntries});
+
+  @override
+  State<_WorkDurationOfCurrentCalendarUnits> createState() =>
+      _WorkDurationOfCurrentCalendarUnitsState();
+}
+
+class _WorkDurationOfCurrentCalendarUnitsState extends State<_WorkDurationOfCurrentCalendarUnits> {
+  Timer? _midnightTimer;
+  late final AppLifecycleListener _lifecycleListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycleListener = AppLifecycleListener(
+      onResume: _refresh,
+      onPause: () => _midnightTimer?.cancel(),
+    );
+    _scheduleNextMidnight();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return Column(
+      children: [
+        Text(
+          '${loc?.today}: ${formatDuration(totalToday(widget.workEntries))}',
+          style: textTheme.bodyLarge,
+        ),
+        Text(
+          '${loc?.currentWeek}: ${formatDuration(totalThisWeek(widget.workEntries))}',
+          style: textTheme.bodyLarge,
+        ),
+        Text(
+          '${loc?.currentMonth}: ${formatDuration(totalThisMonth(widget.workEntries))}',
+          style: textTheme.bodyLarge,
+        ),
+      ],
+    );
+  }
+
+  static Duration totalToday(List<WorkEntry> workEntries) {
+    final DateTime today = clock.now();
+    return totalWorkDuration(
+      workEntries.where((WorkEntry entry) => entry.date.isSameDate(today)).toList(),
+    );
+  }
+
+  static Duration totalThisWeek(List<WorkEntry> workEntries) {
     DateWeek thisWeek = DateWeek.current();
     List<WorkEntry> thisWeekEntries = workEntries
         .where((entry) => thisWeek.contains(entry.date))
@@ -118,7 +163,7 @@ class HomePage extends KglPage {
     return totalWorkDuration(thisWeekEntries);
   }
 
-  Duration totalThisMonth(List<WorkEntry> workEntries) {
+  static Duration totalThisMonth(List<WorkEntry> workEntries) {
     int currentMonth = clock.now().month;
     int currentYear = clock.now().year;
     List<WorkEntry> thisMonthEntries = workEntries
@@ -127,10 +172,36 @@ class HomePage extends KglPage {
     return totalWorkDuration(thisMonthEntries);
   }
 
-  Duration totalWorkDuration(List<WorkEntry> workEntries) {
+  static Duration totalWorkDuration(List<WorkEntry> workEntries) {
     return workEntries.fold(
       Duration.zero,
       (previousValue, element) => previousValue + element.workDuration,
     );
+  }
+
+  void _scheduleNextMidnight() {
+    _midnightTimer?.cancel();
+
+    final DateTime now = clock.now();
+    final DateTime nextMidnight = DateTime(now.year, now.month, now.day + 1);
+
+    _midnightTimer = Timer(
+      nextMidnight.difference(now),
+      _refresh,
+    );
+  }
+
+  void _refresh() {
+    if (!mounted) return;
+
+    setState(() {});
+    _scheduleNextMidnight();
+  }
+
+  @override
+  void dispose() {
+    _midnightTimer?.cancel();
+    _lifecycleListener.dispose();
+    super.dispose();
   }
 }

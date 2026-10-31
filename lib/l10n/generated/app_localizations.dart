@@ -254,6 +254,12 @@ abstract class AppLocalizations {
   /// **'No existing entries yet'**
   String get noExistingEntries;
 
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
   /// No description provided for @currentWeek.
   ///
   /// In en, this message translates to:
