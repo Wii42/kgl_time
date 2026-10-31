@@ -20,25 +20,36 @@ abstract class KglPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
-        actions: [
-          if (showSettingsButton)
-            IconButton(
-              icon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.settings),
-              ),
-              onPressed: () {
-                context.push(AppRoute.settings.path);
-              },
-            ),
+      body: NestedScrollView(
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverAppBar(
+            floating: true,
+            forceElevated: innerBoxIsScrolled,
+            title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
+            actions: [
+              if (showSettingsButton)
+                IconButton(
+                  icon: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.settings),
+                  ),
+                  onPressed: () {
+                    context.push(AppRoute.settings.path);
+                  },
+                ),
+            ],
+          ),
         ],
-      ),
-      body: SafeArea(
-        top: false, // The app bar handles the top inset.
-        bottom: false,
-        child: body(context),
+        body: MediaQuery.removePadding(
+          context: context,
+          removeTop: true,
+          child: SafeArea(
+            top: false, // The app bar handles the top inset.
+            bottom: false,
+            child: Builder(builder: body),
+          ),
+        ),
       ),
     );
   }
