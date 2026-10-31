@@ -196,7 +196,6 @@ class _WorkDurationOfCurrentCalendarUnitsState extends State<_WorkDurationOfCurr
 
     setState(() {});
     _scheduleNextMidnight();
-    print('Refreshed work duration of current calendar units at ${clock.now()}');
   }
 
   @override
