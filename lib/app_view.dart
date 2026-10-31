@@ -13,19 +13,29 @@ class AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
 
-    return Scaffold(
-      body: navigationShell,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: (newIndex) {
-          // go to the initial Location of the branch, if active destination is clicked again.
-          bool goToInitialLocation = newIndex == navigationShell.currentIndex;
-          navigationShell.goBranch(newIndex, initialLocation: goToInitialLocation);
-        },
-        destinations: [
-          for (NavBarAppRoute item in NavBarAppRoute.navBarItems) item.navigationDestination(loc),
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool compact = constraints.maxHeight < 500;
+        return Scaffold(
+          body: navigationShell,
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: navigationShell.currentIndex,
+            onDestinationSelected: (newIndex) {
+              // go to the initial Location of the branch, if active destination is clicked again.
+              bool goToInitialLocation = newIndex == navigationShell.currentIndex;
+              navigationShell.goBranch(newIndex, initialLocation: goToInitialLocation);
+            },
+            destinations: [
+              for (NavBarAppRoute item in NavBarAppRoute.navBarItems)
+                item.navigationDestination(loc),
+            ],
+            height: compact ? 48 : null,
+            labelBehavior: compact
+                ? NavigationDestinationLabelBehavior.alwaysHide
+                : NavigationDestinationLabelBehavior.alwaysShow,
+          ),
+        );
+      },
     );
   }
 }
