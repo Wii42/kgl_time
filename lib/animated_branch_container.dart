@@ -9,7 +9,32 @@ import 'package:material_ui/material_ui.dart';
 /// [packages/go_router/example/lib/others/custom_stateful_shell_route.dart at commit ed5bd29](https://github.com/flutter/packages/blob/4cb0506dddae4f9861145c48f4b27b17907fe251/packages/go_router/example/lib/others/custom_stateful_shell_route.dart#L314)
 class AnimatedBranchContainer extends StatelessWidget {
   /// Creates a AnimatedBranchContainer
-  const AnimatedBranchContainer({super.key, required this.currentIndex, required this.children});
+  const AnimatedBranchContainer({
+    super.key,
+    required this.currentIndex,
+    required this.children,
+    this.duration = const Duration(milliseconds: 400),
+    this.curve = Curves.linear,
+    this.transitionBuilder = _defaultTransition,
+  });
+
+  final Duration duration;
+  final Curve curve;
+
+  /// Receives an animation from 0 (hidden) to 1 (active).
+  final Widget Function(BuildContext, Animation<double>, Widget) transitionBuilder;
+
+  static Widget _defaultTransition(
+    BuildContext context,
+    Animation<double> animation,
+    Widget child,
+  ) => FadeTransition(
+    opacity: animation,
+    child: ScaleTransition(
+      scale: Tween<double>(begin: 1.5, end: 1).animate(animation),
+      child: child,
+    ),
+  );
 
   /// The index (in [children]) of the branch Navigator to display.
   final int currentIndex;
@@ -21,14 +46,19 @@ class AnimatedBranchContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: children.mapIndexed((int index, Widget navigator) {
-        return AnimatedScale(
-          scale: index == currentIndex ? 1 : 1.5,
-          duration: const Duration(milliseconds: 400),
-          child: AnimatedOpacity(
-            opacity: index == currentIndex ? 1 : 0,
-            duration: const Duration(milliseconds: 400),
-            child: _branchNavigatorWrapper(index, navigator),
+        return TweenAnimationBuilder<double>(
+          tween: Tween<double>(
+            begin: index == currentIndex ? 1 : 0,
+            end: index == currentIndex ? 1 : 0,
           ),
+          duration: duration,
+          curve: curve,
+          builder: (context, value, child) => transitionBuilder(
+            context,
+            AlwaysStoppedAnimation<double>(value),
+            child!,
+          ),
+          child: _branchNavigatorWrapper(index, navigator),
         );
       }).toList(),
     );
