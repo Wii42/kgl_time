@@ -34,6 +34,7 @@ class WorkEntryDetailsContent extends StatelessWidget {
               for (IWorkCategory category in workEntry.categories) ...[
                 RawChip(
                   isEnabled: !workEntry.tickedOff,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   //avatar: category.icon != null? Icon(category.icon): null,
                   padding: EdgeInsets.zero,
                   label: Text(category.displayName),
