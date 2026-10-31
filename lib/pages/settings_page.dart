@@ -157,12 +157,20 @@ class _AboutSection extends StatelessWidget {
         infoWithLink(
           linkText: loc?.privacyPolicy ?? '<privacyPolicy>',
           link: Uri.parse(
-            'https://github.com/Wii42/kgl_time/blob/master/PRIVACY.md#${loc?.privacyPolicyUrlFragment}',
+            'https://github.com/Wii42/kgl_time/blob/main/PRIVACY.md#${loc?.privacyPolicyUrlFragment}',
           ),
           context: context,
         ),
         Text(''),
         Text("v${appInfo.version}", style: theme.textTheme.bodySmall),
+        infoWithLink(
+          linkText: loc?.whatsNew ?? "What's new",
+          link: Uri.parse(
+            'https://github.com/Wii42/kgl_time/blob/main/README.md#v${appInfo.version.replaceAll('.', '')}',
+          ),
+          context: context,
+          textStyle: theme.textTheme.bodySmall,
+        ),
       ],
     );
   }
@@ -173,20 +181,22 @@ class _AboutSection extends StatelessWidget {
     required String linkText,
     required Uri link,
     required BuildContext context,
+    TextStyle? textStyle,
   }) {
     ThemeData theme = Theme.of(context);
+    textStyle ??= theme.textTheme.bodyMedium;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text.rich(
           TextSpan(
             children: [
-              if (infoText != null) TextSpan(text: infoText, style: theme.textTheme.bodyMedium),
+              if (infoText != null) TextSpan(text: infoText, style: textStyle),
               TooltipSpan(
                 message: link.toString(),
                 inlineSpan: TextSpan(
                   text: linkText,
-                  style: theme.textTheme.bodyMedium?.apply(color: theme.colorScheme.primary),
+                  style: textStyle?.apply(color: theme.colorScheme.primary),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
                       launchUrl(link);

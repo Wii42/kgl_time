@@ -59,6 +59,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Added
 
+- Added a "What's new" link below the app version in Settings, opening the installed version's
+  release notes in the current README.
 - Added today's total work duration to Home, alongside the current week and month totals. Totals
   refresh at midnight and when returning to the app.
 - Added daily grouping in All Entries, alongside week and month grouping.
