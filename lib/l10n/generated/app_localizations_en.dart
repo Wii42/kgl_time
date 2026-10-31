@@ -91,6 +91,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noExistingEntries => 'No existing entries yet';
 
   @override
+  String get createFirstEntryHint => 'Create your first entry on Home to see it here.';
+
+  @override
   String get today => 'Today';
 
   @override

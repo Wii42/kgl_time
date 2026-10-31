@@ -27,6 +27,7 @@
   "recentEntries": "Recent entries",
   "showAllEntries": "Show all entries",
   "noExistingEntries": "No existing entries yet",
+  "createFirstEntryHint": "Create your first entry on Home to see it here.",
   "today": "Today",
   "currentWeek": "Current week",
   "currentMonth": "Current month",

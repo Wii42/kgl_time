@@ -91,6 +91,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noExistingEntries => 'Noch keine Einträge vorhanden';
 
   @override
+  String get createFirstEntryHint =>
+      'Erfasse deinen ersten Eintrag auf der Startseite, um ihn hier zu sehen.';
+
+  @override
   String get today => 'Heute';
 
   @override

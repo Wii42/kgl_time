@@ -27,6 +27,7 @@
   "recentEntries": "Letzte Einträge",
   "showAllEntries": "Alle Einträge anzeigen",
   "noExistingEntries": "Noch keine Einträge vorhanden",
+  "createFirstEntryHint": "Erfasse deinen ersten Eintrag auf der Startseite, um ihn hier zu sehen.",
   "today": "Heute",
   "currentWeek": "Aktuelle Woche",
   "currentMonth": "Aktueller Monat",

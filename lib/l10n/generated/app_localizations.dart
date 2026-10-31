@@ -260,6 +260,12 @@ abstract class AppLocalizations {
   /// **'No existing entries yet'**
   String get noExistingEntries;
 
+  /// No description provided for @createFirstEntryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first entry on Home to see it here.'**
+  String get createFirstEntryHint;
+
   /// No description provided for @today.
   ///
   /// In en, this message translates to:

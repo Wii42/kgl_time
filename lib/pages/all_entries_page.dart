@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:animated_list_plus/transitions.dart';
 import 'package:intl/intl.dart';
+import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/data_model/grouped_work_entries.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
@@ -77,7 +78,37 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         if (_groupedEntries.isEmpty) {
           return Padding(
             padding: EdgeInsets.all(16).add(EdgeInsets.only(top: max(controlsHeight, 0))),
-            child: Center(child: Text(loc?.noExistingEntries ?? '<noEntries>')),
+            child: AlwaysFillingScrollView(
+              maxWidth: 360,
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ExcludeSemantics(
+                      child: Icon(
+                        Icons.receipt_long_outlined,
+                        size: 80,
+                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.18),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      loc?.noExistingEntries ?? '<noEntries>',
+                      style: Theme.of(context).textTheme.titleMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      loc?.createFirstEntryHint ?? '<createFirstEntryHint>',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
           );
         }
         return AnimatedWidthConstrainedListView<Object>(
