@@ -9,6 +9,7 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/enums/calendar_unit.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/hover_controls.dart';
+import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:material_ui/material_ui.dart';
@@ -76,10 +77,10 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
       ),
       builder: (context, controlsHeight) {
         if (_groupedEntries.isEmpty) {
-          return Padding(
-            padding: EdgeInsets.all(16).add(EdgeInsets.only(top: max(controlsHeight, 0))),
-            child: AlwaysFillingScrollView(
-              maxWidth: 360,
+          return AlwaysFillingScrollView(
+            maxWidth: KglTimeApp.maxPageWidth,
+            child: Padding(
+              padding: EdgeInsets.all(16).add(EdgeInsets.only(top: max(controlsHeight, 0))),
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
