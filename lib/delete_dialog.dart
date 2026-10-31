@@ -6,7 +6,7 @@ import 'package:material_ui/material_ui.dart';
 /// [onDelete] is called when the user confirms the deletion.
 void showDeleteConfirmationDialog({
   required BuildContext context,
-  required void Function()? onDelete,
+  required VoidCallback? onDelete,
   String? Function(AppLocalizations? loc) detailText = defaultConfirmDeleteText,
 }) {
   AppLocalizations? loc = AppLocalizations.of(context);
