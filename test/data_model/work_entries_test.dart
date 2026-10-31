@@ -1,3 +1,5 @@
+//ignore_for_file: many_lints/avoid_dst_unsafe_date_arithmetic
+
 import 'package:clock/clock.dart';
 import 'package:csv/csv.dart';
 import 'package:flutter_test/flutter_test.dart';
