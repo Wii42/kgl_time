@@ -45,6 +45,51 @@ void main() {
     expect(groups.expand((g) => g.entries), unorderedEquals(entries));
   });
 
+  test('daily groups ignore time and separate days, months, and years', () {
+    final List<WorkEntry> entries = <WorkEntry>[
+      entry(DateTime(2026, 10, 31, 23, 59), 30),
+      entry(DateTime(2026, 10, 31, 8), 45),
+      entry(DateTime(2026, 10, 30), 10),
+      entry(DateTime(2026, 11, 30), 20),
+      entry(DateTime(2025, 10, 31), 60),
+    ];
+    final List<GroupedWorkEntries> groups = GroupedWorkEntries.groupEntriesByCalendarUnit(
+      entries,
+      CalendarUnit.day,
+    );
+    expect(groups, hasLength(4));
+    expect(
+      <DateTime, int>{
+        for (final GroupedWorkEntries group in groups)
+          DateTime(group.year, 1, group.calendarUnitValue): group.totalWorkDuration().inMinutes,
+      },
+      <DateTime, int>{
+        DateTime(2026, 10, 31): 75,
+        DateTime(2026, 10, 30): 10,
+        DateTime(2026, 11, 30): 20,
+        DateTime(2025, 10, 31): 60,
+      },
+    );
+    expect(groups.expand((GroupedWorkEntries group) => group.entries), orderedEquals(entries));
+  });
+
+  for (final DateTime date in <DateTime>[
+    DateTime(2024, 2, 29),
+    DateTime(2026, 3, 29),
+    DateTime(2026, 10, 25),
+    DateTime(2026, 12, 31),
+    DateTime(2027, 1, 1),
+  ]) {
+    test('daily group preserves calendar date $date across leap years and DST', () {
+      final GroupedWorkEntries group = GroupedWorkEntries.groupEntriesByCalendarUnit(
+        <WorkEntry>[entry(date, 30), entry(DateTime(date.year, date.month, date.day, 23), 15)],
+        CalendarUnit.day,
+      ).single;
+      expect(DateTime(group.year, 1, group.calendarUnitValue), date);
+      expect(group.totalWorkDuration(), const Duration(minutes: 45));
+    });
+  }
+
   test('Sunday and Monday belong to different weeks', () {
     final groups = GroupedWorkEntries.groupEntriesByCalendarUnit([
       entry(DateTime(2026, 10, 25), 30),

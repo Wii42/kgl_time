@@ -5,6 +5,7 @@ import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
+import 'package:kgl_time/work_entry_widgets/work_entry_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'support/memory_storage.dart';
@@ -54,7 +55,10 @@ void main() {
       for (final route in NavBarAppRoute.navBarItems) {
         router.go(route.path);
         await tester.pumpAndSettle();
-        final card = find.byType(Card);
+        final card = find.descendant(
+          of: find.byWidgetPredicate((Widget widget) => widget is WorkEntryWidget),
+          matching: find.byType(Card),
+        );
         expect(card, findsOneWidget);
         // Measure the painted surface, excluding Card's external margin.
         final surface = find.descendant(of: card, matching: find.byType(Material)).first;
