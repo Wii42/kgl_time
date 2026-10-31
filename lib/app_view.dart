@@ -41,7 +41,6 @@ class AppView extends StatelessWidget {
     );
   }
 
-  // ignore: many_lints/avoid_returning_widgets
   NavigationDestination navigationDestination(AppLocalizations? loc, NavBarAppRoute route) {
     return NavigationDestination(icon: Icon(route.icon), label: route.title(loc));
   }
