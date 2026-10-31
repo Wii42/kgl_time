@@ -197,9 +197,12 @@ void main() {
       body: (_CalendarTestClock time, WorkEntries entries) async {
         expect(find.text('Today: 10 min'), findsOneWidget);
         tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
         tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
         time.jumpWhileSuspended(DateTime(2027, 1, 1, 12));
         expect(find.text('Today: 10 min'), findsOneWidget);
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
         tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
         await tester.pumpAndSettle();
         expect(find.text('Today: 20 min'), findsOneWidget);
@@ -240,8 +243,11 @@ void main() {
       body: (_CalendarTestClock time, WorkEntries entries) async {
         await tester.pumpWidget(const SizedBox.shrink());
         tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
         tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
         time.jumpWhileSuspended(DateTime(2026, 10, 21, 12));
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.hidden);
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
         tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
         await tester.pump();
         await time.pumpUntil(DateTime(2026, 10, 23));

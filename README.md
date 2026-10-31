@@ -59,7 +59,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Added
 
-- Added today's total work duration to Home, alongside the current week and month totals.
+- Added today's total work duration to Home, alongside the current week and month totals. Totals
+  refresh at midnight and when returning to the app.
 - Added daily grouping in All Entries, alongside week and month grouping.
 
 #### Changed
