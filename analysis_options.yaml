@@ -33,6 +33,8 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
+    always_declare_return_types: true
+    type_annotate_public_apis: true
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
@@ -51,6 +53,14 @@ many_lints:
       banned:
         - deny: [ 'DateTime.now' ]
           message: 'Use clock.now() so tests can control time.'
+
+
+    # type annotations
+    refer_type_over_var: true
+    prefer_explicit_function_type: true
+    prefer_correct_future_return_type: true
+    prefer_void_callback: true
+    prefer_async_callback: true
 
 formatter:
   page_width: 100

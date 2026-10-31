@@ -18,6 +18,7 @@ class HoverControls extends StatefulWidget {
 
 class _HoverControlsState extends State<HoverControls> {
   double _controlsHeight = 0;
+  bool _measurementScheduled = false;
 
   @override
   void initState() {
@@ -26,8 +27,11 @@ class _HoverControlsState extends State<HoverControls> {
   }
 
   void _updateControlsHeight() {
+    if (_measurementScheduled) return;
+    _measurementScheduled = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getControlsHeight();
+      _measurementScheduled = false;
+      if (mounted) _getControlsHeight();
     });
   }
 
@@ -36,14 +40,14 @@ class _HoverControlsState extends State<HoverControls> {
     return Stack(
       children: [
         Positioned.fill(child: widget.builder(context, _controlsHeight)),
-        NotificationListener<LayoutChangedNotification>(
+        NotificationListener<SizeChangedLayoutNotification>(
           onNotification: (notification) {
             _updateControlsHeight();
             return false;
           },
           child: Align(
             alignment: Alignment.topCenter,
-            child: widget.hoveringControls,
+            child: SizeChangedLayoutNotifier(child: widget.hoveringControls),
           ),
         ),
       ],
@@ -52,7 +56,9 @@ class _HoverControlsState extends State<HoverControls> {
 
   void _getControlsHeight() {
     // Use the key to get the RenderBox of the button and measure its height
-    final RenderBox renderBox = widget.controlsKey.currentContext?.findRenderObject() as RenderBox;
+    final RenderObject? renderObject = widget.controlsKey.currentContext?.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) return;
+    final RenderBox renderBox = renderObject;
     final double height = renderBox.size.height;
     if (height != _controlsHeight) {
       setState(() {

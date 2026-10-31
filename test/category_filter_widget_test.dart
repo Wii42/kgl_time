@@ -92,10 +92,10 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  Finder chip(String label) => find.widgetWithText(ChoiceChip, label);
+  Finder chip(String label) => find.widgetWithText(FilterChip, label);
 
   void expectSelected(WidgetTester tester, String label, bool selected) {
-    expect(tester.widget<ChoiceChip>(chip(label)).selected, selected);
+    expect(tester.widget<FilterChip>(chip(label)).selected, selected);
   }
 
   Future<void> toggle(WidgetTester tester, String label) async {
@@ -241,10 +241,10 @@ void main() {
         categories.reorder(from, to);
         await tester.pumpAndSettle();
 
-        final List<ChoiceChip> chips = tester
-            .widgetList<ChoiceChip>(find.byType(ChoiceChip))
+        final List<FilterChip> chips = tester
+            .widgetList<FilterChip>(find.byType(FilterChip))
             .toList();
-        expect(chips.map((ChoiceChip chip) => (chip.label as Text).data), [
+        expect(chips.map((FilterChip chip) => (chip.label as Text).data), [
           'Category B',
           'Category A',
           'Without Category',
@@ -366,7 +366,7 @@ void main() {
     categories.remove(categoryB);
     await launch(tester);
 
-    expect(find.byType(ChoiceChip), findsOneWidget);
+    expect(find.byType(FilterChip), findsOneWidget);
     expectSelected(tester, 'Without Category', true);
     // References to deleted categories are not empty category lists.
     expectVisible(tester, {4});

@@ -27,19 +27,23 @@ class SelectCategoriesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      alignment: WrapAlignment.center,
-      children: _buildCategoryChips(context),
+    return Theme(
+      data: chipTheme(context),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        alignment: WrapAlignment.center,
+        children: _buildCategoryChips(context),
+      ),
     );
   }
 
   List<Widget> _buildCategoryChips(BuildContext context) {
     return [
       for (MapEntry<WorkCategory, bool> element in categories.entries)
-        ChoiceChip(
+        FilterChip(
           //avatar: category.icon != null? Icon(category.icon): null,
+          showCheckmark: false,
           label: Text(element.key.displayName),
           selected: element.value,
           onSelected: (selected) {
@@ -49,11 +53,52 @@ class SelectCategoriesWidget extends StatelessWidget {
           },
         ),
       if (showWithoutCategoryChip)
-        ChoiceChip(
+        FilterChip(
+          showCheckmark: false,
           label: Text(AppLocalizations.of(context)?.withoutCategory ?? "<Without category>"),
           selected: isWithoutCategoryChipSelected ?? false,
           onSelected: onToggleWithoutCategory,
         ),
     ];
+  }
+
+  ThemeData chipTheme(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    final bool isDark = theme.brightness == Brightness.dark;
+
+    final Color selectedChipColor = isDark
+        ? theme.colorScheme.primaryContainer
+        : theme.colorScheme.primary;
+
+    final Color selectedChipLabelColor = isDark
+        ? theme.colorScheme.onPrimaryContainer
+        : theme.colorScheme.onPrimary;
+    final Color unselectedChipLabelColor = theme.colorScheme.onSurface;
+    theme = theme.copyWith(
+      chipTheme: theme.chipTheme.copyWith(
+        selectedColor: selectedChipColor,
+        secondarySelectedColor: selectedChipColor,
+        backgroundColor:
+            theme.dialogTheme.backgroundColor ?? theme.colorScheme.surfaceContainerHigh,
+        checkmarkColor: selectedChipLabelColor,
+        labelStyle: TextStyle(
+          color: WidgetStateColor.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? selectedChipLabelColor
+                : unselectedChipLabelColor,
+          ),
+        ),
+        side: WidgetStateBorderSide.resolveWith(
+          (states) => BorderSide(
+            width: 1,
+            color: states.contains(WidgetState.selected)
+                ? Colors.transparent
+                : theme.colorScheme.outline,
+          ),
+        ),
+      ),
+    );
+
+    return theme;
   }
 }
