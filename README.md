@@ -19,7 +19,8 @@ KGL Time is licensed under the [GNU General Public License v3.0](https://www.gnu
 
 ## Platform Compatibility
 
-The app can, in principle, be built for all platforms that Flutter provides, except for the web. However, the application has only been tested on **Windows** and **Android**.
+The app can, in principle, be built for all platforms that Flutter provides, except for the web.
+However, the application has only been tested on **Android**, **Linux** and **Windows**.
 
 ## Getting Started
 
