@@ -59,7 +59,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Changed
 
-- App bars scroll out of view with page content and reappear when scrolling back up.
+- App bars scroll out of view with page content and reappear when scrolling back up, while the
+  status-bar background stays in place.
 - Added clearer empty states on Home and in All Entries with hints to create the first entry or
   start tracking time.
 
