@@ -24,7 +24,6 @@ class HomePage extends KglPage {
   @override
   Widget body(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
         return AlwaysFillingScrollView(
@@ -90,28 +89,41 @@ class HomePage extends KglPage {
                 else
                   Center(child: Text(loc?.noExistingEntries ?? '<noEntries>')),
                 const SizedBox(height: 32),
-                Column(
-                  children: [
-                    Text(
-                      '${loc?.today}: ${formatDuration(totalToday(workEntries.entries))}',
-                      style: textTheme.bodyLarge,
-                    ),
-                    Text(
-                      '${loc?.currentWeek}: ${formatDuration(totalThisWeek(workEntries.entries))}',
-                      style: textTheme.bodyLarge,
-                    ),
-                    Text(
-                      '${loc?.currentMonth}: ${formatDuration(totalThisMonth(workEntries.entries))}',
-                      style: textTheme.bodyLarge,
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+                _WorkDurationOfCurrentCalendarUnits(workEntries: workEntries.entries),
+                const SizedBox(height: 16),
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _WorkDurationOfCurrentCalendarUnits extends StatelessWidget {
+  final List<WorkEntry> workEntries;
+
+  const new({required this.workEntries});
+
+  @override
+  Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
+    return Column(
+      children: [
+        Text(
+          '${loc?.today}: ${formatDuration(totalToday(workEntries))}',
+          style: textTheme.bodyLarge,
+        ),
+        Text(
+          '${loc?.currentWeek}: ${formatDuration(totalThisWeek(workEntries))}',
+          style: textTheme.bodyLarge,
+        ),
+        Text(
+          '${loc?.currentMonth}: ${formatDuration(totalThisMonth(workEntries))}',
+          style: textTheme.bodyLarge,
+        ),
+      ],
     );
   }
 
@@ -122,7 +134,7 @@ class HomePage extends KglPage {
     );
   }
 
-  Duration totalThisWeek(List<WorkEntry> workEntries) {
+  static Duration totalThisWeek(List<WorkEntry> workEntries) {
     DateWeek thisWeek = DateWeek.current();
     List<WorkEntry> thisWeekEntries = workEntries
         .where((entry) => thisWeek.contains(entry.date))
@@ -130,7 +142,7 @@ class HomePage extends KglPage {
     return totalWorkDuration(thisWeekEntries);
   }
 
-  Duration totalThisMonth(List<WorkEntry> workEntries) {
+  static Duration totalThisMonth(List<WorkEntry> workEntries) {
     int currentMonth = clock.now().month;
     int currentYear = clock.now().year;
     List<WorkEntry> thisMonthEntries = workEntries
@@ -139,7 +151,7 @@ class HomePage extends KglPage {
     return totalWorkDuration(thisMonthEntries);
   }
 
-  Duration totalWorkDuration(List<WorkEntry> workEntries) {
+  static Duration totalWorkDuration(List<WorkEntry> workEntries) {
     return workEntries.fold(
       Duration.zero,
       (previousValue, element) => previousValue + element.workDuration,
