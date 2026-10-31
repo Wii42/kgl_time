@@ -131,6 +131,20 @@ class _KglTimeAppState extends State<KglTimeApp> {
             foregroundColor: Colors.white,
           ),
         );
+    final Color unselectedChipLabelColor = theme.colorScheme.onSurface;
+    theme = theme.copyWith(
+      chipTheme: theme.chipTheme.copyWith(
+        selectedColor: KglTimeApp.primaryColor, // FilterChip
+        secondarySelectedColor: KglTimeApp.primaryColor, // ChoiceChip
+        checkmarkColor: Colors.white,
+        labelStyle: TextStyle(
+          color: WidgetStateColor.resolveWith(
+            (states) =>
+                states.contains(WidgetState.selected) ? Colors.white : unselectedChipLabelColor,
+          ),
+        ),
+      ),
+    );
     return theme;
   }
 }
