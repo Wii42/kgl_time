@@ -7,6 +7,7 @@ import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
+import 'animated_branch_container.dart';
 import 'app_view.dart';
 import 'data_model/work_categories.dart';
 import 'data_model/work_entries.dart';
@@ -47,9 +48,15 @@ class _KglTimeAppState extends State<KglTimeApp> {
     router = GoRouter(
       navigatorKey: routerKey,
       routes: [
-        StatefulShellRoute.indexedStack(
+        StatefulShellRoute(
           builder: (context, state, navigationShell) {
             return AppView(navigationShell: navigationShell);
+          },
+          navigatorContainerBuilder: (context, navigationShell, children) {
+            return AnimatedBranchContainer(
+              currentIndex: navigationShell.currentIndex,
+              children: children,
+            );
           },
           branches: [
             NavBarAppRoute.home.statefulShellBranch(appTitle: widget.appTitle),
