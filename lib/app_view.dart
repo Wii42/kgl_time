@@ -18,21 +18,26 @@ class AppView extends StatelessWidget {
         final bool compact = constraints.maxHeight < 500;
         return Scaffold(
           body: navigationShell,
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: navigationShell.currentIndex,
-            onDestinationSelected: (newIndex) {
-              // go to the initial Location of the branch, if active destination is clicked again.
-              bool goToInitialLocation = newIndex == navigationShell.currentIndex;
-              navigationShell.goBranch(newIndex, initialLocation: goToInitialLocation);
-            },
-            destinations: [
-              for (NavBarAppRoute item in NavBarAppRoute.navBarItems)
-                item.navigationDestination(loc),
-            ],
-            height: compact ? 48 : null,
-            labelBehavior: compact
-                ? NavigationDestinationLabelBehavior.alwaysHide
-                : NavigationDestinationLabelBehavior.alwaysShow,
+          bottomNavigationBar: AnimatedSize(
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.easeInOut,
+            alignment: Alignment.bottomCenter,
+            child: NavigationBar(
+              selectedIndex: navigationShell.currentIndex,
+              onDestinationSelected: (newIndex) {
+                // go to the initial Location of the branch, if active destination is clicked again.
+                bool goToInitialLocation = newIndex == navigationShell.currentIndex;
+                navigationShell.goBranch(newIndex, initialLocation: goToInitialLocation);
+              },
+              destinations: [
+                for (NavBarAppRoute item in NavBarAppRoute.navBarItems)
+                  item.navigationDestination(loc),
+              ],
+              height: compact ? 48 : null,
+              labelBehavior: compact
+                  ? NavigationDestinationLabelBehavior.alwaysHide
+                  : NavigationDestinationLabelBehavior.alwaysShow,
+            ),
           ),
         );
       },
