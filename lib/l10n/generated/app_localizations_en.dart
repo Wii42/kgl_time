@@ -22,6 +22,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settings => 'Settings';
 
   @override
+  String get whatsNew => 'What\'s new';
+
+  @override
   String get groupBy => 'Group by';
 
   @override

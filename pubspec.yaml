@@ -2,7 +2,7 @@ name: kgl_time
 description: "Arbeitszeiterfassung für die Kirchgemeinde Lauterbrunnen"
 publish_to: 'none'
 
-version: 0.3.3+14
+version: 0.3.4+15
 
 environment:
   sdk: ^3.13.0
