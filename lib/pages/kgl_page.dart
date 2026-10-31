@@ -41,14 +41,10 @@ abstract class KglPage extends StatelessWidget {
             ],
           ),
         ],
-        body: MediaQuery.removePadding(
-          context: context,
-          removeTop: true,
-          child: SafeArea(
-            top: false, // The app bar handles the top inset.
-            bottom: false,
-            child: Builder(builder: body),
-          ),
+        body: SafeArea(
+          top: false, // The app bar handles the top inset.
+          bottom: false,
+          child: body(context),
         ),
       ),
     );
