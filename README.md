@@ -64,8 +64,8 @@ dart run build_runner watch --delete-conflicting-outputs
 - Adjusted category chip spacing for touch screens while preserving gaps between rows on desktop.
 - App bars scroll out of view with page content and reappear when scrolling back up, while the
   status-bar background stays in place.
-- Added clearer empty states on Home and in All Entries with hints to create the first entry or
-  start tracking time.
+- Added clearer empty states on Home, in All Entries, and in Categories with hints to create an
+  entry, start tracking time, or adjust category filters.
 
 ### v0.3.4
 

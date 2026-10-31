@@ -199,6 +199,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noMatchingEntries => 'No matching entries found';
 
   @override
+  String get adjustCategoryFilterHint =>
+      'Try selecting more categories or include entries without a category.';
+
+  @override
   String get trashBinEmpty => 'The trash bin is empty';
 
   @override

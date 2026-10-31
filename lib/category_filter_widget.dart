@@ -1,5 +1,6 @@
 import 'package:animated_list_plus/transitions.dart';
 import 'package:collection/collection.dart';
+import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/hover_controls.dart';
@@ -106,8 +107,43 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
                 padding: EdgeInsetsGeometry.only(top: controlsHeight),
               );
             }
-            return Center(
-              child: Text(AppLocalizations.of(context)?.noMatchingEntries ?? '<noMatchingEntries>'),
+            final loc = AppLocalizations.of(context);
+            final theme = Theme.of(context);
+            return AlwaysFillingScrollView(
+              maxWidth: 360,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(16, controlsHeight + 16, 16, 16),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ExcludeSemantics(
+                        child: Icon(
+                          Icons.filter_alt_off_outlined,
+                          size: 80,
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.18),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        loc?.noMatchingEntries ?? '<noMatchingEntries>',
+                        style: theme.textTheme.titleMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        workEntries.entries.isEmpty
+                            ? loc?.createFirstEntryHint ?? '<createFirstEntryHint>'
+                            : loc?.adjustCategoryFilterHint ?? '<adjustCategoryFilterHint>',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             );
           },
         );

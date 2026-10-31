@@ -464,6 +464,12 @@ abstract class AppLocalizations {
   /// **'No matching entries found'**
   String get noMatchingEntries;
 
+  /// No description provided for @adjustCategoryFilterHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try selecting more categories or include entries without a category.'**
+  String get adjustCategoryFilterHint;
+
   /// No description provided for @trashBinEmpty.
   ///
   /// In en, this message translates to:

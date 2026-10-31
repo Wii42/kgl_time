@@ -61,6 +61,7 @@
   "restoreEntry": "Restore Entry",
   "trashBin": "Trash Bin",
   "noMatchingEntries": "No matching entries found",
+  "adjustCategoryFilterHint": "Try selecting more categories or include entries without a category.",
   "trashBinEmpty": "The trash bin is empty",
   "exportImportEntries": "Export/Import Entries",
   "share": "Share",

@@ -61,6 +61,7 @@
   "restoreEntry": "Eintrag wiederherstellen",
   "trashBin": "Papierkorb",
   "noMatchingEntries": "Keine passenden Einträge gefunden",
+  "adjustCategoryFilterHint": "Wähle weitere Kategorien aus oder zeige auch Einträge ohne Kategorie an.",
   "trashBinEmpty": "Der Papierkorb ist leer",
   "exportImportEntries": "Einträge exportieren/importieren",
   "share": "Teilen",

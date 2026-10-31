@@ -200,6 +200,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noMatchingEntries => 'Keine passenden Einträge gefunden';
 
   @override
+  String get adjustCategoryFilterHint =>
+      'Wähle weitere Kategorien aus oder zeige auch Einträge ohne Kategorie an.';
+
+  @override
   String get trashBinEmpty => 'Der Papierkorb ist leer';
 
   @override
