@@ -59,7 +59,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Changed
 
-- Switching between Home, All Entries, and Categories uses a brief, subtle fade.
+- Switching between Home, All Entries, and Categories uses a subtle fade and slide following the tab
+  order.
 - Adjusted category chip spacing for touch screens while preserving gaps between rows on desktop.
 - App bars scroll out of view with page content and reappear when scrolling back up, while the
   status-bar background stays in place.

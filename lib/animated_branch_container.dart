@@ -21,13 +21,19 @@ class AnimatedBranchContainer extends StatelessWidget {
   final Duration duration;
   final Curve curve;
 
-  /// Receives an animation from 0 (hidden) to 1 (active).
-  final Widget Function(BuildContext, Animation<double>, Widget) transitionBuilder;
+  /// Receives visibility from 0 (hidden) to 1 (active), and a directional offset.
+  final Widget Function(BuildContext, Animation<double>, Animation<Offset>, Widget)
+  transitionBuilder;
 
   static Widget _defaultTransition(
     BuildContext context,
     Animation<double> animation,
-    Widget child,) => FadeTransition(opacity: animation, child: child);
+    Animation<Offset> position,
+    Widget child,
+  ) => FadeTransition(
+    opacity: animation,
+    child: SlideTransition(position: position, child: child),
+  );
 
   /// The index (in [children]) of the branch Navigator to display.
   final int currentIndex;
@@ -46,10 +52,27 @@ class AnimatedBranchContainer extends StatelessWidget {
           ),
           duration: duration,
           curve: curve,
-          builder: (context, value, child) => transitionBuilder(
-            context,
-            AlwaysStoppedAnimation<double>(value),
-            child!,
+          builder: (context, value, child) => TweenAnimationBuilder<Offset>(
+            tween: Tween<Offset>(
+              begin: index == currentIndex
+                  ? Offset.zero
+                  : Offset(index < currentIndex ? -0.04 : 0.04, 0),
+              end: index == currentIndex
+                  ? Offset.zero
+                  : Offset(index < currentIndex ? -0.04 : 0.04, 0),
+            ),
+            duration: duration,
+            curve: curve,
+            builder: (context, offset, child) => Offstage(
+              offstage: value == 0,
+              child: transitionBuilder(
+                context,
+                AlwaysStoppedAnimation<double>(value),
+                AlwaysStoppedAnimation<Offset>(offset),
+                child!,
+              ),
+            ),
+            child: child,
           ),
           child: _branchNavigatorWrapper(index, navigator),
         );
