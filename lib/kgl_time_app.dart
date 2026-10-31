@@ -131,16 +131,27 @@ class _KglTimeAppState extends State<KglTimeApp> {
             foregroundColor: Colors.white,
           ),
         );
+
+    final bool isDark = brightness == Brightness.dark;
+
+    final Color selectedChipColor = isDark
+        ? theme.colorScheme.primaryContainer
+        : theme.colorScheme.primary;
+
+    final Color selectedChipLabelColor = isDark
+        ? theme.colorScheme.onPrimaryContainer
+        : theme.colorScheme.onPrimary;
     final Color unselectedChipLabelColor = theme.colorScheme.onSurface;
     theme = theme.copyWith(
       chipTheme: theme.chipTheme.copyWith(
-        selectedColor: KglTimeApp.primaryColor, // FilterChip
-        secondarySelectedColor: KglTimeApp.primaryColor, // ChoiceChip
-        checkmarkColor: Colors.white,
+        selectedColor: selectedChipColor,
+        secondarySelectedColor: selectedChipColor,
+        checkmarkColor: selectedChipLabelColor,
         labelStyle: TextStyle(
           color: WidgetStateColor.resolveWith(
-            (states) =>
-                states.contains(WidgetState.selected) ? Colors.white : unselectedChipLabelColor,
+            (states) => states.contains(WidgetState.selected)
+                ? selectedChipLabelColor
+                : unselectedChipLabelColor,
           ),
         ),
       ),
