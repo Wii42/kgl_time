@@ -94,6 +94,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createFirstEntryHint => 'Create your first entry on Home to see it here.';
 
   @override
+  String get homeFirstEntryHint =>
+      'Create an entry or start tracking your time using the controls above.';
+
+  @override
   String get today => 'Today';
 
   @override

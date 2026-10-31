@@ -59,7 +59,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Changed
 
-- Added a clearer empty state in All Entries with a hint to create the first entry.
+- Added clearer empty states on Home and in All Entries with hints to create the first entry or
+  start tracking time.
 
 ### v0.3.4
 

@@ -28,6 +28,7 @@
   "showAllEntries": "Show all entries",
   "noExistingEntries": "No existing entries yet",
   "createFirstEntryHint": "Create your first entry on Home to see it here.",
+  "homeFirstEntryHint": "Create an entry or start tracking your time using the controls above.",
   "today": "Today",
   "currentWeek": "Current week",
   "currentMonth": "Current month",

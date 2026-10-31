@@ -95,6 +95,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Erfasse deinen ersten Eintrag auf der Startseite, um ihn hier zu sehen.';
 
   @override
+  String get homeFirstEntryHint =>
+      'Erfasse einen Eintrag oder starte die Zeiterfassung mit den Optionen oben.';
+
+  @override
   String get today => 'Heute';
 
   @override

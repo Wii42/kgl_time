@@ -89,7 +89,38 @@ class HomePage extends KglPage {
                     ],
                   )
                 else
-                  Center(child: Text(loc?.noExistingEntries ?? '<noEntries>')),
+                  Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: KglTimeApp.maxPageWidth),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ExcludeSemantics(
+                            child: CustomPaint(
+                              size: const Size(48, 32),
+                              painter: _EmptyStateArrowPainter(
+                                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.25),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            loc?.noExistingEntries ?? '<noEntries>',
+                            style: Theme.of(context).textTheme.titleMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            loc?.homeFirstEntryHint ?? '<homeFirstEntryHint>',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 32),
                 _WorkDurationOfCurrentCalendarUnits(workEntries: workEntries.entries),
                 const SizedBox(height: 16),
@@ -100,6 +131,37 @@ class HomePage extends KglPage {
       },
     );
   }
+}
+
+class _EmptyStateArrowPainter extends CustomPainter {
+  final Color color;
+
+  const _EmptyStateArrowPainter(this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    final path = Path()
+      ..moveTo(size.width * 0.8, size.height * 0.9)
+      ..quadraticBezierTo(
+        size.width * 0.35,
+        size.height * 0.95,
+        size.width * 0.4,
+        size.height * 0.1,
+      )
+      ..moveTo(size.width * 0.2, size.height * 0.4)
+      ..lineTo(size.width * 0.4, size.height * 0.1)
+      ..lineTo(size.width * 0.6, size.height * 0.4);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(_EmptyStateArrowPainter oldDelegate) => oldDelegate.color != color;
 }
 
 class _WorkDurationOfCurrentCalendarUnits extends StatefulWidget {

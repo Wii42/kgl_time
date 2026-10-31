@@ -28,6 +28,7 @@
   "showAllEntries": "Alle Einträge anzeigen",
   "noExistingEntries": "Noch keine Einträge vorhanden",
   "createFirstEntryHint": "Erfasse deinen ersten Eintrag auf der Startseite, um ihn hier zu sehen.",
+  "homeFirstEntryHint": "Erfasse einen Eintrag oder starte die Zeiterfassung mit den Optionen oben.",
   "today": "Heute",
   "currentWeek": "Aktuelle Woche",
   "currentMonth": "Aktueller Monat",

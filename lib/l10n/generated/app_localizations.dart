@@ -266,6 +266,12 @@ abstract class AppLocalizations {
   /// **'Create your first entry on Home to see it here.'**
   String get createFirstEntryHint;
 
+  /// No description provided for @homeFirstEntryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an entry or start tracking your time using the controls above.'**
+  String get homeFirstEntryHint;
+
   /// No description provided for @today.
   ///
   /// In en, this message translates to:
