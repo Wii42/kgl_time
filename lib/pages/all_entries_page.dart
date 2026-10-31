@@ -63,49 +63,45 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
     AppLocalizations? loc = AppLocalizations.of(context);
     return HoverControls(
       controlsKey: _buttonKey,
-      hoveringControls: Padding(
-        key: _buttonKey, // Assign the key to the button
-        padding: const EdgeInsets.all(8.0),
-        child: Material(
-          color: Theme.of(context).canvasColor,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  loc?.groupBy ?? '<groupBy>',
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+      hoveringControls: Card(
+        color: Theme.of(context).canvasColor,
+        margin: const EdgeInsets.all(8),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                loc?.groupBy ?? '<groupBy>',
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 4),
+              SegmentedButton<CalendarUnit>(
+                segments: [
+                  ButtonSegment(value: CalendarUnit.day, label: Text(loc?.groupByDay ?? '<day>')),
+                  ButtonSegment(
+                    value: CalendarUnit.week,
+                    label: Text(loc?.groupByWeek ?? '<byWeek>'),
                   ),
-                ),
-                const SizedBox(height: 4),
-                SegmentedButton<CalendarUnit>(
-                  segments: [
-                    ButtonSegment(value: CalendarUnit.day, label: Text(loc?.groupByDay ?? '<day>')),
-                    ButtonSegment(
-                      value: CalendarUnit.week,
-                      label: Text(loc?.groupByWeek ?? '<byWeek>'),
-                    ),
-                    ButtonSegment(
-                      value: CalendarUnit.month,
-                      label: Text(loc?.groupByMonth ?? '<byMonth>'),
-                    ),
-                  ],
-                  selected: {_selectedCalendarUnit},
-                  onSelectionChanged: (Set<CalendarUnit> selected) {
-                    assert(selected.length == 1);
-                    setState(() {
-                      _selectedCalendarUnit = selected.single;
-                      _updateGroupedEntries();
-                    });
-                  },
-                  style: solidUnselectedBackgroundStyle(context),
-                ),
-              ],
-            ),
+                  ButtonSegment(
+                    value: CalendarUnit.month,
+                    label: Text(loc?.groupByMonth ?? '<byMonth>'),
+                  ),
+                ],
+                selected: {_selectedCalendarUnit},
+                onSelectionChanged: (Set<CalendarUnit> selected) {
+                  assert(selected.length == 1);
+                  setState(() {
+                    _selectedCalendarUnit = selected.single;
+                    _updateGroupedEntries();
+                  });
+                },
+                style: solidUnselectedBackgroundStyle(context),
+              ),
+            ],
           ),
         ),
       ),
