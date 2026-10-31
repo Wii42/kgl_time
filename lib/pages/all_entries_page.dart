@@ -68,6 +68,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         padding: const EdgeInsets.all(12.0),
         child: SegmentedButton<CalendarUnit>(
           segments: [
+            ButtonSegment(value: CalendarUnit.day, label: Text(loc?.groupByDay ?? '<day>')),
             ButtonSegment(value: CalendarUnit.week, label: Text(loc?.groupByWeek ?? '<byWeek>')),
             ButtonSegment(value: CalendarUnit.month, label: Text(loc?.groupByMonth ?? '<byMonth>')),
           ],
@@ -173,6 +174,7 @@ class _WorkEntriesGroupHeader extends StatelessWidget {
       workEntryGroup.calendarUnitValue,
       workEntryGroup.calendarUnit,
       loc: loc,
+      year: workEntryGroup.year,
     );
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -182,7 +184,7 @@ class _WorkEntriesGroupHeader extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            '$calendarUnitOfGroup ${workEntryGroup.year}',
+            calendarUnitOfGroup,
             overflow: TextOverflow.ellipsis,
           ),
         ),
@@ -195,12 +197,15 @@ class _WorkEntriesGroupHeader extends StatelessWidget {
     int calendarUnitValue,
     CalendarUnit calendarUnit, {
     required AppLocalizations? loc,
+    required int year,
   }) {
     switch (calendarUnit) {
+      case CalendarUnit.day:
+        return DateFormat.yMMMd(loc?.localeName).format(DateTime(year, 1, calendarUnitValue));
       case CalendarUnit.week:
-        return '${loc?.calendarWeek} $calendarUnitValue,';
+        return '${loc?.calendarWeek} $calendarUnitValue, $year';
       case CalendarUnit.month:
-        return DateFormat('MMMM', loc?.localeName).format(DateTime(0, calendarUnitValue));
+        return DateFormat.yMMMM(loc?.localeName).format(DateTime(year, calendarUnitValue));
     }
   }
 }

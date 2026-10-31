@@ -57,8 +57,13 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ### Unreleased
 
+#### Added
+
+- Added daily grouping in All Entries, alongside week and month grouping.
+
 #### Changed
 
+- Shortened grouping controls to Day, Week, and Month (Tag, Woche, Monat in German).
 - Improved category selector colors in light and dark mode and adjusted chip spacing.
 - Category selector chips keep a stable width when selected or deselected.
 

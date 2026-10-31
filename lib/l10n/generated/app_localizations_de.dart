@@ -22,10 +22,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settings => 'Einstellungen';
 
   @override
-  String get groupByWeek => 'Nach Woche';
+  String get groupByDay => 'Tag';
 
   @override
-  String get groupByMonth => 'Nach Monat';
+  String get groupByWeek => 'Woche';
+
+  @override
+  String get groupByMonth => 'Monat';
 
   @override
   String get calendarWeek => 'Kalenderwoche';

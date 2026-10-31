@@ -122,16 +122,22 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settings;
 
+  /// No description provided for @groupByDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get groupByDay;
+
   /// No description provided for @groupByWeek.
   ///
   /// In en, this message translates to:
-  /// **'By Week'**
+  /// **'Week'**
   String get groupByWeek;
 
   /// No description provided for @groupByMonth.
   ///
   /// In en, this message translates to:
-  /// **'By Month'**
+  /// **'Month'**
   String get groupByMonth;
 
   /// No description provided for @calendarWeek.
