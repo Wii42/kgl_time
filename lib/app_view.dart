@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
-import 'package:material_ui/material_ui.dart';
+import 'package:material_navigation/material_navigation.dart';
+import 'package:material_ui/material_ui.dart' hide NavigationBar, NavigationDestination;
 
 import 'app_route.dart';
 
@@ -31,16 +32,19 @@ class AppView extends StatelessWidget {
               },
               destinations: [
                 for (NavBarAppRoute item in NavBarAppRoute.navBarItems)
-                  item.navigationDestination(loc),
+                  navigationDestination(loc, item),
               ],
               height: compact ? 48 : null,
-              labelBehavior: compact
-                  ? NavigationDestinationLabelBehavior.alwaysHide
-                  : NavigationDestinationLabelBehavior.alwaysShow,
+              labelBehavior: compact ? NavigationLabelBehavior.none : NavigationLabelBehavior.all,
             ),
           ),
         );
       },
     );
+  }
+
+  // ignore: many_lints/avoid_returning_widgets
+  NavigationDestination navigationDestination(AppLocalizations? loc, NavBarAppRoute route) {
+    return NavigationDestination(icon: Icon(route.icon), label: route.title(loc));
   }
 }
