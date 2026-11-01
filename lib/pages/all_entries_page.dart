@@ -88,33 +88,33 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
             ],
             itemBuilder:
                 (BuildContext context, Animation<double> animation, Object item, int index) {
-              if (item is GroupedWorkEntries) {
-                return SizeFadeTransition(
-                  animation: animation,
-                  axis: Axis.vertical,
-                  child: Padding(
-                    padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                    child: _WorkEntriesGroupHeader(item),
-                  ),
-                );
-              }
-              if (item is WorkEntry) {
-                return SizeFadeTransition(
-                  animation: animation,
-                  axis: Axis.vertical,
-                  child: WorkEntryDetails(workEntry: item),
-                );
-              }
-              return SizedBox(); // Fallback, should not reach here
-            },
+                  if (item is GroupedWorkEntries) {
+                    return SizeFadeTransition(
+                      animation: animation,
+                      axis: Axis.vertical,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
+                        child: _WorkEntriesGroupHeader(item),
+                      ),
+                    );
+                  }
+                  if (item is WorkEntry) {
+                    return SizeFadeTransition(
+                      animation: animation,
+                      axis: Axis.vertical,
+                      child: WorkEntryDetails(workEntry: item),
+                    );
+                  }
+                  return SizedBox(); // Fallback, should not reach here
+                },
             areItemsTheSame: itemsAreTheSame,
           );
         }
         return NoContentWidget.inAlwaysFillingScrollView(
-            icon: Icons.receipt_long_outlined,
-            title: loc?.noExistingEntries ?? '<noEntries>',
-            hints: loc?.createFirstEntryHint ?? '<createFirstEntryHint>',
-            saveAreaTopHeight: controlsHeight
+          icon: Icons.receipt_long_outlined,
+          title: loc?.noExistingEntries ?? '<noEntries>',
+          hints: loc?.createFirstEntryHint ?? '<createFirstEntryHint>',
+          saveAreaTopHeight: controlsHeight,
         );
       },
     );
