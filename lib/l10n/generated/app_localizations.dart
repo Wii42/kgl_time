@@ -260,6 +260,18 @@ abstract class AppLocalizations {
   /// **'No existing entries yet'**
   String get noExistingEntries;
 
+  /// No description provided for @createFirstEntryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first entry on Home to see it here.'**
+  String get createFirstEntryHint;
+
+  /// No description provided for @homeFirstEntryHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an entry or start tracking your time using the controls above.'**
+  String get homeFirstEntryHint;
+
   /// No description provided for @today.
   ///
   /// In en, this message translates to:
@@ -452,11 +464,23 @@ abstract class AppLocalizations {
   /// **'No matching entries found'**
   String get noMatchingEntries;
 
+  /// No description provided for @adjustCategoryFilterHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try selecting more categories or include entries without a category.'**
+  String get adjustCategoryFilterHint;
+
   /// No description provided for @trashBinEmpty.
   ///
   /// In en, this message translates to:
   /// **'The trash bin is empty'**
   String get trashBinEmpty;
+
+  /// No description provided for @trashBinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted entries appear here. You can restore them for up to 30 days after deletion.'**
+  String get trashBinHint;
 
   /// No description provided for @exportImportEntries.
   ///

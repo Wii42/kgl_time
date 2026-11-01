@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/hover_controls.dart';
+import 'package:kgl_time/no_content_widget.dart';
 import 'package:kgl_time/select_categories.dart';
 import 'package:kgl_time/width_constrained_list_view.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
@@ -68,8 +69,7 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
               for (var e in _selectedCategories.entries)
                 if (e.value) e.key.id,
             ];
-            List<WorkEntry> filteredEntries = workEntries.entries
-                .where(
+            List<WorkEntry> filteredEntries = workEntries.entries.where(
               (entry) {
                 bool isInSelectedCategory = entry.categories
                     .map((c) => c.id)
@@ -82,8 +82,7 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
                 }
                 return false;
               },
-            )
-                .toList();
+            ).toList();
 
             if (filteredEntries.isNotEmpty) {
               return AnimatedWidthConstrainedListView<WorkEntry>(
@@ -106,8 +105,14 @@ class _CategoryFilterWidgetState extends State<CategoryFilterWidget> {
                 padding: EdgeInsetsGeometry.only(top: controlsHeight),
               );
             }
-            return Center(
-              child: Text(AppLocalizations.of(context)?.noMatchingEntries ?? '<noMatchingEntries>'),
+            final loc = AppLocalizations.of(context);
+            return NoContentWidget.inAlwaysFillingScrollView(
+                icon: Icons.filter_alt_off_outlined,
+                title: loc?.noMatchingEntries ?? '<noMatchingEntries>',
+                hints: workEntries.entries.isEmpty
+                    ? loc?.createFirstEntryHint ?? '<createFirstEntryHint>'
+                    : loc?.adjustCategoryFilterHint ?? '<adjustCategoryFilterHint>',
+                saveAreaTopHeight: controlsHeight
             );
           },
         );

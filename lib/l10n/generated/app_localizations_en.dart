@@ -91,6 +91,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noExistingEntries => 'No existing entries yet';
 
   @override
+  String get createFirstEntryHint => 'Create your first entry on Home to see it here.';
+
+  @override
+  String get homeFirstEntryHint =>
+      'Create an entry or start tracking your time using the controls above.';
+
+  @override
   String get today => 'Today';
 
   @override
@@ -192,7 +199,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noMatchingEntries => 'No matching entries found';
 
   @override
+  String get adjustCategoryFilterHint =>
+      'Try selecting more categories or include entries without a category.';
+
+  @override
   String get trashBinEmpty => 'The trash bin is empty';
+
+  @override
+  String get trashBinHint =>
+      'Deleted entries appear here. You can restore them for up to 30 days after deletion.';
 
   @override
   String get exportImportEntries => 'Export/Import Entries';

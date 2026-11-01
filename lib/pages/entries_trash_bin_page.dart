@@ -1,4 +1,5 @@
 import 'package:animated_list_plus/transitions.dart';
+import 'package:kgl_time/no_content_widget.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/width_constrained_list_view.dart';
 import 'package:kgl_time/work_entry_widgets/trashed_work_entry.dart';
@@ -31,12 +32,10 @@ class EntriesTrashBinPage extends KglPage {
         },
       );
     }
-    return Center(
-      child: Text(
-        AppLocalizations.of(context)?.trashBinEmpty ?? "<trash bin empty>",
-        style: Theme.of(context).textTheme.bodyMedium,
-        textAlign: TextAlign.center,
-      ),
+    return NoContentWidget.inAlwaysFillingScrollView(
+      icon: Icons.delete_outline,
+      title: AppLocalizations.of(context)?.trashBinEmpty ?? "<trash bin empty>",
+      hints: AppLocalizations.of(context)?.trashBinHint ?? '<trashBinHint>',
     );
   }
 

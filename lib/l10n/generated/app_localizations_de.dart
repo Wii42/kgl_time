@@ -91,6 +91,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noExistingEntries => 'Noch keine Einträge vorhanden';
 
   @override
+  String get createFirstEntryHint =>
+      'Erfasse deinen ersten Eintrag auf der Startseite, um ihn hier zu sehen.';
+
+  @override
+  String get homeFirstEntryHint =>
+      'Erfasse einen Eintrag oder starte die Zeiterfassung mit den Optionen oben.';
+
+  @override
   String get today => 'Heute';
 
   @override
@@ -192,7 +200,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get noMatchingEntries => 'Keine passenden Einträge gefunden';
 
   @override
+  String get adjustCategoryFilterHint =>
+      'Wähle weitere Kategorien aus oder zeige auch Einträge ohne Kategorie an.';
+
+  @override
   String get trashBinEmpty => 'Der Papierkorb ist leer';
+
+  @override
+  String get trashBinHint =>
+      'Gelöschte Einträge erscheinen hier. Du kannst sie bis zu 30 Tage nach dem Löschen wiederherstellen.';
 
   @override
   String get exportImportEntries => 'Einträge exportieren/importieren';

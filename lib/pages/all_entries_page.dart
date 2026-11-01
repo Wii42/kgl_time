@@ -9,6 +9,7 @@ import 'package:kgl_time/enums/calendar_unit.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/hover_controls.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:kgl_time/no_content_widget.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +61,7 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations? loc = AppLocalizations.of(context);
     return HoverControls(
       controlsKey: _buttonKey,
       hoveringControls: _CalendarUnitSelector(
@@ -73,37 +75,46 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         },
       ),
       builder: (context, controlsHeight) {
-        return AnimatedWidthConstrainedListView<Object>(
-          padding: EdgeInsets.only(
-            top: max(controlsHeight, 0),
-          ), // tp padding to avoid collision with the SegmentedButton
-          items: [
-            for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
-              entryGroup,
-              for (WorkEntry entry in entryGroup.entries) entry,
+        if (_groupedEntries.isNotEmpty) {
+          return AnimatedWidthConstrainedListView<Object>(
+            padding: EdgeInsets.only(
+              top: max(controlsHeight, 0),
+            ), // tp padding to avoid collision with the SegmentedButton
+            items: [
+              for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
+                entryGroup,
+                for (WorkEntry entry in entryGroup.entries) entry,
+              ],
             ],
-          ],
-          itemBuilder: (BuildContext context, Animation<double> animation, Object item, int index) {
-            if (item is GroupedWorkEntries) {
-              return SizeFadeTransition(
-                animation: animation,
-                axis: Axis.vertical,
-                child: Padding(
-                  padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                  child: _WorkEntriesGroupHeader(item),
-                ),
-              );
-            }
-            if (item is WorkEntry) {
-              return SizeFadeTransition(
-                animation: animation,
-                axis: Axis.vertical,
-                child: WorkEntryDetails(workEntry: item),
-              );
-            }
-            return SizedBox(); // Fallback, should not reach here
-          },
-          areItemsTheSame: itemsAreTheSame,
+            itemBuilder:
+                (BuildContext context, Animation<double> animation, Object item, int index) {
+                  if (item is GroupedWorkEntries) {
+                    return SizeFadeTransition(
+                      animation: animation,
+                      axis: Axis.vertical,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
+                        child: _WorkEntriesGroupHeader(item),
+                      ),
+                    );
+                  }
+                  if (item is WorkEntry) {
+                    return SizeFadeTransition(
+                      animation: animation,
+                      axis: Axis.vertical,
+                      child: WorkEntryDetails(workEntry: item),
+                    );
+                  }
+                  return SizedBox(); // Fallback, should not reach here
+                },
+            areItemsTheSame: itemsAreTheSame,
+          );
+        }
+        return NoContentWidget.inAlwaysFillingScrollView(
+          icon: Icons.receipt_long_outlined,
+          title: loc?.noExistingEntries ?? '<noEntries>',
+          hints: loc?.createFirstEntryHint ?? '<createFirstEntryHint>',
+          saveAreaTopHeight: controlsHeight,
         );
       },
     );
