@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 2,
+  "exportedAt": "2026-11-12T15:30:00.000",
+  "workEntries": [
+    {
+      "id": 1,
+      "uuid": "fdc5c7a4-ca50-4fe6-baef-d17f657442f2",
+      "workDurationInSeconds": 2700,
+      "date": "2026-11-12T09:00:00.000",
+      "description": "Wochenplanung",
+      "categories": [
+        {
+          "id": 1,
+          "uuid": "43db7b0c-8c7f-4b0f-8905-e9ae27ed7d96",
+          "displayName": "Planung",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 2,
+      "uuid": "74b97962-3e67-4207-b30e-379168796f81",
+      "workDurationInSeconds": 4500,
+      "date": "2026-11-12T10:00:00.000",
+      "description": "Teambesprechung",
+      "categories": [
+        {
+          "id": 2,
+          "uuid": "7a5242c2-2bd4-462d-b505-64c3708f8415",
+          "displayName": "Besprechungen",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 3,
+      "uuid": "c04b4ed6-c183-4f5a-b296-dc412e1f4f32",
+      "workDurationInSeconds": 1800,
+      "date": "2026-11-12T11:30:00.000",
+      "description": "E-Mails und Terminplanung",
+      "categories": [
+        {
+          "id": 3,
+          "uuid": "95aabf55-8656-4e08-b883-c8bfa097bc04",
+          "displayName": "Administration",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 4,
+      "uuid": "5cbf7d88-4558-4f75-98f5-65fc028c7459",
+      "workDurationInSeconds": 5400,
+      "date": "2026-11-11T09:00:00.000",
+      "description": "Aktivitäten für den nächsten Monat planen",
+      "categories": [
+        {
+          "id": 1,
+          "uuid": "43db7b0c-8c7f-4b0f-8905-e9ae27ed7d96",
+          "displayName": "Planung",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 5,
+      "uuid": "c15dff3e-e5b9-4985-a27f-c6630d09ab0b",
+      "workDurationInSeconds": 3600,
+      "date": "2026-11-10T10:00:00.000",
+      "description": "Projektbesprechung",
+      "categories": [
+        {
+          "id": 2,
+          "uuid": "7a5242c2-2bd4-462d-b505-64c3708f8415",
+          "displayName": "Besprechungen",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 6,
+      "uuid": "914f0271-2984-4fff-bcd4-43c2bde66775",
+      "workDurationInSeconds": 2700,
+      "date": "2026-11-09T09:00:00.000",
+      "description": "Unterlagen aktualisieren",
+      "categories": [
+        {
+          "id": 3,
+          "uuid": "95aabf55-8656-4e08-b883-c8bfa097bc04",
+          "displayName": "Administration",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 7,
+      "uuid": "ab2f4d63-63eb-4134-81c1-7a742064fe2a",
+      "workDurationInSeconds": 7200,
+      "date": "2026-11-06T09:00:00.000",
+      "description": "Teamworkshop vorbereiten",
+      "categories": [
+        {
+          "id": 1,
+          "uuid": "43db7b0c-8c7f-4b0f-8905-e9ae27ed7d96",
+          "displayName": "Planung",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        },
+        {
+          "id": 2,
+          "uuid": "7a5242c2-2bd4-462d-b505-64c3708f8415",
+          "displayName": "Besprechungen",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 8,
+      "uuid": "ed520dfb-d2bb-40bd-abcd-4d9b0af60279",
+      "workDurationInSeconds": 1800,
+      "date": "2026-11-05T09:00:00.000",
+      "description": "Spesen prüfen",
+      "categories": [
+        {
+          "id": 3,
+          "uuid": "95aabf55-8656-4e08-b883-c8bfa097bc04",
+          "displayName": "Administration",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 9,
+      "uuid": "2741c691-fe60-4444-ae2c-ca99d1a15404",
+      "workDurationInSeconds": 4500,
+      "date": "2026-11-04T09:00:00.000",
+      "description": "Kommende Veranstaltungen planen",
+      "categories": [
+        {
+          "id": 1,
+          "uuid": "43db7b0c-8c7f-4b0f-8905-e9ae27ed7d96",
+          "displayName": "Planung",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 10,
+      "uuid": "20f7b1b8-dcdc-458b-a27e-513f5ae5c294",
+      "workDurationInSeconds": 2700,
+      "date": "2026-11-03T10:00:00.000",
+      "description": "Koordinationsbesprechung",
+      "categories": [
+        {
+          "id": 2,
+          "uuid": "7a5242c2-2bd4-462d-b505-64c3708f8415",
+          "displayName": "Besprechungen",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    }
+  ],
+  "workCategories": [
+    {
+      "id": 1,
+      "uuid": "43db7b0c-8c7f-4b0f-8905-e9ae27ed7d96",
+      "displayName": "Planung",
+      "icon": null,
+      "listIndex": 0,
+      "lastEdit": "2026-11-12T15:30:00.000"
+    },
+    {
+      "id": 2,
+      "uuid": "7a5242c2-2bd4-462d-b505-64c3708f8415",
+      "displayName": "Besprechungen",
+      "icon": null,
+      "listIndex": 1,
+      "lastEdit": "2026-11-12T15:30:00.000"
+    },
+    {
+      "id": 3,
+      "uuid": "95aabf55-8656-4e08-b883-c8bfa097bc04",
+      "displayName": "Administration",
+      "icon": null,
+      "listIndex": 2,
+      "lastEdit": "2026-11-12T15:30:00.000"
+    }
+  ]
+}
