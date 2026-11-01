@@ -1,0 +1,269 @@
+{
+  "schemaVersion": 2,
+  "exportedAt": "2026-11-12T15:30:00.000",
+  "workEntries": [
+    {
+      "id": 1,
+      "uuid": "fd73d1ef-bde2-408a-87ba-aa79528a49cd",
+      "workDurationInSeconds": 2700,
+      "date": "2026-11-12T09:00:00.000",
+      "description": "Plan the week",
+      "categories": [
+        {
+          "id": 1,
+          "uuid": "f5435005-aef9-4190-ac1c-a8153d767ab0",
+          "displayName": "Planning",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 2,
+      "uuid": "f5679704-e9a0-474e-b50a-8a907d6536bb",
+      "workDurationInSeconds": 4500,
+      "date": "2026-11-12T10:00:00.000",
+      "description": "Team meeting",
+      "categories": [
+        {
+          "id": 2,
+          "uuid": "6b1bea90-ea27-4fd4-8891-32e5b691692d",
+          "displayName": "Meetings",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 3,
+      "uuid": "ea2115b2-b9f4-4330-95c4-1117b8a79650",
+      "workDurationInSeconds": 1800,
+      "date": "2026-11-12T11:30:00.000",
+      "description": "Emails and scheduling",
+      "categories": [
+        {
+          "id": 3,
+          "uuid": "6e1fd4ec-a696-4eea-b7fa-e820c07d8d3d",
+          "displayName": "Administration",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 4,
+      "uuid": "d8fafaff-7ece-4988-8bcd-077348b35db0",
+      "workDurationInSeconds": 5400,
+      "date": "2026-11-11T09:00:00.000",
+      "description": "Prepare next month's activities",
+      "categories": [
+        {
+          "id": 1,
+          "uuid": "f5435005-aef9-4190-ac1c-a8153d767ab0",
+          "displayName": "Planning",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 5,
+      "uuid": "2a8a0c51-8271-40da-9073-18d454dd2699",
+      "workDurationInSeconds": 3600,
+      "date": "2026-11-10T10:00:00.000",
+      "description": "Project check-in",
+      "categories": [
+        {
+          "id": 2,
+          "uuid": "6b1bea90-ea27-4fd4-8891-32e5b691692d",
+          "displayName": "Meetings",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 6,
+      "uuid": "84696c21-100a-4e95-9fa3-ea673e424eab",
+      "workDurationInSeconds": 2700,
+      "date": "2026-11-09T09:00:00.000",
+      "description": "Update documents",
+      "categories": [
+        {
+          "id": 3,
+          "uuid": "6e1fd4ec-a696-4eea-b7fa-e820c07d8d3d",
+          "displayName": "Administration",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 7,
+      "uuid": "4434e0bb-5f61-4ee5-8d67-031309d6307b",
+      "workDurationInSeconds": 7200,
+      "date": "2026-11-06T09:00:00.000",
+      "description": "Prepare team workshop",
+      "categories": [
+        {
+          "id": 1,
+          "uuid": "f5435005-aef9-4190-ac1c-a8153d767ab0",
+          "displayName": "Planning",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        },
+        {
+          "id": 2,
+          "uuid": "6b1bea90-ea27-4fd4-8891-32e5b691692d",
+          "displayName": "Meetings",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 8,
+      "uuid": "b2800ea6-c1b7-433e-91b9-a7142e82e55c",
+      "workDurationInSeconds": 1800,
+      "date": "2026-11-05T09:00:00.000",
+      "description": "Review expenses",
+      "categories": [
+        {
+          "id": 3,
+          "uuid": "6e1fd4ec-a696-4eea-b7fa-e820c07d8d3d",
+          "displayName": "Administration",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 9,
+      "uuid": "b0a5565f-ee8e-47cf-8f4c-1f26fa8115d2",
+      "workDurationInSeconds": 4500,
+      "date": "2026-11-04T09:00:00.000",
+      "description": "Plan upcoming events",
+      "categories": [
+        {
+          "id": 1,
+          "uuid": "f5435005-aef9-4190-ac1c-a8153d767ab0",
+          "displayName": "Planning",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    },
+    {
+      "id": 10,
+      "uuid": "0a07ed11-b8d8-4913-9b9e-a54ca024882c",
+      "workDurationInSeconds": 2700,
+      "date": "2026-11-03T10:00:00.000",
+      "description": "Coordination meeting",
+      "categories": [
+        {
+          "id": 2,
+          "uuid": "6b1bea90-ea27-4fd4-8891-32e5b691692d",
+          "displayName": "Meetings",
+          "icon": null,
+          "lastEdit": "2026-11-12T15:30:00.000"
+        }
+      ],
+      "startTime": null,
+      "endTime": null,
+      "lastEdit": "2026-11-12T15:30:00.000",
+      "tickedOff": false,
+      "createType": "manualDuration",
+      "wasEdited": false,
+      "wasMovedToTrashAt": null
+    }
+  ],
+  "workCategories": [
+    {
+      "id": 1,
+      "uuid": "f5435005-aef9-4190-ac1c-a8153d767ab0",
+      "displayName": "Planning",
+      "icon": null,
+      "listIndex": 0,
+      "lastEdit": "2026-11-12T15:30:00.000"
+    },
+    {
+      "id": 2,
+      "uuid": "6b1bea90-ea27-4fd4-8891-32e5b691692d",
+      "displayName": "Meetings",
+      "icon": null,
+      "listIndex": 1,
+      "lastEdit": "2026-11-12T15:30:00.000"
+    },
+    {
+      "id": 3,
+      "uuid": "6e1fd4ec-a696-4eea-b7fa-e820c07d8d3d",
+      "displayName": "Administration",
+      "icon": null,
+      "listIndex": 2,
+      "lastEdit": "2026-11-12T15:30:00.000"
+    }
+  ]
+}
