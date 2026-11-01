@@ -55,17 +55,16 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ## Changelog
 
-### Unreleased
+### v0.3.5
 
 #### Changed
 
-- Switching between Home, All Entries, and Categories uses a subtle fade and slide following the tab
-  order.
-- Adjusted category chip spacing for touch screens while preserving gaps between rows on desktop.
-- App bars scroll out of view with page content and reappear when scrolling back up, while the
-  status-bar background stays in place.
-- Added clearer empty states with hints to create entries, adjust category filters, and restore
-  deleted entries from the trash within 30 days.
+- More room for content on small devices, in landscape, and in split-screen mode: the top bar hides
+  while scrolling and returns when scrolling back up, and the bottom navigation becomes more compact
+  when space is limited.
+- Smoother transitions between Home, All Entries, and Categories.
+- Helpful hints when lists are empty, explaining how to create entries, adjust filters, or restore
+  deleted entries from the trash.
 
 ### v0.3.4
 
