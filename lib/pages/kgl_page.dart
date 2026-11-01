@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
@@ -25,7 +26,8 @@ abstract class KglPage extends StatelessWidget {
           floatHeaderSlivers: true,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
-              primary: false,
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+              primary: true,
               floating: true,
               scrolledUnderElevation: 0,
               title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
