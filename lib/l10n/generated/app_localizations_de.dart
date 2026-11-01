@@ -207,6 +207,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get trashBinEmpty => 'Der Papierkorb ist leer';
 
   @override
+  String get trashBinHint =>
+      'Gelöschte Einträge erscheinen hier. Du kannst sie bis zu 30 Tage nach dem Löschen wiederherstellen.';
+
+  @override
   String get exportImportEntries => 'Einträge exportieren/importieren';
 
   @override

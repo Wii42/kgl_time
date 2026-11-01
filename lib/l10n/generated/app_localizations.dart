@@ -476,6 +476,12 @@ abstract class AppLocalizations {
   /// **'The trash bin is empty'**
   String get trashBinEmpty;
 
+  /// No description provided for @trashBinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Deleted entries appear here. You can restore them for up to 30 days after deletion.'**
+  String get trashBinHint;
+
   /// No description provided for @exportImportEntries.
   ///
   /// In en, this message translates to:

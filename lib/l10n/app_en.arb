@@ -63,6 +63,7 @@
   "noMatchingEntries": "No matching entries found",
   "adjustCategoryFilterHint": "Try selecting more categories or include entries without a category.",
   "trashBinEmpty": "The trash bin is empty",
+  "trashBinHint": "Deleted entries appear here. You can restore them for up to 30 days after deletion.",
   "exportImportEntries": "Export/Import Entries",
   "share": "Share",
   "saveLocally": "Save locally",

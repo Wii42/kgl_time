@@ -206,6 +206,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get trashBinEmpty => 'The trash bin is empty';
 
   @override
+  String get trashBinHint =>
+      'Deleted entries appear here. You can restore them for up to 30 days after deletion.';
+
+  @override
   String get exportImportEntries => 'Export/Import Entries';
 
   @override

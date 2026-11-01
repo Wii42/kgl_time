@@ -63,6 +63,7 @@
   "noMatchingEntries": "Keine passenden Einträge gefunden",
   "adjustCategoryFilterHint": "Wähle weitere Kategorien aus oder zeige auch Einträge ohne Kategorie an.",
   "trashBinEmpty": "Der Papierkorb ist leer",
+  "trashBinHint": "Gelöschte Einträge erscheinen hier. Du kannst sie bis zu 30 Tage nach dem Löschen wiederherstellen.",
   "exportImportEntries": "Einträge exportieren/importieren",
   "share": "Teilen",
   "saveLocally": "Lokal speichern",
