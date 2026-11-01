@@ -2,15 +2,14 @@ import 'dart:math';
 
 import 'package:animated_list_plus/transitions.dart';
 import 'package:intl/intl.dart';
-import 'package:kgl_time/always_filling_scroll_view.dart';
 import 'package:kgl_time/data_model/grouped_work_entries.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/enums/calendar_unit.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/hover_controls.dart';
-import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:kgl_time/no_content_widget.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
@@ -76,73 +75,46 @@ class _AllEntriesStatefulPageState extends State<_AllEntriesStatefulPage> {
         },
       ),
       builder: (context, controlsHeight) {
-        if (_groupedEntries.isEmpty) {
-          return AlwaysFillingScrollView(
-            maxWidth: KglTimeApp.maxPageWidth,
-            child: Padding(
-              padding: EdgeInsets.all(16).add(EdgeInsets.only(top: max(controlsHeight, 0))),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ExcludeSemantics(
-                      child: Icon(
-                        Icons.receipt_long_outlined,
-                        size: 80,
-                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.18),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      loc?.noExistingEntries ?? '<noEntries>',
-                      style: Theme.of(context).textTheme.titleMedium,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      loc?.createFirstEntryHint ?? '<createFirstEntryHint>',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+        if (_groupedEntries.isNotEmpty) {
+          return AnimatedWidthConstrainedListView<Object>(
+            padding: EdgeInsets.only(
+              top: max(controlsHeight, 0),
+            ), // tp padding to avoid collision with the SegmentedButton
+            items: [
+              for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
+                entryGroup,
+                for (WorkEntry entry in entryGroup.entries) entry,
+              ],
+            ],
+            itemBuilder:
+                (BuildContext context, Animation<double> animation, Object item, int index) {
+              if (item is GroupedWorkEntries) {
+                return SizeFadeTransition(
+                  animation: animation,
+                  axis: Axis.vertical,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
+                    child: _WorkEntriesGroupHeader(item),
+                  ),
+                );
+              }
+              if (item is WorkEntry) {
+                return SizeFadeTransition(
+                  animation: animation,
+                  axis: Axis.vertical,
+                  child: WorkEntryDetails(workEntry: item),
+                );
+              }
+              return SizedBox(); // Fallback, should not reach here
+            },
+            areItemsTheSame: itemsAreTheSame,
           );
         }
-        return AnimatedWidthConstrainedListView<Object>(
-          padding: EdgeInsets.only(
-            top: max(controlsHeight, 0),
-          ), // tp padding to avoid collision with the SegmentedButton
-          items: [
-            for (GroupedWorkEntries entryGroup in _groupedEntries) ...[
-              entryGroup,
-              for (WorkEntry entry in entryGroup.entries) entry,
-            ],
-          ],
-          itemBuilder: (BuildContext context, Animation<double> animation, Object item, int index) {
-            if (item is GroupedWorkEntries) {
-              return SizeFadeTransition(
-                animation: animation,
-                axis: Axis.vertical,
-                child: Padding(
-                  padding: EdgeInsets.only(top: index == 0 ? 0 : 16.0),
-                  child: _WorkEntriesGroupHeader(item),
-                ),
-              );
-            }
-            if (item is WorkEntry) {
-              return SizeFadeTransition(
-                animation: animation,
-                axis: Axis.vertical,
-                child: WorkEntryDetails(workEntry: item),
-              );
-            }
-            return SizedBox(); // Fallback, should not reach here
-          },
-          areItemsTheSame: itemsAreTheSame,
+        return NoContentWidget.inAlwaysFillingScrollView(
+            icon: Icons.receipt_long_outlined,
+            title: loc?.noExistingEntries ?? '<noEntries>',
+            hints: loc?.createFirstEntryHint ?? '<createFirstEntryHint>',
+            saveAreaTopHeight: controlsHeight
         );
       },
     );

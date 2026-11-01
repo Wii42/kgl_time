@@ -12,6 +12,7 @@ import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:kgl_time/no_content_widget.dart';
 import 'package:kgl_time/work_entry_time_tracker.dart';
 import 'package:kgl_time/work_entry_widgets/work_entry_preview.dart';
 import 'package:material_ui/material_ui.dart';
@@ -89,25 +90,9 @@ class HomePage extends KglPage {
                     ],
                   )
                 else
-                  Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          loc?.noExistingEntries ?? '<noEntries>',
-                          style: Theme.of(context).textTheme.titleMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          loc?.homeFirstEntryHint ?? '<homeFirstEntryHint>',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+                  NoContentWidget(
+                    title: loc?.noExistingEntries ?? '<noEntries>',
+                    hints: loc?.homeFirstEntryHint ?? '<homeFirstEntryHint>',
                   ),
                 const SizedBox(height: 32),
                 _WorkDurationOfCurrentCalendarUnits(workEntries: workEntries.entries),
