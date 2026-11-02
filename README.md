@@ -4,11 +4,13 @@ A simple time tracking app designed to help users manage their work hours effici
 with Flutter, the app allows users to enter and store their work hours locally on their devices
 without collecting any personal information.
 
-<h1 align="center">
-    <picture>
-      <img alt="KGL Time" src="demo_images/feature_graphic_en.png">
-    </picture>
-  </h1>
+<p>
+  <img
+    src="demo_images/feature_graphic_en.png"
+    alt="KGL Time — simple time tracking"
+    width="612"
+  >
+</p>
 
 ## Features
 
