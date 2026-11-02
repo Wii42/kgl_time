@@ -1,10 +1,14 @@
-
 # KGL Time
 
-<img src="assets/playstore-icon.png" alt="KGL Time app icon" width="80">
+A simple time tracking app designed to help users manage their work hours efficiently. Developed
+with Flutter, the app allows users to enter and store their work hours locally on their devices
+without collecting any personal information.
 
-KGL Time is a simple time tracking app designed to help users manage their work hours efficiently. Developed with Flutter, the app allows users to enter and store their work hours locally on their devices without collecting any personal information.
-
+<h1 align="center">
+    <picture>
+      <img alt="KGL Time" src="demo_images/feature_graphic_en.png">
+    </picture>
+  </h1>
 
 ## Features
 
