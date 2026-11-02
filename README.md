@@ -1,21 +1,40 @@
-
 # KGL Time
 
-KGL Time is a simple time tracking app designed to help users manage their work hours efficiently. Developed with Flutter, the app allows users to enter and store their work hours locally on their devices without collecting any personal information.
+A simple time tracking app designed to help users manage their work hours efficiently. Developed
+with Flutter, the app allows users to enter and store their work hours locally on their devices
+without collecting any personal information.
 
-## Privacy Policy
-
-KGL Time does not collect, store, or share any personal information from its users. For more details on how user data is handled, please refer to the [PRIVACY.md](PRIVACY.md) file.
-
-## License
-
-KGL Time is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html). You can view the terms and conditions in the [LICENSE.md](LICENSE.md) file.
+<p>
+  <img
+    src="demo_images/feature_graphic_en.png"
+    alt="KGL Time — simple time tracking"
+    width="612"
+  >
+</p>
 
 ## Features
 
 - **User-friendly Interface**: Easy to navigate and track work hours.
 - **Local Storage**: All entered data is stored locally on the device, ensuring user privacy.
 - **No Registration Required**: Users can start tracking time immediately without the need for accounts or logins.
+
+<p>
+  <a href="demo_images/phone/demo_en/1_Screenshot_kgl_time_startpage_en.png"><img src="demo_images/phone/demo_en/1_Screenshot_kgl_time_startpage_en.png" alt="Home: time tracker, recent entries, and work totals" width="160"></a>
+  <a href="demo_images/phone/demo_en/2_Screenshot_kgl_time_all_entries_en.png"><img src="demo_images/phone/demo_en/2_Screenshot_kgl_time_all_entries_en.png" alt="All Entries: grouped work entries and totals" width="160"></a>
+  <a href="demo_images/phone/demo_en/3_Screenshot_kgl_time_new_entry_en.png"><img src="demo_images/phone/demo_en/3_Screenshot_kgl_time_new_entry_en.png" alt="New Entry: enter a duration, description, date, and categories" width="160"></a>
+  <a href="demo_images/phone/demo_en/4_Screenshot_kgl_time_categories_en.png"><img src="demo_images/phone/demo_en/4_Screenshot_kgl_time_categories_en.png" alt="Categories: filter entries by category" width="160"></a>
+</p>
+
+## Privacy Policy
+
+KGL Time does not collect, store, or share any personal information from its users. For more details
+on how user data is handled, please refer to the [PRIVACY.md](PRIVACY.md) file.
+
+## License
+
+KGL Time is licensed under
+the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html). You can view the
+terms and conditions in the [LICENSE.md](LICENSE.md) file.
 
 ## Platform Compatibility
 
