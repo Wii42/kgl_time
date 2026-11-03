@@ -95,13 +95,17 @@ class StatusBarSafeArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: Theme.of(context).appBarTheme.backgroundColor ?? Theme.of(context).colorScheme.surface,
-      child: SafeArea(
-        left: false,
-        right: false,
-        bottom: false,
-        child: ColoredBox(color: Theme.of(context).scaffoldBackgroundColor, child: child),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: ColoredBox(
+        color:
+            Theme.of(context).appBarTheme.backgroundColor ?? Theme.of(context).colorScheme.surface,
+        child: SafeArea(
+          left: false,
+          right: false,
+          bottom: false,
+          child: ColoredBox(color: Theme.of(context).scaffoldBackgroundColor, child: child),
+        ),
       ),
     );
   }

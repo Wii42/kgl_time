@@ -78,6 +78,12 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ## Changelog
 
+### Unreleased
+
+#### Fixed
+
+- Keep the system status bar text and icons white, including when the app bar scrolls out of view.
+
 ### v0.3.5
 
 #### Changed
