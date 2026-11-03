@@ -75,8 +75,8 @@ class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
       // Measure overflow only with the toolbar visible. Hiding it enlarges the
       // body's viewport and must not change the decision that allowed it to hide.
       if (_controller.hasClients && _controller.offset > 0) return;
-      final metrics = _metrics!;
-      final overflows = metrics.maxScrollExtent - metrics.minScrollExtent > 0.5;
+      final ScrollMetrics metrics = _metrics!;
+      final bool overflows = metrics.maxScrollExtent - metrics.minScrollExtent > 0.5;
       if (_overflows != overflows) setState(() => _overflows = overflows);
     });
     WidgetsBinding.instance.ensureVisualUpdate();
