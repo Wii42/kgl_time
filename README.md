@@ -83,7 +83,8 @@ dart run build_runner watch --delete-conflicting-outputs
 #### Changed
 
 - Keep the app bar fixed when the page content fits; let it hide while scrolling when the content
-  overflows, adapting to window size and content changes.
+  overflows, adapting to window size and content changes. Scrolling works with both page content
+  and animated entry lists without jumping back to the top.
 
 #### Fixed
 

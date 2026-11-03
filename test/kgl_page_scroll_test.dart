@@ -1,7 +1,17 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:kgl_time/always_filling_scroll_view.dart';
+import 'package:kgl_time/app_route.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
+import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
+import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
+import 'package:kgl_time/width_constrained_list_view.dart';
 import 'package:material_ui/material_ui.dart';
+
+import 'support/memory_storage.dart';
 
 class _ListPage extends KglPage {
   const _ListPage() : super(appTitle: 'Scrolling page');
@@ -47,6 +57,99 @@ class _SizedPage extends KglPage {
 }
 
 void main() {
+  setUpAll(() => initializeDateFormatting('en'));
+
+  for (final route in [NavBarAppRoute.allEntries, NavBarAppRoute.categories]) {
+    testWidgets('${route.name} scrolls through overflowing animated entries', (tester) async {
+      final storage = MemoryStorage();
+      PersistentStorageService.setImplementation(storage);
+      addTearDown(storage.close);
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(390, 844);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.resetPhysicalSize);
+      await tester.pumpWidget(
+        KglTimeApp(
+          appTitle: 'Test',
+          initialEntries: [
+            for (var i = 0; i < 40; i++)
+              WorkEntry.fromDuration(
+                duration: const Duration(minutes: 30),
+                date: DateTime(2026, 10, 30 - i),
+                description: 'Entry $i' * (1 + i % 4),
+              )..id = i + 1,
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+      final router = tester.widget<MaterialApp>(find.byType(MaterialApp)).routerConfig! as GoRouter;
+      router.go(route.path);
+      await tester.pumpAndSettle();
+      final list = find.byWidgetPredicate((widget) => widget is AnimatedWidthConstrainedListView);
+      expect(list, findsOneWidget);
+      final scrollable = tester.state<ScrollableState>(
+        find.descendant(of: list, matching: find.byType(Scrollable)),
+      );
+      expect(scrollable.position.maxScrollExtent, greaterThan(0));
+      expect(tester.widget<SliverAppBar>(find.byType(SliverAppBar)).floating, isTrue);
+      await tester.drag(list, const Offset(0, -600));
+      await tester.pumpAndSettle();
+      expect(scrollable.position.pixels, greaterThan(100));
+      final firstOffset = scrollable.position.pixels;
+      await tester.drag(list, const Offset(0, -600));
+      await tester.pumpAndSettle();
+      expect(scrollable.position.pixels, greaterThan(firstOffset + 100));
+      final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      await mouse.addPointer(location: tester.getCenter(list));
+      for (var i = 0; i < 5; i++) {
+        final beforeWheel = scrollable.position.pixels;
+        await tester.sendEventToBinding(
+          PointerScrollEvent(
+            position: tester.getCenter(list),
+            scrollDelta: const Offset(0, 200),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(scrollable.position.pixels, greaterThan(beforeWheel));
+      }
+      await mouse.removePointer();
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('AlwaysFillingScrollView keeps scrolling through long content', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    final height = ValueNotifier<double>(3000);
+    addTearDown(height.dispose);
+    await tester.pumpWidget(MaterialApp(home: _SizedPage(height)));
+    await tester.pumpAndSettle();
+    final scroll = find.byType(SingleChildScrollView);
+    final position = tester
+        .state<ScrollableState>(
+          find.descendant(of: scroll, matching: find.byType(Scrollable)),
+        )
+        .position;
+    for (var i = 0; i < 2; i++) {
+      final before = position.pixels;
+      await tester.drag(scroll, const Offset(0, -300));
+      await tester.pumpAndSettle();
+      expect(position.pixels, greaterThan(before));
+    }
+    final beforeWheel = position.pixels;
+    await tester.sendEventToBinding(
+      PointerScrollEvent(
+        position: tester.getCenter(scroll),
+        scrollDelta: const Offset(0, 200),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(position.pixels, greaterThan(beforeWheel));
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('adapts to content changes and resizing without losing the body state', (
     tester,
   ) async {
