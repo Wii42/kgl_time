@@ -82,8 +82,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Changed
 
-- Keep the app bar fixed on taller windows without scrolling content that already fits; hide it
-  while scrolling only when vertical space is limited.
+- Keep the app bar fixed when the page content fits; let it hide while scrolling when the content
+  overflows, adapting to window size and content changes.
 
 #### Fixed
 
