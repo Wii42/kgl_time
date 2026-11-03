@@ -1,3 +1,10 @@
+# Coding style
+
+- Explicitly specify the type of every variable declaration, including local variables, fields,
+  constants, and loop variables, even when the type can be inferred. Use `final Type name` or
+  `const Type name` where appropriate instead of untyped `final`, `const` declarations. Never use
+  `var` declarations.
+
 # Release notes
 
 - When implementing a user-visible feature or fixing a user-visible bug, update the **Unreleased**
