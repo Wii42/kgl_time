@@ -76,6 +76,11 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ### Unreleased
 
+#### Changed
+
+- Keep the app bar fixed on taller windows without scrolling content that already fits; hide it
+  while scrolling only when vertical space is limited.
+
 #### Fixed
 
 - Keep the system status bar text and icons white, including when the app bar scrolls out of view.

@@ -20,38 +20,59 @@ abstract class KglPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StatusBarSafeArea(
-        child: NestedScrollView(
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverAppBar(
-              systemOverlayStyle: SystemUiOverlayStyle.light,
-              primary: true,
-              floating: true,
-              scrolledUnderElevation: 0,
-              title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
-              actions: [
-                if (showSettingsButton)
-                  IconButton(
-                    icon: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.settings),
-                    ),
-                    onPressed: () {
-                      context.push(AppRoute.settings.path);
-                    },
-                  ),
-              ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool compact = constraints.maxHeight < 500;
+        final Widget title = _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle);
+        final List<Widget> actions = [
+          if (showSettingsButton)
+            IconButton(
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.settings),
+              ),
+              onPressed: () {
+                context.push(AppRoute.settings.path);
+              },
             ),
-          ],
-          body: SafeArea(
-            top: false, // The outer SafeArea keeps the status-bar area fixed.
-            bottom: false,
-            child: body(context),
+        ];
+        final pageBody = SafeArea(
+          top: false, // The outer SafeArea keeps the status-bar area fixed.
+          bottom: false,
+          child: body(context),
+        );
+        if (compact) {
+          return Scaffold(
+            body: StatusBarSafeArea(
+                child: NestedScrollView(
+                  floatHeaderSlivers: true,
+                  headerSliverBuilder: (context, innerBoxIsScrolled) =>
+                  [
+                    SliverAppBar(
+                      systemOverlayStyle: SystemUiOverlayStyle.light,
+                      primary: true,
+                      floating: true,
+                      scrolledUnderElevation: 0,
+                      title: title,
+                      actions: actions,
+                    ),
+                  ],
+                  body: pageBody,
+                )
+            ),
+          );
+        }
+        return Scaffold(
+          appBar: AppBar(
+            systemOverlayStyle: SystemUiOverlayStyle.light,
+            primary: true,
+            scrolledUnderElevation: 0,
+            title: title,
+            actions: actions,
           ),
-        ),
-      ),
+          body: pageBody,
+        );
+      },
     );
   }
 }
