@@ -53,7 +53,7 @@ class _ContentAwareAppBar extends StatefulWidget {
 }
 
 class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
-  final _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
   bool _overflows = false;
   bool _updateScheduled = false;
   ScrollMetrics? _metrics;
@@ -102,31 +102,53 @@ class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final size = constraints.biggest;
+        final Size size = constraints.biggest;
+        final bool hideAppBar = _overflows && size.height < 900;
         if (_size != size) {
           _size = size;
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted && _controller.hasClients && _controller.offset > 0) _controller.jumpTo(0);
           });
         }
-        return NestedScrollView(
-          controller: _controller,
-          physics: _overflows ? null : const NeverScrollableScrollPhysics(),
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            SliverAppBar(
-              systemOverlayStyle: SystemUiOverlayStyle.light,
-              floating: _overflows,
-              pinned: !_overflows,
-              scrolledUnderElevation: 0,
-              title: widget.title,
-              actions: widget.actions,
+        final AppBar fixedAppBar = AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          primary: false,
+          scrolledUnderElevation: 0,
+          title: widget.title,
+          actions: widget.actions,
+        );
+        // Keep the body in the same scroll container in both modes. A fixed
+        // toolbar gets its own space so it cannot overlap the body's viewport.
+        return Column(
+          children: [
+            SizedBox(
+              height: hideAppBar
+                  ? 0
+                  : AppBar.preferredHeightFor(context, fixedAppBar.preferredSize),
+              child: Offstage(offstage: hideAppBar, child: fixedAppBar),
+            ),
+            Expanded(
+              child: NestedScrollView(
+                controller: _controller,
+                physics: _overflows ? null : const NeverScrollableScrollPhysics(),
+                floatHeaderSlivers: true,
+                headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                  if (hideAppBar)
+                    SliverAppBar(
+                      systemOverlayStyle: SystemUiOverlayStyle.light,
+                      floating: true,
+                      scrolledUnderElevation: 0,
+                      title: widget.title,
+                      actions: widget.actions,
+                    ),
+                ],
+                body: NotificationListener<ScrollMetricsNotification>(
+                  onNotification: _onMetrics,
+                  child: widget.child,
+                ),
+              ),
             ),
           ],
-          body: NotificationListener<ScrollMetricsNotification>(
-            onNotification: _onMetrics,
-            child: widget.child,
-          ),
         );
       },
     );
