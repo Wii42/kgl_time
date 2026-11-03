@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_navigation/material_navigation.dart';
 import 'package:material_ui/material_ui.dart' hide NavigationBar, NavigationDestination;
@@ -17,7 +18,7 @@ class AppView extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final bool compact = constraints.maxHeight < 500;
+        final bool compact = constraints.maxHeight < KglTimeApp.fullNavigationBarMinHeight;
         final bool showLabels = !compact || constraints.maxWidth > navBarItems.length * 160;
         return Scaffold(
           body: navigationShell,
