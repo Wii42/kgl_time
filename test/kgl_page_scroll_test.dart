@@ -29,7 +29,67 @@ class _FittingPage extends KglPage {
   );
 }
 
+class _SizedPage extends KglPage {
+  final ValueNotifier<double> contentHeight;
+
+  const _SizedPage(this.contentHeight) : super(appTitle: 'Sized page');
+
+  @override
+  bool get showSettingsButton => false;
+
+  @override
+  Widget body(BuildContext context) => ValueListenableBuilder<double>(
+    valueListenable: contentHeight,
+    builder: (context, height, _) => AlwaysFillingScrollView(
+      child: SizedBox(height: height, child: const Text('Resizable content')),
+    ),
+  );
+}
+
 void main() {
+  testWidgets('adapts to content changes and resizing without losing the body state', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(800, 700);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    final height = ValueNotifier<double>(100);
+    addTearDown(height.dispose);
+    await tester.pumpWidget(MaterialApp(home: _SizedPage(height)));
+    await tester.pumpAndSettle();
+    final scroll = find.byType(SingleChildScrollView);
+    final bodyState = tester.state(find.descendant(of: scroll, matching: find.byType(Scrollable)));
+    SliverAppBar bar() => tester.widget<SliverAppBar>(find.byType(SliverAppBar));
+    expect(bar().pinned, isTrue);
+    height.value = 660; // Only 16 pixels taller than the body with the toolbar visible.
+    await tester.pumpAndSettle();
+    expect(bar().floating, isTrue);
+    await tester.drag(scroll, const Offset(0, -200));
+    await tester.pumpAndSettle();
+    expect(find.text('Sized page'), findsNothing);
+    expect(
+      tester.state(find.descendant(of: scroll, matching: find.byType(Scrollable))),
+      same(bodyState),
+    );
+    await tester.drag(scroll, const Offset(0, 200));
+    await tester.pumpAndSettle();
+    height.value = 100;
+    await tester.pumpAndSettle();
+    expect(bar().pinned, isTrue);
+    expect(find.text('Sized page'), findsOneWidget);
+    height.value = 660;
+    await tester.pumpAndSettle();
+    expect(bar().floating, isTrue);
+    tester.view.physicalSize = const Size(800, 900);
+    await tester.pumpAndSettle();
+    expect(bar().pinned, isTrue);
+    tester.view.physicalSize = const Size(800, 400);
+    await tester.pumpAndSettle();
+    expect(bar().floating, isTrue);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('fitting body stays still below the fixed app bar', (tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(800, 900);
@@ -39,7 +99,9 @@ void main() {
     await tester.pumpAndSettle();
     final content = find.text('Fitting content');
     final originalPosition = tester.getTopLeft(content);
-    final scrollable = tester.state<ScrollableState>(find.byType(Scrollable));
+    final scrollable = tester.state<ScrollableState>(
+      find.descendant(of: find.byType(SingleChildScrollView), matching: find.byType(Scrollable)),
+    );
     expect(scrollable.position.maxScrollExtent, 0);
     await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -300));
     await tester.pumpAndSettle();
@@ -47,31 +109,16 @@ void main() {
     expect(scrollable.position.pixels, 0);
   });
 
-  testWidgets('app bar stays visible on tall windows and adapts after resizing', (tester) async {
+  testWidgets('overflowing body hides the app bar even on tall windows', (tester) async {
     tester.view.devicePixelRatio = 1;
     tester.view.physicalSize = const Size(800, 900);
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetPhysicalSize);
     await tester.pumpWidget(const MaterialApp(home: _ListPage()));
     await tester.pumpAndSettle();
-    final title = find.text('Scrolling page');
-    final list = find.byType(ListView);
-    final originalTop = tester.getTopLeft(title).dy;
-
-    await tester.drag(list, const Offset(0, -600));
+    await tester.drag(find.byType(ListView), const Offset(0, -600));
     await tester.pumpAndSettle();
-    expect(tester.getTopLeft(title).dy, originalTop);
-    expect(find.text('Entry 0'), findsNothing);
-
-    tester.view.physicalSize = const Size(800, 400);
-    await tester.pumpAndSettle();
-    await tester.drag(list, const Offset(0, -300));
-    await tester.pumpAndSettle();
-    expect(title, findsNothing);
-
-    tester.view.physicalSize = const Size(800, 900);
-    await tester.pumpAndSettle();
-    expect(tester.getTopLeft(title).dy, originalTop);
+    expect(find.text('Scrolling page'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 

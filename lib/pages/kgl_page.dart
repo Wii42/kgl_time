@@ -20,57 +20,119 @@ abstract class KglPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: StatusBarSafeArea(
+        child: _ContentAwareAppBar(
+          title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
+          actions: [
+            if (showSettingsButton)
+              IconButton(
+                icon: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(Icons.settings),
+                ),
+                onPressed: () => context.push(AppRoute.settings.path),
+              ),
+          ],
+          child: SafeArea(top: false, bottom: false, child: body(context)),
+        ),
+      ),
+    );
+  }
+}
+
+class _ContentAwareAppBar extends StatefulWidget {
+  final Widget title;
+  final List<Widget> actions;
+  final Widget child;
+
+  const _ContentAwareAppBar({required this.title, required this.actions, required this.child});
+
+  @override
+  State<_ContentAwareAppBar> createState() => _ContentAwareAppBarState();
+}
+
+class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
+  final _controller = ScrollController();
+  bool _overflows = false;
+  bool _updateScheduled = false;
+  ScrollMetrics? _metrics;
+
+  double? _contentExtent;
+  Size? _size;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_scheduleUpdate);
+  }
+
+  void _scheduleUpdate() {
+    if (_updateScheduled) return;
+    _updateScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateScheduled = false;
+      if (!mounted || _metrics == null) return;
+      // Measure overflow only with the toolbar visible. Hiding it enlarges the
+      // body's viewport and must not change the decision that allowed it to hide.
+      if (_controller.hasClients && _controller.offset > 0) return;
+      final metrics = _metrics!;
+      final overflows = metrics.maxScrollExtent - metrics.minScrollExtent > 0.5;
+      if (_overflows != overflows) setState(() => _overflows = overflows);
+    });
+  }
+
+  bool _onMetrics(ScrollMetricsNotification notification) {
+    if (notification.depth != 0 || notification.metrics.axis != Axis.vertical) return false;
+    final metrics = notification.metrics;
+    final extent = metrics.viewportDimension + metrics.maxScrollExtent - metrics.minScrollExtent;
+    final shrank = _contentExtent != null && extent < _contentExtent! - 0.5;
+    _contentExtent = extent;
+    _metrics = metrics;
+    if (shrank && _controller.hasClients && _controller.offset > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _controller.hasClients) _controller.jumpTo(0);
+      });
+    }
+    _scheduleUpdate();
+    return false;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final bool compact = constraints.maxHeight < 500;
-        final Widget title = _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle);
-        final List<Widget> actions = [
-          if (showSettingsButton)
-            IconButton(
-              icon: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.settings),
-              ),
-              onPressed: () {
-                context.push(AppRoute.settings.path);
-              },
-            ),
-        ];
-        final pageBody = SafeArea(
-          top: false, // The outer SafeArea keeps the status-bar area fixed.
-          bottom: false,
-          child: body(context),
-        );
-        if (compact) {
-          return Scaffold(
-            body: StatusBarSafeArea(
-                child: NestedScrollView(
-                  floatHeaderSlivers: true,
-                  headerSliverBuilder: (context, innerBoxIsScrolled) =>
-                  [
-                    SliverAppBar(
-                      systemOverlayStyle: SystemUiOverlayStyle.light,
-                      primary: true,
-                      floating: true,
-                      scrolledUnderElevation: 0,
-                      title: title,
-                      actions: actions,
-                    ),
-                  ],
-                  body: pageBody,
-                )
-            ),
-          );
+        final size = constraints.biggest;
+        if (_size != size) {
+          _size = size;
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && _controller.hasClients && _controller.offset > 0) _controller.jumpTo(0);
+          });
         }
-        return Scaffold(
-          appBar: AppBar(
-            systemOverlayStyle: SystemUiOverlayStyle.light,
-            primary: true,
-            scrolledUnderElevation: 0,
-            title: title,
-            actions: actions,
+        return NestedScrollView(
+          controller: _controller,
+          physics: _overflows ? null : const NeverScrollableScrollPhysics(),
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+              floating: _overflows,
+              pinned: !_overflows,
+              scrolledUnderElevation: 0,
+              title: widget.title,
+              actions: widget.actions,
+            ),
+          ],
+          body: NotificationListener<ScrollMetricsNotification>(
+            onNotification: _onMetrics,
+            child: widget.child,
           ),
-          body: pageBody,
         );
       },
     );
