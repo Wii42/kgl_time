@@ -5,6 +5,12 @@
   `const Type name` where appropriate instead of untyped `final`, `const` declarations. Never use
   `var` declarations.
 
+# Reuse existing code
+
+- Check for existing widgets and functions in the project, Flutter, and current dependencies before
+  implementing new ones. Reuse or compose them when appropriate instead of duplicating behavior
+  from scratch.
+
 # Release notes
 
 - When implementing a user-visible feature or fixing a user-visible bug, update the **Unreleased**
