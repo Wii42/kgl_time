@@ -58,7 +58,6 @@ class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
   bool _updateScheduled = false;
   ScrollMetrics? _metrics;
 
-  double? _contentExtent;
   Size? _size;
 
   @override
@@ -80,20 +79,14 @@ class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
       final overflows = metrics.maxScrollExtent - metrics.minScrollExtent > 0.5;
       if (_overflows != overflows) setState(() => _overflows = overflows);
     });
+    WidgetsBinding.instance.ensureVisualUpdate();
   }
 
   bool _onMetrics(ScrollMetricsNotification notification) {
     if (notification.depth != 0 || notification.metrics.axis != Axis.vertical) return false;
-    final metrics = notification.metrics;
-    final extent = metrics.viewportDimension + metrics.maxScrollExtent - metrics.minScrollExtent;
-    final shrank = _contentExtent != null && extent < _contentExtent! - 0.5;
-    _contentExtent = extent;
-    _metrics = metrics;
-    if (shrank && _controller.hasClients && _controller.offset > 0) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && _controller.hasClients) _controller.jumpTo(0);
-      });
-    }
+    // Lazy lists revise their extent estimates while scrolling. These updates
+    // must never reset the coordinated inner and outer scroll positions.
+    _metrics = notification.metrics;
     _scheduleUpdate();
     return false;
   }
@@ -101,6 +94,7 @@ class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
   @override
   void dispose() {
     _controller.dispose();
+    _controller.removeListener(_scheduleUpdate);
     super.dispose();
   }
 
