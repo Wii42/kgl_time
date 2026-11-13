@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:clock/clock.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:kgl_time/export_import/work_data.dart';
 import 'package:share_plus/share_plus.dart';
@@ -11,6 +12,17 @@ import '../data_model/work_entries.dart';
 import '../main.dart';
 
 class ImportService {
+
+  /// Native platforms supported by the file picker plugin. Web is unsupported.
+  List<TargetPlatform> get supportedImportPlatforms =>
+      const [
+        TargetPlatform.android,
+        TargetPlatform.iOS,
+      ];
+
+  bool isImportSupportedOnCurrentPlatform() =>
+      supportedImportPlatforms.contains(defaultTargetPlatform);
+
   Future<WorkData?> loadJsonBackup({
     void Function(Object error)? onError,
   }) async {

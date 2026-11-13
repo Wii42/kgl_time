@@ -228,6 +228,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Das Teilen von Dateien wird auf dieser Plattform nicht unterstützt.';
 
   @override
+  String get importingNotSupported =>
+      'Das Importieren von Dateien wird auf dieser Plattform nicht unterstützt.';
+
+  @override
   String get workingTime => 'Arbeitszeit';
 
   @override

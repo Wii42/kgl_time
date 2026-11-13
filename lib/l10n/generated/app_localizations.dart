@@ -512,6 +512,12 @@ abstract class AppLocalizations {
   /// **'Sharing files is not supported on this platform.'**
   String get sharingNotSupported;
 
+  /// No description provided for @importingNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing files is not supported on this platform.'**
+  String get importingNotSupported;
+
   /// No description provided for @workingTime.
   ///
   /// In en, this message translates to:

@@ -31,6 +31,7 @@ class ExportImportPage extends KglPage {
   @override
   Widget body(BuildContext context) {
     AppLocalizations? loc = AppLocalizations.of(context);
+    final bool canImport = ImportService().isImportSupportedOnCurrentPlatform();
     return AlwaysFillingScrollView(
       maxWidth: KglTimeApp.maxPageWidth,
       child: Padding(
@@ -51,19 +52,24 @@ class ExportImportPage extends KglPage {
               fileContent: jsonFileContent(context),
               fileName: ExportService().jsonFileName(),
               mimeType: 'application/json; charset=utf-8',
-              explanationLabel: (loc) => loc?.exportJsonExplanation,
+              explanationLabel: (loc) =>
+              loc?.exportJsonExplanation ?? "<export to JSON explanation>",
             ),
             ImportExportCard(
               title: (loc) => loc?.importBackup ?? "<import json>",
-              explanationLabel: (loc) => loc?.importBackupExplanation,
+              explanationLabel: (loc) =>
+              loc?.importBackupExplanation ?? "<import backup explanation>",
               actions: [
                 ElevatedButton.icon(
-                  onPressed: onImportJsonBackup(context),
+                  onPressed: canImport ? onImportJsonBackup(context) : null,
                   label: Text(
                     loc?.importBacupAndReplaceExistingEntries ?? "<import json and replace data>",
                   ),
                   icon: Icon(Icons.upload_outlined),
                 ),
+              ],
+              warningLabels: [
+                if (!canImport) (loc) => loc?.importingNotSupported ?? "<Importing not supported>"
               ],
             ),
           ],

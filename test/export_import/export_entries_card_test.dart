@@ -27,7 +27,7 @@ void main() {
           locale: const Locale('en'),
           home: Scaffold(
             body: ExportEntriesCard(
-              title: (AppLocalizations? loc) => loc!.exportEntries,
+              title: (AppLocalizations? loc) => loc!.exportImportEntries,
               fileContent: Uint8List.fromList([1, 2, 3]),
               fileName: 'test.csv',
             ),
