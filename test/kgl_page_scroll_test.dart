@@ -61,6 +61,54 @@ class _SizedPage extends KglPage {
 void main() {
   setUpAll(() => initializeDateFormatting('en'));
 
+  for (final bool useList in <bool>[true, false]) {
+    testWidgets('resizing and rotating preserve content offset (list: $useList)', (
+      WidgetTester tester,
+    ) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = const Size(390, 700);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.view.resetPhysicalSize);
+      final ValueNotifier<double> height = ValueNotifier<double>(3000);
+      addTearDown(height.dispose);
+      final KglPage page = useList ? const _ListPage() : _SizedPage(height);
+      await tester.pumpWidget(MaterialApp(home: page));
+      await tester.pumpAndSettle();
+      final Finder scroll = find.byType(useList ? ListView : SingleChildScrollView);
+      final ScrollableState body = tester.state<ScrollableState>(
+        find.descendant(of: scroll, matching: find.byType(Scrollable)),
+      );
+      await tester.drag(scroll, const Offset(0, -400));
+      await tester.pumpAndSettle();
+      expect(body.position.pixels, greaterThan(100));
+
+      for (final Size size in <Size>[
+        const Size(700, 390), // Landscape, with a floating toolbar.
+        const Size(700, 600), // Height change within floating mode.
+        const Size(700, 900), // Switch to a fixed toolbar.
+        const Size(390, 700), // Portrait and a floating toolbar again.
+        const Size(390, 650),
+        const Size(390, 700),
+      ]) {
+        final double offset = body.position.pixels;
+        tester.view.physicalSize = size;
+        await tester.pumpAndSettle();
+        expect(
+          tester.state(find.descendant(of: scroll, matching: find.byType(Scrollable))),
+          same(body),
+        );
+        expect(body.position.pixels, closeTo(offset, 0.01), reason: 'Resized to $size');
+        expect(find.text(useList ? 'Scrolling page' : 'Sized page').hitTestable(), findsOneWidget);
+
+        // Continue scrolling after each resize, also hiding floating toolbars.
+        await tester.drag(scroll, const Offset(0, -150));
+        await tester.pumpAndSettle();
+        expect(body.position.pixels, greaterThan(offset));
+      }
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   for (final NavBarAppRoute route in [NavBarAppRoute.allEntries, NavBarAppRoute.categories]) {
     testWidgets('${route.name} scrolls through overflowing animated entries', (tester) async {
       final MemoryStorage storage = MemoryStorage();
@@ -117,8 +165,10 @@ void main() {
         await tester.pumpAndSettle();
         expect(scrollable.position.pixels, greaterThan(beforeWheel));
       }
+      final double beforeResize = scrollable.position.pixels;
       tester.view.physicalSize = const Size(390, 1100);
       await tester.pumpAndSettle();
+      expect(scrollable.position.pixels, closeTo(beforeResize, 0.01));
       expect(find.byType(SliverAppBar), findsNothing);
       expect(find.byType(AppBar), findsOneWidget);
       final double toolbarBottom = tester.getBottomLeft(find.byType(AppBar)).dy;
@@ -305,6 +355,45 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.getRect(title).top, greaterThanOrEqualTo(0));
     expect(find.text('Entry 0'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('returning to a standalone page reveals only its header', (
+    WidgetTester tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(800, 400);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await tester.pumpWidget(const MaterialApp(home: _ListPage()));
+    await tester.pumpAndSettle();
+    final Finder list = find.byType(ListView);
+    final ScrollPosition content = tester
+        .state<ScrollableState>(
+          find.descendant(of: list, matching: find.byType(Scrollable)),
+        )
+        .position;
+    final ScrollPosition header = tester
+        .widget<NestedScrollView>(
+          find.byType(NestedScrollView),
+        )
+        .controller!
+        .position;
+    await tester.drag(list, const Offset(0, -400));
+    await tester.pumpAndSettle();
+    expect(header.pixels, greaterThan(header.minScrollExtent));
+    final double offset = content.pixels;
+
+    final NavigatorState navigator = tester.state<NavigatorState>(find.byType(Navigator));
+    navigator.push<void>(
+      MaterialPageRoute<void>(builder: (BuildContext context) => const _FittingPage()),
+    );
+    await tester.pumpAndSettle();
+    navigator.pop();
+    await tester.pumpAndSettle();
+    expect(header.pixels, header.minScrollExtent);
+    expect(find.text('Scrolling page').hitTestable(), findsOneWidget);
+    expect(content.pixels, closeTo(offset, 0.01));
     expect(tester.takeException(), isNull);
   });
 }

@@ -80,12 +80,20 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ### Unreleased
 
+#### Added
+
+- Swipe left or right to switch between Home, All Entries, and Categories. Tab switching requires
+  a swipe within 20 degrees of horizontal so diagonal drags can scroll the page vertically.
+- Reveal the app bar when switching tabs or returning to a page, keeping the content's scroll
+  position.
+
 #### Changed
 
 - Keep the app bar fixed when the page content fits or the available page height is at least 800
   logical pixels; otherwise, let it hide while scrolling overflowing content. Scrolling works with
   both page content and animated entry lists without jumping back to the top or being covered by
-  the fixed app bar.
+  the fixed app bar. Preserve the content's scroll position when rotating the device or resizing
+  the window.
 
 #### Fixed
 
