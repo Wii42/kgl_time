@@ -17,10 +17,6 @@ import 'data_model/work_entry.dart';
 class KglTimeApp extends StatefulWidget {
   final String appTitle;
 
-  static const double maxPageWidth = 800;
-  static const double fixedAppBarMinHeight = 800;
-  static const double fullNavigationBarMinHeight = 600;
-
   final List<WorkEntry> initialEntries;
   final List<WorkCategory> initialCategories;
   final Map<String, dynamic> initialKeyValueStorage;
