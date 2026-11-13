@@ -16,24 +16,23 @@ class ExportService {
   const ExportService();
 
   /// Native platforms supported by the file saving plugin. Web is unsupported.
-  static const List<TargetPlatform> supportedSavePlatforms = [
+  List<TargetPlatform> get supportedSavePlatforms => const [
     TargetPlatform.android,
     TargetPlatform.iOS,
   ];
 
   /// Native platforms supporting file sharing. Web is also supported separately.
-  static const List<TargetPlatform> supportedSharePlatforms = [
+  List<TargetPlatform> get supportedSharePlatforms => const [
     TargetPlatform.android,
     TargetPlatform.iOS,
     TargetPlatform.macOS,
     TargetPlatform.windows,
   ];
 
-  static bool isSaveSupportedOnCurrentPlatform() =>
-      ExportService.supportedSavePlatforms.contains(defaultTargetPlatform);
+  bool isSaveSupportedOnCurrentPlatform() => supportedSavePlatforms.contains(defaultTargetPlatform);
 
-  static bool isShareSupportedOnCurrentPlatform() =>
-      ExportService.supportedSharePlatforms.contains(defaultTargetPlatform) || kIsWeb;
+  bool isShareSupportedOnCurrentPlatform() =>
+      supportedSharePlatforms.contains(defaultTargetPlatform) || kIsWeb;
 
   String csvFileName() => 'work_entries_export_${fileTimestamp()}.csv';
 

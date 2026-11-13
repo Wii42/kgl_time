@@ -25,8 +25,8 @@ class ExportEntriesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? loc = AppLocalizations.of(context);
-    final bool canSave = ExportService.isSaveSupportedOnCurrentPlatform();
-    final bool canShare = ExportService.isShareSupportedOnCurrentPlatform();
+    final bool canSave = ExportService().isSaveSupportedOnCurrentPlatform();
+    final bool canShare = ExportService().isShareSupportedOnCurrentPlatform();
     return ImportExportCard(
       title: title,
       explanationLabel: explanationLabel,
