@@ -4,8 +4,8 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   isar_community_flutter_libs
-  share_plus
   url_launcher_windows
+        share_plus
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
