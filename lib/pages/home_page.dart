@@ -11,7 +11,6 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/date_week.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/helpers.dart';
-import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/no_content_widget.dart';
 import 'package:kgl_time/work_entry_time_tracker.dart';

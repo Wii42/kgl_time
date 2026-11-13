@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import '../data_model/work_entry.dart';
 import '../export_import/export_entries_card.dart';
 import '../export_import/export_service.dart';
-import '../kgl_time_app.dart';
 
 class ExportImportPage extends KglPage {
   const ExportImportPage({super.key, required super.appTitle});
