@@ -88,7 +88,8 @@ dart run build_runner watch --delete-conflicting-outputs
 - Keep the app bar fixed when the page content fits or the available page height is at least 800
   logical pixels; otherwise, let it hide while scrolling overflowing content. Scrolling works with
   both page content and animated entry lists without jumping back to the top or being covered by
-  the fixed app bar.
+  the fixed app bar. Preserve the content's scroll position when rotating the device or resizing
+  the window.
 
 #### Fixed
 

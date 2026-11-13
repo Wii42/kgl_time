@@ -141,9 +141,7 @@ class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
             : _overflows;
         if (_size != size) {
           _size = size;
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted && _controller.hasClients && _controller.offset > 0) _controller.jumpTo(0);
-          });
+          WidgetsBinding.instance.addPostFrameCallback((_) => _revealAppBar());
         }
         final AppBar fixedAppBar = AppBar(
           systemOverlayStyle: SystemUiOverlayStyle.light,
