@@ -28,10 +28,11 @@ class WorkEntryTimeTracker extends StatelessWidget {
     double height = 50;
     double borderWidth = 1.5;
 
-    Color indicatorColor(bool isTracking) =>
+    Color indicatorColor(bool isTracking, ThemeData theme) =>
         isTracking ? KglTimeApp.actionColor : KglTimeApp.primaryColor;
 
     AppLocalizations? loc = AppLocalizations.of(context);
+    ThemeData theme = Theme.of(context);
     return Center(
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -113,12 +114,12 @@ class WorkEntryTimeTracker extends StatelessWidget {
                     borderWidth: borderWidth,
                     indicatorSize: Size.fromWidth(height - 2 * borderWidth),
                     styleBuilder: (isTracking) => ToggleStyle(
-                      indicatorColor: indicatorColor(isTracking),
-                      borderColor: indicatorColor(isTracking),
+                      indicatorColor: indicatorColor(isTracking, theme),
+                      borderColor: indicatorColor(isTracking, theme),
                       indicatorBorder: Border.all(
                         width: 6,
                         strokeAlign: BorderSide.strokeAlignOutside - 0.1,
-                        color: indicatorColor(isTracking),
+                        color: indicatorColor(isTracking, theme),
                       ),
                     ),
                     clipBehavior: Clip.none,
