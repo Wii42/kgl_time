@@ -7,6 +7,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'data_model/work_category.dart';
 import 'kgl_time_app.dart';
+import 'l10n/app_locales.dart';
+import 'l10n/generated/app_localizations.dart';
 
 late final PackageInfo appInfo;
 
@@ -14,19 +16,27 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   appInfo = await PackageInfo.fromPlatform();
   await PersistentStorageService.initializeImplementation(IsarPersistentStorage());
-  List<WorkEntry> initialEntries = await PersistentStorageService.instance.workEntries
+  final List<WorkEntry> initialEntries = await PersistentStorageService.instance.workEntries
       .loadEntries();
-  List<WorkCategory> initialCategories = await PersistentStorageService.instance.workCategories
+  final List<WorkCategory> initialCategories = await PersistentStorageService
+      .instance
+      .workCategories
       .loadEntries();
 
-  Map<String, dynamic> initialKeyValueStorage = await PersistentStorageService
+  final Map<String, dynamic> initialKeyValueStorage = await PersistentStorageService
       .instance
       .keyValueStorage
       .getAll();
-  bool isFirstRun = initialKeyValueStorage['isFirstRun'] ?? true;
+  final bool isFirstRun = initialKeyValueStorage['isFirstRun'] ?? true;
   if (isFirstRun) {
-    await PersistentStorageService.instance.workCategories.saveEntries(mockWorkCategories);
-    initialCategories.addAll(mockWorkCategories);
+    final Locale locale = basicLocaleListResolution(
+      WidgetsBinding.instance.platformDispatcher.locales,
+      supportedAppLocales,
+    );
+    final AppLocalizations loc = await AppLocalizations.delegate.load(locale);
+    final List<WorkCategory> categories = createInitialCategories(loc);
+    await PersistentStorageService.instance.workCategories.saveEntries(categories);
+    initialCategories.addAll(categories);
     // Set isFirstRun to false in storage for future runs, but the in memory value is not updated,
     // so that other part of the app still get the notification that it is the first run.
     await PersistentStorageService.instance.keyValueStorage.set('isFirstRun', false);
@@ -43,10 +53,8 @@ void main() async {
   );
 }
 
-List<WorkCategory> get mockWorkCategories => [
-  WorkCategory('Telefonanruf'),
-  WorkCategory('Kategorie 2'),
-  WorkCategory('Kategorie 3'),
-  WorkCategory('Kategorie 4'),
-  WorkCategory('Kategorie 5'),
+List<WorkCategory> createInitialCategories(AppLocalizations loc) => [
+  WorkCategory(loc.defaultCategoryPlanning, listIndex: 0),
+  WorkCategory(loc.defaultCategoryMeetings, listIndex: 1),
+  WorkCategory(loc.defaultCategoryAdministration, listIndex: 2),
 ];

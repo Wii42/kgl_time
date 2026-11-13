@@ -123,6 +123,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get categories => 'Kategorien';
 
   @override
+  String get defaultCategoryPlanning => 'Planung';
+
+  @override
+  String get defaultCategoryMeetings => 'Besprechungen';
+
+  @override
+  String get defaultCategoryAdministration => 'Verwaltung';
+
+  @override
   String deleteCategoryConfirmationDialog(Object category) {
     return 'Wollen Sie die Kategorie $category wirklich löschen?\n\nEinträge, die dieser Kategorie zugeordnet sind, werden nicht verändert.';
   }
