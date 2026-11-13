@@ -7,6 +7,7 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:kgl_time/width_constrained_list_view.dart';
+import 'package:material_navigation/material_navigation.dart' as navigation;
 import 'package:material_ui/material_ui.dart';
 
 import 'support/memory_storage.dart';
@@ -38,6 +39,115 @@ Future<GoRouter> pumpApp(WidgetTester tester) async {
 
 void main() {
   setUpAll(() => initializeDateFormatting('en'));
+
+  for (final bool useSwipe in <bool>[false, true]) {
+    testWidgets('returning to a tab reveals its app bar (swipe: $useSwipe)', (
+      WidgetTester tester,
+    ) async {
+      final GoRouter router = await pumpApp(tester);
+      tester.view.physicalSize = const Size(390, 700);
+      router.go(NavBarAppRoute.allEntries.path);
+      await tester.pumpAndSettle();
+      final Finder list = find.byType(AnimatedWidthConstrainedListView);
+      final ScrollPosition position = tester
+          .state<ScrollableState>(
+            find.descendant(of: list, matching: find.byType(Scrollable)),
+          )
+          .position;
+      final ScrollPosition header = tester
+          .widget<NestedScrollView>(
+            find.byType(NestedScrollView),
+          )
+          .controller!
+          .position;
+      await tester.drag(list, const Offset(0, -400));
+      await tester.pumpAndSettle();
+      expect(header.pixels, greaterThan(header.minScrollExtent));
+      final double offset = position.pixels;
+      expect(offset, greaterThan(100));
+
+      if (useSwipe) {
+        await tester.drag(list, const Offset(-250, 0));
+        await tester.pumpAndSettle();
+        await tester.drag(find.byType(AnimatedBranchContainer), const Offset(250, 0));
+      } else {
+        await tester.tap(
+          find.descendant(
+            of: find.byType(navigation.NavigationBar),
+            matching: find.text('Categories'),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(
+          find.descendant(
+            of: find.byType(navigation.NavigationBar),
+            matching: find.text('All Entries'),
+          ),
+        );
+      }
+      await tester.pumpAndSettle();
+      expect(router.routeInformationProvider.value.uri.path, NavBarAppRoute.allEntries.path);
+      expect(header.pixels, header.minScrollExtent);
+      expect(
+        find
+            .descendant(
+              of: find.byType(SliverAppBar),
+              matching: find.byIcon(Icons.settings),
+            )
+            .hitTestable(),
+        findsOneWidget,
+      );
+      expect(position.pixels, closeTo(offset, 0.01));
+
+      // Revealing the bar does not pin it; subsequent scrolling can hide it again.
+      await tester.drag(list, const Offset(0, -200));
+      await tester.pumpAndSettle();
+      expect(header.pixels, greaterThan(header.minScrollExtent));
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('back navigation reveals the app bar without resetting content', (
+    WidgetTester tester,
+  ) async {
+    final GoRouter router = await pumpApp(tester);
+    tester.view.physicalSize = const Size(390, 700);
+    router.go(NavBarAppRoute.allEntries.path);
+    await tester.pumpAndSettle();
+    final Finder list = find.byType(AnimatedWidthConstrainedListView);
+    final ScrollPosition position = tester
+        .state<ScrollableState>(
+          find.descendant(of: list, matching: find.byType(Scrollable)),
+        )
+        .position;
+    final ScrollPosition header = tester
+        .widget<NestedScrollView>(
+          find.byType(NestedScrollView),
+        )
+        .controller!
+        .position;
+    await tester.drag(list, const Offset(0, -400));
+    await tester.pumpAndSettle();
+    expect(header.pixels, greaterThan(header.minScrollExtent));
+    final double offset = position.pixels;
+
+    router.push<void>(AppRoute.exportImport.path);
+    await tester.pumpAndSettle();
+    router.pop();
+    await tester.pumpAndSettle();
+    expect(header.pixels, header.minScrollExtent);
+    expect(
+      find
+          .descendant(
+            of: find.byType(SliverAppBar),
+            matching: find.byIcon(Icons.settings),
+          )
+          .hitTestable(),
+      findsOneWidget,
+    );
+    expect(position.pixels, closeTo(offset, 0.01));
+    expect(tester.takeException(), isNull);
+  });
 
   for (final (Offset delta, bool switchesTab) in <(Offset, bool)>[
     (const Offset(-240, -80), true), // 18.4 degrees: within the allowed angle.

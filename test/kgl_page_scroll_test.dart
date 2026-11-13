@@ -307,4 +307,43 @@ void main() {
     expect(find.text('Entry 0'), findsNothing);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('returning to a standalone page reveals only its header', (
+    WidgetTester tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(800, 400);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await tester.pumpWidget(const MaterialApp(home: _ListPage()));
+    await tester.pumpAndSettle();
+    final Finder list = find.byType(ListView);
+    final ScrollPosition content = tester
+        .state<ScrollableState>(
+          find.descendant(of: list, matching: find.byType(Scrollable)),
+        )
+        .position;
+    final ScrollPosition header = tester
+        .widget<NestedScrollView>(
+          find.byType(NestedScrollView),
+        )
+        .controller!
+        .position;
+    await tester.drag(list, const Offset(0, -400));
+    await tester.pumpAndSettle();
+    expect(header.pixels, greaterThan(header.minScrollExtent));
+    final double offset = content.pixels;
+
+    final NavigatorState navigator = tester.state<NavigatorState>(find.byType(Navigator));
+    navigator.push<void>(
+      MaterialPageRoute<void>(builder: (BuildContext context) => const _FittingPage()),
+    );
+    await tester.pumpAndSettle();
+    navigator.pop();
+    await tester.pumpAndSettle();
+    expect(header.pixels, header.minScrollExtent);
+    expect(find.text('Scrolling page').hitTestable(), findsOneWidget);
+    expect(content.pixels, closeTo(offset, 0.01));
+    expect(tester.takeException(), isNull);
+  });
 }

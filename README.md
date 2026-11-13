@@ -80,6 +80,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 - Swipe left or right to switch between Home, All Entries, and Categories. Tab switching requires
   a swipe within 20 degrees of horizontal so diagonal drags can scroll the page vertically.
+- Reveal the app bar when switching tabs or returning to a page, keeping the content's scroll
+  position.
 
 #### Changed
 

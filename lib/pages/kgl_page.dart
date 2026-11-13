@@ -64,6 +64,7 @@ class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
   final ScrollController _controller = ScrollController();
   bool _overflows = false;
   bool _updateScheduled = false;
+  bool _active = false;
   ScrollMetrics? _metrics;
 
   Size? _size;
@@ -72,6 +73,30 @@ class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
   void initState() {
     super.initState();
     _controller.addListener(_scheduleUpdate);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // The branch container and Navigator disable tickers for hidden pages.
+    final bool active =
+        TickerMode.valuesOf(context).enabled && (ModalRoute.isCurrentOf(context) ?? true);
+    if (active && !_active) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _revealAppBar());
+    }
+    _active = active;
+  }
+
+  void _revealAppBar() {
+    if (!mounted || !_active || !_controller.hasClients) return;
+    final ScrollPosition position = _controller.position;
+    if (!position.hasContentDimensions) return;
+    final double hiddenExtent = position.pixels - position.minScrollExtent;
+    if (hiddenExtent <= 0) return;
+    // With floatHeaderSlivers, a reverse scroll reveals the outer header first.
+    // Consume exactly its hidden extent so the inner content keeps its offset.
+    // jumpTo/animateTo would also reset the inner scroll position.
+    position.pointerScroll(-hiddenExtent);
   }
 
   void _scheduleUpdate() {
