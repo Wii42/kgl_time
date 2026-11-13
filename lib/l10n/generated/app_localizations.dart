@@ -500,6 +500,18 @@ abstract class AppLocalizations {
   /// **'Save locally'**
   String get saveLocally;
 
+  /// No description provided for @savingNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving files is not supported on this platform.'**
+  String get savingNotSupported;
+
+  /// No description provided for @sharingNotSupported.
+  ///
+  /// In en, this message translates to:
+  /// **'Sharing files is not supported on this platform.'**
+  String get sharingNotSupported;
+
   /// No description provided for @workingTime.
   ///
   /// In en, this message translates to:

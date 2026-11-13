@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:material_ui/material_ui.dart';
@@ -8,11 +7,11 @@ import 'export_import_card.dart';
 import 'export_service.dart';
 
 class ExportEntriesCard extends StatelessWidget {
-  final Function(AppLocalizations? loc) title;
+  final String Function(AppLocalizations? loc) title;
   final Uint8List fileContent;
   final String fileName;
   final String? mimeType;
-  final Function(AppLocalizations? loc)? explanationLabel;
+  final String Function(AppLocalizations? loc)? explanationLabel;
 
   const ExportEntriesCard({
     super.key,
@@ -25,7 +24,9 @@ class ExportEntriesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AppLocalizations? loc = AppLocalizations.of(context);
+    final AppLocalizations? loc = AppLocalizations.of(context);
+    final bool canSave = ExportService.isSaveSupportedOnCurrentPlatform();
+    final bool canShare = ExportService.isShareSupportedOnCurrentPlatform();
     return ImportExportCard(
       title: title,
       explanationLabel: explanationLabel,
@@ -33,7 +34,7 @@ class ExportEntriesCard extends StatelessWidget {
         TextButton.icon(
           label: Text(loc?.saveLocally ?? "<save locally>"),
           icon: Icon(Icons.save_alt_outlined),
-          onPressed: (Platform.isAndroid | Platform.isIOS)
+          onPressed: canSave
               ? onSave(
                   fileContent: fileContent,
                   fileName: fileName,
@@ -46,7 +47,7 @@ class ExportEntriesCard extends StatelessWidget {
         TextButton.icon(
           label: Text(loc?.share ?? "<share>"),
           icon: Icon(Icons.share),
-          onPressed: !Platform.isLinux
+          onPressed: canShare
               ? onShare(
                   fileContent: fileContent,
                   fileName: fileName,
@@ -55,6 +56,10 @@ class ExportEntriesCard extends StatelessWidget {
                 )
               : null,
         ),
+      ],
+      warningLabels: [
+        if (!canSave) (loc) => loc?.savingNotSupported ?? "<Saving not supported>",
+        if (!canShare) (loc) => loc?.sharingNotSupported ?? "<Sharing not supported>",
       ],
     );
   }

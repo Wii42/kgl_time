@@ -8,11 +8,13 @@ class ImportExportCard extends StatelessWidget {
     required this.title,
     this.actions = const [],
     this.explanationLabel,
+    this.warningLabels = const [],
   });
 
-  final Function(AppLocalizations? loc) title;
+  final String Function(AppLocalizations? loc) title;
   final List<Widget> actions;
-  final Function(AppLocalizations? loc)? explanationLabel;
+  final String Function(AppLocalizations? loc)? explanationLabel;
+  final List<Function(AppLocalizations? loc)> warningLabels;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,13 @@ class ImportExportCard extends StatelessWidget {
               SizedBox(height: 4),
             ],
             Wrap(spacing: 8, runSpacing: 8, children: actions),
+            if (warningLabels.isNotEmpty) SizedBox(height: 4),
+            for (var label in warningLabels)
+              Text(
+                label(loc),
+                style: Theme.of(context).textTheme.bodySmall,
+                textAlign: TextAlign.center,
+              ),
           ],
         ),
       ),

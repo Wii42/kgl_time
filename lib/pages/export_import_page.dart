@@ -37,7 +37,7 @@ class ExportImportPage extends KglPage {
               fileContent: csvFileContent(context),
               fileName: ExportService().csvFileName(),
               mimeType: 'text/csv; charset=utf-8',
-              explanationLabel: (loc) => loc?.exportCsvExplanation,
+              explanationLabel: (loc) => loc?.exportCsvExplanation ?? "<Export as CSV explanation>",
             ),
           ],
         ),
