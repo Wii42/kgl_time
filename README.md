@@ -78,7 +78,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Added
 
-- Swipe left or right to switch between Home, All Entries, and Categories.
+- Swipe left or right to switch between Home, All Entries, and Categories. Tab switching requires
+  a swipe within 20 degrees of horizontal so diagonal drags can scroll the page vertically.
 
 #### Changed
 

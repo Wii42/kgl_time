@@ -5,6 +5,7 @@ import 'package:material_navigation/material_navigation.dart';
 import 'package:material_ui/material_ui.dart' hide NavigationBar, NavigationDestination;
 
 import 'app_route.dart';
+import 'tab_swipe_gesture_recognizer.dart';
 
 class AppView extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -40,14 +41,28 @@ class _AppViewState extends State<AppView> {
         final bool compact = constraints.maxHeight < AppLayoutConstants.fullNavigationBarMinHeight;
         final bool showLabels = !compact || constraints.maxWidth > navBarItems.length * 160;
         return Scaffold(
-          body: GestureDetector(
+          body: RawGestureDetector(
             behavior: HitTestBehavior.translucent,
-            onHorizontalDragStart: (DragStartDetails details) => _horizontalDragDistance = 0,
-            onHorizontalDragUpdate: (DragUpdateDetails details) {
-              _horizontalDragDistance += details.primaryDelta ?? 0;
+            gestures: <Type, GestureRecognizerFactory>{
+              TabSwipeGestureRecognizer:
+                  GestureRecognizerFactoryWithHandlers<TabSwipeGestureRecognizer>(
+                    () => TabSwipeGestureRecognizer(debugOwner: this),
+                    (TabSwipeGestureRecognizer recognizer) {
+                      recognizer
+                        ..gestureSettings = MediaQuery.gestureSettingsOf(context)
+                        ..onStart = (DragStartDetails details) {
+                          _horizontalDragDistance = 0;
+                        }
+                        ..onUpdate = (DragUpdateDetails details) {
+                          _horizontalDragDistance += details.primaryDelta ?? 0;
+                        }
+                        ..onEnd = _onHorizontalDragEnd
+                        ..onCancel = () {
+                          _horizontalDragDistance = 0;
+                        };
+                    },
+                  ),
             },
-            onHorizontalDragEnd: _onHorizontalDragEnd,
-            onHorizontalDragCancel: () => _horizontalDragDistance = 0,
             child: widget.navigationShell,
           ),
           bottomNavigationBar: NavigationBar(

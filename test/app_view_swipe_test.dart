@@ -39,6 +39,35 @@ Future<GoRouter> pumpApp(WidgetTester tester) async {
 void main() {
   setUpAll(() => initializeDateFormatting('en'));
 
+  for (final (Offset delta, bool switchesTab) in <(Offset, bool)>[
+    (const Offset(-240, -80), true), // 18.4 degrees: within the allowed angle.
+    (const Offset(-240, -96), false), // 21.8 degrees: scroll instead.
+    (const Offset(240, -96), false),
+    (const Offset(-150, -240), false),
+  ]) {
+    testWidgets('drag $delta switches tabs: $switchesTab', (WidgetTester tester) async {
+      final GoRouter router = await pumpApp(tester);
+      router.go(NavBarAppRoute.allEntries.path);
+      await tester.pumpAndSettle();
+      final Finder list = find.byType(AnimatedWidthConstrainedListView);
+      final ScrollPosition position = tester
+          .state<ScrollableState>(
+            find.descendant(of: list, matching: find.byType(Scrollable)),
+          )
+          .position;
+
+      // Small increments establish the actual angle before either recognizer wins.
+      await tester.timedDrag(list, delta, const Duration(seconds: 1));
+      await tester.pumpAndSettle();
+      expect(
+        router.routeInformationProvider.value.uri.path,
+        switchesTab ? NavBarAppRoute.categories.path : NavBarAppRoute.allEntries.path,
+      );
+      if (!switchesTab) expect(position.pixels, greaterThan(0));
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('swipes switch adjacent tabs without wrapping or reacting to short drags', (
     WidgetTester tester,
   ) async {
