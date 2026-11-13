@@ -17,8 +17,6 @@ import 'data_model/work_entry.dart';
 class KglTimeApp extends StatefulWidget {
   final String appTitle;
 
-  static const Color primaryColor = Color(0xff0067b1);
-  static const Color actionColor = Color(0xffc62828);
   static const double maxPageWidth = 800;
   static const double fixedAppBarMinHeight = 800;
   static const double fullNavigationBarMinHeight = 600;
