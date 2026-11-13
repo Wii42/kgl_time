@@ -27,7 +27,10 @@ void main() async {
   if (isFirstRun) {
     await PersistentStorageService.instance.workCategories.saveEntries(mockWorkCategories);
     initialCategories.addAll(mockWorkCategories);
+    // Set isFirstRun to false in storage for future runs, but the in memory value is not updated,
+    // so that other part of the app still get the notification that it is the first run.
     await PersistentStorageService.instance.keyValueStorage.set('isFirstRun', false);
+    initialKeyValueStorage['isFirstRun'] = true;
   }
   await initializeDateFormatting(); // initialize the date formatting for German
   runApp(
