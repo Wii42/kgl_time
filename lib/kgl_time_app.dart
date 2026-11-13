@@ -100,7 +100,6 @@ class _KglTimeAppState extends State<KglTimeApp> {
           ...GlobalMaterialLocalizations.delegates,
           AppLocalizations.delegate,
         ],
-        //locale: kDebugMode ? Locale('de', 'CH') : null,
         supportedLocales: [
           Locale('en'),
           Locale('de'),
@@ -121,24 +120,28 @@ class _KglTimeAppState extends State<KglTimeApp> {
     final Color primaryColor = Color(0xff0067b1);
     final Color actionColor = Color(0xffc62828);
     final Color appBarColor = Color(0xff4a8e3b);
-    ThemeData theme =
-        ThemeData(
-          colorScheme: ColorScheme.fromSeed(
+
+    final FilledButtonThemeData filledButtonTheme = FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
+      ),
+    );
+
+    final AppBarTheme appBarTheme = AppBarTheme(
+      backgroundColor: appBarColor,
+      foregroundColor: Colors.white,
+    );
+
+    ThemeData theme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(
         seedColor: primaryColor,
         brightness: brightness,
-          ),
-          useMaterial3: true,
-          brightness: brightness,
-          filledButtonTheme: FilledButtonThemeData(
-            style: FilledButton.styleFrom(
-          backgroundColor: primaryColor,
-          foregroundColor: Colors.white,
-            ),
-          ),
-          appBarTheme: AppBarTheme(
-        backgroundColor: appBarColor,
-        foregroundColor: Colors.white,
-          ),
+      ),
+      useMaterial3: true,
+      brightness: brightness,
+      filledButtonTheme: filledButtonTheme,
+      appBarTheme: appBarTheme,
       extensions: [
         ColorThemeExtension(
           primaryColor: primaryColor,
