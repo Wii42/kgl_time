@@ -93,7 +93,6 @@ class ExportService {
     required Uint8List fileContent,
     required String fileName,
     String? mimeType,
-    void Function(ShareResult result)? onSuccess,
     void Function(Object error)? onError,
   }) async {
     XFile file = XFile.fromData(
@@ -105,9 +104,6 @@ class ExportService {
       ShareResult result = await SharePlus.instance.share(
         ShareParams(files: [file], fileNameOverrides: [fileName]),
       );
-      if (result.status == ShareResultStatus.success && onSuccess != null) {
-        onSuccess(result);
-      }
     } catch (error, stacktrace) {
       log("Failed to share file", error: error, stackTrace: stacktrace);
       if (onError != null) {
