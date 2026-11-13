@@ -101,7 +101,7 @@ class ExportService {
       name: fileName,
     );
     try {
-      ShareResult result = await SharePlus.instance.share(
+      await SharePlus.instance.share(
         ShareParams(files: [file], fileNameOverrides: [fileName]),
       );
     } catch (error, stacktrace) {
