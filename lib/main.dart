@@ -12,9 +12,35 @@ import 'l10n/generated/app_localizations.dart';
 
 late final PackageInfo appInfo;
 
+typedef InitialAppData = ({
+  PackageInfo appInfo,
+  List<WorkEntry> entries,
+  List<WorkCategory> categories,
+  Map<String, dynamic> keyValues,
+});
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  appInfo = await PackageInfo.fromPlatform();
+  InitialAppData data = await initializeApp();
+  appInfo = data.appInfo;
+  runApp(
+    KglTimeApp(
+      appTitle: 'KGL Time',
+      initialEntries: data.entries,
+      initialCategories: data.categories,
+      initialKeyValueStorage: data.keyValues,
+    ),
+  );
+}
+
+List<WorkCategory> createInitialCategories(AppLocalizations loc) => [
+  WorkCategory(loc.defaultCategoryPlanning, listIndex: 0),
+  WorkCategory(loc.defaultCategoryMeetings, listIndex: 1),
+  WorkCategory(loc.defaultCategoryAdministration, listIndex: 2),
+];
+
+Future<InitialAppData> initializeApp() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
   await PersistentStorageService.initializeImplementation(IsarPersistentStorage());
   final List<WorkEntry> initialEntries = await PersistentStorageService.instance.workEntries
       .loadEntries();
@@ -43,18 +69,11 @@ void main() async {
     initialKeyValueStorage['isFirstRun'] = true;
   }
   await initializeDateFormatting(); // initialize the date formatting for German
-  runApp(
-    KglTimeApp(
-      appTitle: 'KGL Time',
-      initialEntries: initialEntries,
-      initialCategories: initialCategories,
-      initialKeyValueStorage: initialKeyValueStorage,
-    ),
+
+  return (
+    appInfo: packageInfo,
+    entries: initialEntries,
+    categories: initialCategories,
+    keyValues: initialKeyValueStorage,
   );
 }
-
-List<WorkCategory> createInitialCategories(AppLocalizations loc) => [
-  WorkCategory(loc.defaultCategoryPlanning, listIndex: 0),
-  WorkCategory(loc.defaultCategoryMeetings, listIndex: 1),
-  WorkCategory(loc.defaultCategoryAdministration, listIndex: 2),
-];
