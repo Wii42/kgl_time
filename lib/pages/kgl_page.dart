@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -24,6 +25,7 @@ abstract class KglPage extends StatelessWidget {
       body: StatusBarSafeArea(
         child: _ContentAwareAppBar(
           title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
+          fixedAppBarMinHeight: KglTimeApp.fixedAppBarMinHeight,
           actions: [
             if (showSettingsButton)
               IconButton(
@@ -45,8 +47,14 @@ class _ContentAwareAppBar extends StatefulWidget {
   final Widget title;
   final List<Widget> actions;
   final Widget child;
+  final double? fixedAppBarMinHeight;
 
-  const _ContentAwareAppBar({required this.title, required this.actions, required this.child});
+  const _ContentAwareAppBar({
+    required this.title,
+    required this.actions,
+    required this.child,
+    this.fixedAppBarMinHeight,
+  });
 
   @override
   State<_ContentAwareAppBar> createState() => _ContentAwareAppBarState();
@@ -103,7 +111,9 @@ class _ContentAwareAppBarState extends State<_ContentAwareAppBar> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final Size size = constraints.biggest;
-        final bool hideAppBar = _overflows && size.height < 900;
+        final bool hideAppBar = widget.fixedAppBarMinHeight != null
+            ? _overflows && size.height < widget.fixedAppBarMinHeight!
+            : _overflows;
         if (_size != size) {
           _size = size;
           WidgetsBinding.instance.addPostFrameCallback((_) {
