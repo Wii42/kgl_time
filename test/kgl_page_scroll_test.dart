@@ -242,7 +242,7 @@ void main() {
 
   testWidgets('very tall pages reserve toolbar space while the body still scrolls', (tester) async {
     tester.view.devicePixelRatio = 1;
-    tester.view.physicalSize = const Size(800, 900);
+    tester.view.physicalSize = const Size(800, KglTimeApp.fixedAppBarMinHeight);
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetPhysicalSize);
     await tester.pumpWidget(const MaterialApp(home: _ListPage()));
@@ -261,12 +261,12 @@ void main() {
     body.position.jumpTo(0);
     await tester.pumpAndSettle();
     expect(find.text('Entry 0').hitTestable(), findsOneWidget);
-    tester.view.physicalSize = const Size(800, 899);
+    tester.view.physicalSize = const Size(800, KglTimeApp.fixedAppBarMinHeight - 1);
     await tester.pumpAndSettle();
     await tester.drag(list, const Offset(0, -600));
     await tester.pumpAndSettle();
     expect(title, findsNothing);
-    tester.view.physicalSize = const Size(800, 900);
+    tester.view.physicalSize = const Size(800, KglTimeApp.fixedAppBarMinHeight);
     await tester.pumpAndSettle();
     expect(tester.getTopLeft(title).dy, titleTop);
     expect(tester.takeException(), isNull);
