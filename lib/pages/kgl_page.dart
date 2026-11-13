@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kgl_time/kgl_time_app.dart';
+import 'package:kgl_time/app_layout_constants.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -25,7 +25,7 @@ abstract class KglPage extends StatelessWidget {
       body: StatusBarSafeArea(
         child: _ContentAwareAppBar(
           title: _AppBarTitle(appTitle: appTitle, pageTitle: pageTitle),
-          fixedAppBarMinHeight: KglTimeApp.fixedAppBarMinHeight,
+          fixedAppBarMinHeight: AppLayoutConstants.fixedAppBarMinHeight,
           actions: [
             if (showSettingsButton)
               IconButton(

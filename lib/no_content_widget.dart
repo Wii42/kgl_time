@@ -1,10 +1,10 @@
 import 'dart:math';
 
+import 'package:kgl_time/app_layout_constants.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'always_filling_scroll_view.dart';
-import 'kgl_time_app.dart';
 
 class NoContentWidget extends StatelessWidget {
   final IconData? icon;
@@ -56,7 +56,7 @@ class NoContentWidget extends StatelessWidget {
     IconData? icon,
     String? title,
     String? hints,
-    double maxWidth = KglTimeApp.maxPageWidth,
+    double maxWidth = AppLayoutConstants.maxPageWidth,
     double padding = 16,
     double saveAreaTopHeight = 0,
   }) {

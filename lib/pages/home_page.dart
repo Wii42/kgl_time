@@ -4,13 +4,13 @@ import 'package:animated_list_plus/transitions.dart';
 import 'package:clock/clock.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/always_filling_scroll_view.dart';
+import 'package:kgl_time/app_layout_constants.dart';
 import 'package:kgl_time/app_route.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/date_week.dart';
 import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/helpers.dart';
-import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/no_content_widget.dart';
 import 'package:kgl_time/work_entry_time_tracker.dart';
@@ -30,7 +30,7 @@ class HomePage extends KglPage {
     return Consumer<WorkEntries>(
       builder: (BuildContext context, workEntries, Widget? _) {
         return AlwaysFillingScrollView(
-          maxWidth: KglTimeApp.maxPageWidth + 32,
+          maxWidth: AppLayoutConstants.maxPageWidth + 32,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(

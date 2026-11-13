@@ -20,24 +20,23 @@ class ExportService {
   const ExportService();
 
   /// Native platforms supported by the file saving plugin. Web is unsupported.
-  static const List<TargetPlatform> supportedSavePlatforms = [
+  List<TargetPlatform> get supportedSavePlatforms => const [
     TargetPlatform.android,
     TargetPlatform.iOS,
   ];
 
   /// Native platforms supporting file sharing. Web is also supported separately.
-  static const List<TargetPlatform> supportedSharePlatforms = [
+  List<TargetPlatform> get supportedSharePlatforms => const [
     TargetPlatform.android,
     TargetPlatform.iOS,
     TargetPlatform.macOS,
     TargetPlatform.windows,
   ];
 
-  static bool isSaveSupportedOnCurrentPlatform() =>
-      ExportService.supportedSavePlatforms.contains(defaultTargetPlatform);
+  bool isSaveSupportedOnCurrentPlatform() => supportedSavePlatforms.contains(defaultTargetPlatform);
 
-  static bool isShareSupportedOnCurrentPlatform() =>
-      ExportService.supportedSharePlatforms.contains(defaultTargetPlatform) || kIsWeb;
+  bool isShareSupportedOnCurrentPlatform() =>
+      supportedSharePlatforms.contains(defaultTargetPlatform) || kIsWeb;
 
   String csvFileName() => 'work_entries_export_${fileTimestamp()}.csv';
 
@@ -110,7 +109,6 @@ class ExportService {
     required Uint8List fileContent,
     required String fileName,
     String? mimeType,
-    void Function(ShareResult result)? onSuccess,
     void Function(Object error)? onError,
   }) async {
     XFile file = XFile.fromData(
@@ -119,12 +117,9 @@ class ExportService {
       name: fileName,
     );
     try {
-      ShareResult result = await SharePlus.instance.share(
+      await SharePlus.instance.share(
         ShareParams(files: [file], fileNameOverrides: [fileName]),
       );
-      if (result.status == ShareResultStatus.success && onSuccess != null) {
-        onSuccess(result);
-      }
     } catch (error, stacktrace) {
       log("Failed to share file", error: error, stackTrace: stacktrace);
       if (onError != null) {

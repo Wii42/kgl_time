@@ -2,6 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/always_filling_scroll_view.dart';
+import 'package:kgl_time/app_layout_constants.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -13,8 +14,6 @@ import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/select_categories.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
-
-import '../kgl_time_app.dart';
 
 class NewEntryPage extends KglPage {
   /// The existing entry to edit, or null if a new entry should be created.
@@ -118,7 +117,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     return Form(
       key: _formKey,
       child: AlwaysFillingScrollView(
-        maxWidth: KglTimeApp.maxPageWidth,
+        maxWidth: AppLayoutConstants.maxPageWidth,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

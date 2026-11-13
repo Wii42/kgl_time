@@ -91,6 +91,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 - Disable unsupported export actions and explain when saving or sharing files is unavailable on
   the current platform.
+- Remove the misleading sharing success message, since opening another app does not confirm that
+  the file was sent.
 - Keep the system status bar text and icons white, including when the app bar scrolls out of view.
 
 ### v0.3.5

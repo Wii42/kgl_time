@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app_route.dart';
+import 'package:kgl_time/color_theme_extension.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/helpers.dart';
@@ -15,13 +16,6 @@ import 'data_model/work_entry.dart';
 
 class KglTimeApp extends StatefulWidget {
   final String appTitle;
-
-  static const Color primaryColor = Color(0xff0067b1);
-  static const Color appBarColor = Color(0xff4a8e3b);
-  static const Color actionColor = Color(0xffc62828);
-  static const double maxPageWidth = 800;
-  static const double fixedAppBarMinHeight = 800;
-  static const double fullNavigationBarMinHeight = 600;
 
   final List<WorkEntry> initialEntries;
   final List<WorkCategory> initialCategories;
@@ -102,7 +96,6 @@ class _KglTimeAppState extends State<KglTimeApp> {
           ...GlobalMaterialLocalizations.delegates,
           AppLocalizations.delegate,
         ],
-        //locale: kDebugMode ? Locale('de', 'CH') : null,
         supportedLocales: [
           Locale('en'),
           Locale('de'),
@@ -120,26 +113,38 @@ class _KglTimeAppState extends State<KglTimeApp> {
   }
 
   ThemeData theme({required Brightness brightness}) {
-    ThemeData theme =
-        ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: KglTimeApp.primaryColor,
-            brightness: brightness,
-          ),
-          useMaterial3: true,
-          brightness: brightness,
-          filledButtonTheme: FilledButtonThemeData(
-            style: FilledButton.styleFrom(
-              backgroundColor: KglTimeApp.primaryColor,
-              foregroundColor: Colors.white,
-            ),
-          ),
-        ).copyWith(
-          appBarTheme: AppBarTheme(
-            backgroundColor: KglTimeApp.appBarColor,
-            foregroundColor: Colors.white,
-          ),
-        );
+    final Color primaryColor = Color(0xff0067b1);
+    final Color actionColor = Color(0xffc62828);
+    final Color appBarColor = Color(0xff4a8e3b);
+
+    final FilledButtonThemeData filledButtonTheme = FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        backgroundColor: primaryColor,
+        foregroundColor: Colors.white,
+      ),
+    );
+
+    final AppBarTheme appBarTheme = AppBarTheme(
+      backgroundColor: appBarColor,
+      foregroundColor: Colors.white,
+    );
+
+    ThemeData theme = ThemeData(
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: primaryColor,
+        brightness: brightness,
+      ),
+      useMaterial3: true,
+      brightness: brightness,
+      filledButtonTheme: filledButtonTheme,
+      appBarTheme: appBarTheme,
+      extensions: [
+        ColorThemeExtension(
+          primaryColor: primaryColor,
+          actionColor: actionColor,
+        ),
+      ],
+    );
     return theme;
   }
 }

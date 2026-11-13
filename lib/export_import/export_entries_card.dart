@@ -25,8 +25,8 @@ class ExportEntriesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? loc = AppLocalizations.of(context);
-    final bool canSave = ExportService.isSaveSupportedOnCurrentPlatform();
-    final bool canShare = ExportService.isShareSupportedOnCurrentPlatform();
+    final bool canSave = ExportService().isSaveSupportedOnCurrentPlatform();
+    final bool canShare = ExportService().isShareSupportedOnCurrentPlatform();
     return ImportExportCard(
       title: title,
       explanationLabel: explanationLabel,
@@ -103,13 +103,6 @@ class ExportEntriesCard extends StatelessWidget {
       fileContent: fileContent,
       fileName: fileName,
       mimeType: mimeType,
-      onSuccess: (result) => messenger.showSnackBar(
-        SnackBar(
-          content: Text(
-            loc?.fileSharedSuccessfully ?? "<File shared successfully.>",
-          ),
-        ),
-      ),
       onError: (error) => messenger.showSnackBar(
         SnackBar(
           content: Text(loc?.failedToShareFile ?? "<Failed to share file.>"),
