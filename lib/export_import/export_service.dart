@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:clock/clock.dart';
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart' show TargetPlatform, kIsWeb, defaultTargetPlatform;
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:kgl_time/export_import/work_data.dart';
@@ -17,6 +18,26 @@ import '../main.dart';
 
 class ExportService {
   const ExportService();
+
+  /// Native platforms supported by the file saving plugin. Web is unsupported.
+  static const List<TargetPlatform> supportedSavePlatforms = [
+    TargetPlatform.android,
+    TargetPlatform.iOS,
+  ];
+
+  /// Native platforms supporting file sharing. Web is also supported separately.
+  static const List<TargetPlatform> supportedSharePlatforms = [
+    TargetPlatform.android,
+    TargetPlatform.iOS,
+    TargetPlatform.macOS,
+    TargetPlatform.windows,
+  ];
+
+  static bool isSaveSupportedOnCurrentPlatform() =>
+      ExportService.supportedSavePlatforms.contains(defaultTargetPlatform);
+
+  static bool isShareSupportedOnCurrentPlatform() =>
+      ExportService.supportedSharePlatforms.contains(defaultTargetPlatform) || kIsWeb;
 
   String csvFileName() => 'work_entries_export_${fileTimestamp()}.csv';
 

@@ -220,6 +220,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get saveLocally => 'Lokal speichern';
 
   @override
+  String get savingNotSupported =>
+      'Das Speichern von Dateien wird auf dieser Plattform nicht unterstützt.';
+
+  @override
+  String get sharingNotSupported =>
+      'Das Teilen von Dateien wird auf dieser Plattform nicht unterstützt.';
+
+  @override
   String get workingTime => 'Arbeitszeit';
 
   @override

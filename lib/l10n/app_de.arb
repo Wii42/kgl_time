@@ -67,6 +67,8 @@
   "exportImportEntries": "Einträge exportieren/importieren",
   "share": "Teilen",
   "saveLocally": "Lokal speichern",
+  "savingNotSupported": "Das Speichern von Dateien wird auf dieser Plattform nicht unterstützt.",
+  "sharingNotSupported": "Das Teilen von Dateien wird auf dieser Plattform nicht unterstützt.",
   "workingTime": "Arbeitszeit",
   "fromTo": "Von-Bis",
   "fileSavedSuccessfully": "Datei erfolgreich gespeichert",

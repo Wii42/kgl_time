@@ -219,6 +219,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveLocally => 'Save locally';
 
   @override
+  String get savingNotSupported => 'Saving files is not supported on this platform.';
+
+  @override
+  String get sharingNotSupported => 'Sharing files is not supported on this platform.';
+
+  @override
   String get workingTime => 'Working Time';
 
   @override
