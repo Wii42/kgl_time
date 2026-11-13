@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
@@ -58,7 +59,7 @@ class ImportService {
   /// replacing their current contents.
   ///
   /// Returns a function that, when called, will revert the changes made by this import,
-  void Function() importAndReplace(
+  VoidCallback importAndReplace(
     WorkData workData,
     WorkEntries entriesList,
     WorkCategories categoriesList,
