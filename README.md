@@ -76,6 +76,10 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ### Unreleased
 
+#### Added
+
+- Swipe left or right to switch between Home, All Entries, and Categories.
+
 #### Changed
 
 - Keep the app bar fixed when the page content fits or the available page height is at least 800
