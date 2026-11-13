@@ -20,7 +20,7 @@ class KglTimeApp extends StatefulWidget {
   static const Color appBarColor = Color(0xff4a8e3b);
   static const Color actionColor = Color(0xffc62828);
   static const double maxPageWidth = 800;
-  static const double fixedAppBarMinHeight = 500;
+  static const double fixedAppBarMinHeight = 800;
   static const double fullNavigationBarMinHeight = 600;
 
   final List<WorkEntry> initialEntries;
