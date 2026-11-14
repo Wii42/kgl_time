@@ -74,6 +74,14 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ## Changelog
 
+### Unreleased
+
+#### Fixed
+
+- Restore backups and undo imports as a single operation, preserving existing data if saving fails
+  and showing success only after saving completes. Undo checks for later edits before restoring
+  the previous data.
+
 ### v0.3.6
 
 #### Added

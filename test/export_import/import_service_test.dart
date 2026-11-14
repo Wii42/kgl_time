@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart' show AsyncCallback;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kgl_time/data_model/value.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
@@ -124,10 +126,8 @@ void main() {
       await storage.close();
     });
 
-    // Accept the current undo callback or a future asynchronous restore result.
-    Future<Object?> restore() => Future<Object?>.sync(
-      () => ImportService().importAndReplace(backup, entries, categories),
-    );
+    Future<AsyncCallback> restore() =>
+        ImportService().importAndReplace(backup, entries, categories);
 
     Future<Object?> state() async => jsonDecode(
       jsonEncode(<String, Object?>{
@@ -145,6 +145,7 @@ void main() {
     test('does not complete while category persistence is pending', () async {
       final Completer<void> barrier = Completer<void>();
       storage.workCategories.writeBarrier = barrier;
+      final Object? before = await state();
       bool completed = false;
       final Future<void> operation = restore().then<void>((Object? result) {
         completed = true;
@@ -156,6 +157,7 @@ void main() {
           isFalse,
           reason: 'Restore must await persistence before reporting success',
         );
+        expect(await state(), before);
       } finally {
         barrier.complete();
         await operation;
@@ -169,6 +171,63 @@ void main() {
       await expectLater(restore(), throwsStateError);
       await Future<void>.delayed(Duration.zero);
       expect(await state(), before);
+    });
+
+    test('a false transaction result preserves both stored and in-memory datasets', () async {
+      final Object? before = await state();
+      storage.acceptReplacement = false;
+      await expectLater(restore(), throwsStateError);
+      expect(await state(), before);
+    });
+
+    test('undo awaits the same atomic replacement and restores a separate snapshot', () async {
+      final Object? before = await state();
+      final WorkEntry oldEntry = entries.entries.single;
+      final WorkCategory oldCategory = categories.entries.single;
+      final AsyncCallback undo = await restore();
+      final Object? imported = await state();
+      oldEntry.description = 'Changed stale reference';
+      oldEntry.categories.single.displayName = 'Changed stale category';
+      oldCategory.displayName = 'Changed stale root category';
+      final Completer<void> barrier = Completer<void>();
+      storage.workCategories.writeBarrier = barrier;
+      bool completed = false;
+      final Future<void> operation = undo().then((_) {
+        completed = true;
+      });
+      try {
+        await Future<void>.delayed(Duration.zero);
+        expect(completed, isFalse);
+        expect(await state(), imported);
+      } finally {
+        barrier.complete();
+        await operation;
+      }
+      expect(await state(), before);
+      expect(storage.replacementCalls, 2);
+    });
+
+    for (final bool throwsError in <bool>[true, false]) {
+      test('failed undo preserves the imported data (exception: $throwsError)', () async {
+        final AsyncCallback undo = await restore();
+        final Object? imported = await state();
+        storage.workCategories.failWrites = throwsError;
+        storage.acceptReplacement = throwsError;
+        await expectLater(undo(), throwsStateError);
+        expect(await state(), imported);
+      });
+    }
+
+    test('undo rejects subsequent edits instead of overwriting them', () async {
+      final AsyncCallback undo = await restore();
+      final WorkEntry entry = entries.entries.single;
+      final WorkEntry edited = entry.copyWith(description: const Value<String?>('New work'));
+      entries.updateEntry(entry, edited);
+      await Future<void>.delayed(Duration.zero);
+      final Object? changed = await state();
+      await expectLater(undo(), throwsStateError);
+      expect(await state(), changed);
+      expect(storage.replacementCalls, 1);
     });
 
     test(

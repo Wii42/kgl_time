@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:clock/clock.dart';
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show AsyncCallback, defaultTargetPlatform, TargetPlatform;
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:kgl_time/export_import/work_data.dart';
 import 'package:share_plus/share_plus.dart';
@@ -11,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 import '../data_model/work_categories.dart';
 import '../data_model/work_entries.dart';
 import '../main.dart';
+import '../persistent_storage/persistent_storage_service.dart';
 
 class ImportService {
   /// Native platforms supported by the file picker plugin. Web is unsupported.
@@ -54,26 +54,55 @@ class ImportService {
   }
 
   /// Imports the given [workData] into the provided [entriesList] and [categoriesList],
-  /// replacing their current contents.
+  /// replacing their contents only after the storage transaction commits.
   ///
-  /// Returns a function that, when called, will revert the changes made by this import,
-  VoidCallback importAndReplace(
+  /// Returns an asynchronous undo action using a separate snapshot of the previous data.
+  /// Undo rejects changes made since the import rather than overwriting them.
+  Future<AsyncCallback> importAndReplace(
     WorkData workData,
     WorkEntries entriesList,
-    WorkCategories categoriesList,
-  ) {
-    WorkData currentData = WorkData(
-      workEntries: entriesList.entriesIncludingTrash,
-      workCategories: categoriesList.entries,
-      backupFormatVersion: backupFormatVersion,
-      exportedAt: clock.now(),
+    WorkCategories categoriesList,) async {
+    final WorkData currentData = _copy(
+      WorkData(
+        workEntries: entriesList.entriesIncludingTrash,
+        workCategories: categoriesList.entries,
+        backupFormatVersion: backupFormatVersion,
+        exportedAt: clock.now(),
+      ),
     );
-    entriesList.replaceAllEntries(workData.workEntries);
-    categoriesList.replaceAllEntries(workData.workCategories);
+    await _replaceAndPublish(_copy(workData), entriesList, categoriesList);
+    final String importedState = _stateJson(entriesList, categoriesList);
 
-    return () {
-      entriesList.replaceAllEntries(currentData.workEntries);
-      categoriesList.replaceAllEntries(currentData.workCategories);
+    return () async {
+      if (_stateJson(entriesList, categoriesList) != importedState) {
+        throw StateError('Cannot undo an import after the work data has changed');
+      }
+      await _replaceAndPublish(_copy(currentData), entriesList, categoriesList);
     };
   }
+
+  Future<void> _replaceAndPublish(
+    WorkData data,
+    WorkEntries entriesList,
+    WorkCategories categoriesList,
+  ) async {
+    final bool committed = await PersistentStorageService.instance.replaceWorkData(
+      entries: data.workEntries,
+      categories: data.workCategories,
+    );
+    if (!committed) throw StateError('Storage did not commit the backup replacement');
+    categoriesList.loadEntries(data.workCategories);
+    entriesList.loadEntries(data.workEntries);
+  }
+
+  WorkData _copy(WorkData data) => WorkData.fromJson(
+    jsonDecode(jsonEncode(data.toJson())) as Map<String, dynamic>,
+  );
+
+  String _stateJson(WorkEntries entries, WorkCategories categories) => jsonEncode(
+    <String, Object>{
+      'workEntries': entries.entriesIncludingTrash,
+      'workCategories': categories.entries,
+    },
+  );
 }

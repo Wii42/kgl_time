@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/foundation.dart' show AsyncCallback;
 import 'package:kgl_time/export_import/work_data.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
@@ -9,54 +12,99 @@ import '../main.dart';
 import '../utils/format_duration.dart';
 import 'import_service.dart';
 
-class ImportReplaceConfirmationDialog extends StatelessWidget {
+class ImportReplaceConfirmationDialog extends StatefulWidget {
   const ImportReplaceConfirmationDialog({super.key, required this.loadedData});
 
   final WorkData loadedData;
 
   @override
-  Widget build(BuildContext context) {
-    ImportService importService = ImportService();
-    ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-    AppLocalizations? loc = AppLocalizations.of(context);
-    return AlertDialog(
-      title: Text(loc?.importBacupAndReplace ?? "<Import Data>"),
-      content: dialogContent(loc),
-      actions: [
-        ElevatedButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(loc?.cancel ?? "<Cancel>"),
-        ),
-        TextButton(
-          child: Text(
-            loc?.importBacupAndReplaceExistingEntries ?? "<Import and Replace>",
-            textAlign: TextAlign.center,
+  State<ImportReplaceConfirmationDialog> createState() => _ImportReplaceConfirmationDialogState();
+}
+
+class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmationDialog> {
+  bool _isImporting = false;
+
+  Future<void> _importAndReplace() async {
+    if (_isImporting) return;
+    final WorkEntries entriesList = context.read<WorkEntries>();
+    final WorkCategories categoriesList = context.read<WorkCategories>();
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final AppLocalizations? loc = AppLocalizations.of(context);
+    setState(() => _isImporting = true);
+    try {
+      final AsyncCallback revertImport = await ImportService().importAndReplace(
+        widget.loadedData,
+        entriesList,
+        categoriesList,
+      );
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(loc?.importSuccess ?? '<Import successful.>'),
+          action: SnackBarAction(
+            label: loc?.undo ?? '<Undo>',
+            onPressed: () async {
+              try {
+                await revertImport();
+              } catch (error, stackTrace) {
+                log('Failed to undo backup import', error: error, stackTrace: stackTrace);
+                if (messenger.mounted) {
+                  messenger.showSnackBar(
+                    SnackBar(content: Text(loc?.importFailed ?? '<Import failed.>')),
+                  );
+                }
+              }
+            },
           ),
-          onPressed: () {
-            WorkEntries entriesList = context.read<WorkEntries>();
-            WorkCategories categoriesList = context.read<WorkCategories>();
-            VoidCallback revertImport = importService.importAndReplace(
-              loadedData,
-              entriesList,
-              categoriesList,
-            );
-            Navigator.of(context).pop();
-            messenger.showSnackBar(
-              SnackBar(
-                content: Text(loc?.importSuccess ?? "<Import successful.>"),
-                action: SnackBarAction(
-                  label: loc?.undo ?? "<undo>",
-                  onPressed: revertImport,
-                ),
-              ),
-            );
-          },
         ),
-      ],
-    );
+      );
+    } catch (error, stackTrace) {
+      log('Failed to replace work data from backup', error: error, stackTrace: stackTrace);
+      if (mounted) {
+        messenger.showSnackBar(
+          SnackBar(content: Text(loc?.importFailed ?? '<Import failed.>')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isImporting = false);
+    }
   }
 
-  Column dialogContent(AppLocalizations? loc) {
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations? loc = AppLocalizations.of(context);
+    return PopScope(
+      canPop: !_isImporting,
+      child: AlertDialog(
+        title: Text(loc?.importBacupAndReplace ?? "<Import Data>"),
+        content: _ImportReplaceContent(loadedData: widget.loadedData),
+        actions: [
+          ElevatedButton(
+            onPressed: _isImporting ? null : () => Navigator.of(context).pop(),
+            child: Text(loc?.cancel ?? "<Cancel>"),
+          ),
+          TextButton(
+            onPressed: _isImporting ? null : _importAndReplace,
+            child: Text(
+              loc?.importBacupAndReplaceExistingEntries ?? "<Import and Replace>",
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ImportReplaceContent extends StatelessWidget {
+  const _ImportReplaceContent({required this.loadedData});
+
+  final WorkData loadedData;
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations? loc = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,

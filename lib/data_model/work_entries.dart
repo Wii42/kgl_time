@@ -8,7 +8,7 @@ import 'work_entry.dart';
 
 class WorkEntries extends ChangeNotifier {
   final Table<WorkEntry> _storedEntries = PersistentStorageService.instance.workEntries;
-  late final CallbackNotifyingList<WorkEntry> _entries;
+  late CallbackNotifyingList<WorkEntry> _entries;
 
   WorkEntries(List<WorkEntry> entriesList) {
     entriesList = List.of(entriesList);
@@ -81,12 +81,11 @@ class WorkEntries extends ChangeNotifier {
   /// All entries including those in the trash
   List<WorkEntry> get entriesIncludingTrash => List.unmodifiable(_entries);
 
-  void replaceAllEntries(List<WorkEntry> workEntries) {
-    _entries.clear();
-    _entries.addAll(workEntries);
-    sortEntriesInReverse(_entries);
-    _storedEntries.deleteAllEntries();
-    _storedEntries.saveEntries(_entries);
+  /// Loads entries already committed to storage without writing them again.
+  void loadEntries(List<WorkEntry> workEntries) {
+    final List<WorkEntry> loaded = List<WorkEntry>.of(workEntries);
+    sortEntriesInReverse(loaded);
+    _entries = CallbackNotifyingList<WorkEntry>.of(notifyListeners, loaded);
     notifyListeners();
   }
 }

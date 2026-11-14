@@ -189,10 +189,136 @@ void main() {
     try {
       await confirm(tester);
       expect(find.text('Import successful'), findsNothing);
+      expect(find.byType(ImportReplaceConfirmationDialog), findsOneWidget);
+      expect(
+        tester
+            .widget<TextButton>(
+              find.widgetWithText(TextButton, 'Import backup and replace existing entries'),
+            )
+            .onPressed,
+        isNull,
+      );
+      expect(
+        tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Cancel')).onPressed,
+        isNull,
+      );
+      expect(storage.replacementCalls, 1);
+      await tester.tapAt(const Offset(5, 5));
+      await tester.pumpAndSettle();
+      expect(find.byType(ImportReplaceConfirmationDialog), findsOneWidget);
     } finally {
       barrier.complete();
       await tester.pumpAndSettle();
     }
+    expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
+    expect(find.text('Import successful'), findsOneWidget);
+  });
+
+  testWidgets('repeated confirmation starts only one replacement', (WidgetTester tester) async {
+    await launch(tester);
+    await openConfirmation(tester, WorkData.fromJson(backupFixture()));
+    final Completer<void> barrier = Completer<void>();
+    storage.workCategories.writeBarrier = barrier;
+    final VoidCallback onPressed = tester
+        .widget<TextButton>(
+          find.widgetWithText(TextButton, 'Import backup and replace existing entries'),
+        )
+        .onPressed!;
+    try {
+      onPressed();
+      onPressed();
+      await tester.pumpAndSettle();
+      expect(storage.replacementCalls, 1);
+    } finally {
+      barrier.complete();
+      await tester.pumpAndSettle();
+    }
+  });
+
+  for (final bool throwsError in <bool>[true, false]) {
+    testWidgets('failed replacement stays open and allows retry (exception: $throwsError)', (
+      WidgetTester tester,
+    ) async {
+      await launch(tester);
+      final WorkData empty = WorkData(
+        workEntries: const [],
+        workCategories: const [],
+        backupFormatVersion: 1,
+        exportedAt: DateTime.utc(2026, 11, 14),
+      );
+      await openConfirmation(tester, empty);
+      storage.workCategories.failWrites = throwsError;
+      storage.acceptReplacement = throwsError;
+      await confirm(tester);
+      expect(find.byType(ImportReplaceConfirmationDialog), findsOneWidget);
+      expect(find.text('Import failed'), findsOneWidget);
+      expect(find.text('Import successful'), findsNothing);
+      expect(entries.entriesIncludingTrash, hasLength(2));
+      expect(categories.entries, hasLength(2));
+      expect(await storage.workEntries.loadEntries(), hasLength(2));
+      expect(await storage.workCategories.loadEntries(), hasLength(2));
+      expect(
+        tester
+            .widget<TextButton>(
+              find.widgetWithText(TextButton, 'Import backup and replace existing entries'),
+            )
+            .onPressed,
+        isNotNull,
+      );
+      storage.workCategories.failWrites = false;
+      storage.acceptReplacement = true;
+      await confirm(tester);
+      expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
+      expect(entries.entriesIncludingTrash, isEmpty);
+      expect(categories.entries, isEmpty);
+      expect(storage.replacementCalls, 2);
+    });
+  }
+
+  testWidgets('undo from the success message restores the prior dataset atomically', (
+    WidgetTester tester,
+  ) async {
+    await launch(tester);
+    final WorkData empty = WorkData(
+      workEntries: const [],
+      workCategories: const [],
+      backupFormatVersion: 1,
+      exportedAt: DateTime.utc(2026, 11, 14),
+    );
+    await openConfirmation(tester, empty);
+    await confirm(tester);
+    expect(entries.entriesIncludingTrash, isEmpty);
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+    expect(entries.entriesIncludingTrash, hasLength(2));
+    expect(categories.entries, hasLength(2));
+    expect(await storage.workEntries.loadEntries(), hasLength(2));
+    expect(await storage.workCategories.loadEntries(), hasLength(2));
+    expect(storage.replacementCalls, 2);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('undo failure is reported and preserves the imported dataset', (
+    WidgetTester tester,
+  ) async {
+    await launch(tester);
+    final WorkData empty = WorkData(
+      workEntries: const [],
+      workCategories: const [],
+      backupFormatVersion: 1,
+      exportedAt: DateTime.utc(2026, 11, 14),
+    );
+    await openConfirmation(tester, empty);
+    await confirm(tester);
+    storage.acceptReplacement = false;
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+    expect(find.text('Import failed'), findsOneWidget);
+    expect(entries.entriesIncludingTrash, isEmpty);
+    expect(categories.entries, isEmpty);
+    expect(await storage.workEntries.loadEntries(), isEmpty);
+    expect(await storage.workCategories.loadEntries(), isEmpty);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('unsupported backup formats cannot be confirmed', (WidgetTester tester) async {

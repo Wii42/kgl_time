@@ -62,12 +62,12 @@ class WorkCategories extends ChangeNotifier {
     }
   }
 
-  void replaceAllEntries(List<WorkCategory> workCategories) {
+  /// Loads categories already committed to storage, preserving their saved positions.
+  void loadEntries(List<WorkCategory> workCategories) {
+    final List<WorkCategory> loaded = List<WorkCategory>.of(workCategories);
+    loaded.sort((WorkCategory a, WorkCategory b) => a.listIndex.compareTo(b.listIndex));
     _entries.clear();
-    _entries.addAll(workCategories);
-    _recalculateListIndices();
-    storedEntries.deleteAllEntries();
-    storedEntries.saveEntries(_entries);
+    _entries.addAll(loaded);
     notifyListeners();
   }
 }

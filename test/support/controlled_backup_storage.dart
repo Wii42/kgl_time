@@ -8,6 +8,8 @@ import 'memory_storage.dart';
 /// Lets restore tests hold or fail category persistence independently of entry writes.
 class ControlledBackupStorage extends MemoryStorage {
   final ControlledCategoryTable _categories = ControlledCategoryTable();
+  bool acceptReplacement = true;
+  int replacementCalls = 0;
 
   @override
   ControlledCategoryTable get workCategories => _categories;
@@ -17,9 +19,11 @@ class ControlledBackupStorage extends MemoryStorage {
     required List<WorkEntry> entries,
     required List<WorkCategory> categories,
   }) async {
+    replacementCalls++;
     final Completer<void>? barrier = workCategories.writeBarrier;
     if (barrier != null) await barrier.future;
     if (workCategories.failWrites) throw StateError('Injected category write failure');
+    if (!acceptReplacement) return false;
     return super.replaceWorkData(entries: entries, categories: categories);
   }
 }
