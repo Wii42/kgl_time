@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
 
@@ -6,8 +7,11 @@ import 'package:csv/csv.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform, kIsWeb, defaultTargetPlatform;
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:intl/intl.dart';
+import 'package:kgl_time/export_import/work_data.dart';
+import 'package:kgl_time/main.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../data_model/work_category.dart';
 import '../data_model/work_entry.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../utils/format_duration.dart';
@@ -36,6 +40,8 @@ class ExportService {
 
   String csvFileName() => 'work_entries_export_${fileTimestamp()}.csv';
 
+  String jsonFileName() => 'kgl_time_backup_${fileTimestamp()}.json';
+
   String fileTimestamp() => DateFormat('yyyy-MM-dd_HH-mm-ss').format(clock.now());
 
   String entriesToCsv(List<WorkEntry> entries, AppLocalizations? loc) {
@@ -61,6 +67,16 @@ class ExportService {
       ),
     ];
     return csv.encode(rows);
+  }
+
+  String dataToJson(List<WorkEntry> entries, List<WorkCategory> categories) {
+    WorkData workData = WorkData(
+      workEntries: entries,
+      workCategories: categories,
+      backupFormatVersion: backupFormatVersion,
+      exportedAt: clock.now(),
+    );
+    return jsonEncode(workData.toJson());
   }
 
   Future<void> saveFileLocally({

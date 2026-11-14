@@ -7,6 +7,8 @@ import 'app/kgl_time_app.dart';
 
 late final PackageInfo appInfo;
 
+const int backupFormatVersion = 1;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final InitialAppData data = await initializeApp(storage: IsarPersistentStorage());
