@@ -1,11 +1,5 @@
-import 'dart:developer';
-
 import 'package:kgl_time/app_initialization.dart';
-import 'package:kgl_time/data_model/work_category.dart';
-import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/persistent_storage/isar_persistent_storage.dart';
-import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -19,7 +13,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final InitialAppData data = await initializeApp(storage: IsarPersistentStorage());
   appInfo = data.appInfo;
-  await _checkSchemaVersion([SchemaMigration1to2()]);
   runApp(
     KglTimeApp(
       appTitle: 'KGL Time',
@@ -30,87 +23,4 @@ void main() async {
   );
 }
 
-/// Checks the stored schema version and executes all applicable [migrations]
-/// if the stored version is different from the current [schemaVersion].
-Future<void> _checkSchemaVersion(List<SchemaMigration> migrations) async {
-  final storage = PersistentStorageService.instance;
-  final kvStorage = storage.keyValueStorage;
-  int storedSchemaVersion = await kvStorage.get<int>('schemaVersion') ?? 0;
-  if (storedSchemaVersion != schemaVersion) {
-    List<SchemaMigration> applicableMigrations =
-        migrations
-            .where(
-              (migration) =>
-                  migration.fromSchemaVersion >= storedSchemaVersion &&
-                  migration.toSchemaVersion <= schemaVersion,
-            )
-            .toList()
-          ..sort();
-    for (SchemaMigration migration in applicableMigrations) {
-      await migration.migrate(storage);
-    }
-    //onSchemaVersionChanged(storedSchemaVersion, schemaVersion);
-    await kvStorage.set<int>('schemaVersion', schemaVersion);
-  }
-}
 
-abstract class SchemaMigration implements Comparable<SchemaMigration> {
-  int get fromSchemaVersion;
-  int get toSchemaVersion;
-  SchemaMigration() {
-    assert(fromSchemaVersion + 1 == toSchemaVersion);
-  }
-  Future<void> migrate(PersistentStorageService storageService);
-
-  @override
-  int compareTo(SchemaMigration other) {
-    return fromSchemaVersion.compareTo(other.fromSchemaVersion);
-  }
-}
-
-class SchemaMigration1to2 extends SchemaMigration {
-  @override
-  int get fromSchemaVersion => 1;
-
-  @override
-  int get toSchemaVersion => 2;
-
-  // Migrate work entries to have uuids and lastEdit set
-  @override
-  Future<void> migrate(PersistentStorageService storage) async {
-    log('Migrating schema from $fromSchemaVersion to $toSchemaVersion');
-    List<WorkEntry> entries = await storage.workEntries.loadEntries();
-    for (WorkEntry entry in entries) {
-      bool hasChanged = false;
-      WorkEntry newEntry = entry.copyWith();
-      if (entry.uuid.isEmpty) {
-        hasChanged = true;
-        newEntry = newEntry.copyWith(uuid: WorkEntry.generateUuid());
-      }
-      if (entry.lastEdit == dateTimeEpoch()) {
-        hasChanged = true;
-        newEntry.lastEdit = entry.startTime ?? entry.endTime ?? entry.date;
-      }
-      if (hasChanged) {
-        newEntry.lastEdit = DateTime.timestamp();
-        await storage.workEntries.updateEntry(newEntry, entry);
-      }
-    }
-    List<WorkCategory> categories = await storage.workCategories.loadEntries();
-    for (WorkCategory category in categories) {
-      bool hasChanged = false;
-      if (category.uuid.isEmpty) {
-        hasChanged = true;
-        category.uuid = WorkEntry.generateUuid();
-      }
-      if (category.lastEdit == dateTimeEpoch() || category.lastEdit == null) {
-        hasChanged = true;
-        category.lastEdit = DateTime.timestamp();
-      }
-      if (hasChanged) {
-        category.lastEdit = DateTime.timestamp();
-        await storage.workCategories.updateEntry(category, category);
-      }
-    }
-  }
-}
