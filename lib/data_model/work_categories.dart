@@ -61,4 +61,13 @@ class WorkCategories extends ChangeNotifier {
       _entries[i].listIndex = i;
     }
   }
+
+  void replaceAllEntries(List<WorkCategory> workCategories) {
+    _entries.clear();
+    _entries.addAll(workCategories);
+    _recalculateListIndices();
+    storedEntries.deleteAllEntries();
+    storedEntries.saveEntries(_entries);
+    notifyListeners();
+  }
 }
