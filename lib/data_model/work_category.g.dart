@@ -1585,3 +1585,47 @@ extension EmbeddedWorkCategoryQueryObject
           EmbeddedWorkCategory,
           QFilterCondition
         > {}
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+WorkCategory _$WorkCategoryFromJson(Map<String, dynamic> json) => WorkCategory(
+  json['displayName'] as String,
+  icon: $enumDecodeNullable(_$CategoryIconEnumMap, json['icon']),
+  listIndex: (json['listIndex'] as num?)?.toInt() ?? -1,
+)..id = (json['id'] as num).toInt();
+
+Map<String, dynamic> _$WorkCategoryToJson(WorkCategory instance) =>
+    <String, dynamic>{
+      'displayName': instance.displayName,
+      'icon': _$CategoryIconEnumMap[instance.icon],
+      'id': instance.id,
+      'listIndex': instance.listIndex,
+    };
+
+const _$CategoryIconEnumMap = {
+  CategoryIcon.phone: 'phone',
+  CategoryIcon.work: 'work',
+  CategoryIcon.home: 'home',
+  CategoryIcon.school: 'school',
+  CategoryIcon.shopping: 'shopping',
+  CategoryIcon.sport: 'sport',
+  CategoryIcon.transport: 'transport',
+};
+
+EmbeddedWorkCategory _$EmbeddedWorkCategoryFromJson(
+  Map<String, dynamic> json,
+) => EmbeddedWorkCategory(
+  displayName: json['displayName'] as String? ?? '',
+  icon: $enumDecodeNullable(_$CategoryIconEnumMap, json['icon']),
+  id: (json['id'] as num?)?.toInt(),
+);
+
+Map<String, dynamic> _$EmbeddedWorkCategoryToJson(
+  EmbeddedWorkCategory instance,
+) => <String, dynamic>{
+  'displayName': instance.displayName,
+  'icon': _$CategoryIconEnumMap[instance.icon],
+  'id': instance.id,
+};
