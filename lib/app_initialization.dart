@@ -16,9 +16,24 @@ typedef InitialAppData = ({
 });
 
 List<WorkCategory> createInitialCategories(AppLocalizations loc) => [
-  WorkCategory(loc.defaultCategoryPlanning, listIndex: 0),
-  WorkCategory(loc.defaultCategoryMeetings, listIndex: 1),
-  WorkCategory(loc.defaultCategoryAdministration, listIndex: 2),
+  WorkCategory(
+    loc.defaultCategoryPlanning,
+    listIndex: 0,
+    lastEdit: DateTime.timestamp(),
+    uuid: WorkEntry.generateUuid(),
+  ),
+  WorkCategory(
+    loc.defaultCategoryMeetings,
+    listIndex: 1,
+    lastEdit: DateTime.timestamp(),
+    uuid: WorkEntry.generateUuid(),
+  ),
+  WorkCategory(
+    loc.defaultCategoryAdministration,
+    listIndex: 2,
+    lastEdit: DateTime.timestamp(),
+    uuid: WorkEntry.generateUuid(),
+  ),
 ];
 
 Future<InitialAppData> initializeApp({required PersistentStorage storage}) async {

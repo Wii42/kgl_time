@@ -1,5 +1,11 @@
+import 'dart:developer';
+
 import 'package:kgl_time/app_initialization.dart';
+import 'package:kgl_time/data_model/work_category.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
+import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/persistent_storage/isar_persistent_storage.dart';
+import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -23,14 +29,6 @@ void main() async {
     ),
   );
 }
-
-List<WorkCategory> get mockWorkCategories => [
-  WorkCategory('Telefonanruf', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
-  WorkCategory('Kategorie 2', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
-  WorkCategory('Kategorie 3', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
-  WorkCategory('Kategorie 4', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
-  WorkCategory('Kategorie 5', uuid: WorkEntry.generateUuid(), lastEdit: DateTime.timestamp()),
-];
 
 /// Checks the stored schema version and executes all applicable [migrations]
 /// if the stored version is different from the current [schemaVersion].
