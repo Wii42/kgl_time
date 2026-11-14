@@ -9,7 +9,7 @@ late final PackageInfo appInfo;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  InitialAppData data = await initializeApp(storage: IsarPersistentStorage());
+  final InitialAppData data = await initializeApp(storage: IsarPersistentStorage());
   appInfo = data.appInfo;
   runApp(
     KglTimeApp(

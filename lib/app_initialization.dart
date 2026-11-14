@@ -22,9 +22,9 @@ List<WorkCategory> createInitialCategories(AppLocalizations loc) => [
 ];
 
 Future<InitialAppData> initializeApp({required PersistentStorage storage}) async {
-  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  final PackageInfo packageInfo = await PackageInfo.fromPlatform();
   await PersistentStorageService.initializeImplementation(storage);
-  PersistentStorageService storageService = PersistentStorageService.instance;
+  final PersistentStorageService storageService = PersistentStorageService.instance;
   final List<WorkEntry> initialEntries = await storageService.workEntries.loadEntries();
   final List<WorkCategory> initialCategories = await storageService.workCategories.loadEntries();
 
