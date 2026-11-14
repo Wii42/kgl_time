@@ -61,8 +61,8 @@ marketing emails or push notifications.
 
 ## Changes
 
-The current privacy policy is accessible through the app's settings. We will inform you in the app
-about material changes to data processing.
+The current privacy policy is accessible through the app's settings. Its revision date is shown
+above.
 
 ---
 
@@ -133,5 +133,5 @@ eingebunden. KGL Time versendet keine Marketing-E-Mails oder Push-Benachrichtigu
 
 ## Änderungen
 
-Die aktuelle Datenschutzerklärung ist über die Einstellungen der App erreichbar. Über wesentliche
-Änderungen der Datenbearbeitung informieren wir Sie in der App.
+Die aktuelle Datenschutzerklärung ist über die Einstellungen der App erreichbar.
+Das Datum der letzten Aktualisierung steht am Anfang dieser Erklärung.
