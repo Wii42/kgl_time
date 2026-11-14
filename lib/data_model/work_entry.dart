@@ -1,16 +1,20 @@
 import 'package:isar_community/isar.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:kgl_time/data_model/value.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 
+import '../utils/format_duration.dart';
 import 'isar_storable.dart';
 
 part 'work_entry.g.dart';
 
 @Collection(accessor: 'workEntries')
+@JsonSerializable()
 class WorkEntry implements IsarStorable {
   @override
   Id id = Isar.autoIncrement;
   int workDurationInSeconds;
+  @JsonKey(defaultValue: dateTimeEpoch)
   DateTime date;
   String? description;
   List<EmbeddedWorkCategory> categories;
@@ -42,6 +46,10 @@ class WorkEntry implements IsarStorable {
 
   @ignore
   bool get isInTrash => wasMovedToTrashAt != null;
+
+  Map<String, dynamic> toJson() => _$WorkEntryToJson(this);
+
+  factory WorkEntry.fromJson(Map<String, dynamic> json) => _$WorkEntryFromJson(json);
 
   factory WorkEntry.fromDuration({
     required Duration duration,
