@@ -24,9 +24,9 @@ void main() {
   });
   tearDown(() async => storage.close());
 
-  testWithAdvancingClock('trash and restore preserve the ID and work data in storage', () async {
-    final category = EmbeddedWorkCategory(displayName: 'Office', id: 7);
-    final original = WorkEntry.fromStartAndEndTime(
+  test('trash and restore update lastEdit while preserving the ID and work data', () async {
+    final EmbeddedWorkCategory category = EmbeddedWorkCategory(displayName: 'Office', id: 7);
+    final WorkEntry original = WorkEntry.fromStartAndEndTime(
       startTime: DateTime(2026, 10, 23, 8),
       endTime: DateTime(2026, 10, 23, 9, 30),
       description: 'Planning',
@@ -37,25 +37,25 @@ void main() {
       wasEdited: true,
     )..id = 42;
     await storage.workEntries.addEntry(original);
-    final model = WorkEntries([original]);
+    final WorkEntries model = WorkEntries([original]);
     addTearDown(model.dispose);
-    var notifications = 0;
+    int notifications = 0;
     model.addListener(() => notifications++);
-    final beforeTrash = clock.now();
-    model.moveToTrashBin(original);
+    final DateTime trashedAt = DateTime.utc(2026, 10, 31, 12);
+    withClock(Clock.fixed(trashedAt), () => model.moveToTrashBin(original));
 
     expect(model.entries, isEmpty);
-    final trashed = model.entriesInTrash.single;
+    final WorkEntry trashed = model.entriesInTrash.single;
     expect(trashed.id, 42);
-    expect(
-      trashed.wasMovedToTrashAt,
-      timeBetween(beforeTrash, clock.now()),
-    );
+    expect(trashed.wasMovedToTrashAt, trashedAt);
+    expect(trashed.lastEdit, trashedAt);
     expect(trashed.tickedOff, isFalse);
-    model.restoreFromTrashBin(trashed);
+    expect((await storage.workEntries.loadEntries()).single.lastEdit, trashedAt);
+    final DateTime restoredAt = trashedAt.add(const Duration(minutes: 1));
+    withClock(Clock.fixed(restoredAt), () => model.restoreFromTrashBin(trashed));
 
     expect(model.entriesInTrash, isEmpty);
-    final restored = model.entries.single;
+    final WorkEntry restored = model.entries.single;
     expect(restored.id, original.id);
     expect(restored.workDuration, original.workDuration);
     expect(restored.date, original.date);
@@ -63,12 +63,13 @@ void main() {
     expect(restored.endTime, original.endTime);
     expect(restored.description, original.description);
     expect(restored.categories, original.categories);
-    expect(restored.lastEdit, original.lastEdit);
+    expect(restored.lastEdit, restoredAt);
     expect(restored.createType, original.createType);
     expect(restored.wasEdited, original.wasEdited);
     expect(notifications, greaterThanOrEqualTo(2));
     expect((await storage.workEntries.loadEntries()).single.id, 42);
     expect((await storage.workEntries.loadEntries()).single.isInTrash, isFalse);
+    expect((await storage.workEntries.loadEntries()).single.lastEdit, restoredAt);
   });
 
   testWithAdvancingClock(
