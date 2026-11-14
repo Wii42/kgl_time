@@ -1,3 +1,5 @@
+import 'package:clock/clock.dart';
+import 'package:kgl_time/data_model/value.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
@@ -134,9 +136,7 @@ class EditCategoriesWidget extends StatelessWidget {
                       ),
                     );
                     for (WorkEntry entry in entriesWithThisCategory) {
-                      WorkEntry newEntry = WorkEntry(
-                        workDurationInSeconds: entry.workDurationInSeconds,
-                        date: entry.date,
+                      WorkEntry newEntry = entry.copyWith(
                         categories: [
                           for (EmbeddedWorkCategory category in entry.categories)
                             if (category.id == existingCategory.id &&
@@ -145,14 +145,8 @@ class EditCategoriesWidget extends StatelessWidget {
                             else
                               category,
                         ],
-                        description: entry.description,
-                        startTime: entry.startTime,
-                        endTime: entry.endTime,
-                        lastEdit: entry.lastEdit,
-                        tickedOff: entry.tickedOff,
-                        createType: entry.createType,
-                        wasEdited: entry.wasEdited,
-                      )..id = entry.id;
+                        lastEdit: Value<DateTime?>(clock.now().toUtc()),
+                      );
                       workEntries.updateEntry(entry, newEntry..id = entry.id);
                     }
                   } else {
