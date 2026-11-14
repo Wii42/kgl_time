@@ -14,7 +14,7 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
   IsarFlutterLibsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("IsarFlutterLibsPlugin"));
   UrlLauncherWindowsRegisterWithRegistrar(
-          registry->GetRegistrarForPlugin("UrlLauncherWindows"));
+      registry->GetRegistrarForPlugin("UrlLauncherWindows"));
   SharePlusWindowsPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("SharePlusWindowsPluginCApi"));
 }
