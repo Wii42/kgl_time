@@ -24,7 +24,7 @@ class _UndoImportConfirmationDialogState extends State<UndoImportConfirmationDia
     setState(() => _isUndoing = true);
     try {
       await widget.onUndo();
-      if (mounted) Navigator.of(context).pop();
+      if (mounted) Navigator.of(context).pop(true);
     } catch (error, stackTrace) {
       log('Failed to undo backup import', error: error, stackTrace: stackTrace);
       if (mounted) {

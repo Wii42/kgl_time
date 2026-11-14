@@ -366,6 +366,8 @@ void main() {
     expect(await storage.workEntries.loadEntries(), hasLength(2));
     expect(await storage.workCategories.loadEntries(), hasLength(2));
     expect(storage.replacementCalls, 2);
+    expect(find.text('Backup import undone'), findsOneWidget);
+    expect(tester.widget<SnackBar>(find.byType(SnackBar)).action, isNull);
     expect(tester.takeException(), isNull);
   });
 
@@ -385,6 +387,7 @@ void main() {
     await tester.tap(find.text('Undo'));
     await tester.pumpAndSettle();
     expect(find.text('Failed to undo the backup import'), findsOneWidget);
+    expect(find.text('Backup import undone'), findsNothing);
     expect(entries.entriesIncludingTrash, isEmpty);
     expect(categories.entries, isEmpty);
     expect(await storage.workEntries.loadEntries(), isEmpty);
@@ -414,6 +417,7 @@ void main() {
       'Later edit',
     );
     expect(storage.replacementCalls, 1);
+    expect(find.text('Backup import undone'), findsNothing);
   });
 
   testWidgets('confirmed undo of category edits stays open and blocks dismissal until committed', (
@@ -437,6 +441,7 @@ void main() {
       expect(categories.entries.first.displayName, 'Later category');
       expect(entries.entries.single.description, 'Imported description');
       expect(storage.replacementCalls, 2);
+      expect(find.text('Backup import undone'), findsNothing);
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
@@ -454,6 +459,8 @@ void main() {
       (backupFixture()['workEntries'] as List<Map<String, dynamic>>).first['description'],
     );
     expect((await storage.workCategories.loadEntries()).first.displayName, 'Planning');
+    expect(find.text('Backup import undone'), findsOneWidget);
+    expect(tester.widget<SnackBar>(find.byType(SnackBar)).action, isNull);
     expect(tester.takeException(), isNull);
   });
 
@@ -468,6 +475,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
         expect(find.text('Failed to undo the backup import'), findsOneWidget);
+        expect(find.text('Backup import undone'), findsNothing);
         expect(entries.entries.single.description, 'Later edit');
         expect(
           (await storage.workEntries.loadEntries())
@@ -489,6 +497,8 @@ void main() {
           (backupFixture()['workEntries'] as List<Map<String, dynamic>>).first['description'],
         );
         expect(storage.replacementCalls, 3);
+        expect(find.text('Backup import undone'), findsOneWidget);
+        expect(tester.widget<SnackBar>(find.byType(SnackBar)).action, isNull);
         expect(tester.takeException(), isNull);
       },
     );

@@ -306,6 +306,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get undoImportFailed => 'Der Backup-Import konnte nicht rückgängig gemacht werden';
 
   @override
+  String get undoImportSuccess => 'Backup-Import rückgängig gemacht';
+
+  @override
   String dateOfBackup(Object date) {
     return 'Datum des Backups: $date';
   }

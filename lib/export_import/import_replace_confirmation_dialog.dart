@@ -49,14 +49,16 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
               try {
                 await revertImport();
               } on ImportUndoRequiresConfirmation {
-                if (navigator.mounted) {
-                  await showDialog<void>(
-                    context: navigator.context,
-                    builder: (BuildContext context) => UndoImportConfirmationDialog(
-                      onUndo: () => revertImport(discardChanges: true),
-                    ),
-                  );
-                }
+                if (!navigator.mounted) return;
+                final bool undone =
+                    await showDialog<bool>(
+                      context: navigator.context,
+                      builder: (BuildContext context) => UndoImportConfirmationDialog(
+                        onUndo: () => revertImport(discardChanges: true),
+                      ),
+                    ) ??
+                    false;
+                if (!undone) return;
               } catch (error, stackTrace) {
                 log('Failed to undo backup import', error: error, stackTrace: stackTrace);
                 if (messenger.mounted) {
@@ -64,6 +66,13 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
                     SnackBar(content: Text(loc?.undoImportFailed ?? '<Undo failed.>')),
                   );
                 }
+                return;
+              }
+              if (messenger.mounted) {
+                messenger.hideCurrentSnackBar();
+                messenger.showSnackBar(
+                  SnackBar(content: Text(loc?.undoImportSuccess ?? '<Backup import undone.>')),
+                );
               }
             },
           ),
