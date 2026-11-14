@@ -1,9 +1,9 @@
-import 'package:kgl_time/work_entry_widgets/work_entry_widget.dart';
+import 'package:kgl_time/widgets/work_entries/work_entry_widget.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
-import '../data_model/work_entries.dart';
-import '../l10n/generated/app_localizations.dart';
+import '../../data_model/work_entries.dart';
+import '../../l10n/generated/app_localizations.dart';
 import 'work_entry_details_content.dart';
 
 class TrashedWorkEntry extends WorkEntryWidget {

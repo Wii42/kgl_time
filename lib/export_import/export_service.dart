@@ -9,8 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../data_model/work_entry.dart';
-import '../format_duration.dart';
 import '../l10n/generated/app_localizations.dart';
+import '../utils/format_duration.dart';
 
 class ExportService {
   const ExportService();

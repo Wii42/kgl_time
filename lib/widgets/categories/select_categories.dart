@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
-import 'data_model/work_category.dart';
-import 'l10n/generated/app_localizations.dart';
+import '../../data_model/work_category.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 class SelectCategoriesWidget extends StatelessWidget {
   final Map<WorkCategory, bool> categories;

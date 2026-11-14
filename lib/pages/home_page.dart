@@ -3,22 +3,22 @@ import 'dart:async';
 import 'package:animated_list_plus/transitions.dart';
 import 'package:clock/clock.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kgl_time/always_filling_scroll_view.dart';
-import 'package:kgl_time/app_layout_constants.dart';
-import 'package:kgl_time/app_route.dart';
+import 'package:kgl_time/app/app_layout_constants.dart';
+import 'package:kgl_time/app/app_route.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/date_week.dart';
-import 'package:kgl_time/format_duration.dart';
-import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
-import 'package:kgl_time/no_content_widget.dart';
-import 'package:kgl_time/work_entry_time_tracker.dart';
-import 'package:kgl_time/work_entry_widgets/work_entry_preview.dart';
+import 'package:kgl_time/utils/date_week.dart';
+import 'package:kgl_time/utils/format_duration.dart';
+import 'package:kgl_time/utils/helpers.dart';
+import 'package:kgl_time/widgets/layout/always_filling_scroll_view.dart';
+import 'package:kgl_time/widgets/no_content_widget.dart';
+import 'package:kgl_time/widgets/work_entries/work_entry_preview.dart';
+import 'package:kgl_time/widgets/work_entries/work_entry_time_tracker.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
-import '../width_constrained_list_view.dart';
+import '../widgets/layout/width_constrained_list_view.dart';
 import 'kgl_page.dart';
 
 class HomePage extends KglPage {

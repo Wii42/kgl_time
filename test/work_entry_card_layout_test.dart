@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:kgl_time/app_route.dart';
+import 'package:kgl_time/app/app_route.dart';
+import 'package:kgl_time/app/kgl_time_app.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
-import 'package:kgl_time/work_entry_widgets/work_entry_widget.dart';
+import 'package:kgl_time/widgets/work_entries/work_entry_widget.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'support/memory_storage.dart';

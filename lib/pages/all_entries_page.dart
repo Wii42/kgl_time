@@ -6,15 +6,15 @@ import 'package:kgl_time/data_model/grouped_work_entries.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/enums/calendar_unit.dart';
-import 'package:kgl_time/format_duration.dart';
-import 'package:kgl_time/hover_controls.dart';
+import 'package:kgl_time/utils/format_duration.dart';
+import 'package:kgl_time/widgets/layout/hover_controls.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
-import 'package:kgl_time/no_content_widget.dart';
-import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
+import 'package:kgl_time/widgets/no_content_widget.dart';
+import 'package:kgl_time/widgets/work_entries/work_entry_details.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
-import '../width_constrained_list_view.dart';
+import '../widgets/layout/width_constrained_list_view.dart';
 import 'kgl_page.dart';
 
 class AllEntriesPage extends KglPage {

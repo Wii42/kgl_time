@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kgl_time/date_week.dart';
+import 'package:kgl_time/utils/date_week.dart';
 
 void main() {
   test('week runs from Monday midnight up to but excluding next Monday', () {

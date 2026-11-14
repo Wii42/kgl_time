@@ -1,11 +1,11 @@
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
-import 'package:kgl_time/select_categories.dart';
+import 'package:kgl_time/widgets/categories/select_categories.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
-import 'data_model/work_category.dart';
+import '../../data_model/work_category.dart';
 
 class SelectCategoryDialog extends StatefulWidget {
   static const String storageKey = 'timeTrackerCategories';

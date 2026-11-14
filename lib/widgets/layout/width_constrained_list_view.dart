@@ -1,8 +1,8 @@
 import 'package:animated_list_plus/animated_list_plus.dart';
-import 'package:kgl_time/app_layout_constants.dart';
+import 'package:kgl_time/app/app_layout_constants.dart';
 import 'package:material_ui/material_ui.dart';
 
-import 'kgl_time_app.dart';
+import '../../app/kgl_time_app.dart';
 
 class WidthConstrainedListView extends ListView {
   WidthConstrainedListView({

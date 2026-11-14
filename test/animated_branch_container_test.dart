@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kgl_time/animated_branch_container.dart';
+import 'package:kgl_time/app/animated_branch_container.dart';
 import 'package:material_ui/material_ui.dart';
 
 void main() {
