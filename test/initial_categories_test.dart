@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kgl_time/app_initialization.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/l10n/app_locales.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
-import 'package:kgl_time/main.dart' as app;
 import 'package:material_ui/material_ui.dart';
 
 void main() {
@@ -23,7 +23,7 @@ void main() {
       final Locale locale = basicLocaleListResolution(preferences, supportedAppLocales);
       expect(locale, expectedLocale);
       final AppLocalizations loc = await AppLocalizations.delegate.load(locale);
-      final List<WorkCategory> categories = app.createInitialCategories(loc);
+      final List<WorkCategory> categories = createInitialCategories(loc);
 
       expect(categories.map((WorkCategory category) => category.displayName), names);
       expect(categories.map((WorkCategory category) => category.listIndex), [0, 1, 2]);
