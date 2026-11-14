@@ -320,6 +320,24 @@ abstract class AppLocalizations {
   /// **'Categories'**
   String get categories;
 
+  /// No description provided for @defaultCategoryPlanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning'**
+  String get defaultCategoryPlanning;
+
+  /// No description provided for @defaultCategoryMeetings.
+  ///
+  /// In en, this message translates to:
+  /// **'Meetings'**
+  String get defaultCategoryMeetings;
+
+  /// No description provided for @defaultCategoryAdministration.
+  ///
+  /// In en, this message translates to:
+  /// **'Administration'**
+  String get defaultCategoryAdministration;
+
   /// No description provided for @deleteCategoryConfirmationDialog.
   ///
   /// In en, this message translates to:

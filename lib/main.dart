@@ -1,14 +1,8 @@
-import 'dart:developer';
-
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/format_duration.dart';
+import 'package:kgl_time/app_initialization.dart';
 import 'package:kgl_time/persistent_storage/isar_persistent_storage.dart';
-import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-import 'data_model/work_category.dart';
 import 'kgl_time_app.dart';
 
 late final PackageInfo appInfo;
@@ -17,31 +11,15 @@ const int schemaVersion = 2;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  appInfo = await PackageInfo.fromPlatform();
-  await PersistentStorageService.initializeImplementation(IsarPersistentStorage());
+  final InitialAppData data = await initializeApp(storage: IsarPersistentStorage());
+  appInfo = data.appInfo;
   await _checkSchemaVersion([SchemaMigration1to2()]);
-  List<WorkEntry> initialEntries = await PersistentStorageService.instance.workEntries
-      .loadEntries();
-  List<WorkCategory> initialCategories = await PersistentStorageService.instance.workCategories
-      .loadEntries();
-
-  Map<String, dynamic> initialKeyValueStorage = await PersistentStorageService
-      .instance
-      .keyValueStorage
-      .getAll();
-  bool isFirstRun = initialKeyValueStorage['isFirstRun'] ?? true;
-  if (isFirstRun) {
-    await PersistentStorageService.instance.workCategories.saveEntries(mockWorkCategories);
-    initialCategories.addAll(mockWorkCategories);
-    await PersistentStorageService.instance.keyValueStorage.set('isFirstRun', false);
-  }
-  await initializeDateFormatting(); // initialize the date formatting for German
   runApp(
     KglTimeApp(
       appTitle: 'KGL Time',
-      initialEntries: initialEntries,
-      initialCategories: initialCategories,
-      initialKeyValueStorage: initialKeyValueStorage,
+      initialEntries: data.entries,
+      initialCategories: data.categories,
+      initialKeyValueStorage: data.keyValues,
     ),
   );
 }

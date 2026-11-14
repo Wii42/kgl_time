@@ -13,6 +13,7 @@ import 'app_view.dart';
 import 'data_model/work_categories.dart';
 import 'data_model/work_entries.dart';
 import 'data_model/work_entry.dart';
+import 'l10n/app_locales.dart';
 
 class KglTimeApp extends StatefulWidget {
   final String appTitle;
@@ -96,12 +97,7 @@ class _KglTimeAppState extends State<KglTimeApp> {
           ...GlobalMaterialLocalizations.delegates,
           AppLocalizations.delegate,
         ],
-        supportedLocales: [
-          Locale('en'),
-          Locale('de'),
-          Locale('de', 'CH'),
-          Locale('de', 'AT'),
-        ],
+        supportedLocales: supportedAppLocales,
       ),
     );
   }
