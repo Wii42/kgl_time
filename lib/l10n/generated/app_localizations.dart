@@ -638,6 +638,24 @@ abstract class AppLocalizations {
   /// **'Undo'**
   String get undo;
 
+  /// No description provided for @undoImportTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo backup import?'**
+  String get undoImportTitle;
+
+  /// No description provided for @undoImportChangesWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This will restore the data from before the import. Changes made since the import will be lost.'**
+  String get undoImportChangesWarning;
+
+  /// No description provided for @undoImportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to undo the backup import'**
+  String get undoImportFailed;
+
   /// No description provided for @dateOfBackup.
   ///
   /// In en, this message translates to:

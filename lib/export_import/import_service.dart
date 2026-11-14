@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:clock/clock.dart';
-import 'package:flutter/foundation.dart' show AsyncCallback, defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:kgl_time/export_import/work_data.dart';
 import 'package:share_plus/share_plus.dart';
@@ -11,6 +11,12 @@ import '../data_model/work_categories.dart';
 import '../data_model/work_entries.dart';
 import '../main.dart';
 import '../persistent_storage/persistent_storage_service.dart';
+
+typedef UndoImport = Future<void> Function({bool discardChanges});
+
+class ImportUndoRequiresConfirmation implements Exception {
+  const ImportUndoRequiresConfirmation();
+}
 
 class ImportService {
   /// Native platforms supported by the file picker plugin. Web is unsupported.
@@ -57,11 +63,12 @@ class ImportService {
   /// replacing their contents only after the storage transaction commits.
   ///
   /// Returns an asynchronous undo action using a separate snapshot of the previous data.
-  /// Undo rejects changes made since the import rather than overwriting them.
-  Future<AsyncCallback> importAndReplace(
+  /// Undo requires explicit confirmation to discard changes made since the import.
+  Future<UndoImport> importAndReplace(
     WorkData workData,
     WorkEntries entriesList,
-    WorkCategories categoriesList,) async {
+    WorkCategories categoriesList,
+  ) async {
     final WorkData currentData = _copy(
       WorkData(
         workEntries: entriesList.entriesIncludingTrash,
@@ -73,9 +80,9 @@ class ImportService {
     await _replaceAndPublish(_copy(workData), entriesList, categoriesList);
     final String importedState = _stateJson(entriesList, categoriesList);
 
-    return () async {
-      if (_stateJson(entriesList, categoriesList) != importedState) {
-        throw StateError('Cannot undo an import after the work data has changed');
+    return ({bool discardChanges = false}) async {
+      if (!discardChanges && _stateJson(entriesList, categoriesList) != importedState) {
+        throw const ImportUndoRequiresConfirmation();
       }
       await _replaceAndPublish(_copy(currentData), entriesList, categoriesList);
     };

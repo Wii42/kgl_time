@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart' show AsyncCallback;
 import 'package:kgl_time/export_import/work_data.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +10,7 @@ import '../l10n/generated/app_localizations.dart';
 import '../main.dart';
 import '../utils/format_duration.dart';
 import 'import_service.dart';
+import 'undo_import_confirmation_dialog.dart';
 
 class ImportReplaceConfirmationDialog extends StatefulWidget {
   const ImportReplaceConfirmationDialog({super.key, required this.loadedData});
@@ -29,10 +29,11 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
     final WorkEntries entriesList = context.read<WorkEntries>();
     final WorkCategories categoriesList = context.read<WorkCategories>();
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final NavigatorState navigator = Navigator.of(context);
     final AppLocalizations? loc = AppLocalizations.of(context);
     setState(() => _isImporting = true);
     try {
-      final AsyncCallback revertImport = await ImportService().importAndReplace(
+      final UndoImport revertImport = await ImportService().importAndReplace(
         widget.loadedData,
         entriesList,
         categoriesList,
@@ -47,11 +48,20 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
             onPressed: () async {
               try {
                 await revertImport();
+              } on ImportUndoRequiresConfirmation {
+                if (navigator.mounted) {
+                  await showDialog<void>(
+                    context: navigator.context,
+                    builder: (BuildContext context) => UndoImportConfirmationDialog(
+                      onUndo: () => revertImport(discardChanges: true),
+                    ),
+                  );
+                }
               } catch (error, stackTrace) {
                 log('Failed to undo backup import', error: error, stackTrace: stackTrace);
                 if (messenger.mounted) {
                   messenger.showSnackBar(
-                    SnackBar(content: Text(loc?.importFailed ?? '<Import failed.>')),
+                    SnackBar(content: Text(loc?.undoImportFailed ?? '<Undo failed.>')),
                   );
                 }
               }

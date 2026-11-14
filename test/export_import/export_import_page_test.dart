@@ -6,11 +6,14 @@ import 'package:flutter/foundation.dart' show TargetPlatform, debugDefaultTarget
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kgl_time/data_model/key_values.dart';
+import 'package:kgl_time/data_model/value.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/export_import/export_entries_card.dart';
 import 'package:kgl_time/export_import/import_replace_confirmation_dialog.dart';
+import 'package:kgl_time/export_import/undo_import_confirmation_dialog.dart';
 import 'package:kgl_time/export_import/work_data.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/export_import_page.dart';
@@ -100,6 +103,31 @@ void main() {
   Future<void> confirm(WidgetTester tester) async {
     await tester.tap(find.widgetWithText(TextButton, 'Import backup and replace existing entries'));
     await tester.pumpAndSettle();
+  }
+
+  Future<void> importAndEdit(WidgetTester tester, {bool editCategory = false}) async {
+    await launch(tester);
+    final WorkData backup = WorkData.fromJson(backupFixture());
+    backup.workEntries.first.description = 'Imported description';
+    await openConfirmation(tester, backup);
+    await confirm(tester);
+    if (editCategory) {
+      final WorkCategory original = categories.entries.first;
+      categories.updateEntry(
+        original,
+        WorkCategory('Later category', listIndex: original.listIndex)..id = original.id,
+      );
+    } else {
+      final WorkEntry original = entries.entries.single;
+      entries.updateEntry(
+        original,
+        original.copyWith(description: const Value<String?>('Later edit')),
+      );
+    }
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+    expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
   }
 
   Future<Map<String, dynamic>> saveBackup(WidgetTester tester) async {
@@ -290,6 +318,7 @@ void main() {
     expect(entries.entriesIncludingTrash, isEmpty);
     await tester.tap(find.text('Undo'));
     await tester.pumpAndSettle();
+    expect(find.byType(UndoImportConfirmationDialog), findsNothing);
     expect(entries.entriesIncludingTrash, hasLength(2));
     expect(categories.entries, hasLength(2));
     expect(await storage.workEntries.loadEntries(), hasLength(2));
@@ -313,13 +342,115 @@ void main() {
     storage.acceptReplacement = false;
     await tester.tap(find.text('Undo'));
     await tester.pumpAndSettle();
-    expect(find.text('Import failed'), findsOneWidget);
+    expect(find.text('Failed to undo the backup import'), findsOneWidget);
     expect(entries.entriesIncludingTrash, isEmpty);
     expect(categories.entries, isEmpty);
     expect(await storage.workEntries.loadEntries(), isEmpty);
     expect(await storage.workCategories.loadEntries(), isEmpty);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('cancelling undo after edits preserves the changed dataset', (
+    WidgetTester tester,
+  ) async {
+    await importAndEdit(tester);
+    expect(find.text('Undo backup import?'), findsOneWidget);
+    expect(
+      find.text(
+        'This will restore the data from before the import. Changes made since the import will be lost.',
+      ),
+      findsOneWidget,
+    );
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Cancel'));
+    await tester.pumpAndSettle();
+    expect(find.byType(UndoImportConfirmationDialog), findsNothing);
+    expect(entries.entries.single.description, 'Later edit');
+    expect(
+      (await storage.workEntries.loadEntries())
+          .singleWhere((WorkEntry entry) => entry.id == 42)
+          .description,
+      'Later edit',
+    );
+    expect(storage.replacementCalls, 1);
+  });
+
+  testWidgets('confirmed undo of category edits stays open and blocks dismissal until committed', (
+    WidgetTester tester,
+  ) async {
+    await importAndEdit(tester, editCategory: true);
+    // The captured snapshot remains available after the snackbar's lifetime.
+    await tester.pump(const Duration(seconds: 40));
+    await tester.pumpAndSettle();
+    final Completer<void> barrier = Completer<void>();
+    storage.workCategories.writeBarrier = barrier;
+    try {
+      await tester.tap(find.widgetWithText(TextButton, 'Undo'));
+      await tester.pumpAndSettle();
+      expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
+      expect(tester.widget<TextButton>(find.widgetWithText(TextButton, 'Undo')).onPressed, isNull);
+      expect(
+        tester.widget<ElevatedButton>(find.widgetWithText(ElevatedButton, 'Cancel')).onPressed,
+        isNull,
+      );
+      expect(categories.entries.first.displayName, 'Later category');
+      expect(entries.entries.single.description, 'Imported description');
+      expect(storage.replacementCalls, 2);
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
+      await tester.tapAt(const Offset(5, 5));
+      await tester.pumpAndSettle();
+      expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
+    } finally {
+      barrier.complete();
+      await tester.pumpAndSettle();
+    }
+    expect(find.byType(UndoImportConfirmationDialog), findsNothing);
+    expect(categories.entries.first.displayName, 'Planning');
+    expect(
+      entries.entries.single.description,
+      (backupFixture()['workEntries'] as List<Map<String, dynamic>>).first['description'],
+    );
+    expect((await storage.workCategories.loadEntries()).first.displayName, 'Planning');
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final bool throwsError in <bool>[true, false]) {
+    testWidgets(
+      'failed confirmed undo preserves edits and allows retry (exception: $throwsError)',
+      (WidgetTester tester) async {
+        await importAndEdit(tester);
+        storage.workCategories.failWrites = throwsError;
+        storage.acceptReplacement = throwsError;
+        await tester.tap(find.widgetWithText(TextButton, 'Undo'));
+        await tester.pumpAndSettle();
+        expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
+        expect(find.text('Failed to undo the backup import'), findsOneWidget);
+        expect(entries.entries.single.description, 'Later edit');
+        expect(
+          (await storage.workEntries.loadEntries())
+              .singleWhere((WorkEntry entry) => entry.id == 42)
+              .description,
+          'Later edit',
+        );
+        expect(
+          tester.widget<TextButton>(find.widgetWithText(TextButton, 'Undo')).onPressed,
+          isNotNull,
+        );
+        storage.workCategories.failWrites = false;
+        storage.acceptReplacement = true;
+        await tester.tap(find.widgetWithText(TextButton, 'Undo'));
+        await tester.pumpAndSettle();
+        expect(find.byType(UndoImportConfirmationDialog), findsNothing);
+        expect(
+          entries.entries.single.description,
+          (backupFixture()['workEntries'] as List<Map<String, dynamic>>).first['description'],
+        );
+        expect(storage.replacementCalls, 3);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets('unsupported backup formats cannot be confirmed', (WidgetTester tester) async {
     await launch(tester);

@@ -296,6 +296,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get undo => 'Rückgängig';
 
   @override
+  String get undoImportTitle => 'Backup-Import rückgängig machen?';
+
+  @override
+  String get undoImportChangesWarning =>
+      'Dadurch werden die Daten vor dem Import wiederhergestellt. Änderungen seit dem Import gehen verloren.';
+
+  @override
+  String get undoImportFailed => 'Der Backup-Import konnte nicht rückgängig gemacht werden';
+
+  @override
   String dateOfBackup(Object date) {
     return 'Datum des Backups: $date';
   }

@@ -291,6 +291,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get undo => 'Undo';
 
   @override
+  String get undoImportTitle => 'Undo backup import?';
+
+  @override
+  String get undoImportChangesWarning =>
+      'This will restore the data from before the import. Changes made since the import will be lost.';
+
+  @override
+  String get undoImportFailed => 'Failed to undo the backup import';
+
+  @override
   String dateOfBackup(Object date) {
     return 'Date of backup: $date';
   }

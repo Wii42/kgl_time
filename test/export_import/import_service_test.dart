@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart' show AsyncCallback;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kgl_time/data_model/value.dart';
@@ -126,8 +125,7 @@ void main() {
       await storage.close();
     });
 
-    Future<AsyncCallback> restore() =>
-        ImportService().importAndReplace(backup, entries, categories);
+    Future<UndoImport> restore() => ImportService().importAndReplace(backup, entries, categories);
 
     Future<Object?> state() async => jsonDecode(
       jsonEncode(<String, Object?>{
@@ -184,7 +182,7 @@ void main() {
       final Object? before = await state();
       final WorkEntry oldEntry = entries.entries.single;
       final WorkCategory oldCategory = categories.entries.single;
-      final AsyncCallback undo = await restore();
+      final UndoImport undo = await restore();
       final Object? imported = await state();
       oldEntry.description = 'Changed stale reference';
       oldEntry.categories.single.displayName = 'Changed stale category';
@@ -209,7 +207,7 @@ void main() {
 
     for (final bool throwsError in <bool>[true, false]) {
       test('failed undo preserves the imported data (exception: $throwsError)', () async {
-        final AsyncCallback undo = await restore();
+        final UndoImport undo = await restore();
         final Object? imported = await state();
         storage.workCategories.failWrites = throwsError;
         storage.acceptReplacement = throwsError;
@@ -218,16 +216,20 @@ void main() {
       });
     }
 
-    test('undo rejects subsequent edits instead of overwriting them', () async {
-      final AsyncCallback undo = await restore();
+    test('undo requires confirmation before discarding later edits', () async {
+      final Object? before = await state();
+      final UndoImport undo = await restore();
       final WorkEntry entry = entries.entries.single;
       final WorkEntry edited = entry.copyWith(description: const Value<String?>('New work'));
       entries.updateEntry(entry, edited);
       await Future<void>.delayed(Duration.zero);
       final Object? changed = await state();
-      await expectLater(undo(), throwsStateError);
+      await expectLater(undo(), throwsA(isA<ImportUndoRequiresConfirmation>()));
       expect(await state(), changed);
       expect(storage.replacementCalls, 1);
+      await undo(discardChanges: true);
+      expect(await state(), before);
+      expect(storage.replacementCalls, 2);
     });
 
     test(
