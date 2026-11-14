@@ -1,4 +1,5 @@
 import 'package:isar_community/isar.dart';
+import 'package:kgl_time/data_model/value.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 
 import 'isar_storable.dart';
@@ -93,19 +94,40 @@ class WorkEntry implements IsarStorable {
   }
 
   WorkEntry withTrashStatus(DateTime? movedToTrashAt, {bool? tickedOff}) {
-    return WorkEntry(
-      workDurationInSeconds: workDurationInSeconds,
-      date: date,
-      description: description,
-      categories: categories,
-      startTime: startTime,
-      endTime: endTime,
-      lastEdit: lastEdit,
+    return copyWith(
       tickedOff: tickedOff ?? this.tickedOff,
-      createType: createType,
-      wasEdited: wasEdited,
-      wasMovedToTrashAt: movedToTrashAt,
+      wasMovedToTrashAt: Value<DateTime?>(movedToTrashAt),
     );
+  }
+
+  WorkEntry copyWith({
+    int? workDurationInSeconds,
+    DateTime? date,
+    Value<String?>? description,
+    List<EmbeddedWorkCategory>? categories,
+    Value<DateTime?>? startTime,
+    Value<DateTime?>? endTime,
+    Value<DateTime?>? lastEdit,
+    bool? tickedOff,
+    Value<CreateWorkEntryType?>? createType,
+    bool? wasEdited,
+    Value<DateTime?>? wasMovedToTrashAt,
+  }) {
+    return WorkEntry(
+      workDurationInSeconds: workDurationInSeconds ?? this.workDurationInSeconds,
+      date: date ?? this.date,
+      description: description == null ? this.description : description.value,
+      categories: categories ?? this.categories,
+      startTime: startTime == null ? this.startTime : startTime.value,
+      endTime: endTime == null ? this.endTime : endTime.value,
+      lastEdit: lastEdit == null ? this.lastEdit : lastEdit.value,
+      tickedOff: tickedOff ?? this.tickedOff,
+      createType: createType == null ? this.createType : createType.value,
+      wasEdited: wasEdited ?? this.wasEdited,
+      wasMovedToTrashAt: wasMovedToTrashAt == null
+          ? this.wasMovedToTrashAt
+          : wasMovedToTrashAt.value,
+    )..id = id;
   }
 
   @override
