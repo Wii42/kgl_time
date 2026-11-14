@@ -78,32 +78,26 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ## Changelog
 
-### Unreleased
+### v0.3.6
 
 #### Added
 
-- Swipe left or right to switch between Home, All Entries, and Categories. Tab switching requires
-  a swipe within 20 degrees of horizontal so diagonal drags can scroll the page vertically.
-- Reveal the app bar when switching tabs or returning to a page, keeping the content's scroll
-  position.
+- Swipe left or right to switch between Home, All Entries, and Categories.
 
 #### Changed
 
 - New installations start with Planning, Meetings, and Administration categories, translated into
-  the app's language. Existing categories are kept unchanged.
-- Keep the app bar fixed when the page content fits or the available page height is at least 800
-  logical pixels; otherwise, let it hide while scrolling overflowing content. Scrolling works with
-  both page content and animated entry lists without jumping back to the top or being covered by
-  the fixed app bar. Preserve the content's scroll position when rotating the device or resizing
-  the window.
+  the app's language.
+- Keep the app bar visible when content fits or there is enough vertical space. On smaller screens,
+  it hides while scrolling and reappears when switching tabs or returning to a page.
 
 #### Fixed
 
-- Disable unsupported export actions and explain when saving or sharing files is unavailable on
-  the current platform.
-- Remove the misleading sharing success message, since opening another app does not confirm that
-  the file was sent.
-- Keep the system status bar text and icons white, including when the app bar scrolls out of view.
+- Prevent scroll jumps and content being hidden behind the app bar. Keep the scroll position when
+  rotating the device or resizing the window.
+- Explain unavailable save and share actions, disable their buttons, and remove misleading sharing
+  success messages.
+- Keep status bar text and icons white for both dark and light mode.
 
 ### v0.3.5
 

@@ -1,81 +1,137 @@
 # Privacy Policy for KGL Time
 
-**Effective Date:** October 22, 2024
+**Last updated:** November 14, 2026
 
-## Introduction
+## Developer and Contact
 
-KGL Time is a simple time tracking app designed to help users manage their work hours efficiently. The privacy of users is important, and this privacy policy explains how any information may be handled when using the app.
+KGL Time is a time tracking app developed by Lukas Künzi. For privacy inquiries, contact the
+developer at [wi42.dev@gmail.com](mailto:wi42.dev@gmail.com).
 
-## Information That Is Not Collected
+**Website:** [wi42.dev](https://wi42.dev)
 
-KGL Time does not collect, store, or share any personal information from its users. The app operates without the need for user data and does not require any registration or login. However, any data entered by the user, such as work hours and timestamps, will be stored locally on the device.
+## Local Data Processing
 
-## Third-Party Services
+The app stores working times, dates, descriptions, categories, and settings on your device. This
+data is used to track, analyze, and manage your work entries. No registration is required. KGL Time
+does not automatically transmit your work data to the developer and does not include embedded
+analytics or advertising services. The developer has no remote access to your locally stored work
+data.
 
-No third-party services are utilized that collect personal data. KGL Time is designed to ensure that the user experience is free from data collection.
+Data is stored in your device's file system and is subject to its access controls and security
+mechanisms.
 
-## User Communication
+## Retention and Deletion
 
-Since no personal information is collected, there are no communications sent via email or push notifications. Questions or feedback can be directed to the contact information provided below.
+Work data remains stored until it is deleted. Deleted work entries can initially be restored from
+the trash for 30 days. After this period, they are removed when the app starts. App data can also be
+deleted using the operating system's features. This does not delete exported files, shared copies,
+or device backups.
 
-## Legal Jurisdiction
+## Export, Sharing, and Device Backups
 
-This privacy policy is governed by the laws of Switzerland.
+At your request, work data, including descriptions and categories, can be exported as CSV or shared
+with other apps. Temporary files may be created in the process. Depending on your chosen storage
+location or recipient, data may also be transferred to cloud services or other people. The privacy
+policies of the respective providers apply to these copies.
 
-## Developer Information
+Depending on your device settings, app data may be included in operating system backups or
+transferred to another device, for example through Google on Android. Backups and the deletion of
+these copies are managed by the operating system or backup provider.
 
-KGL Time is developed by Lukas Künzi.
+## Google Play
 
-## Contact Information
+For installations distributed through Google Play, Google may process installation and usage
+information as well as technical diagnostic data. The developer can access aggregated usage
+statistics and technical reports, such as crash reports, through Play Console to assess app usage
+and reliability. According to Google, Android diagnostic reports are based on users opting to
+share usage and diagnostics data.
 
-For any questions about this privacy policy, please contact:
+Google processes this information under its own terms and the applicable settings. For more
+information, see [Google's Privacy Policy](https://policies.google.com/privacy?hl=en).
 
-**Email:** [wi42.dev@gmail.com](mailto:wi42.dev@gmail.com)
+## External Links and Support
 
-**Website:** [https://wi42.dev](https://wi42.dev)
+When you open external links, such as the privacy policy or release notes on GitHub, the providers
+may process connection data such as your IP address. Their privacy policies apply, in particular
+[GitHub's Privacy Statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
 
-## Changes to This Privacy Policy
+If you contact the developer by email, your email address and message contents are processed to
+handle your inquiry. The respective email providers are also involved. KGL Time does not send
+marketing emails or push notifications.
 
-The privacy policy may be updated from time to time. Users will be informed of any changes directly within the app. It is advised to review this privacy policy periodically for any changes. Changes to this privacy policy are effective when they are posted in the app.
+## Changes
+
+The current privacy policy is accessible through the app's settings. We will inform you in the app
+about material changes to data processing.
 
 ---
 
 # Datenschutzrichtlinie für KGL Time
 
-**Gültigkeitsdatum:** 22. Oktober 2024
+**Stand:** 14. November 2026
 
-## Einleitung
+## Entwickler und Kontakt
 
-KGL Time ist eine einfache App zur Arbeitszeiterfassung, die Nutzern hilft, ihre Arbeitsstunden effizient zu verwalten. Der Schutz der Privatsphäre der Nutzer ist wichtig, und diese Datenschutzrichtlinie erklärt, wie Informationen behandelt werden, wenn die App verwendet wird.
+KGL Time ist eine App zur Arbeitszeiterfassung von Lukas Künzi. Für Datenschutzanfragen erreichen
+Sie
+den Entwickler unter [wi42.dev@gmail.com](mailto:wi42.dev@gmail.com).
 
-## Informationen, die nicht gesammelt werden
+**Website:** [wi42.dev](https://wi42.dev)
 
-KGL Time sammelt, speichert oder teilt keine persönlichen Informationen seiner Nutzer. Die App funktioniert ohne die Notwendigkeit von Nutzerdaten und erfordert keine Registrierung oder Anmeldung. Alle vom Nutzer eingegebenen Daten, wie Arbeitsstunden und Zeitstempel, werden jedoch lokal auf dem Gerät gespeichert.
+## Lokale Datenverarbeitung
 
-## Drittanbieter-Dienste
+Die App speichert Arbeitszeiten, Datum, Beschreibungen, Kategorien und Einstellungen auf Ihrem
+Gerät.
+Diese Daten dienen der Zeiterfassung, Auswertung und Verwaltung Ihrer Einträge. Eine Registrierung
+ist nicht erforderlich. KGL Time übermittelt Ihre Arbeitsdaten nicht automatisch an den Entwickler
+und enthält keine eingebundenen Analyse- oder Werbedienste. Der Entwickler hat keinen Fernzugriff
+auf Ihre lokal gespeicherten Arbeitsdaten.
 
-Es werden keine Drittanbieterdienste genutzt, die persönliche Daten sammeln. KGL Time wurde so konzipiert, dass die Benutzererfahrung frei von Datensammlungen ist.
+Die Speicherung erfolgt im Dateisystem Ihres Geräts und unterliegt dessen Zugriffs- und
+Schutzmechanismen.
 
-## Nutzerkommunikation
+## Aufbewahrung und Löschung
 
-Da keine persönlichen Informationen gesammelt werden, werden keine Kommunikationen per E-Mail oder Push-Benachrichtigungen gesendet. Fragen oder Feedback können an die unten angegebenen Kontaktinformationen gerichtet werden.
+Arbeitsdaten bleiben gespeichert, bis sie gelöscht werden. Gelöschte Arbeitseinträge sind zunächst
+für 30 Tage im Papierkorb wiederherstellbar und werden nach Ablauf dieser Frist beim Start der App
+entfernt. App-Daten können ausserdem über die Funktionen des Betriebssystems gelöscht werden.
+Exportierte Dateien, geteilte Kopien und Gerätesicherungen werden dadurch nicht mitgelöscht.
 
-## Rechtliche Zuständigkeit
+## Export, Teilen und Gerätesicherungen
 
-Diese Datenschutzrichtlinie unterliegt den Gesetzen der Schweiz.
+Auf Ihre Veranlassung können Arbeitsdaten einschliesslich Beschreibungen und Kategorien als CSV
+exportiert oder an andere Apps weitergegeben werden. Dabei können vorübergehende Dateien entstehen.
+Je nach gewähltem Speicherort oder Empfänger können die Daten auch an Cloud-Dienste oder andere
+Personen gelangen. Für diese Kopien gelten die Datenschutzbestimmungen der jeweiligen Anbieter.
 
-## Entwicklerinformationen
+Abhängig von Ihren Geräteeinstellungen können App-Daten in Betriebssystem-Sicherungen aufgenommen
+oder auf ein anderes Gerät übertragen werden, auf Android beispielsweise über Google. Sicherung und
+Löschung solcher Kopien werden vom Betriebssystem beziehungsweise Sicherungsanbieter verwaltet.
 
-KGL Time wird von Lukas Künzi entwickelt.
+## Google Play
 
-## Kontaktinformationen
+Bei einer Installation über Google Play kann Google Installations- und Nutzungsinformationen sowie
+technische Diagnosedaten verarbeiten. Der Entwickler kann über die Play Console zusammengefasste
+Nutzungsstatistiken und technische Berichte, etwa über Abstürze, einsehen, um die Nutzung und
+Zuverlässigkeit der App zu beurteilen. Android-Diagnoseberichte beruhen laut Google auf der Freigabe
+von Nutzungs- und Diagnosedaten durch die Nutzer.
 
-Für Fragen zu dieser Datenschutzrichtlinie kontaktieren Sie bitte:
+Diese Verarbeitung erfolgt durch Google nach dessen Bedingungen und den jeweiligen Einstellungen.
+Weitere Informationen finden Sie in
+der [Datenschutzerklärung von Google](https://policies.google.com/privacy?hl=de).
 
-**E-Mail:** [wi42.dev@gmail.com](mailto:wi42.dev@gmail.com)
+## Externe Links und Support
 
-**Website:** [https://wi42.dev](https://wi42.dev)
+Beim Öffnen externer Links, etwa zur Datenschutzerklärung und zu Versionshinweisen auf GitHub,
+können die Anbieter Verbindungsdaten wie Ihre IP-Adresse verarbeiten. Es gelten deren
+Datenschutzbestimmungen, insbesondere die
+[Datenschutzerklärung von GitHub](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
 
-## Änderungen an dieser Datenschutzrichtlinie
+Wenn Sie den Entwickler per E-Mail kontaktieren, werden Ihre E-Mail-Adresse und Nachrichteninhalte
+zur Bearbeitung Ihrer Anfrage verarbeitet. Dabei sind auch die beteiligten E-Mail-Anbieter
+eingebunden. KGL Time versendet keine Marketing-E-Mails oder Push-Benachrichtigungen.
 
-Die Datenschutzrichtlinie kann von Zeit zu Zeit aktualisiert werden. Nutzer werden über Änderungen direkt in der App informiert. Es wird empfohlen, diese Datenschutzrichtlinie regelmäßig auf Änderungen zu überprüfen. Änderungen an dieser Datenschutzrichtlinie werden wirksam, wenn sie in der App veröffentlicht werden.
+## Änderungen
+
+Die aktuelle Datenschutzerklärung ist über die Einstellungen der App erreichbar. Über wesentliche
+Änderungen der Datenbearbeitung informieren wir Sie in der App.
