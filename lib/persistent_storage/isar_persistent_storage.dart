@@ -38,6 +38,20 @@ class IsarPersistentStorage implements PersistentStorage {
   late final Table<WorkEntry> workEntries;
   @override
   late final KeyValueStorage keyValueStorage;
+
+  @override
+  Future<bool> replaceWorkData({
+    required List<WorkEntry> entries,
+    required List<WorkCategory> categories,
+  }) {
+    return isar.writeTxn<bool>(() async {
+      await isar.workEntries.clear();
+      await isar.workCategories.clear();
+      await isar.workEntries.putAll(entries);
+      await isar.workCategories.putAll(categories);
+      return true;
+    });
+  }
 }
 
 class IsarTable<T extends IsarStorable> implements Table<T> {

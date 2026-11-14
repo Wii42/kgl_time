@@ -6,11 +6,25 @@ import 'package:kgl_time/persistent_storage/persistent_storage_interface.dart';
 /// Test storage with no platform plugins or filesystem access.
 class MemoryStorage implements PersistentStorage {
   @override
-  final workEntries = MemoryTable<WorkEntry>();
+  final MemoryTable<WorkEntry> workEntries = MemoryTable<WorkEntry>();
   @override
-  final workCategories = MemoryTable<WorkCategory>();
+  final MemoryTable<WorkCategory> workCategories = MemoryTable<WorkCategory>();
   @override
-  final keyValueStorage = MemoryKeyValues();
+  final MemoryKeyValues keyValueStorage = MemoryKeyValues();
+
+  @override
+  Future<bool> replaceWorkData({
+    required List<WorkEntry> entries,
+    required List<WorkCategory> categories,
+  }) async {
+    final MemoryTable<WorkEntry> stagedEntries = MemoryTable<WorkEntry>();
+    final MemoryTable<WorkCategory> stagedCategories = MemoryTable<WorkCategory>();
+    await stagedEntries.saveEntries(entries);
+    await stagedCategories.saveEntries(categories);
+    workEntries._replaceWith(stagedEntries);
+    workCategories._replaceWith(stagedCategories);
+    return true;
+  }
 
   @override
   Future<void> initialize() async {}
@@ -21,6 +35,13 @@ class MemoryStorage implements PersistentStorage {
 class MemoryTable<T extends IsarStorable> implements Table<T> {
   final List<T> _entries = [];
   int _nextId = 1;
+
+  void _replaceWith(MemoryTable<T> staged) {
+    _entries
+      ..clear()
+      ..addAll(staged._entries);
+    _nextId = staged._nextId;
+  }
 
   @override
   Future<List<T>> loadEntries() async => List.of(_entries);

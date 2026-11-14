@@ -15,6 +15,15 @@ abstract class PersistentStorage {
 
   KeyValueStorage get keyValueStorage;
 
+  /// Atomically replaces all work entries and categories, leaving settings unchanged.
+  ///
+  /// Returns true only after both collections have been committed. A false result
+  /// or an exception leaves both collections unchanged. Exceptions may propagate.
+  Future<bool> replaceWorkData({
+    required List<WorkEntry> entries,
+    required List<WorkCategory> categories,
+  });
+
   /// Closes the persistent storage service.
   ///
   /// PersistentStorageService should not be used after calling this method,

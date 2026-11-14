@@ -34,6 +34,15 @@ class PersistentStorageService implements PersistentStorage {
     return _implementation!.initialize();
   }
 
+  @override
+  Future<bool> replaceWorkData({
+    required List<WorkEntry> entries,
+    required List<WorkCategory> categories,
+  }) {
+    _checkHasImplementation();
+    return _implementation!.replaceWorkData(entries: entries, categories: categories);
+  }
+
   void _checkHasImplementation() {
     if (_implementation == null) {
       throw StateError('No PersistentStorage implementation provided for PersistentStorageService');

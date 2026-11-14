@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:kgl_time/data_model/work_category.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
 
 import 'memory_storage.dart';
 
@@ -10,6 +11,17 @@ class ControlledBackupStorage extends MemoryStorage {
 
   @override
   ControlledCategoryTable get workCategories => _categories;
+
+  @override
+  Future<bool> replaceWorkData({
+    required List<WorkEntry> entries,
+    required List<WorkCategory> categories,
+  }) async {
+    final Completer<void>? barrier = workCategories.writeBarrier;
+    if (barrier != null) await barrier.future;
+    if (workCategories.failWrites) throw StateError('Injected category write failure');
+    return super.replaceWorkData(entries: entries, categories: categories);
+  }
 }
 
 class ControlledCategoryTable extends MemoryTable<WorkCategory> {
