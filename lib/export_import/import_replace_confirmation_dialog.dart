@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../data_model/work_categories.dart';
 import '../data_model/work_entries.dart';
-import '../format_duration.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../main.dart';
+import '../utils/format_duration.dart';
 import 'import_service.dart';
 
 class ImportReplaceConfirmationDialog extends StatelessWidget {

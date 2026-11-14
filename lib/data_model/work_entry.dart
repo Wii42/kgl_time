@@ -5,7 +5,7 @@ import 'package:kgl_time/data_model/value.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:uuid/uuid.dart';
 
-import '../format_duration.dart';
+import '../utils/format_duration.dart';
 import 'isar_storable.dart';
 
 part 'work_entry.g.dart';
