@@ -65,7 +65,7 @@ void main() {
     await storage.close();
   });
 
-  Future<void> launch(WidgetTester tester) async {
+  Future<void> launch(WidgetTester tester, {Locale locale = const Locale('en')}) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
     addTearDown(() => debugDefaultTargetPlatformOverride = null);
     tester.view.physicalSize = const Size(1200, 1600);
@@ -80,9 +80,12 @@ void main() {
           ChangeNotifierProvider<KeyValues>.value(value: settings),
         ],
         child: MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+            ...GlobalMaterialLocalizations.delegates,
+            AppLocalizations.delegate,
+          ],
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: const Locale('en'),
+          locale: locale,
           home: const ExportImportPage(appTitle: 'KGL Time'),
         ),
       ),
@@ -146,6 +149,41 @@ void main() {
     expect(saved['fileName'], endsWith('.json'));
     final Uint8List bytes = saved['data']! as Uint8List;
     return jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
+  }
+
+  for (final (Locale locale, String entryLabel, String categoryLabel) in
+  <(Locale, String, String)>[
+    (const Locale('en'), 'entries', 'categories'),
+    (const Locale('de'), 'Einträge', 'Kategorien'),
+  ]) {
+    for (final (int entryCount, int categoryCount) in <(int, int)>[(1, 3), (3, 1), (0, 3)]) {
+      testWidgets(
+        'backup preview shows $entryCount entries and $categoryCount categories in ${locale
+            .languageCode}',
+            (WidgetTester tester) async {
+          await launch(tester, locale: locale);
+          final WorkData backup = WorkData(
+            workEntries: List<WorkEntry>.generate(entryCount, (int index) =>
+            WorkEntry(
+              workDurationInSeconds: 60, date: DateTime.utc(2026, 11, 15),
+            )
+              ..id = index + 1),
+            workCategories: List<WorkCategory>.generate(categoryCount, (int index) =>
+            WorkCategory(
+              'Category $index', listIndex: index,
+            )
+              ..id = index + 1),
+            backupFormatVersion: 1,
+            exportedAt: DateTime.utc(2026, 11, 15),
+          );
+          await openConfirmation(tester, backup);
+          expect(
+              find.text('$entryCount $entryLabel, $categoryCount $categoryLabel'), findsOneWidget);
+          expect(backup.workEntries, hasLength(entryCount));
+          expect(backup.workCategories, hasLength(categoryCount));
+        },
+      );
+    }
   }
 
   testWidgets('saved JSON includes active entries, trash and ordered categories', (

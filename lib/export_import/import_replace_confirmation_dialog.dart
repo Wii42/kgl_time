@@ -127,8 +127,8 @@ class _ImportReplaceContent extends StatelessWidget {
         ),
         Text(
           loc?.nrOfEntriesAndCategories(
-                loadedData.workEntries.length,
                 loadedData.workCategories.length,
+                loadedData.workEntries.length,
               ) ??
               "<Number of entries and categories>",
         ),
