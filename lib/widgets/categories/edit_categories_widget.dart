@@ -3,11 +3,11 @@ import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
-import 'data_model/work_categories.dart';
-import 'data_model/work_category.dart';
-import 'data_model/work_entries.dart';
-import 'data_model/work_entry.dart';
-import 'delete_dialog.dart';
+import '../../data_model/work_categories.dart';
+import '../../data_model/work_category.dart';
+import '../../data_model/work_entries.dart';
+import '../../data_model/work_entry.dart';
+import '../delete_dialog.dart';
 
 class EditCategoriesWidget extends StatelessWidget {
   const EditCategoriesWidget({super.key});

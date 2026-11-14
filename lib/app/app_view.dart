@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:kgl_time/app_layout_constants.dart';
+import 'package:kgl_time/app/app_layout_constants.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_navigation/material_navigation.dart';
 import 'package:material_ui/material_ui.dart' hide NavigationBar, NavigationDestination;

@@ -1,7 +1,7 @@
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/format_duration.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:kgl_time/utils/format_duration.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'work_entry_widget.dart';

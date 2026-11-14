@@ -1,17 +1,17 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kgl_time/always_filling_scroll_view.dart';
-import 'package:kgl_time/app_layout_constants.dart';
+import 'package:kgl_time/app/app_layout_constants.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/format_duration.dart';
-import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
-import 'package:kgl_time/select_categories.dart';
+import 'package:kgl_time/utils/format_duration.dart';
+import 'package:kgl_time/utils/helpers.dart';
+import 'package:kgl_time/widgets/categories/select_categories.dart';
+import 'package:kgl_time/widgets/layout/always_filling_scroll_view.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 

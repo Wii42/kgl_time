@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:kgl_time/animated_branch_container.dart';
-import 'package:kgl_time/app_route.dart';
+import 'package:kgl_time/app/animated_branch_container.dart';
+import 'package:kgl_time/app/app_route.dart';
+import 'package:kgl_time/app/kgl_time_app.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/kgl_time_app.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
-import 'package:kgl_time/width_constrained_list_view.dart';
+import 'package:kgl_time/widgets/layout/width_constrained_list_view.dart';
 import 'package:material_navigation/material_navigation.dart' as navigation;
 import 'package:material_ui/material_ui.dart';
 

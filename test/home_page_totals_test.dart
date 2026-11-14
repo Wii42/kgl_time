@@ -2,7 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
-import 'package:kgl_time/kgl_time_app.dart';
+import 'package:kgl_time/app/kgl_time_app.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:material_ui/material_ui.dart';
 

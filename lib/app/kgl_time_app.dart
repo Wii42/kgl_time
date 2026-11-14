@@ -1,19 +1,19 @@
 import 'package:go_router/go_router.dart';
-import 'package:kgl_time/app_route.dart';
-import 'package:kgl_time/color_theme_extension.dart';
+import 'package:kgl_time/app/app_route.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_category.dart';
-import 'package:kgl_time/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:kgl_time/theme/color_theme_extension.dart';
+import 'package:kgl_time/utils/helpers.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
+import '../data_model/work_categories.dart';
+import '../data_model/work_entries.dart';
+import '../data_model/work_entry.dart';
+import '../l10n/app_locales.dart';
 import 'animated_branch_container.dart';
 import 'app_view.dart';
-import 'data_model/work_categories.dart';
-import 'data_model/work_entries.dart';
-import 'data_model/work_entry.dart';
-import 'l10n/app_locales.dart';
 
 class KglTimeApp extends StatefulWidget {
   final String appTitle;

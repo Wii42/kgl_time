@@ -1,17 +1,17 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 import 'package:clock/clock.dart';
-import 'package:kgl_time/color_theme_extension.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_entries.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
-import 'package:kgl_time/select_category_dialog.dart';
+import 'package:kgl_time/theme/color_theme_extension.dart';
+import 'package:kgl_time/widgets/categories/select_category_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:timer_builder/timer_builder.dart';
 
-import 'data_model/work_category.dart';
+import '../../data_model/work_category.dart';
 
 class WorkEntryTimeTracker extends StatelessWidget {
   static const String _storageKey = 'timeTrackerStart';
@@ -30,8 +30,9 @@ class WorkEntryTimeTracker extends StatelessWidget {
 
     Color indicatorColor(bool isTracking, ThemeData theme) {
       ColorThemeExtension? colorTheme = theme.extension<ColorThemeExtension>();
-      return isTracking ? colorTheme?.actionColor ?? theme.highlightColor : colorTheme
-          ?.primaryColor ?? theme.primaryColor;
+      return isTracking
+          ? colorTheme?.actionColor ?? theme.highlightColor
+          : colorTheme?.primaryColor ?? theme.primaryColor;
     }
 
     AppLocalizations? loc = AppLocalizations.of(context);

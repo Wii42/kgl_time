@@ -1,7 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
-import '../data_model/work_entries.dart';
+import '../../data_model/work_entries.dart';
 import 'work_entry_details_content.dart';
 import 'work_entry_widget.dart';
 
@@ -23,7 +23,9 @@ class WorkEntryDetails extends WorkEntryWidget {
           },
           shape: CircleBorder(),
           side: BorderSide(
-            color: Theme.of(context).dividerColor,
+            color: Theme
+                .of(context)
+                .dividerColor,
             width: 1,
           ),
           visualDensity: VisualDensity.compact,

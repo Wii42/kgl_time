@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kgl_time/app_initialization.dart';
+import 'package:kgl_time/app/app_initialization.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/l10n/app_locales.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';

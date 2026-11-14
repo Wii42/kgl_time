@@ -7,7 +7,7 @@ import 'package:kgl_time/enums/calendar_unit.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/all_entries_page.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
-import 'package:kgl_time/work_entry_widgets/work_entry_details.dart';
+import 'package:kgl_time/widgets/work_entries/work_entry_details.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 

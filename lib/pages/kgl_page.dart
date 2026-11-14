@@ -1,11 +1,11 @@
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kgl_time/app_layout_constants.dart';
-import 'package:kgl_time/content_aware_app_bar.dart';
+import 'package:kgl_time/app/app_layout_constants.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:kgl_time/widgets/layout/content_aware_app_bar.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../app_route.dart';
+import '../app/app_route.dart';
 
 abstract class KglPage extends StatelessWidget {
   final String appTitle;

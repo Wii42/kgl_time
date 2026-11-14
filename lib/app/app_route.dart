@@ -10,7 +10,7 @@ import 'package:kgl_time/pages/new_entry_page.dart';
 import 'package:kgl_time/pages/settings_page.dart';
 import 'package:material_ui/material_ui.dart';
 
-import 'data_model/work_entry.dart';
+import '../data_model/work_entry.dart';
 
 class AppRoute {
   final String path;

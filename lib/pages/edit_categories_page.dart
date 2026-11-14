@@ -1,7 +1,7 @@
-import 'package:kgl_time/always_filling_scroll_view.dart';
-import 'package:kgl_time/app_layout_constants.dart';
-import 'package:kgl_time/edit_categories_widget.dart';
+import 'package:kgl_time/app/app_layout_constants.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
+import 'package:kgl_time/widgets/categories/edit_categories_widget.dart';
+import 'package:kgl_time/widgets/layout/always_filling_scroll_view.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../l10n/generated/app_localizations.dart';

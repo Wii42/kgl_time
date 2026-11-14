@@ -1,10 +1,10 @@
 import 'dart:math';
 
-import 'package:kgl_time/app_layout_constants.dart';
+import 'package:kgl_time/app/app_layout_constants.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:material_ui/material_ui.dart';
 
-import 'always_filling_scroll_view.dart';
+import 'layout/always_filling_scroll_view.dart';
 
 class NoContentWidget extends StatelessWidget {
   final IconData? icon;
