@@ -234,6 +234,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sharingNotSupported => 'Sharing files is not supported on this platform.';
 
   @override
+  String get importingNotSupported => 'Importing files is not supported on this platform.';
+
+  @override
   String get workingTime => 'Working Time';
 
   @override
@@ -255,11 +258,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportTable => 'Export work entries as table';
 
   @override
+  String get exportBackup => 'Export backup of work entries';
+
+  @override
   String get exportCsvExplanation =>
       'Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.';
 
   @override
-  String get exportEntries => 'Export Entries';
+  String get exportJsonExplanation =>
+      'Creates a backup of all work entries  and categories as a JSON file. This file can be used to restore your entries later or to import them into another device.';
+
+  @override
+  String get importBackup => 'Import backup';
+
+  @override
+  String get importBackupExplanation =>
+      'Import a previously exported JSON backup file to restore your work entries and categories.';
+
+  @override
+  String get importBacupAndReplaceExistingEntries => 'Import backup and replace existing entries';
+
+  @override
+  String get importBacupAndReplace => 'Import backup and replace';
+
+  @override
+  String get importSuccess => 'Import successful';
+
+  @override
+  String get importFailed => 'Import failed';
+
+  @override
+  String get undo => 'Undo';
+
+  @override
+  String dateOfBackup(Object date) {
+    return 'Date of backup: $date';
+  }
+
+  @override
+  String nrOfEntriesAndCategories(Object nrOfCategories, Object nrOfEntries) {
+    return '$nrOfEntries entries, $nrOfCategories categories';
+  }
+
+  @override
+  String get backupFromNewerVersionWarning =>
+      'Warning: The backup was created with a newer version of the app. Some data might not be imported correctly. Consider updating the app first';
+
+  @override
+  String get importReplaceConfirmationDialog =>
+      'Do you really want to import the backup and replace all existing entries and categories?\nThis action cannot be undone after the action is completed.';
 
   @override
   String get withoutCategory => 'Without Category';

@@ -17,7 +17,7 @@ class WorkData {
   });
 
   Map<String, dynamic> toJson() => {
-    'schemaVersion': backupFormatVersion,
+    'backupFormatVersion': backupFormatVersion,
     'exportedAt': exportedAt.toIso8601String(),
     'workEntries': workEntries.map((e) => e.toJson()).toList(),
     'workCategories': workCategories.map((c) => c.toJson()).toList(),
@@ -25,7 +25,7 @@ class WorkData {
 
   factory WorkData.fromJson(Map<String, dynamic> json) {
     return WorkData(
-      backupFormatVersion: json['schemaVersion'],
+      backupFormatVersion: json['backupFormatVersion'],
       exportedAt: DateTime.parse(json['exportedAt']),
       workEntries: (json['workEntries'] as List<dynamic>)
           .map((e) => WorkEntry.fromJson(e as Map<String, dynamic>))

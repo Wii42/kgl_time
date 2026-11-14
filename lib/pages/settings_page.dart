@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
-import 'package:kgl_time/widgets/layout/always_filling_scroll_view.dart';
 import 'package:kgl_time/app/app_layout_constants.dart';
 import 'package:kgl_time/app/app_route.dart';
-import 'package:kgl_time/utils/helpers.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
+import 'package:kgl_time/utils/helpers.dart';
+import 'package:kgl_time/widgets/layout/always_filling_scroll_view.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,7 +45,7 @@ class SettingsPage extends KglPage {
             ),
             ElevatedButton.icon(
               onPressed: () => context.push(AppRoute.exportImport.path),
-              label: Text(loc?.exportEntries ?? "<Export/import entries>"),
+              label: Text(loc?.exportImportEntries ?? "<Export/import entries>"),
               icon: Icon(Icons.import_export_outlined),
             ),
             _AboutSection(),
