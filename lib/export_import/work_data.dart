@@ -3,6 +3,11 @@ import 'dart:developer';
 import '../data_model/work_category.dart';
 import '../data_model/work_entry.dart';
 
+class UnsupportedBackupFormatException extends FormatException {
+  UnsupportedBackupFormatException(int version)
+    : super('Unsupported backup format version: $version');
+}
+
 class WorkData {
   /// Each supported version must have a corresponding reader below.
   static bool isSupportedVersion(int version) => version == 1;
@@ -29,7 +34,7 @@ class WorkData {
   factory WorkData.fromJson(Map<String, dynamic> json) {
     final int version = _integer(json['backupFormatVersion'], 'backupFormatVersion');
     if (!isSupportedVersion(version)) {
-      throw FormatException('Unsupported backup format version: $version');
+      throw UnsupportedBackupFormatException(version);
     }
     final WorkData data = WorkData(
       backupFormatVersion: version,
@@ -59,7 +64,7 @@ class WorkData {
   /// Checks data constructed directly as well as data read from JSON.
   void validate() {
     if (!isSupportedVersion(backupFormatVersion)) {
-      throw FormatException('Unsupported backup format version: $backupFormatVersion');
+      throw UnsupportedBackupFormatException(backupFormatVersion);
     }
     final Set<int> entryIds = <int>{};
     for (final WorkEntry entry in workEntries) {

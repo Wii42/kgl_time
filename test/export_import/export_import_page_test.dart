@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:clock/clock.dart';
 import 'package:csv/csv.dart';
-import 'package:flutter/foundation.dart' show TargetPlatform, debugDefaultTargetPlatformOverride;
+import 'package:flutter/foundation.dart'
+    show AsyncCallback, TargetPlatform, debugDefaultTargetPlatformOverride;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kgl_time/data_model/key_values.dart';
@@ -669,19 +671,76 @@ void main() {
         TextButton,
         'Import backup and replace existing entries',
       );
-      if (button.evaluate().isNotEmpty) {
-        expect(tester.widget<TextButton>(button).onPressed, isNull);
-      }
-      expect(
-        find.text(
-          'This backup format is not supported and cannot be imported. If it was created with a newer app version, update the app first.',
-        ),
-        findsOneWidget,
-      );
+      expect(button, findsOneWidget);
+      expect(tester.widget<TextButton>(button).onPressed, isNull);
       expect(await storage.workEntries.loadEntries(), hasLength(2));
       await expectTrackerRunning();
       expect(storage.replacementCalls, 0);
     });
+  }
+
+  for (final Locale locale in <Locale>[const Locale('en'), const Locale('de')]) {
+    for (final int version in <int>[-1, 0, 2]) {
+      testWidgets(
+        'picking unsupported backup format $version shows an error dialog in ${locale.languageCode}',
+        (WidgetTester tester) async {
+          startTracker();
+          await launch(tester, locale: locale);
+          final Directory directory = Directory.systemTemp.createTempSync(
+            'kgl_unsupported_backup_',
+          );
+          addTearDown(() => directory.deleteSync(recursive: true));
+          final File file = File('${directory.path}/backup.json');
+          file.writeAsStringSync(jsonEncode(<String, int>{'backupFormatVersion': version}));
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(
+                channel,
+                (MethodCall call) async {
+                  expect(call.method, 'pickFile');
+                  return file.path;
+                },
+              );
+          final BuildContext pageContext = tester.element(find.byType(ExportImportPage));
+          final AppLocalizations loc = AppLocalizations.of(pageContext)!;
+          final String previousEntries = jsonEncode(entries.entriesIncludingTrash);
+          final String previousCategories = jsonEncode(categories.entries);
+          final String previousStoredEntries = jsonEncode(await storage.workEntries.loadEntries());
+          final String previousStoredCategories = jsonEncode(
+            await storage.workCategories.loadEntries(),
+          );
+          final Finder button = find.widgetWithText(
+            ElevatedButton,
+            loc.importBacupAndReplaceExistingEntries,
+          );
+          await tester.ensureVisible(button);
+          final AsyncCallback importBackup =
+              tester.widget<ElevatedButton>(button).onPressed! as AsyncCallback;
+          await tester.runAsync(importBackup);
+          await tester.pumpAndSettle();
+
+          expect(find.byType(AlertDialog), findsOneWidget);
+          expect(find.text(loc.unsupportedBackupFormatTitle), findsOneWidget);
+          expect(find.text(loc.unsupportedBackupFormat), findsOneWidget);
+          expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
+          expect(find.byType(SnackBar), findsNothing);
+          expect(storage.replacementCalls, 0);
+          expect(jsonEncode(entries.entriesIncludingTrash), previousEntries);
+          expect(jsonEncode(categories.entries), previousCategories);
+          expect(jsonEncode(await storage.workEntries.loadEntries()), previousStoredEntries);
+          expect(jsonEncode(await storage.workCategories.loadEntries()), previousStoredCategories);
+          await expectTrackerRunning();
+
+          final Finder okButton = find.widgetWithText(
+            TextButton,
+            MaterialLocalizations.of(pageContext).okButtonLabel,
+          );
+          await tester.tap(okButton);
+          await tester.pumpAndSettle();
+          expect(find.byType(AlertDialog), findsNothing);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
   }
 
   testWidgets('successful import cancels tracking instead of rebinding its categories', (

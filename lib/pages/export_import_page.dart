@@ -42,29 +42,27 @@ class ExportImportPage extends KglPage {
           children: [
             ExportEntriesCard(
               title: (loc) => loc?.exportTable ?? "<export as table>",
-              createFile: () =>
-              (
-              content: csvFileContent(context),
-              fileName: const ExportService().csvFileName(),
+              createFile: () => (
+                content: csvFileContent(context),
+                fileName: const ExportService().csvFileName(),
               ),
               mimeType: 'text/csv; charset=utf-8',
               explanationLabel: (loc) => loc?.exportCsvExplanation ?? "<Export as CSV explanation>",
             ),
             ExportEntriesCard(
               title: (loc) => loc?.exportBackup ?? "<export backup>",
-              createFile: () =>
-              (
-              content: jsonFileContent(context),
-              fileName: const ExportService().jsonFileName(),
+              createFile: () => (
+                content: jsonFileContent(context),
+                fileName: const ExportService().jsonFileName(),
               ),
               mimeType: 'application/json; charset=utf-8',
               explanationLabel: (loc) =>
-              loc?.exportJsonExplanation ?? "<export to JSON explanation>",
+                  loc?.exportJsonExplanation ?? "<export to JSON explanation>",
             ),
             ImportExportCard(
               title: (loc) => loc?.importBackup ?? "<import json>",
               explanationLabel: (loc) =>
-              loc?.importBackupExplanation ?? "<import backup explanation>",
+                  loc?.importBackupExplanation ?? "<import backup explanation>",
               actions: [
                 ElevatedButton.icon(
                   onPressed: canImport ? onImportJsonBackup(context) : null,
@@ -75,7 +73,7 @@ class ExportImportPage extends KglPage {
                 ),
               ],
               warningLabels: [
-                if (!canImport) (loc) => loc?.importingNotSupported ?? "<Importing not supported>"
+                if (!canImport) (loc) => loc?.importingNotSupported ?? "<Importing not supported>",
               ],
             ),
           ],
@@ -93,34 +91,45 @@ class ExportImportPage extends KglPage {
   }
 
   Uint8List jsonFileContent(BuildContext context) {
-    List<WorkEntry> entries = context
-        .read<WorkEntries>()
-        .entriesIncludingTrash;
-    List<WorkCategory> categories = context
-        .read<WorkCategories>()
-        .entries;
+    List<WorkEntry> entries = context.read<WorkEntries>().entriesIncludingTrash;
+    List<WorkCategory> categories = context.read<WorkCategories>().entries;
     return utf8.encode(ExportService().dataToJson(entries, categories));
   }
 
-  VoidCallback onImportJsonBackup(BuildContext context) =>
-          () async {
-        AppLocalizations? loc = AppLocalizations.of(context);
-        WorkData? loadedData = await ImportService().loadJsonBackup(
-          onError: (Object error) {
-            if (!context.mounted) return;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(loc?.importFailed ?? "<Import failed.>")),
-            );
-          },
-        );
-        if (loadedData == null) {
+  VoidCallback onImportJsonBackup(BuildContext context) => () async {
+    AppLocalizations? loc = AppLocalizations.of(context);
+    WorkData? loadedData = await ImportService().loadJsonBackup(
+      onError: (Object error) {
+        if (!context.mounted) return;
+        if (error is UnsupportedBackupFormatException) {
+          showDialog<void>(
+            context: context,
+            builder: (BuildContext dialogContext) => AlertDialog(
+              title: Text(loc?.unsupportedBackupFormatTitle ?? '<Unsupported backup format>'),
+              content: Text(loc?.unsupportedBackupFormat ?? '<Unsupported backup format>'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: Text(MaterialLocalizations.of(dialogContext).okButtonLabel),
+                ),
+              ],
+            ),
+          );
           return;
         }
-        if (context.mounted) {
-          showDialog(
-            context: context,
-            builder: (context) => ImportReplaceConfirmationDialog(loadedData: loadedData),
-          );
-        }
-      };
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(loc?.importFailed ?? "<Import failed.>")),
+        );
+      },
+    );
+    if (loadedData == null) {
+      return;
+    }
+    if (context.mounted) {
+      showDialog(
+        context: context,
+        builder: (context) => ImportReplaceConfirmationDialog(loadedData: loadedData),
+      );
+    }
+  };
 }

@@ -148,12 +148,6 @@ class _ImportReplaceContent extends StatelessWidget {
               ) ??
               "<Number of entries and categories>",
         ),
-        if (!WorkData.isSupportedVersion(loadedData.backupFormatVersion)) ...[
-          SizedBox(height: 12),
-          Text(
-            loc?.unsupportedBackupFormat ?? '<Unsupported backup format>',
-          ),
-        ],
         SizedBox(height: 12),
         Text(
           loc?.importReplaceConfirmationDialog ?? "<import replace confirmation dialog>",

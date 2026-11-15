@@ -36,6 +36,10 @@ void main() {
   for (final int version in <int>[-1, 0, 2]) {
     test('rejects unsupported backup format version $version', () {
       final Map<String, dynamic> json = backupFixture()..['backupFormatVersion'] = version;
+      expect(
+        () => WorkData.fromJson(json),
+        throwsA(isA<UnsupportedBackupFormatException>()),
+      );
       expect(WorkData.tryFromJson(json), isNull);
     });
   }

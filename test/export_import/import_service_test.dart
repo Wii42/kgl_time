@@ -99,7 +99,7 @@ void main() {
       await file.writeAsString(jsonEncode(json));
       expect(await ImportService().loadJsonBackup(onError: errors.add), isNull);
       expect(errors, hasLength(1));
-      expect(errors.single, isA<FormatException>());
+      expect(errors.single, isA<UnsupportedBackupFormatException>());
     });
   });
 

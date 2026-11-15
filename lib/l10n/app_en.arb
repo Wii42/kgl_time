@@ -98,6 +98,7 @@
   "undoImportCancelsTrackerWarning": "Undoing this import will cancel the current time tracker without saving the tracked time.",
   "dateOfBackup": "Date of backup: {date}",
   "nrOfEntriesAndCategories": "{nrOfEntries} entries, {nrOfCategories} categories",
+  "unsupportedBackupFormatTitle": "Unsupported backup format",
   "unsupportedBackupFormat": "This backup format is not supported and cannot be imported. If it was created with a newer app version, update the app first.",
   "importReplaceConfirmationDialog": "This will replace all existing entries and categories, including the trash. You can undo this only while the confirmation message at the bottom of the screen is visible.",
   "withoutCategory": "Without Category"

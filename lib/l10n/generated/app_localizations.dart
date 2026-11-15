@@ -686,6 +686,12 @@ abstract class AppLocalizations {
   /// **'{nrOfEntries} entries, {nrOfCategories} categories'**
   String nrOfEntriesAndCategories(Object nrOfCategories, Object nrOfEntries);
 
+  /// No description provided for @unsupportedBackupFormatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported backup format'**
+  String get unsupportedBackupFormatTitle;
+
   /// No description provided for @unsupportedBackupFormat.
   ///
   /// In en, this message translates to:

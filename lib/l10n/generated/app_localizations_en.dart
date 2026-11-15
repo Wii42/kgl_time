@@ -322,6 +322,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get unsupportedBackupFormatTitle => 'Unsupported backup format';
+
+  @override
   String get unsupportedBackupFormat =>
       'This backup format is not supported and cannot be imported. If it was created with a newer app version, update the app first.';
 

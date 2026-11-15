@@ -98,6 +98,7 @@
   "undoImportCancelsTrackerWarning": "Beim Rückgängigmachen dieses Imports wird die laufende Zeiterfassung abgebrochen, ohne die erfasste Zeit zu speichern.",
   "dateOfBackup": "Datum des Backups: {date}",
   "nrOfEntriesAndCategories": "{nrOfEntries} Einträge, {nrOfCategories} Kategorien",
+  "unsupportedBackupFormatTitle": "Nicht unterstütztes Backup-Format",
   "unsupportedBackupFormat": "Dieses Backup-Format wird nicht unterstützt und kann nicht importiert werden. Falls es mit einer neueren App-Version erstellt wurde, aktualisieren Sie zuerst die App.",
   "importReplaceConfirmationDialog": "Alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb werden ersetzt. Sie können dies nur rückgängig machen, solange die Bestätigungsmeldung am unteren Bildschirmrand sichtbar ist.",
   "withoutCategory": "Ohne Kategorie"
