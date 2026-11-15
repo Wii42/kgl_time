@@ -22,7 +22,7 @@ class WhatsNewDialog extends StatelessWidget {
       scrollable: true,
       title: Row(
         children: <Widget>[
-          Icon(Icons.rocket_launch_outlined, color: colorScheme.primary, size: 28),
+          Icon(Icons.new_releases_outlined, color: colorScheme.primary, size: 28),
           const SizedBox(width: 12),
           Expanded(child: Text(loc.whatsNew)),
         ],

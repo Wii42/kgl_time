@@ -175,7 +175,7 @@ class _AboutSection extends StatelessWidget {
           sectionTitle: loc?.aboutSection ?? '<About>',
           children: <Widget>[
             ListTile(
-              leading: const Icon(Icons.rocket_launch_outlined),
+              leading: const Icon(Icons.new_releases_outlined),
               title: Text(loc?.whatsNew ?? "<What's new>"),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => showDialog<void>(
