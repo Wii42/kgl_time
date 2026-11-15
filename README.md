@@ -15,6 +15,8 @@ with Flutter, the app stores work hours locally on your device and requires no a
 
 - **User-friendly Interface**: Easy to navigate and track work hours.
 - **Local Storage**: Work entries, categories, and settings are stored on your device.
+- **Backup and Restore**: Save or share JSON backups of all work entries and categories and restore
+  them when needed.
 - **No Registration Required**: Users can start tracking time immediately without the need for accounts or logins.
 
 <p>
