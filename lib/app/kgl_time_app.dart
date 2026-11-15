@@ -12,11 +12,17 @@ import '../data_model/work_categories.dart';
 import '../data_model/work_entries.dart';
 import '../data_model/work_entry.dart';
 import '../l10n/app_locales.dart';
+import '../persistent_storage/persistent_storage_service.dart';
+import '../whats_new/whats_new_controller.dart';
+import '../whats_new/whats_new_gate.dart';
 import 'animated_branch_container.dart';
 import 'app_view.dart';
 
 class KglTimeApp extends StatefulWidget {
   final String appTitle;
+
+  /// Installed version loaded by initializeApp; omitted in isolated widget previews.
+  final String? appVersion;
 
   final List<WorkEntry> initialEntries;
   final List<WorkCategory> initialCategories;
@@ -25,6 +31,7 @@ class KglTimeApp extends StatefulWidget {
   const KglTimeApp({
     super.key,
     required this.appTitle,
+    this.appVersion,
     this.initialEntries = const [],
     this.initialCategories = const [],
     this.initialKeyValueStorage = const {},
@@ -38,6 +45,9 @@ class _KglTimeAppState extends State<KglTimeApp> {
   final GlobalKey<NavigatorState> routerKey = GlobalKey(debugLabel: "globalRouter");
 
   late final GoRouter router;
+  late final WhatsNewController whatsNewController = WhatsNewController(
+    storage: PersistentStorageService.instance.keyValueStorage,
+  );
 
   @override
   void initState() {
@@ -93,6 +103,14 @@ class _KglTimeAppState extends State<KglTimeApp> {
         theme: theme(brightness: Brightness.light),
         darkTheme: theme(brightness: Brightness.dark),
         routerConfig: router,
+        builder: (BuildContext context, Widget? child) => widget.appVersion == null
+            ? child!
+            : WhatsNewGate(
+                controller: whatsNewController,
+                currentVersion: widget.appVersion!,
+                navigatorKey: routerKey,
+                child: child!,
+              ),
         localizationsDelegates: [
           ...GlobalMaterialLocalizations.delegates,
           AppLocalizations.delegate,

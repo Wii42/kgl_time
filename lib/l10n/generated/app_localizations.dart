@@ -140,6 +140,48 @@ abstract class AppLocalizations {
   /// **'What\'s new'**
   String get whatsNew;
 
+  /// No description provided for @whatsNewDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Got it'**
+  String get whatsNewDismiss;
+
+  /// No description provided for @highlightJsonBackupsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up your work'**
+  String get highlightJsonBackupsTitle;
+
+  /// No description provided for @highlightJsonBackupsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Save or share a JSON backup of all entries and categories, including the trash. Settings and running timers are excluded.'**
+  String get highlightJsonBackupsDescription;
+
+  /// No description provided for @highlightBackupRestoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore a backup'**
+  String get highlightBackupRestoreTitle;
+
+  /// No description provided for @highlightBackupRestoreDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview and restore your backup from Export / Import. This replaces existing entries and categories, with a temporary Undo option at the bottom of the screen.'**
+  String get highlightBackupRestoreDescription;
+
+  /// No description provided for @highlightSettingsSectionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clearer settings'**
+  String get highlightSettingsSectionsTitle;
+
+  /// No description provided for @highlightSettingsSectionsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Find appearance, data, and app information in separate sections in Settings.'**
+  String get highlightSettingsSectionsDescription;
+
   /// No description provided for @groupBy.
   ///
   /// In en, this message translates to:

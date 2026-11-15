@@ -16,6 +16,7 @@ void main() async {
   runApp(
     KglTimeApp(
       appTitle: 'KGL Time',
+      appVersion: data.appInfo.version,
       initialEntries: data.entries,
       initialCategories: data.categories,
       initialKeyValueStorage: data.keyValues,

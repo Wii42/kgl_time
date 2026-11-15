@@ -74,6 +74,13 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ## Changelog
 
+### Unreleased
+
+#### Added
+
+- Show localized release highlights once after updates, combining missed releases in one dialog.
+  Fresh installations start without historical announcements.
+
 ### v0.4.0
 
 #### Added
