@@ -175,7 +175,19 @@ class _AboutSection extends StatelessWidget {
           sectionTitle: loc?.aboutSection ?? '<About>',
           children: <Widget>[
             ListTile(
-              leading: const Icon(Icons.waving_hand_outlined),
+              leading: const Icon(Icons.rocket_launch_outlined),
+              title: Text(loc?.whatsNew ?? "<What's new>"),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (BuildContext context) => WhatsNewDialog(
+                  highlights: WhatsNewController.recentHighlights(appInfo.version),
+                  currentVersion: appInfo.version,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.explore_outlined),
               title: Text(loc?.gettingStarted ?? '<Getting started>'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () async {
@@ -190,18 +202,6 @@ class _AboutSection extends StatelessWidget {
                 );
                 if (context.mounted) await controller.acknowledge();
               },
-            ),
-            ListTile(
-              leading: const Icon(Icons.rocket_launch_outlined),
-              title: Text(loc?.whatsNew ?? "<What's new>"),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => showDialog<void>(
-                context: context,
-                builder: (BuildContext context) => WhatsNewDialog(
-                  highlights: WhatsNewController.recentHighlights(appInfo.version),
-                  currentVersion: appInfo.version,
-                ),
-              ),
             ),
             Tooltip(
               message: contactUri.toString(),

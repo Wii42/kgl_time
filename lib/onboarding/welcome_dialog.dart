@@ -11,12 +11,9 @@ class WelcomeDialog extends StatelessWidget {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     return AlertDialog(
       scrollable: true,
-      title: Row(
-        children: <Widget>[
-          Icon(Icons.waving_hand_outlined, color: colorScheme.primary, size: 28),
-          const SizedBox(width: 12),
-          Expanded(child: Text(loc.welcomeTitle)),
-        ],
+      title: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Text(loc.welcomeTitle),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -35,7 +32,7 @@ class WelcomeDialog extends StatelessWidget {
           ),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: Icon(Icons.backup_outlined, color: colorScheme.primary),
+            leading: Icon(Icons.save_alt_outlined, color: colorScheme.primary),
             title: Text(loc.welcomeBackupsTitle),
             subtitle: Text(loc.welcomeBackupsDescription),
           ),
