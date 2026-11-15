@@ -15,11 +15,9 @@ class EditCategoriesPage extends KglPage {
   @override
   Widget body(BuildContext context) => AlwaysFillingScrollView(
     maxWidth: AppLayoutConstants.maxPageWidth,
-    child: Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: EditCategoriesWidget(),
-      ),
+    child: Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: EditCategoriesWidget(),
     ),
   );
 
