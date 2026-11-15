@@ -35,9 +35,9 @@ class ExportImportPage extends KglPage {
     return AlwaysFillingScrollView(
       maxWidth: AppLayoutConstants.maxPageWidth,
       child: Padding(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ExportEntriesCard(
@@ -49,6 +49,7 @@ class ExportImportPage extends KglPage {
               mimeType: 'text/csv; charset=utf-8',
               explanationLabel: (loc) => loc?.exportCsvExplanation ?? "<Export as CSV explanation>",
             ),
+            SizedBox(height: 16),
             ExportEntriesCard(
               title: (loc) => loc?.exportBackup ?? "<export backup>",
               createFile: () => (
@@ -59,6 +60,7 @@ class ExportImportPage extends KglPage {
               explanationLabel: (loc) =>
                   loc?.exportJsonExplanation ?? "<export to JSON explanation>",
             ),
+            SizedBox(height: 16),
             ImportExportCard(
               title: (loc) => loc?.importBackup ?? "<import json>",
               explanationLabel: (loc) =>
