@@ -74,7 +74,7 @@ dart run build_runner watch --delete-conflicting-outputs
 
 ## Changelog
 
-### Unreleased
+### v0.4.1
 
 #### Added
 
