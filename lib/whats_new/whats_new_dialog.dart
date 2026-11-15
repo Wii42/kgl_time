@@ -31,6 +31,7 @@ class WhatsNewDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          if (highlights.isEmpty) Text(loc.whatsNewNoHighlights),
           for (final ReleaseHighlight highlight in highlights.take(
             WhatsNewController.maxHighlights,
           ))

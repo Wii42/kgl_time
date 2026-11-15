@@ -193,4 +193,64 @@ void main() {
     expect(await controller.pendingHighlights('0.4.0'), isEmpty);
     expect(await lastSeen(), '0.4.0');
   });
+
+  test('recent highlights include acknowledged releases without changing storage', () async {
+    await setLastSeen('0.5.0');
+    final List<ReleaseHighlight> recent = WhatsNewController.recentHighlights('0.4.1');
+    expect(recent.single.id, HighlightId.jsonBackups);
+    expect(recent.single.version, '0.4.0');
+    expect(await lastSeen(), '0.5.0');
+  });
+
+  test('recent highlights select five newest semantically and exclude future releases', () {
+    final List<ReleaseHighlight> recent = WhatsNewController.recentHighlights(
+      '2.12.0',
+      highlights: <ReleaseHighlight>[
+        for (final String version in <String>[
+          '2.9.0',
+          '2.10.0',
+          '2.8.0',
+          '3.0.0',
+          '2.12.0',
+          '2.7.0',
+          '2.11.0',
+        ])
+          ReleaseHighlight(version: version, id: HighlightId.jsonBackups),
+      ],
+    );
+    expect(recent.map((ReleaseHighlight highlight) => highlight.version), <String>[
+      '2.12.0',
+      '2.11.0',
+      '2.10.0',
+      '2.9.0',
+      '2.8.0',
+    ]);
+  });
+
+  test('recent highlights strip build metadata and respect prereleases', () {
+    const List<ReleaseHighlight> highlights = <ReleaseHighlight>[
+      ReleaseHighlight(version: '0.4.0+18', id: HighlightId.jsonBackups),
+      ReleaseHighlight(version: '0.3.6', id: HighlightId.jsonBackups),
+    ];
+    expect(
+      WhatsNewController.recentHighlights('0.4.0-beta.1', highlights: highlights).single.version,
+      '0.3.6',
+    );
+    expect(
+      WhatsNewController.recentHighlights(
+        '0.4.0+19',
+        highlights: highlights,
+      ).map((ReleaseHighlight highlight) => highlight.version),
+      <String>['0.4.0+18', '0.3.6'],
+    );
+  });
+
+  test('recent highlights can be empty without establishing a baseline', () async {
+    expect(WhatsNewController.recentHighlights('0.3.6'), isEmpty);
+    expect(
+      WhatsNewController.recentHighlights('0.4.0', highlights: const <ReleaseHighlight>[]),
+      isEmpty,
+    );
+    expect(await lastSeen(), isNull);
+  });
 }

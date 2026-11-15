@@ -80,6 +80,7 @@ dart run build_runner watch --delete-conflicting-outputs
 
 - Show localized release highlights once after updates to help discover new features and where to
   find them, combining missed releases in one dialog with a link to the full release notes.
+  Reopen up to five of the most recent highlights from Settings at any time.
   Existing users also see highlights when upgrading from versions without announcement tracking;
   fresh installations start without historical announcements.
 

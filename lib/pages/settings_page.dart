@@ -11,6 +11,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../data_model/key_values.dart';
 import '../main.dart';
+import '../whats_new/whats_new_controller.dart';
+import '../whats_new/whats_new_dialog.dart';
 
 class SettingsPage extends KglPage {
   const SettingsPage({super.key, required super.appTitle});
@@ -164,7 +166,6 @@ class _AboutSection extends StatelessWidget {
     final Uri privacyUri = Uri.parse(
       'https://github.com/Wii42/kgl_time/blob/main/PRIVACY.md#${loc?.privacyPolicyUrlFragment}',
     );
-    final Uri releaseNotesUri = releaseNotesUriForVersion(appInfo.version);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
@@ -190,13 +191,18 @@ class _AboutSection extends StatelessWidget {
                 onTap: () => launchUrl(privacyUri),
               ),
             ),
-            Tooltip(
-              message: releaseNotesUri.toString(),
-              child: ListTile(
-                leading: const Icon(Icons.new_releases_outlined),
-                title: Text(loc?.whatsNew ?? "<What's new>"),
-                trailing: const Icon(Icons.open_in_new),
-                onTap: () => launchUrl(releaseNotesUri),
+            ListTile(
+              leading: const Icon(Icons.rocket_launch_outlined),
+              title: Text(loc?.whatsNew ?? "<What's new>"),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () =>
+                  showDialog<void>(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        WhatsNewDialog(
+                          highlights: WhatsNewController.recentHighlights(appInfo.version),
+                          currentVersion: appInfo.version,
+                        ),
               ),
             ),
           ],

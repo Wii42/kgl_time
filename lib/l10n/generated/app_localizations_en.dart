@@ -37,6 +37,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get whatsNewReleaseNotes => 'Release notes';
 
   @override
+  String get whatsNewNoHighlights => 'No recent highlights. See the release notes for all changes.';
+
+  @override
   String get highlightJsonBackupsTitle => 'Backups for your work';
 
   @override

@@ -36,16 +36,36 @@ class WhatsNewController {
     // over an existing installation, so returning to it cannot replay highlights.
     if (lastSeen != null && current <= lastSeen) return <ReleaseHighlight>[];
 
-    final List<ReleaseHighlight> pending = highlights.where((ReleaseHighlight highlight) {
+    final List<ReleaseHighlight> pending = _selectHighlights(
+      current,
+      highlights,
+      afterVersion: lastSeen,
+    );
+    if (pending.isEmpty) await acknowledge(currentVersion);
+    return pending;
+  }
+
+  /// Highlights for manually reopening the dialog from Settings. Includes already
+  /// acknowledged releases and never reads or changes the acknowledgement.
+  static List<ReleaseHighlight> recentHighlights(
+    String currentVersion, {
+    List<ReleaseHighlight> highlights = releaseHighlights,
+  }) => _selectHighlights(_version(currentVersion), highlights);
+
+  static List<ReleaseHighlight> _selectHighlights(
+    Version current,
+    List<ReleaseHighlight> highlights, {
+    Version? afterVersion,
+  }) {
+    final List<ReleaseHighlight> selected = highlights.where((ReleaseHighlight highlight) {
       final Version version = _version(highlight.version);
-      return (lastSeen == null || lastSeen < version) && version <= current;
+      return (afterVersion == null || afterVersion < version) && version <= current;
     }).toList();
-    pending.sort(
+    selected.sort(
       (ReleaseHighlight a, ReleaseHighlight b) =>
           _version(b.version).compareTo(_version(a.version)),
     );
-    if (pending.isEmpty) await acknowledge(currentVersion);
-    return pending.take(maxHighlights).toList();
+    return selected.take(maxHighlights).toList();
   }
 
   /// Call only after dismissal, or when establishing/advancing an empty baseline.

@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'Release notes'**
   String get whatsNewReleaseNotes;
 
+  /// No description provided for @whatsNewNoHighlights.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent highlights. See the release notes for all changes.'**
+  String get whatsNewNoHighlights;
+
   /// No description provided for @highlightJsonBackupsTitle.
   ///
   /// In en, this message translates to:
