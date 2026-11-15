@@ -4,6 +4,8 @@
   "newEntry": "Neuer Eintrag",
   "editEntry": "Eintrag Bearbeiten",
   "settings": "Einstellungen",
+  "settingsDataSectionTitle": "Daten",
+  "settingsExportImport": "Export / Import",
   "whatsNew": "Was ist neu?",
   "groupBy": "Gruppieren nach",
   "groupByDay": "Tag",

@@ -23,44 +23,62 @@ class SettingsPage extends KglPage {
 
   @override
   Widget body(BuildContext context) {
-    AppLocalizations? loc = AppLocalizations.of(context);
+    final AppLocalizations? loc = AppLocalizations.of(context);
     return AlwaysFillingScrollView(
       maxWidth: AppLayoutConstants.maxPageWidth,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            withCard(_ThemeModeSettings()),
-            ElevatedButton.icon(
-              onPressed: () => context.push(AppRoute.editCategories.path),
-              label: Text(loc?.editCategories ?? '<editCategories>'),
-              //SizedBox(width: 8),
-              icon: Icon(Icons.edit_outlined),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: _ThemeModeSettings(),
+              ),
             ),
-            ElevatedButton.icon(
-              onPressed: () => context.push(AppRoute.entriesTrashBin.path),
-              label: Text(loc?.openTrashBin ?? '<open entriesTrashBin>'),
-              icon: Icon(Icons.recycling_outlined),
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+              child: Text(
+                loc?.settingsDataSectionTitle ?? '<Data>',
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
             ),
-            ElevatedButton.icon(
-              onPressed: () => context.push(AppRoute.exportImport.path),
-              label: Text(loc?.exportImportEntries ?? "<Export/import entries>"),
-              icon: Icon(Icons.import_export_outlined),
+            Card(
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
+                    leading: const Icon(Icons.edit_outlined),
+                    title: Text(loc?.editCategories ?? '<Edit Categories>'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push(AppRoute.editCategories.path),
+                  ),
+                  const Divider(height: 1, indent: 56, endIndent: 16),
+                  ListTile(
+                    leading: const Icon(Icons.recycling_outlined),
+                    title: Text(loc?.trashBin ?? '<Trash Bin>'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push(AppRoute.entriesTrashBin.path),
+                  ),
+                  const Divider(height: 1, indent: 56, endIndent: 16),
+                  ListTile(
+                    leading: const Icon(Icons.import_export_outlined),
+                    title: Text(loc?.settingsExportImport ?? '<Export / Import>'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push(AppRoute.exportImport.path),
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(height: 32),
             _AboutSection(),
-          ].withSpaceBetween(height: 16),
+          ],
         ),
-      ),
-    );
-  }
-
-  // ignore: many_lints/avoid_returning_widgets
-  Widget withCard(Widget child) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: child,
       ),
     );
   }

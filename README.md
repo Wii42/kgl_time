@@ -84,6 +84,10 @@ dart run build_runner watch --delete-conflicting-outputs
   validation, a preview, and a temporary Undo option. Preserve existing data on failure and warn
   before discarding changes or cancelling time tracking.
 
+#### Changed
+
+- Group settings navigation into a compact list for categories, trash, and export/import.
+
 #### Fixed
 
 - CSV exports use the latest data when saving or sharing.

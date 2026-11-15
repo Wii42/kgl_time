@@ -122,6 +122,18 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get settings;
 
+  /// No description provided for @settingsDataSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get settingsDataSectionTitle;
+
+  /// No description provided for @settingsExportImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export / Import'**
+  String get settingsExportImport;
+
   /// No description provided for @whatsNew.
   ///
   /// In en, this message translates to:

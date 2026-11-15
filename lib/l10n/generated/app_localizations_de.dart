@@ -22,6 +22,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settings => 'Einstellungen';
 
   @override
+  String get settingsDataSectionTitle => 'Daten';
+
+  @override
+  String get settingsExportImport => 'Export / Import';
+
+  @override
   String get whatsNew => 'Was ist neu?';
 
   @override
