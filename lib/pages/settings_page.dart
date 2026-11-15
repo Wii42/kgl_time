@@ -38,43 +38,30 @@ class SettingsPage extends KglPage {
               ),
             ),
             const SizedBox(height: 24),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              child: Text(
-                loc?.settingsDataSectionTitle ?? '<Data>',
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
+            _SettingsSection(
+              sectionTitle: loc?.settingsDataSectionTitle ?? '<Data>',
+              children: <Widget>[
+                ListTile(
+                  leading: const Icon(Icons.edit_outlined),
+                  title: Text(loc?.editCategories ?? '<Edit Categories>'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.push(AppRoute.editCategories.path),
                 ),
-              ),
+                ListTile(
+                  leading: const Icon(Icons.recycling_outlined),
+                  title: Text(loc?.trashBin ?? '<Trash Bin>'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.push(AppRoute.entriesTrashBin.path),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.import_export_outlined),
+                  title: Text(loc?.settingsExportImport ?? '<Export / Import>'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.push(AppRoute.exportImport.path),
+                ),
+              ],
             ),
-            Card(
-              clipBehavior: Clip.antiAlias,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListTile(
-                    leading: const Icon(Icons.edit_outlined),
-                    title: Text(loc?.editCategories ?? '<Edit Categories>'),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => context.push(AppRoute.editCategories.path),
-                  ),
-                  const Divider(height: 1, indent: 56, endIndent: 16),
-                  ListTile(
-                    leading: const Icon(Icons.recycling_outlined),
-                    title: Text(loc?.trashBin ?? '<Trash Bin>'),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => context.push(AppRoute.entriesTrashBin.path),
-                  ),
-                  const Divider(height: 1, indent: 56, endIndent: 16),
-                  ListTile(
-                    leading: const Icon(Icons.import_export_outlined),
-                    title: Text(loc?.settingsExportImport ?? '<Export / Import>'),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => context.push(AppRoute.exportImport.path),
-                  ),
-                ],
-              ),
-            ),
+
             const SizedBox(height: 32),
             _AboutSection(),
           ],
@@ -241,4 +228,52 @@ class TooltipSpan extends WidgetSpan {
            ),
          ),
        );
+}
+
+class _SettingsSection extends StatelessWidget {
+  final String sectionTitle;
+  final List<Widget> children;
+  final bool addDividerBetweenChildren;
+
+  final Widget divider = const Divider(height: 1, indent: 56, endIndent: 16);
+
+  const _SettingsSection({
+    required this.sectionTitle,
+    required this.children,
+    this.addDividerBetweenChildren = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+          child: Text(
+            sectionTitle,
+            style: Theme
+                .of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary,
+            ),
+          ),
+        ),
+        Card(
+          clipBehavior: Clip.antiAlias,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: addDividerBetweenChildren ? children.withWidgetBetween(divider) : children,
+          ),
+        ),
+      ],
+    );
+  }
 }
