@@ -1,8 +1,7 @@
 # KGL Time
 
 A simple time tracking app designed to help users manage their work hours efficiently. Developed
-with Flutter, the app allows users to enter and store their work hours locally on their devices
-without collecting any personal information.
+with Flutter, the app stores work hours locally on your device and requires no account.
 
 <p>
   <img
@@ -15,7 +14,7 @@ without collecting any personal information.
 ## Features
 
 - **User-friendly Interface**: Easy to navigate and track work hours.
-- **Local Storage**: All entered data is stored locally on the device, ensuring user privacy.
+- **Local Storage**: Work entries, categories, and settings are stored on your device.
 - **No Registration Required**: Users can start tracking time immediately without the need for accounts or logins.
 
 <p>
@@ -27,8 +26,9 @@ without collecting any personal information.
 
 ## Privacy Policy
 
-KGL Time does not collect, store, or share any personal information from its users. For more details
-on how user data is handled, please refer to the [PRIVACY.md](PRIVACY.md) file.
+KGL Time stores work data locally and does not automatically transmit it to the developer. The app
+contains no embedded analytics or advertising. You can export or share data at your request, and
+app data may be included in operating system backups. See [PRIVACY.md](PRIVACY.md) for details.
 
 ## License
 
