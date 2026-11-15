@@ -599,24 +599,37 @@ void main() {
     );
   }
 
-  testWidgets('unsupported backup formats cannot be confirmed', (WidgetTester tester) async {
-    await launch(tester);
-    final WorkData unsupported = WorkData(
-      workEntries: const [],
-      workCategories: const [],
-      backupFormatVersion: 2,
-      exportedAt: DateTime.utc(2026, 11, 14),
-    );
-    await openConfirmation(tester, unsupported);
-    final Finder button = find.widgetWithText(
-      TextButton,
-      'Import backup and replace existing entries',
-    );
-    if (button.evaluate().isNotEmpty) {
-      expect(tester.widget<TextButton>(button).onPressed, isNull);
-    }
-    expect(await storage.workEntries.loadEntries(), hasLength(2));
-  });
+  for (final int version in <int>[-1, 0, 2]) {
+    testWidgets('unsupported backup format $version cannot be confirmed', (
+      WidgetTester tester,
+    ) async {
+      startTracker();
+      await launch(tester);
+      final WorkData unsupported = WorkData(
+        workEntries: const [],
+        workCategories: const [],
+        backupFormatVersion: version,
+        exportedAt: DateTime.utc(2026, 11, 14),
+      );
+      await openConfirmation(tester, unsupported);
+      final Finder button = find.widgetWithText(
+        TextButton,
+        'Import backup and replace existing entries',
+      );
+      if (button.evaluate().isNotEmpty) {
+        expect(tester.widget<TextButton>(button).onPressed, isNull);
+      }
+      expect(
+        find.text(
+          'This backup format is not supported and cannot be imported. If it was created with a newer app version, update the app first.',
+        ),
+        findsOneWidget,
+      );
+      expect(await storage.workEntries.loadEntries(), hasLength(2));
+      await expectTrackerRunning();
+      expect(storage.replacementCalls, 0);
+    });
+  }
 
   testWidgets('successful import cancels tracking instead of rebinding its categories', (
     WidgetTester tester,

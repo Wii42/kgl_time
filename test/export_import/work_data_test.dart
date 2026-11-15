@@ -41,6 +41,14 @@ void main() {
   }
 
   for (final String collection in <String>['workEntries', 'workCategories']) {
+    for (final Object? invalidId in <Object?>[null, 1.5, -1, '7']) {
+      test('rejects invalid ID $invalidId in $collection without truncating it', () {
+        final Map<String, dynamic> json = backupFixture();
+        final List<Map<String, dynamic>> records = json[collection] as List<Map<String, dynamic>>;
+        records.first['id'] = invalidId;
+        expect(WorkData.tryFromJson(json), isNull);
+      });
+    }
     test('rejects duplicate IDs in $collection', () {
       final Map<String, dynamic> json = backupFixture();
       final List<Map<String, dynamic>> records = json[collection] as List<Map<String, dynamic>>;
@@ -48,6 +56,34 @@ void main() {
       expect(WorkData.tryFromJson(json), isNull);
     });
   }
+
+  for (final Object? duration in <Object?>[null, 1.5, -1]) {
+    test('rejects invalid work duration $duration', () {
+      final Map<String, dynamic> json = backupFixture();
+      (json['workEntries'] as List<Map<String, dynamic>>).first['workDurationInSeconds'] = duration;
+      expect(WorkData.tryFromJson(json), isNull);
+    });
+  }
+
+  for (final Object? date in <Object?>['not a date', 0]) {
+    test('rejects invalid entry date $date', () {
+      final Map<String, dynamic> json = backupFixture();
+      (json['workEntries'] as List<Map<String, dynamic>>).first['date'] = date;
+      expect(WorkData.tryFromJson(json), isNull);
+    });
+  }
+
+  test('an explicitly stored epoch date remains valid', () {
+    final Map<String, dynamic> json = backupFixture();
+    (json['workEntries'] as List<Map<String, dynamic>>).first['date'] = '1970-01-01T00:00:00.000Z';
+    expect(WorkData.fromJson(json).workEntries.first.date, DateTime.utc(1970));
+  });
+
+  test('entry and category IDs have separate namespaces', () {
+    final Map<String, dynamic> json = backupFixture();
+    (json['workEntries'] as List<Map<String, dynamic>>).first['id'] = 7;
+    expect(WorkData.tryFromJson(json), isNotNull);
+  });
 
   for (final bool missing in <bool>[true, false]) {
     test('rejects a ${missing ? 'missing' : 'null'} entry date instead of inventing one', () {

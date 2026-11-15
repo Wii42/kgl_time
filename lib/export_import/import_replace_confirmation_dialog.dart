@@ -8,7 +8,6 @@ import '../data_model/key_values.dart';
 import '../data_model/work_categories.dart';
 import '../data_model/work_entries.dart';
 import '../l10n/generated/app_localizations.dart';
-import '../main.dart';
 import '../utils/format_duration.dart';
 import 'import_service.dart';
 import 'undo_import_confirmation_dialog.dart';
@@ -26,7 +25,7 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
   bool _isImporting = false;
 
   Future<void> _importAndReplace() async {
-    if (_isImporting) return;
+    if (_isImporting || !WorkData.isSupportedVersion(widget.loadedData.backupFormatVersion)) return;
     final WorkEntries entriesList = context.read<WorkEntries>();
     final WorkCategories categoriesList = context.read<WorkCategories>();
     final KeyValues settings = context.read<KeyValues>();
@@ -97,6 +96,7 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? loc = AppLocalizations.of(context);
+    final bool supported = WorkData.isSupportedVersion(widget.loadedData.backupFormatVersion);
     return PopScope(
       canPop: !_isImporting,
       child: AlertDialog(
@@ -108,7 +108,7 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
             child: Text(loc?.cancel ?? "<Cancel>"),
           ),
           TextButton(
-            onPressed: _isImporting ? null : _importAndReplace,
+            onPressed: _isImporting || !supported ? null : _importAndReplace,
             child: Text(
               loc?.importBacupAndReplaceExistingEntries ?? "<Import and Replace>",
               textAlign: TextAlign.center,
@@ -148,10 +148,10 @@ class _ImportReplaceContent extends StatelessWidget {
               ) ??
               "<Number of entries and categories>",
         ),
-        if (loadedData.backupFormatVersion > backupFormatVersion) ...[
+        if (!WorkData.isSupportedVersion(loadedData.backupFormatVersion)) ...[
           SizedBox(height: 12),
           Text(
-            loc?.backupFromNewerVersionWarning ?? "<Warning backup is form newer version>",
+            loc?.unsupportedBackupFormat ?? '<Unsupported backup format>',
           ),
         ],
         SizedBox(height: 12),

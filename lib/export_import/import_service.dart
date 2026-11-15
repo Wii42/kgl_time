@@ -96,6 +96,7 @@ class ImportService {
     WorkCategories categoriesList,
     KeyValues settings,
   ) async {
+    data.validate();
     final bool committed = await PersistentStorageService.instance.replaceWorkData(
       entries: data.workEntries,
       categories: data.workCategories,

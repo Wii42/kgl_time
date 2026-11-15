@@ -322,8 +322,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get backupFromNewerVersionWarning =>
-      'Warning: The backup was created with a newer version of the app. Some data might not be imported correctly. Consider updating the app first';
+  String get unsupportedBackupFormat =>
+      'This backup format is not supported and cannot be imported. If it was created with a newer app version, update the app first.';
 
   @override
   String get importReplaceConfirmationDialog =>

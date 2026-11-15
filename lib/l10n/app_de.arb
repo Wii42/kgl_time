@@ -98,7 +98,7 @@
   "undoImportCancelsTrackerWarning": "Beim Rückgängigmachen dieses Imports wird die laufende Zeiterfassung abgebrochen, ohne die erfasste Zeit zu speichern.",
   "dateOfBackup": "Datum des Backups: {date}",
   "nrOfEntriesAndCategories": "{nrOfEntries} Einträge, {nrOfCategories} Kategorien",
-  "backupFromNewerVersionWarning": "Warnung: Das Backup wurde mit einer neueren Version der App erstellt. Einträge oder Kategorien werden möglicherweise nicht korrekt importiert. Aktualisieren Sie wenn möglich die App auf die neueste Version, bevor Sie das Backup importieren.",
+  "unsupportedBackupFormat": "Dieses Backup-Format wird nicht unterstützt und kann nicht importiert werden. Falls es mit einer neueren App-Version erstellt wurde, aktualisieren Sie zuerst die App.",
   "importReplaceConfirmationDialog": "Möchten Sie das Backup wirklich importieren und alle vorhandenen Einträge und Kategorien ersetzen? Dieser Vorgang kann nach Abschluss der Importierung nicht rückgängig gemacht werden.",
   "withoutCategory": "Ohne Kategorie"
 }

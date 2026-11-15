@@ -93,6 +93,14 @@ void main() {
       );
       expect(errors, hasLength(1));
     });
+
+    test('reports an unsupported backup format before returning data for confirmation', () async {
+      final Map<String, dynamic> json = backupFixture()..['backupFormatVersion'] = 2;
+      await file.writeAsString(jsonEncode(json));
+      expect(await ImportService().loadJsonBackup(onError: errors.add), isNull);
+      expect(errors, hasLength(1));
+      expect(errors.single, isA<FormatException>());
+    });
   });
 
   group('restore safety', () {
@@ -202,6 +210,29 @@ void main() {
       await expectLater(restore(), throwsStateError);
       expect(await state(), before);
     });
+
+    for (final String invalid in <String>['version', 'entry IDs', 'category IDs']) {
+      test(
+        'invalid $invalid cannot replace data or cancel tracking even when constructed directly',
+        () async {
+          await startTracker();
+          final Object? before = await state();
+          backup = WorkData(
+            backupFormatVersion: invalid == 'version' ? 2 : 1,
+            exportedAt: backup.exportedAt,
+            workEntries: invalid == 'entry IDs'
+                ? <WorkEntry>[backup.workEntries.first, backup.workEntries.first]
+                : backup.workEntries,
+            workCategories: invalid == 'category IDs'
+                ? <WorkCategory>[backup.workCategories.first, backup.workCategories.first]
+                : backup.workCategories,
+          );
+          await expectLater(restore(), throwsFormatException);
+          expect(await state(), before);
+          expect(storage.replacementCalls, 0);
+        },
+      );
+    }
 
     test(
       'successful import cancels tracking without saving it and undo does not restart it',

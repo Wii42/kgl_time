@@ -686,11 +686,11 @@ abstract class AppLocalizations {
   /// **'{nrOfEntries} entries, {nrOfCategories} categories'**
   String nrOfEntriesAndCategories(Object nrOfCategories, Object nrOfEntries);
 
-  /// No description provided for @backupFromNewerVersionWarning.
+  /// No description provided for @unsupportedBackupFormat.
   ///
   /// In en, this message translates to:
-  /// **'Warning: The backup was created with a newer version of the app. Some data might not be imported correctly. Consider updating the app first'**
-  String get backupFromNewerVersionWarning;
+  /// **'This backup format is not supported and cannot be imported. If it was created with a newer app version, update the app first.'**
+  String get unsupportedBackupFormat;
 
   /// No description provided for @importReplaceConfirmationDialog.
   ///

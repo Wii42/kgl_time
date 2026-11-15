@@ -78,6 +78,7 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Fixed
 
+- Reject invalid or unsupported backup files before replacing existing data.
 - Show an import error when a backup file cannot be selected or read.
 - Show the correct entry and category counts when previewing a backup import.
 - Restore backups and undo imports as a single operation, preserving existing data if saving fails
