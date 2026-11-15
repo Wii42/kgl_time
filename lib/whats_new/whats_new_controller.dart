@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:pub_semver/pub_semver.dart';
 
 import '../persistent_storage/persistent_storage_interface.dart';
@@ -18,6 +19,9 @@ class WhatsNewController {
   });
 
   Future<List<ReleaseHighlight>> pendingHighlights(String currentVersion) async {
+    if (kDebugMode) {
+      return highlights.take(maxHighlights).toList();
+    }
     final Version current = _version(currentVersion);
     final String? stored = await storage.get<String>(lastSeenVersionKey);
     if (stored == null && isFirstRun) {
