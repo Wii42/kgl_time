@@ -84,7 +84,7 @@
   "exportCsvExplanation": "Exportiert alle Einträge als CSV-Tabelle. Diese Datei kann in Tabellenkalkulationsprogrammen wie Excel oder Google Sheets geöffnet werden.",
   "exportJsonExplanation": "Erstellt eine JSON-Sicherung aller Arbeitseinträge einschliesslich Papierkorb und Kategorien, um Daten wiederherzustellen oder auf ein anderes Gerät zu übertragen. Einstellungen und eine laufende Zeiterfassung sind nicht enthalten.",
   "importBackup": "Backup importieren",
-  "importBackupExplanation": "Importieren Sie eine zuvor exportierte JSON-Backup-Datei, um Ihre Arbeitseinträge und Kategorien wiederherzustellen.",
+  "importBackupExplanation": "Importieren Sie eine JSON-Sicherung, um Ihre Arbeitseinträge und Kategorien wiederherzustellen. Dabei werden alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb ersetzt.",
   "importBacupAndReplaceExistingEntries": "Backup importieren und vorhandene Einträge ersetzen",
   "importBacupAndReplace": "Backup importieren und ersetzen",
   "importSuccess": "Import erfolgreich",

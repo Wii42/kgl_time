@@ -66,9 +66,7 @@ class ExportImportPage extends KglPage {
               actions: [
                 ElevatedButton.icon(
                   onPressed: canImport ? onImportJsonBackup(context) : null,
-                  label: Text(
-                    loc?.importBacupAndReplaceExistingEntries ?? "<import json and replace data>",
-                  ),
+                  label: Text(loc?.importBackup ?? '<Import backup>'),
                   icon: Icon(Icons.upload_outlined),
                 ),
               ],

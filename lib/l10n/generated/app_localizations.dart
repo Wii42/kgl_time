@@ -605,7 +605,7 @@ abstract class AppLocalizations {
   /// No description provided for @importBackupExplanation.
   ///
   /// In en, this message translates to:
-  /// **'Import a previously exported JSON backup file to restore your work entries and categories.'**
+  /// **'Import a JSON backup to restore your work entries and categories. This replaces all existing entries and categories, including the trash.'**
   String get importBackupExplanation;
 
   /// No description provided for @importBacupAndReplaceExistingEntries.

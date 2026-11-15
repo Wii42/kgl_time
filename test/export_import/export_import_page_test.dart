@@ -196,7 +196,7 @@ void main() {
     final AppLocalizations loc = AppLocalizations.of(pageContext)!;
     final Finder button = find.widgetWithText(
       ElevatedButton,
-      loc.importBacupAndReplaceExistingEntries,
+      loc.importBackup,
     );
     await tester.ensureVisible(button);
     final AsyncCallback importBackup =
@@ -257,7 +257,7 @@ void main() {
     );
     final Finder button = find.widgetWithText(
       ElevatedButton,
-      'Import backup and replace existing entries',
+      'Import backup',
     );
     await tester.ensureVisible(button);
     await tester.tap(button);
@@ -284,7 +284,7 @@ void main() {
     );
     final Finder button = find.widgetWithText(
       ElevatedButton,
-      'Import backup and replace existing entries',
+      'Import backup',
     );
     await tester.ensureVisible(button);
     await tester.tap(button);

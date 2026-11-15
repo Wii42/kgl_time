@@ -277,7 +277,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get importBackupExplanation =>
-      'Importieren Sie eine zuvor exportierte JSON-Backup-Datei, um Ihre Arbeitseinträge und Kategorien wiederherzustellen.';
+      'Importieren Sie eine JSON-Sicherung, um Ihre Arbeitseinträge und Kategorien wiederherzustellen. Dabei werden alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb ersetzt.';
 
   @override
   String get importBacupAndReplaceExistingEntries =>
