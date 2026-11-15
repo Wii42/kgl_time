@@ -8,6 +8,7 @@
   "settingsExportImport": "Export / Import",
   "whatsNew": "What's new",
   "whatsNewDismiss": "Got it",
+  "whatsNewReleaseNotes": "Release notes",
   "highlightJsonBackupsTitle": "Back up your work",
   "highlightJsonBackupsDescription": "Save or share a JSON backup of all entries and categories, including the trash. Settings and running timers are excluded.",
   "highlightBackupRestoreTitle": "Restore a backup",

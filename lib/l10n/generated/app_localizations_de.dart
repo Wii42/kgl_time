@@ -34,11 +34,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get whatsNewDismiss => 'Verstanden';
 
   @override
+  String get whatsNewReleaseNotes => 'Versionshinweise';
+
+  @override
   String get highlightJsonBackupsTitle => 'Arbeitsdaten sichern';
 
   @override
   String get highlightJsonBackupsDescription =>
-      'Speichere oder teile ein JSON-Backup aller Einträge und Kategorien einschließlich Papierkorb. Einstellungen und laufende Zeiterfassungen sind nicht enthalten.';
+      'Speichere oder teile ein Backup aller Einträge und Kategorien einschließlich Papierkorb.';
 
   @override
   String get highlightBackupRestoreTitle => 'Backup wiederherstellen';

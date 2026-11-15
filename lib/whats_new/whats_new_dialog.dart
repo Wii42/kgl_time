@@ -1,14 +1,17 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/generated/app_localizations.dart';
+import '../utils/helpers.dart';
 import 'highlight_localizations.dart';
 import 'release_highlight.dart';
 import 'whats_new_controller.dart';
 
 class WhatsNewDialog extends StatelessWidget {
   final List<ReleaseHighlight> highlights;
+  final String currentVersion;
 
-  const WhatsNewDialog({super.key, required this.highlights});
+  const WhatsNewDialog({super.key, required this.highlights, required this.currentVersion});
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,13 @@ class WhatsNewDialog extends StatelessWidget {
         ],
       ),
       actions: <Widget>[
+        TextButton(
+          onPressed: () => launchUrl(
+            releaseNotesUriForVersion(currentVersion),
+            mode: LaunchMode.externalApplication,
+          ),
+          child: Text(loc.whatsNewReleaseNotes),
+        ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(loc.whatsNewDismiss),

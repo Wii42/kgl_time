@@ -146,6 +146,12 @@ abstract class AppLocalizations {
   /// **'Got it'**
   String get whatsNewDismiss;
 
+  /// No description provided for @whatsNewReleaseNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Release notes'**
+  String get whatsNewReleaseNotes;
+
   /// No description provided for @highlightJsonBackupsTitle.
   ///
   /// In en, this message translates to:

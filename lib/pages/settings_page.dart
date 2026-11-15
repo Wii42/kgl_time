@@ -164,10 +164,7 @@ class _AboutSection extends StatelessWidget {
     final Uri privacyUri = Uri.parse(
       'https://github.com/Wii42/kgl_time/blob/main/PRIVACY.md#${loc?.privacyPolicyUrlFragment}',
     );
-    final Uri releaseNotesUri = Uri.parse(
-      'https://github.com/Wii42/kgl_time/blob/main/README.md#v${appInfo.version.replaceAll(
-          '.', '')}',
-    );
+    final Uri releaseNotesUri = releaseNotesUriForVersion(appInfo.version);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[

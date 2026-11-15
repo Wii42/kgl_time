@@ -34,6 +34,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get whatsNewDismiss => 'Got it';
 
   @override
+  String get whatsNewReleaseNotes => 'Release notes';
+
+  @override
   String get highlightJsonBackupsTitle => 'Back up your work';
 
   @override

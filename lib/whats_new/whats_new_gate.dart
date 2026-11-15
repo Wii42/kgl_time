@@ -44,7 +44,10 @@ class _WhatsNewGateState extends State<WhatsNewGate> {
       if (navigatorContext == null || !navigatorContext.mounted) return;
       await showDialog<void>(
         context: navigatorContext,
-        builder: (BuildContext context) => WhatsNewDialog(highlights: highlights),
+        builder: (BuildContext context) => WhatsNewDialog(
+          highlights: highlights,
+          currentVersion: widget.currentVersion,
+        ),
       );
       if (mounted) await widget.controller.acknowledge(widget.currentVersion);
     } catch (error, stackTrace) {
