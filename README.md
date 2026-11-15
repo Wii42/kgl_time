@@ -3,17 +3,26 @@
 A simple time tracking app designed to help users manage their work hours efficiently. Developed
 with Flutter, the app stores work hours locally on your device and requires no account.
 
+<a href="https://play.google.com/store/apps/details?id=com.wi42.kgl_time">
+  <img
+    src="demo_images/google-play-badge-en.png"
+    alt="Get it on Google Play"
+    height="48"
+  >
+</a>
+
 <p>
   <img
     src="demo_images/feature_graphic_en.png"
     alt="KGL Time — simple time tracking"
-    width="612"
+    width="628"
   >
 </p>
 
 ## Features
 
 - **User-friendly Interface**: Easy to navigate and track work hours.
+- **Light and Dark Themes**: Choose your preferred theme or follow your device’s system setting.
 - **Local Storage**: Work entries, categories, and settings are stored on your device.
 - **Backup and Restore**: Save or share JSON backups of all work entries and categories and restore
   them when needed.
