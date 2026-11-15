@@ -16,11 +16,15 @@ ThemeMode? parseThemeMode(String? themeMode) {
 
 extension SpacedList on List<Widget> {
   List<Widget> withSpaceBetween({double? height, double? width}) {
+    return withWidgetBetween(SizedBox(height: height, width: width));
+  }
+
+  List<Widget> withWidgetBetween(Widget widget) {
     List<Widget> result = [];
     for (int i = 0; i < length; i++) {
       result.add(this[i]);
       if (i < length - 1) {
-        result.add(SizedBox(height: height, width: width));
+        result.add(widget);
       }
     }
     return result;
