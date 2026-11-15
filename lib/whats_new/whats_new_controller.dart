@@ -8,31 +8,33 @@ class WhatsNewController {
   static const int maxHighlights = 5;
 
   final KeyValueStorage storage;
+  final bool isFirstRun;
   final List<ReleaseHighlight> highlights;
 
   const WhatsNewController({
     required this.storage,
+    required this.isFirstRun,
     this.highlights = releaseHighlights,
   });
 
   Future<List<ReleaseHighlight>> pendingHighlights(String currentVersion) async {
     final Version current = _version(currentVersion);
     final String? stored = await storage.get<String>(lastSeenVersionKey);
-    if (stored == null) {
-      // The first launch with this feature establishes a baseline, including for
-      // existing installations that have never recorded an acknowledgement.
+    if (stored == null && isFirstRun) {
+      // Only fresh installations skip historical announcements. Existing users
+      // without an acknowledgement should see the currently curated highlights.
       await acknowledge(currentVersion);
       return <ReleaseHighlight>[];
     }
 
-    final Version lastSeen = _version(stored);
+    final Version? lastSeen = stored == null ? null : _version(stored);
     // Keep the highest acknowledged version across downgrades and reinstalls
     // over an existing installation, so returning to it cannot replay highlights.
-    if (current <= lastSeen) return <ReleaseHighlight>[];
+    if (lastSeen != null && current <= lastSeen) return <ReleaseHighlight>[];
 
     final List<ReleaseHighlight> pending = highlights.where((ReleaseHighlight highlight) {
       final Version version = _version(highlight.version);
-      return lastSeen < version && version <= current;
+      return (lastSeen == null || lastSeen < version) && version <= current;
     }).toList();
     pending.sort(
       (ReleaseHighlight a, ReleaseHighlight b) =>

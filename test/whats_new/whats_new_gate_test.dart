@@ -18,7 +18,7 @@ void main() {
 
   setUp(() {
     storage = MemoryKeyValues();
-    controller = WhatsNewController(storage: storage);
+    controller = WhatsNewController(storage: storage, isFirstRun: false);
     navigatorKey = GlobalKey<NavigatorState>();
   });
 
@@ -56,6 +56,7 @@ void main() {
   }
 
   testWidgets('fresh installation shows only the existing screen', (WidgetTester tester) async {
+    controller = WhatsNewController(storage: storage, isFirstRun: true);
     await launch(tester);
     expect(find.byType(WhatsNewDialog), findsNothing);
     expect(find.text('Existing app screen'), findsOneWidget);
@@ -90,6 +91,7 @@ void main() {
   ) async {
     controller = WhatsNewController(
       storage: storage,
+      isFirstRun: false,
       highlights: const <ReleaseHighlight>[
         ReleaseHighlight(version: '0.4.0', id: HighlightId.jsonBackups),
         ReleaseHighlight(version: '0.5.0', id: HighlightId.backupRestore),
@@ -202,6 +204,7 @@ void main() {
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     controller = WhatsNewController(
       storage: storage,
+      isFirstRun: false,
       highlights: <ReleaseHighlight>[
         for (final int minor in <int>[1, 2, 3, 4, 5, 6])
           ReleaseHighlight(version: '1.$minor.0', id: HighlightId.jsonBackups),
@@ -223,7 +226,13 @@ void main() {
     final MemoryStorage appStorage = MemoryStorage();
     PersistentStorageService.setImplementation(appStorage);
     await appStorage.keyValueStorage.set<String>(WhatsNewController.lastSeenVersionKey, '0.3.6');
-    await tester.pumpWidget(const KglTimeApp(appTitle: 'Test', appVersion: '0.4.0'));
+    await tester.pumpWidget(
+      const KglTimeApp(
+        appTitle: 'Test',
+        appVersion: '0.4.0',
+        initialKeyValueStorage: <String, dynamic>{'isFirstRun': false},
+      ),
+    );
     await tester.pumpAndSettle();
     expect(find.byType(WhatsNewDialog), findsOneWidget);
     expect(find.text('Test'), findsWidgets);
@@ -236,4 +245,40 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     await appStorage.close();
   });
+
+  for (final bool isFirstRun in <bool>[true, false]) {
+    testWidgets('app startup without tracking distinguishes first run=$isFirstRun', (
+      WidgetTester tester,
+    ) async {
+      final MemoryStorage appStorage = MemoryStorage();
+      PersistentStorageService.setImplementation(appStorage);
+      // initializeApp has already persisted false, but preserves the startup
+      // value in memory. Reading storage here would misclassify a fresh install.
+      await appStorage.keyValueStorage.set<bool>('isFirstRun', false);
+      await tester.pumpWidget(
+        KglTimeApp(
+          appTitle: 'Test',
+          appVersion: '0.4.1',
+          initialKeyValueStorage: <String, dynamic>{'isFirstRun': isFirstRun},
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(WhatsNewDialog), isFirstRun ? findsNothing : findsOneWidget);
+      expect(
+        await appStorage.keyValueStorage.get<String>(WhatsNewController.lastSeenVersionKey),
+        isFirstRun ? '0.4.1' : isNull,
+      );
+      if (!isFirstRun) {
+        expect(find.text('Back up your work'), findsOneWidget);
+        await tester.tap(find.text('Got it'));
+        await tester.pumpAndSettle();
+        expect(
+          await appStorage.keyValueStorage.get<String>(WhatsNewController.lastSeenVersionKey),
+          '0.4.1',
+        );
+      }
+      await tester.pumpWidget(const SizedBox());
+      await appStorage.close();
+    });
+  }
 }

@@ -10,7 +10,7 @@ void main() {
 
   setUp(() {
     storage = MemoryKeyValues();
-    controller = WhatsNewController(storage: storage);
+    controller = WhatsNewController(storage: storage, isFirstRun: false);
   });
 
   Future<void> setLastSeen(String version) => storage.set<String>(
@@ -21,9 +21,35 @@ void main() {
   Future<String?> lastSeen() => storage.get<String>(WhatsNewController.lastSeenVersionKey);
 
   test('fresh installation establishes a baseline without historical highlights', () async {
+    controller = WhatsNewController(storage: storage, isFirstRun: true);
     expect(await controller.pendingHighlights('0.4.0'), isEmpty);
     expect(await lastSeen(), '0.4.0');
   });
+
+  test('existing installation without tracking sees 0.4.0 highlights on a 0.4.x update', () async {
+    final List<ReleaseHighlight> pending = await controller.pendingHighlights('0.4.1');
+    expect(pending.map((ReleaseHighlight highlight) => highlight.id), <HighlightId>[
+      HighlightId.jsonBackups,
+      HighlightId.backupRestore,
+      HighlightId.settingsSections,
+    ]);
+    expect(await lastSeen(), isNull);
+
+    final WhatsNewController nextLaunch = WhatsNewController(storage: storage, isFirstRun: false);
+    expect(await nextLaunch.pendingHighlights('0.4.1'), hasLength(3));
+    await nextLaunch.acknowledge('0.4.1');
+    expect(await lastSeen(), '0.4.1');
+    expect(await nextLaunch.pendingHighlights('0.4.1'), isEmpty);
+  });
+
+  test(
+    'existing installation without tracking or eligible highlights establishes a baseline',
+    () async {
+      expect(await controller.pendingHighlights('0.3.6'), isEmpty);
+      expect(await lastSeen(), '0.3.6');
+      expect(await controller.pendingHighlights('0.4.0'), hasLength(3));
+    },
+  );
 
   test('same version has no highlights', () async {
     await setLastSeen('0.4.0');
@@ -45,6 +71,7 @@ void main() {
   test('skipped releases aggregate newest first and exclude seen and future highlights', () async {
     controller = WhatsNewController(
       storage: storage,
+      isFirstRun: false,
       highlights: const <ReleaseHighlight>[
         ReleaseHighlight(version: '0.5.0', id: HighlightId.settingsSections),
         ReleaseHighlight(version: '0.3.0', id: HighlightId.jsonBackups),
@@ -70,6 +97,7 @@ void main() {
   test('only the five most recent highlights are selected', () async {
     controller = WhatsNewController(
       storage: storage,
+      isFirstRun: false,
       highlights: <ReleaseHighlight>[
         for (final int minor in <int>[1, 5, 3, 6, 2, 4])
           ReleaseHighlight(version: '1.$minor.0', id: HighlightId.jsonBackups),
@@ -89,6 +117,7 @@ void main() {
   test('semantic ordering puts 2.10.0 after 2.9.0', () async {
     controller = WhatsNewController(
       storage: storage,
+      isFirstRun: false,
       highlights: const <ReleaseHighlight>[
         ReleaseHighlight(version: '2.9.0', id: HighlightId.jsonBackups),
         ReleaseHighlight(version: '2.10.0', id: HighlightId.backupRestore),
@@ -131,7 +160,7 @@ void main() {
   test('without acknowledgement the next launch still has highlights', () async {
     await setLastSeen('0.3.6');
     expect(await controller.pendingHighlights('0.4.0'), isNotEmpty);
-    final WhatsNewController nextLaunch = WhatsNewController(storage: storage);
+    final WhatsNewController nextLaunch = WhatsNewController(storage: storage, isFirstRun: false);
     expect(await nextLaunch.pendingHighlights('0.4.0'), isNotEmpty);
     expect(await lastSeen(), '0.3.6');
   });
@@ -139,6 +168,7 @@ void main() {
   test('build metadata is ignored for the app and highlight versions', () async {
     controller = WhatsNewController(
       storage: storage,
+      isFirstRun: false,
       highlights: const <ReleaseHighlight>[
         ReleaseHighlight(version: '0.4.0+18', id: HighlightId.jsonBackups),
       ],
@@ -158,7 +188,11 @@ void main() {
   });
 
   test('obsolete removed highlights do not produce a popup after a long absence', () async {
-    controller = WhatsNewController(storage: storage, highlights: const <ReleaseHighlight>[]);
+    controller = WhatsNewController(
+      storage: storage,
+      isFirstRun: false,
+      highlights: const <ReleaseHighlight>[],
+    );
     await setLastSeen('0.1.0');
     expect(await controller.pendingHighlights('0.4.0'), isEmpty);
     expect(await lastSeen(), '0.4.0');

@@ -47,6 +47,7 @@ class _KglTimeAppState extends State<KglTimeApp> {
   late final GoRouter router;
   late final WhatsNewController whatsNewController = WhatsNewController(
     storage: PersistentStorageService.instance.keyValueStorage,
+    isFirstRun: widget.initialKeyValueStorage['isFirstRun'] as bool? ?? true,
   );
 
   @override
