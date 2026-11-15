@@ -134,6 +134,60 @@ abstract class AppLocalizations {
   /// **'Export / Import'**
   String get settingsExportImport;
 
+  /// No description provided for @gettingStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting started'**
+  String get gettingStarted;
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to KGL Time'**
+  String get welcomeTitle;
+
+  /// No description provided for @welcomeDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Get started'**
+  String get welcomeDismiss;
+
+  /// No description provided for @welcomeTrackTimeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your time'**
+  String get welcomeTrackTimeTitle;
+
+  /// No description provided for @welcomeTrackTimeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a timer on Home or add an entry manually.'**
+  String get welcomeTrackTimeDescription;
+
+  /// No description provided for @welcomeCategoriesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make categories your own'**
+  String get welcomeCategoriesTitle;
+
+  /// No description provided for @welcomeCategoriesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize them in Settings → Edit categories.'**
+  String get welcomeCategoriesDescription;
+
+  /// No description provided for @welcomeBackupsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up your work'**
+  String get welcomeBackupsTitle;
+
+  /// No description provided for @welcomeBackupsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Entries are saved locally. Create and restore backups in Settings → Export / Import.'**
+  String get welcomeBackupsDescription;
+
   /// No description provided for @whatsNew.
   ///
   /// In en, this message translates to:

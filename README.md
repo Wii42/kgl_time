@@ -78,6 +78,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Added
 
+- Welcome new users with a brief introduction to time tracking, categories, and backups.
+  Reopen it from Settings → Getting started. An interrupted welcome reappears until dismissed.
 - Show localized release highlights once after updates to help discover new features and where to
   find them, combining missed releases in one dialog with a link to the full release notes.
   Reopen up to five of the most recent highlights from Settings at any time.

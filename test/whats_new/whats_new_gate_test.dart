@@ -1,12 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kgl_time/app/kgl_time_app.dart';
+import 'package:kgl_time/app/startup_dialogs_gate.dart';
 import 'package:kgl_time/l10n/app_locales.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:kgl_time/onboarding/onboarding_controller.dart';
+import 'package:kgl_time/onboarding/welcome_dialog.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:kgl_time/whats_new/release_highlight.dart';
 import 'package:kgl_time/whats_new/whats_new_controller.dart';
 import 'package:kgl_time/whats_new/whats_new_dialog.dart';
-import 'package:kgl_time/whats_new/whats_new_gate.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../support/memory_storage.dart';
@@ -43,8 +45,9 @@ void main() {
           AppLocalizations.delegate,
         ],
         supportedLocales: supportedAppLocales,
-        builder: (BuildContext context, Widget? child) => WhatsNewGate(
-          controller: controller,
+        builder: (BuildContext context, Widget? child) => StartupDialogsGate(
+          whatsNewController: controller,
+          onboardingController: OnboardingController(storage: storage),
           currentVersion: version,
           navigatorKey: navigatorKey,
           child: child!,
@@ -253,6 +256,9 @@ void main() {
       // initializeApp has already persisted false, but preserves the startup
       // value in memory. Reading storage here would misclassify a fresh install.
       await appStorage.keyValueStorage.set<bool>('isFirstRun', false);
+      if (isFirstRun) {
+        await appStorage.keyValueStorage.set<bool>(OnboardingController.completedKey, false);
+      }
       await tester.pumpWidget(
         KglTimeApp(
           appTitle: 'Test',
@@ -262,6 +268,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(find.byType(WhatsNewDialog), isFirstRun ? findsNothing : findsOneWidget);
+      expect(find.byType(WelcomeDialog), isFirstRun ? findsOneWidget : findsNothing);
       expect(
         await appStorage.keyValueStorage.get<String>(WhatsNewController.lastSeenVersionKey),
         isFirstRun ? '0.4.1' : isNull,

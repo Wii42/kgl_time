@@ -28,6 +28,36 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsExportImport => 'Export / Import';
 
   @override
+  String get gettingStarted => 'Erste Schritte';
+
+  @override
+  String get welcomeTitle => 'Willkommen bei KGL Time';
+
+  @override
+  String get welcomeDismiss => 'Los geht’s';
+
+  @override
+  String get welcomeTrackTimeTitle => 'Arbeitszeit erfassen';
+
+  @override
+  String get welcomeTrackTimeDescription =>
+      'Starte die Zeiterfassung auf der Startseite oder füge einen Eintrag manuell hinzu.';
+
+  @override
+  String get welcomeCategoriesTitle => 'Kategorien anpassen';
+
+  @override
+  String get welcomeCategoriesDescription =>
+      'Passe die Kategorien unter Einstellungen → Kategorien bearbeiten an.';
+
+  @override
+  String get welcomeBackupsTitle => 'Arbeitsdaten sichern';
+
+  @override
+  String get welcomeBackupsDescription =>
+      'Einträge werden lokal gespeichert. Backups kannst du unter Einstellungen → Export / Import erstellen und wiederherstellen.';
+
+  @override
   String get whatsNew => 'Was ist neu?';
 
   @override

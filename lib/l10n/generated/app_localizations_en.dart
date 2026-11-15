@@ -28,6 +28,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsExportImport => 'Export / Import';
 
   @override
+  String get gettingStarted => 'Getting started';
+
+  @override
+  String get welcomeTitle => 'Welcome to KGL Time';
+
+  @override
+  String get welcomeDismiss => 'Get started';
+
+  @override
+  String get welcomeTrackTimeTitle => 'Track your time';
+
+  @override
+  String get welcomeTrackTimeDescription => 'Start a timer on Home or add an entry manually.';
+
+  @override
+  String get welcomeCategoriesTitle => 'Make categories your own';
+
+  @override
+  String get welcomeCategoriesDescription => 'Customize them in Settings → Edit categories.';
+
+  @override
+  String get welcomeBackupsTitle => 'Back up your work';
+
+  @override
+  String get welcomeBackupsDescription =>
+      'Entries are saved locally. Create and restore backups in Settings → Export / Import.';
+
+  @override
   String get whatsNew => 'What\'s new';
 
   @override

@@ -3,6 +3,7 @@ import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/l10n/app_locales.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
+import 'package:kgl_time/onboarding/onboarding_controller.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_interface.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:material_ui/material_ui.dart';
@@ -31,6 +32,9 @@ Future<InitialAppData> initializeApp({required PersistentStorage storage}) async
   final Map<String, dynamic> initialKeyValueStorage = await storageService.keyValueStorage.getAll();
   final bool isFirstRun = initialKeyValueStorage['isFirstRun'] ?? true;
   if (isFirstRun) {
+    // Persist before clearing isFirstRun so an interrupted startup can retry the welcome.
+    await storageService.keyValueStorage.set<bool>(OnboardingController.completedKey, false);
+    initialKeyValueStorage[OnboardingController.completedKey] = false;
     final Locale locale = basicLocaleListResolution(
       WidgetsBinding.instance.platformDispatcher.locales,
       supportedAppLocales,

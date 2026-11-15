@@ -12,11 +12,12 @@ import '../data_model/work_categories.dart';
 import '../data_model/work_entries.dart';
 import '../data_model/work_entry.dart';
 import '../l10n/app_locales.dart';
+import '../onboarding/onboarding_controller.dart';
 import '../persistent_storage/persistent_storage_service.dart';
 import '../whats_new/whats_new_controller.dart';
-import '../whats_new/whats_new_gate.dart';
 import 'animated_branch_container.dart';
 import 'app_view.dart';
+import 'startup_dialogs_gate.dart';
 
 class KglTimeApp extends StatefulWidget {
   final String appTitle;
@@ -48,6 +49,9 @@ class _KglTimeAppState extends State<KglTimeApp> {
   late final WhatsNewController whatsNewController = WhatsNewController(
     storage: PersistentStorageService.instance.keyValueStorage,
     isFirstRun: widget.initialKeyValueStorage['isFirstRun'] as bool? ?? true,
+  );
+  late final OnboardingController onboardingController = OnboardingController(
+    storage: PersistentStorageService.instance.keyValueStorage,
   );
 
   @override
@@ -106,8 +110,9 @@ class _KglTimeAppState extends State<KglTimeApp> {
         routerConfig: router,
         builder: (BuildContext context, Widget? child) => widget.appVersion == null
             ? child!
-            : WhatsNewGate(
-                controller: whatsNewController,
+            : StartupDialogsGate(
+                whatsNewController: whatsNewController,
+                onboardingController: onboardingController,
                 currentVersion: widget.appVersion!,
                 navigatorKey: routerKey,
                 child: child!,

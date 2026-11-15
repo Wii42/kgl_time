@@ -11,6 +11,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../data_model/key_values.dart';
 import '../main.dart';
+import '../onboarding/onboarding_controller.dart';
+import '../onboarding/welcome_dialog.dart';
 import '../whats_new/whats_new_controller.dart';
 import '../whats_new/whats_new_dialog.dart';
 
@@ -172,6 +174,23 @@ class _AboutSection extends StatelessWidget {
         _SettingsSection(
           sectionTitle: loc?.aboutSection ?? '<About>',
           children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.waving_hand_outlined),
+              title: Text(loc?.gettingStarted ?? '<Getting started>'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () async {
+                final OnboardingController controller = OnboardingController(
+                  storage: context
+                      .read<KeyValues>()
+                      .storedEntries,
+                );
+                await showDialog<void>(
+                  context: context,
+                  builder: (BuildContext context) => const WelcomeDialog(),
+                );
+                if (context.mounted) await controller.acknowledge();
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.rocket_launch_outlined),
               title: Text(loc?.whatsNew ?? "<What's new>"),

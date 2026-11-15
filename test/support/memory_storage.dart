@@ -133,5 +133,5 @@ class MemoryKeyValues extends KeyValueStorage {
   }
 
   @override
-  Future<Map<String, T>> getAll<T>() async => _values.cast<String, T>();
+  Future<Map<String, T>> getAll<T>() async => Map<String, T>.from(_values);
 }

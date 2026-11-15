@@ -1,15 +1,16 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kgl_time/app/startup_dialogs_gate.dart';
 import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/l10n/app_locales.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/main.dart' as app;
+import 'package:kgl_time/onboarding/onboarding_controller.dart';
 import 'package:kgl_time/pages/settings_page.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:kgl_time/whats_new/release_highlight.dart';
 import 'package:kgl_time/whats_new/whats_new_controller.dart';
 import 'package:kgl_time/whats_new/whats_new_dialog.dart';
-import 'package:kgl_time/whats_new/whats_new_gate.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
@@ -62,8 +63,9 @@ void main() {
           AppLocalizations.delegate,
         ],
         supportedLocales: supportedAppLocales,
-        builder: (BuildContext context, Widget? child) => WhatsNewGate(
-          controller: controller,
+        builder: (BuildContext context, Widget? child) => StartupDialogsGate(
+          whatsNewController: controller,
+          onboardingController: OnboardingController(storage: storage),
           currentVersion: '0.4.0+18',
           navigatorKey: navigatorKey,
           child: child!,
