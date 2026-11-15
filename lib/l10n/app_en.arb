@@ -38,6 +38,7 @@
   "darkMode": "Dark",
   "lightMode": "Light",
   "appearance": "Appearance",
+  "theme": "Theme",
   "categories": "Categories",
   "defaultCategoryPlanning": "Planning",
   "defaultCategoryMeetings": "Meetings",

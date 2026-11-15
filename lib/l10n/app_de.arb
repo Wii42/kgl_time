@@ -38,6 +38,7 @@
   "darkMode": "Dunkel",
   "lightMode": "Hell",
   "appearance": "Darstellung",
+  "theme": "Design",
   "categories": "Kategorien",
   "defaultCategoryPlanning": "Planung",
   "defaultCategoryMeetings": "Besprechungen",

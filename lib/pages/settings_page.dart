@@ -31,11 +31,13 @@ class SettingsPage extends KglPage {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Card(
-              child: Padding(
+            _SettingsSection(
+              sectionTitle: loc?.appearance ?? '<Appearance>',
+              children: [Padding(
                 padding: const EdgeInsets.all(16),
                 child: _ThemeModeSettings(),
-              ),
+              )
+              ],
             ),
             const SizedBox(height: 24),
             _SettingsSection(
@@ -89,6 +91,14 @@ class _ThemeModeSettings extends StatelessWidget {
       builder: (context, keyValues, _) {
         return LayoutBuilder(
           builder: (context, constraints) {
+            final ThemeData theme = Theme.of(context);
+            final ListTileThemeData tileTheme = ListTileTheme.of(context);
+
+            final TextStyle? titleStyle =
+                tileTheme.titleTextStyle ??
+                    theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.colorScheme.onSurface,
+                    );
             return SizedBox(
               width: constraints.maxWidth,
               child: Wrap(
@@ -98,7 +108,7 @@ class _ThemeModeSettings extends StatelessWidget {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  Text(loc?.appearance ?? '<Appearance>'),
+                  Text(loc?.theme ?? '<Theme>', style: titleStyle),
                   SegmentedButton<ThemeMode>(
                     segments: [
                       for (ThemeMode mode in ThemeMode.values)
