@@ -211,7 +211,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get openTrashBin => 'Open Trash Bin';
 
   @override
-  String get restoreEntry => 'Restore Entry';
+  String get restoreEntry => 'Restore';
 
   @override
   String get trashBin => 'Trash Bin';

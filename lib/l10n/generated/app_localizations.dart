@@ -491,7 +491,7 @@ abstract class AppLocalizations {
   /// No description provided for @restoreEntry.
   ///
   /// In en, this message translates to:
-  /// **'Restore Entry'**
+  /// **'Restore'**
   String get restoreEntry;
 
   /// No description provided for @trashBin.

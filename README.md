@@ -88,6 +88,7 @@ dart run build_runner watch --delete-conflicting-outputs
 
 - Group settings into sections for appearance, data, and app information, with tappable rows for
   navigation, contact, privacy, and release notes.
+- Place the restore action below trashed entry details for a clearer layout.
 
 #### Fixed
 

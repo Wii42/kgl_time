@@ -17,27 +17,15 @@ class TrashedWorkEntry extends WorkEntryWidget {
 
   @override
   List<Widget> rightSideButtons(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-    AppLocalizations? loc = AppLocalizations.of(context);
-    return [
-      FilledButton(
-        onPressed: () {
-          WorkEntries entries = context.read<WorkEntries>();
-          entries.restoreFromTrashBin(workEntry);
-        },
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Icon(Icons.restore_from_trash),
-            ),
-            Text(
-              loc?.restoreEntry ?? "<restore Entry>",
-              style: textTheme.labelSmall?.apply(color: Colors.white),
-            ),
-          ],
-        ),
-      ),
+    final AppLocalizations? loc = AppLocalizations.of(context);
+    return <Widget>[TextButton.icon(
+      onPressed: () {
+        final WorkEntries entries = context.read<WorkEntries>();
+        entries.restoreFromTrashBin(workEntry);
+      },
+      icon: const Icon(Icons.restore_from_trash_outlined),
+      label: Text(loc?.restoreEntry ?? '<Restore>'),
+    )
     ];
   }
 }

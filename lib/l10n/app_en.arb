@@ -65,7 +65,7 @@
   "stop": "Stop",
   "home": "Home",
   "openTrashBin": "Open Trash Bin",
-  "restoreEntry": "Restore Entry",
+  "restoreEntry": "Restore",
   "trashBin": "Trash Bin",
   "noMatchingEntries": "No matching entries found",
   "adjustCategoryFilterHint": "Try selecting more categories or include entries without a category.",

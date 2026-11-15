@@ -212,7 +212,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get openTrashBin => 'Papierkorb öffnen';
 
   @override
-  String get restoreEntry => 'Eintrag wiederherstellen';
+  String get restoreEntry => 'Wiederherstellen';
 
   @override
   String get trashBin => 'Papierkorb';
