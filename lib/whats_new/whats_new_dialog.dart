@@ -40,9 +40,11 @@ class WhatsNewDialog extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(highlight.id.title(loc), style: theme.textTheme.titleMedium),
-                  const SizedBox(height: 8),
-                  Text(highlight.id.description(loc)),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(highlight.id.title(loc)),
+                    subtitle: Text(highlight.id.description(loc)),
+                  ),
                 ],
               ),
             ),
