@@ -5,6 +5,8 @@
   `const Type name` where appropriate instead of untyped `final`, `const` declarations. Never use
   `var` declarations.
 
+- Set `scrollable: true` when creating an `AlertDialog`, unless explicitly instructed otherwise.
+
 # Reuse existing code
 
 - Check for existing widgets and functions in the project, Flutter, and current dependencies before

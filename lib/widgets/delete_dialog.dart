@@ -19,6 +19,7 @@ void showDeleteConfirmationDialog({
           textTheme: theme.extension<OriginalTextTheme>()?.textTheme ?? theme.textTheme,
         ),
         child: AlertDialog(
+          scrollable: true,
           title: Text(loc?.confirmDelete ?? '<confirmDelete>'),
           content: Text(detailText(loc) ?? '<explanationText>'),
           actions: <Widget>[

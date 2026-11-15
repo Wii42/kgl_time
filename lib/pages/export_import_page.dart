@@ -105,6 +105,7 @@ class ExportImportPage extends KglPage {
           showDialog<void>(
             context: context,
             builder: (BuildContext dialogContext) => AlertDialog(
+              scrollable: true,
               title: Text(loc?.unsupportedBackupFormatTitle ?? '<Unsupported backup format>'),
               content: Text(loc?.unsupportedBackupFormat ?? '<Unsupported backup format>'),
               actions: <Widget>[

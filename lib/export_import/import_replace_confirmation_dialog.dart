@@ -100,6 +100,7 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
     return PopScope(
       canPop: !_isImporting,
       child: AlertDialog(
+        scrollable: true,
         title: Text(loc?.importBacupAndReplace ?? "<Import Data>"),
         content: _ImportReplaceContent(loadedData: widget.loadedData),
         actions: [

@@ -60,6 +60,7 @@ class _SelectCategoryDialogState extends State<SelectCategoryDialog> {
         );
 
         return AlertDialog(
+          scrollable: true,
           title: Text(loc?.selectCategory ?? ''),
           content: SelectCategoriesWidget(
             categories: selectedCategories,

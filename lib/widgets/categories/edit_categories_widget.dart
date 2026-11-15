@@ -97,6 +97,7 @@ class EditCategoriesWidget extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
+          scrollable: true,
           title: Text((existingCategory == null ? loc?.addNewCategory : loc?.editCategory) ?? ''),
           content: Form(
             key: formKey,

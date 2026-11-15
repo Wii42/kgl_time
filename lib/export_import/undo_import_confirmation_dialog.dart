@@ -49,6 +49,7 @@ class _UndoImportConfirmationDialogState extends State<UndoImportConfirmationDia
     return PopScope(
       canPop: !_isUndoing,
       child: AlertDialog(
+        scrollable: true,
         title: Text(loc?.undoImportTitle ?? '<Undo backup import?>'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
