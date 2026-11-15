@@ -1,6 +1,6 @@
 # Privacy Policy for KGL Time
 
-**Last updated:** November 14, 2026
+**Last updated:** November 15, 2026
 
 ## Developer and Contact
 
@@ -22,17 +22,22 @@ mechanisms.
 
 ## Retention and Deletion
 
-Work data remains stored until it is deleted. Deleted work entries can initially be restored from
-the trash for 30 days. After this period, they are removed when the app starts. App data can also be
-deleted using the operating system's features. This does not delete exported files, shared copies,
-or device backups.
+Work data remains stored until it is deleted or replaced. Deleted work entries can initially be
+restored from the trash for 30 days. After this period, they are removed when the app starts. App
+data can also be deleted using the operating system's features. This does not delete exported
+files, shared copies, or device backups.
 
-## Export, Sharing, and Device Backups
+## Export, Import, Sharing, and Backups
 
 At your request, work data, including descriptions and categories, can be exported as CSV or shared
-with other apps. Temporary files may be created in the process. Depending on your chosen storage
-location or recipient, data may also be transferred to cloud services or other people. The privacy
-policies of the respective providers apply to these copies.
+with other apps. JSON backups contain all work entries, including those in the trash, categories,
+record identifiers, and editing timestamps. CSV and JSON exports are not encrypted by KGL Time.
+Importing a JSON backup processes its contents locally and replaces existing entries and categories,
+including the trash. The original backup file is not modified.
+
+Temporary files may be created when saving or sharing. Depending on your chosen storage location or
+recipient, data may also be transferred to cloud services or other people. The privacy policies of
+the respective providers apply to these copies.
 
 Depending on your device settings, app data may be included in operating system backups or
 transferred to another device, for example through Google on Android. Backups and the deletion of
@@ -68,7 +73,7 @@ above.
 
 # Datenschutzrichtlinie für KGL Time
 
-**Stand:** 14. November 2026
+**Stand:** 15. November 2026
 
 ## Entwickler und Kontakt
 
@@ -92,17 +97,24 @@ Schutzmechanismen.
 
 ## Aufbewahrung und Löschung
 
-Arbeitsdaten bleiben gespeichert, bis sie gelöscht werden. Gelöschte Arbeitseinträge sind zunächst
-für 30 Tage im Papierkorb wiederherstellbar und werden nach Ablauf dieser Frist beim Start der App
-entfernt. App-Daten können ausserdem über die Funktionen des Betriebssystems gelöscht werden.
+Arbeitsdaten bleiben gespeichert, bis sie gelöscht oder ersetzt werden. Gelöschte Arbeitseinträge
+sind zunächst für 30 Tage im Papierkorb wiederherstellbar und werden nach Ablauf dieser Frist beim
+Start der App entfernt. App-Daten können ausserdem über die Funktionen des Betriebssystems gelöscht
+werden.
 Exportierte Dateien, geteilte Kopien und Gerätesicherungen werden dadurch nicht mitgelöscht.
 
-## Export, Teilen und Gerätesicherungen
+## Export, Import, Teilen und Sicherungen
 
 Auf Ihre Veranlassung können Arbeitsdaten einschliesslich Beschreibungen und Kategorien als CSV
-exportiert oder an andere Apps weitergegeben werden. Dabei können vorübergehende Dateien entstehen.
-Je nach gewähltem Speicherort oder Empfänger können die Daten auch an Cloud-Dienste oder andere
-Personen gelangen. Für diese Kopien gelten die Datenschutzbestimmungen der jeweiligen Anbieter.
+exportiert oder an andere Apps weitergegeben werden. JSON-Sicherungen enthalten alle Arbeitseinträge
+einschliesslich Papierkorb, Kategorien, Datensatzkennungen und Bearbeitungszeitpunkte. CSV- und
+JSON-Exporte werden von KGL Time nicht verschlüsselt. Der Import einer JSON-Sicherung erfolgt lokal
+und ersetzt vorhandene Einträge und Kategorien einschliesslich Papierkorb. Die ursprüngliche
+Sicherungsdatei wird nicht verändert.
+
+Beim Speichern oder Teilen können vorübergehende Dateien entstehen. Je nach gewähltem Speicherort
+oder Empfänger können die Daten auch an Cloud-Dienste oder andere Personen gelangen. Für diese
+Kopien gelten die Datenschutzbestimmungen der jeweiligen Anbieter.
 
 Abhängig von Ihren Geräteeinstellungen können App-Daten in Betriebssystem-Sicherungen aufgenommen
 oder auf ein anderes Gerät übertragen werden, auf Android beispielsweise über Google. Sicherung und
