@@ -66,6 +66,7 @@ class SettingsPage extends KglPage {
 
             const SizedBox(height: 24),
             _AboutSection(),
+            const SizedBox(height: 12),
           ],
         ),
       ),
