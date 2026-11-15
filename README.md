@@ -80,19 +80,13 @@ dart run build_runner watch --delete-conflicting-outputs
 
 - Save or share JSON backups of all work entries, including the trash, and categories.
   Settings and running tracker sessions are excluded.
-- Restore entries and categories from a JSON backup after previewing its date and contents.
-  Import replaces existing data and can be undone while the confirmation message is visible.
+- Restore entries and categories from a JSON backup, with a replacement preview, validation, and
+  a temporary Undo option. Preserve existing data on failure and warn before discarding changes
+  or cancelling time tracking.
 
 #### Fixed
 
-- Save and share the latest entries and categories, with filenames and backup timestamps generated
-  when exporting.
-- Reject invalid or unsupported backups before replacing data. Explain invalid backup data in an
-  error message and unsupported formats in a dialog, and report file selection or read failures.
-- Preserve existing data if importing or undoing fails, and ask before discarding changes made
-  after an import when undoing it.
-- Warn before cancelling running time tracking when importing or undoing a backup. Failed or
-  cancelled operations keep the tracker running.
+- CSV exports use the latest data when saving or sharing.
 
 ### v0.3.6
 
