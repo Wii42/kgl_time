@@ -16,10 +16,17 @@ class WhatsNewDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations loc = AppLocalizations.of(context)!;
-    final TextTheme textTheme = Theme.of(context).textTheme;
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
     return AlertDialog(
       scrollable: true,
-      title: Text(loc.whatsNew),
+      title: Row(
+        children: <Widget>[
+          Icon(Icons.rocket_launch_outlined, color: colorScheme.primary, size: 28),
+          const SizedBox(width: 12),
+          Expanded(child: Text(loc.whatsNew)),
+        ],
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,8 +39,8 @@ class WhatsNewDialog extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(highlight.id.title(loc), style: textTheme.titleSmall),
-                  const SizedBox(height: 4),
+                  Text(highlight.id.title(loc), style: theme.textTheme.titleMedium),
+                  const SizedBox(height: 8),
                   Text(highlight.id.description(loc)),
                 ],
               ),
