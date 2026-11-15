@@ -608,17 +608,17 @@ abstract class AppLocalizations {
   /// **'Import a JSON backup to restore your work entries and categories. This replaces all existing entries and categories, including the trash.'**
   String get importBackupExplanation;
 
-  /// No description provided for @importBacupAndReplaceExistingEntries.
+  /// Button label confirming replacement of existing work entries and categories with an imported backup.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace data'**
+  String get replaceData;
+
+  /// Title of the dialog asking the user to confirm replacing current work data with an imported backup.
   ///
   /// In en, this message translates to:
   /// **'Import backup and replace existing entries'**
-  String get importBacupAndReplaceExistingEntries;
-
-  /// No description provided for @importBacupAndReplace.
-  ///
-  /// In en, this message translates to:
-  /// **'Import backup and replace'**
-  String get importBacupAndReplace;
+  String get importReplaceDialogTitle;
 
   /// No description provided for @importSuccess.
   ///

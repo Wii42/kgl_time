@@ -280,11 +280,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Importieren Sie eine JSON-Sicherung, um Ihre Arbeitseinträge und Kategorien wiederherzustellen. Dabei werden alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb ersetzt.';
 
   @override
-  String get importBacupAndReplaceExistingEntries =>
-      'Backup importieren und vorhandene Einträge ersetzen';
+  String get replaceData => 'Daten ersetzen';
 
   @override
-  String get importBacupAndReplace => 'Backup importieren und ersetzen';
+  String get importReplaceDialogTitle => 'Backup importieren und vorhandene Einträge ersetzen';
 
   @override
   String get importSuccess => 'Import erfolgreich';

@@ -133,7 +133,7 @@ void main() {
   }
 
   Future<void> confirm(WidgetTester tester) async {
-    await tester.tap(find.widgetWithText(TextButton, 'Import backup and replace existing entries'));
+    await tester.tap(find.widgetWithText(TextButton, 'Replace data'));
     await tester.pumpAndSettle();
   }
 
@@ -195,12 +195,12 @@ void main() {
     final BuildContext pageContext = tester.element(find.byType(ExportImportPage));
     final AppLocalizations loc = AppLocalizations.of(pageContext)!;
     final Finder button = find.widgetWithText(
-      ElevatedButton,
+      TextButton,
       loc.importBackup,
     );
     await tester.ensureVisible(button);
     final AsyncCallback importBackup =
-        tester.widget<ElevatedButton>(button).onPressed! as AsyncCallback;
+        tester.widget<TextButton>(button).onPressed! as AsyncCallback;
     await tester.runAsync(importBackup);
     await tester.pumpAndSettle();
   }
@@ -256,7 +256,7 @@ void main() {
       },
     );
     final Finder button = find.widgetWithText(
-      ElevatedButton,
+      TextButton,
       'Import backup',
     );
     await tester.ensureVisible(button);
@@ -283,7 +283,7 @@ void main() {
       },
     );
     final Finder button = find.widgetWithText(
-      ElevatedButton,
+      TextButton,
       'Import backup',
     );
     await tester.ensureVisible(button);
@@ -426,7 +426,7 @@ void main() {
       expect(
         tester
             .widget<TextButton>(
-              find.widgetWithText(TextButton, 'Import backup and replace existing entries'),
+              find.widgetWithText(TextButton, 'Replace data'),
             )
             .onPressed,
         isNull,
@@ -455,7 +455,7 @@ void main() {
     storage.workCategories.writeBarrier = barrier;
     final VoidCallback onPressed = tester
         .widget<TextButton>(
-          find.widgetWithText(TextButton, 'Import backup and replace existing entries'),
+          find.widgetWithText(TextButton, 'Replace data'),
         )
         .onPressed!;
     try {
@@ -496,7 +496,7 @@ void main() {
       expect(
         tester
             .widget<TextButton>(
-              find.widgetWithText(TextButton, 'Import backup and replace existing entries'),
+              find.widgetWithText(TextButton, 'Replace data'),
             )
             .onPressed,
         isNotNull,
@@ -694,7 +694,7 @@ void main() {
       await openConfirmation(tester, unsupported);
       final Finder button = find.widgetWithText(
         TextButton,
-        'Import backup and replace existing entries',
+        'Replace data',
       );
       expect(button, findsOneWidget);
       expect(tester.widget<TextButton>(button).onPressed, isNull);
@@ -890,7 +890,7 @@ void main() {
       final AppLocalizations loc = AppLocalizations.of(
         tester.element(find.byType(ImportReplaceConfirmationDialog)),
       )!;
-      await tester.tap(find.widgetWithText(TextButton, loc.importBacupAndReplaceExistingEntries));
+      await tester.tap(find.widgetWithText(TextButton, loc.replaceData));
       await tester.pumpAndSettle();
       startTracker();
       await tester.pumpAndSettle();

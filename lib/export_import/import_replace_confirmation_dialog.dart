@@ -101,7 +101,7 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
       canPop: !_isImporting,
       child: AlertDialog(
         scrollable: true,
-        title: Text(loc?.importBacupAndReplace ?? "<Import Data>"),
+        title: Text(loc?.importReplaceDialogTitle ?? "<Import Data>"),
         content: _ImportReplaceContent(loadedData: widget.loadedData),
         actions: [
           ElevatedButton(
@@ -111,7 +111,7 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
           TextButton(
             onPressed: _isImporting || !supported ? null : _importAndReplace,
             child: Text(
-              loc?.importBacupAndReplaceExistingEntries ?? "<Import and Replace>",
+              loc?.replaceData ?? "<Import and Replace>",
               textAlign: TextAlign.center,
             ),
           ),

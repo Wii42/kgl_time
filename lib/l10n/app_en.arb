@@ -85,8 +85,14 @@
   "exportJsonExplanation": "Creates a JSON backup of all work entries, including the trash, and categories, for restoring data or transferring it to another device. Settings and running tracker sessions are not included.",
   "importBackup": "Import backup",
   "importBackupExplanation": "Import a JSON backup to restore your work entries and categories. This replaces all existing entries and categories, including the trash.",
-  "importBacupAndReplaceExistingEntries": "Import backup and replace existing entries",
-  "importBacupAndReplace": "Import backup and replace",
+  "replaceData": "Replace data",
+  "@replaceData": {
+    "description": "Button label confirming replacement of existing work entries and categories with an imported backup."
+  },
+  "importReplaceDialogTitle": "Import backup and replace existing entries",
+  "@importReplaceDialogTitle": {
+    "description": "Title of the dialog asking the user to confirm replacing current work data with an imported backup."
+  },
   "importSuccess": "Import successful",
   "importFailed": "Import failed",
   "invalidBackupData": "This backup contains invalid data and cannot be imported.",

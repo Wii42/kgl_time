@@ -64,7 +64,7 @@ class ExportImportPage extends KglPage {
               explanationLabel: (loc) =>
                   loc?.importBackupExplanation ?? "<import backup explanation>",
               actions: [
-                ElevatedButton.icon(
+                TextButton.icon(
                   onPressed: canImport ? onImportJsonBackup(context) : null,
                   label: Text(loc?.importBackup ?? '<Import backup>'),
                   icon: Icon(Icons.upload_outlined),
