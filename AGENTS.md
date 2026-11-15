@@ -33,3 +33,17 @@
   do not rewrite notes for released versions.
 - When preparing a release, move the Unreleased notes under the actual version and create a fresh
   Unreleased section. Do not choose or increment a release version unless the task calls for it.
+
+# What's New highlights
+
+- Before a release, review the curated highlights in `lib/whats_new/release_highlight.dart` and
+  their
+  ARB translations, updating them when necessary.
+- Focus on new features users might otherwise miss or not realize are new. For features that are
+  less discoverable, briefly say where to find them.
+- Keep highlights concise. Avoid repeating usage instructions, warnings, or explanations already
+  provided by the feature itself. Combine closely related capabilities into one highlight.
+- Omit routine visual changes, such as settings layout updates, unless they help users discover a
+  meaningful new capability.
+- Keep all supported locales consistent. Remove obsolete highlights and their unused translation
+  keys together; the popup should remain a curated selection rather than a complete changelog.
