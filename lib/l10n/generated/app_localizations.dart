@@ -632,6 +632,12 @@ abstract class AppLocalizations {
   /// **'Import failed'**
   String get importFailed;
 
+  /// No description provided for @invalidBackupData.
+  ///
+  /// In en, this message translates to:
+  /// **'This backup contains invalid data and cannot be imported.'**
+  String get invalidBackupData;
+
   /// No description provided for @undo.
   ///
   /// In en, this message translates to:

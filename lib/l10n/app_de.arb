@@ -89,6 +89,7 @@
   "importBacupAndReplace": "Backup importieren und ersetzen",
   "importSuccess": "Import erfolgreich",
   "importFailed": "Import fehlgeschlagen",
+  "invalidBackupData": "Dieses Backup enthält ungültige Daten und kann nicht importiert werden.",
   "undo": "Rückgängig",
   "undoImportTitle": "Backup-Import rückgängig machen?",
   "undoImportChangesWarning": "Dadurch werden die Daten vor dem Import wiederhergestellt. Änderungen seit dem Import gehen verloren.",

@@ -293,6 +293,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get importFailed => 'Import fehlgeschlagen';
 
   @override
+  String get invalidBackupData =>
+      'Dieses Backup enthält ungültige Daten und kann nicht importiert werden.';
+
+  @override
   String get undo => 'Rückgängig';
 
   @override

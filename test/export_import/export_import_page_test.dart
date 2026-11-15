@@ -180,6 +180,31 @@ void main() {
     return jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
   }
 
+  Future<void> pickBackup(WidgetTester tester, String contents) async {
+    final Directory directory = Directory.systemTemp.createTempSync('kgl_backup_picker_');
+    addTearDown(() => directory.deleteSync(recursive: true));
+    final File file = File('${directory.path}/backup.json');
+    file.writeAsStringSync(contents);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      channel,
+      (MethodCall call) async {
+        expect(call.method, 'pickFile');
+        return file.path;
+      },
+    );
+    final BuildContext pageContext = tester.element(find.byType(ExportImportPage));
+    final AppLocalizations loc = AppLocalizations.of(pageContext)!;
+    final Finder button = find.widgetWithText(
+      ElevatedButton,
+      loc.importBacupAndReplaceExistingEntries,
+    );
+    await tester.ensureVisible(button);
+    final AsyncCallback importBackup =
+        tester.widget<ElevatedButton>(button).onPressed! as AsyncCallback;
+    await tester.runAsync(importBackup);
+    await tester.pumpAndSettle();
+  }
+
   for (final (Locale locale, String entryLabel, String categoryLabel) in <(Locale, String, String)>[
     (const Locale('en'), 'entries', 'categories'),
     (const Locale('de'), 'Einträge', 'Kategorien'),
@@ -686,20 +711,6 @@ void main() {
         (WidgetTester tester) async {
           startTracker();
           await launch(tester, locale: locale);
-          final Directory directory = Directory.systemTemp.createTempSync(
-            'kgl_unsupported_backup_',
-          );
-          addTearDown(() => directory.deleteSync(recursive: true));
-          final File file = File('${directory.path}/backup.json');
-          file.writeAsStringSync(jsonEncode(<String, int>{'backupFormatVersion': version}));
-          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-              .setMockMethodCallHandler(
-                channel,
-                (MethodCall call) async {
-                  expect(call.method, 'pickFile');
-                  return file.path;
-                },
-              );
           final BuildContext pageContext = tester.element(find.byType(ExportImportPage));
           final AppLocalizations loc = AppLocalizations.of(pageContext)!;
           final String previousEntries = jsonEncode(entries.entriesIncludingTrash);
@@ -708,15 +719,7 @@ void main() {
           final String previousStoredCategories = jsonEncode(
             await storage.workCategories.loadEntries(),
           );
-          final Finder button = find.widgetWithText(
-            ElevatedButton,
-            loc.importBacupAndReplaceExistingEntries,
-          );
-          await tester.ensureVisible(button);
-          final AsyncCallback importBackup =
-              tester.widget<ElevatedButton>(button).onPressed! as AsyncCallback;
-          await tester.runAsync(importBackup);
-          await tester.pumpAndSettle();
+          await pickBackup(tester, jsonEncode(<String, int>{'backupFormatVersion': version}));
 
           expect(find.byType(AlertDialog), findsOneWidget);
           expect(find.text(loc.unsupportedBackupFormatTitle), findsOneWidget);
@@ -737,6 +740,56 @@ void main() {
           await tester.tap(okButton);
           await tester.pumpAndSettle();
           expect(find.byType(AlertDialog), findsNothing);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+  }
+
+  final Map<String, String> invalidBackupFiles = <String, String>{
+    'malformed JSON': 'not JSON',
+    'invalid document': '[]',
+  };
+  for (final String collection in <String>['workEntries', 'workCategories']) {
+    for (final bool duplicate in <bool>[false, true]) {
+      final Map<String, dynamic> json = backupFixture();
+      final List<Map<String, dynamic>> records = json[collection] as List<Map<String, dynamic>>;
+      records.first['id'] = duplicate ? records.last['id'] : 1.5;
+      invalidBackupFiles['${duplicate ? 'duplicate' : 'invalid'} IDs in $collection'] = jsonEncode(
+        json,
+      );
+    }
+  }
+  for (final Locale locale in <Locale>[const Locale('en'), const Locale('de')]) {
+    for (final MapEntry<String, String> invalid in invalidBackupFiles.entries) {
+      testWidgets(
+        '${invalid.key} show the invalid backup message in ${locale.languageCode}',
+        (WidgetTester tester) async {
+          startTracker();
+          await launch(tester, locale: locale);
+          final AppLocalizations loc = AppLocalizations.of(
+            tester.element(find.byType(ExportImportPage)),
+          )!;
+          final String previousEntries = jsonEncode(entries.entriesIncludingTrash);
+          final String previousCategories = jsonEncode(categories.entries);
+          final String previousStoredEntries = jsonEncode(await storage.workEntries.loadEntries());
+          final String previousStoredCategories = jsonEncode(
+            await storage.workCategories.loadEntries(),
+          );
+
+          await pickBackup(tester, invalid.value);
+
+          expect(find.text(loc.invalidBackupData), findsOneWidget);
+          expect(find.text(loc.importFailed), findsNothing);
+          expect(find.byType(SnackBar), findsOneWidget);
+          expect(find.byType(AlertDialog), findsNothing);
+          expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
+          expect(storage.replacementCalls, 0);
+          expect(jsonEncode(entries.entriesIncludingTrash), previousEntries);
+          expect(jsonEncode(categories.entries), previousCategories);
+          expect(jsonEncode(await storage.workEntries.loadEntries()), previousStoredEntries);
+          expect(jsonEncode(await storage.workCategories.loadEntries()), previousStoredCategories);
+          await expectTrackerRunning();
           expect(tester.takeException(), isNull);
         },
       );

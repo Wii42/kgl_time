@@ -288,6 +288,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importFailed => 'Import failed';
 
   @override
+  String get invalidBackupData => 'This backup contains invalid data and cannot be imported.';
+
+  @override
   String get undo => 'Undo';
 
   @override

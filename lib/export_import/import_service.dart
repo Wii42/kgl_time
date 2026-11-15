@@ -48,8 +48,15 @@ class ImportService {
         return null;
       }
       final String data = await XFile(filePath).readAsString();
-      final Map<String, dynamic> decoded = jsonDecode(data) as Map<String, dynamic>;
-      return WorkData.fromJson(decoded);
+      try {
+        final Map<String, dynamic> decoded = jsonDecode(data) as Map<String, dynamic>;
+        return WorkData.fromJson(decoded);
+      } catch (error, stackTrace) {
+        Error.throwWithStackTrace(
+          error is FormatException ? error : FormatException('Invalid backup data: $error'),
+          stackTrace,
+        );
+      }
     } catch (error, stackTrace) {
       log('Failed to load backup', error: error, stackTrace: stackTrace);
       onError?.call(error);

@@ -73,7 +73,24 @@ void main() {
         await file.writeAsString(contents);
         expect(await ImportService().loadJsonBackup(onError: errors.add), isNull);
         expect(errors, hasLength(1));
+        expect(errors.single, isA<FormatException>());
       });
+    }
+
+    for (final String collection in <String>['workEntries', 'workCategories']) {
+      for (final bool duplicate in <bool>[false, true]) {
+        test('reports ${duplicate ? 'duplicate' : 'invalid'} IDs in $collection', () async {
+          final Map<String, dynamic> json = backupFixture();
+          final List<Map<String, dynamic>> records = json[collection] as List<Map<String, dynamic>>;
+          records.first['id'] = duplicate ? records.last['id'] : 1.5;
+          await file.writeAsString(jsonEncode(json));
+
+          expect(await ImportService().loadJsonBackup(onError: errors.add), isNull);
+          expect(errors, hasLength(1));
+          expect(errors.single, isA<FormatException>());
+          expect(errors.single, isNot(isA<UnsupportedBackupFormatException>()));
+        });
+      }
     }
 
     test('reports picker failures through onError instead of throwing', () async {
@@ -83,6 +100,14 @@ void main() {
         completion(isNull),
       );
       expect(errors, hasLength(1));
+      expect(
+        errors.single,
+        isA<PlatformException>().having(
+          (PlatformException error) => error.code,
+          'code',
+          'picker_failed',
+        ),
+      );
     });
 
     test('reports an unreadable file through onError instead of throwing', () async {
@@ -92,6 +117,7 @@ void main() {
         completion(isNull),
       );
       expect(errors, hasLength(1));
+      expect(errors.single, isA<FileSystemException>());
     });
 
     test('reports an unsupported backup format before returning data for confirmation', () async {

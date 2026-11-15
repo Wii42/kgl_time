@@ -86,8 +86,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 - Save and share the latest entries and categories, with filenames and backup timestamps generated
   when exporting.
-- Reject invalid or unsupported backups before replacing data. Explain unsupported formats in a
-  dialog and show errors when a backup cannot be selected or read.
+- Reject invalid or unsupported backups before replacing data. Explain invalid backup data in an
+  error message and unsupported formats in a dialog, and report file selection or read failures.
 - Preserve existing data if importing or undoing fails, and ask before discarding changes made
   after an import when undoing it.
 - Warn before cancelling running time tracking when importing or undoing a backup. Failed or

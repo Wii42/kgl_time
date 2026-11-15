@@ -118,7 +118,13 @@ class ExportImportPage extends KglPage {
           return;
         }
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(loc?.importFailed ?? "<Import failed.>")),
+          SnackBar(
+            content: Text(
+              error is FormatException
+                  ? loc?.invalidBackupData ?? '<Invalid backup data.>'
+                  : loc?.importFailed ?? '<Import failed.>',
+            ),
+          ),
         );
       },
     );

@@ -89,6 +89,7 @@
   "importBacupAndReplace": "Import backup and replace",
   "importSuccess": "Import successful",
   "importFailed": "Import failed",
+  "invalidBackupData": "This backup contains invalid data and cannot be imported.",
   "undo": "Undo",
   "undoImportTitle": "Undo backup import?",
   "undoImportChangesWarning": "This will restore the data from before the import. Changes made since the import will be lost.",
