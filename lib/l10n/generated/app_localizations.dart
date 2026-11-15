@@ -695,7 +695,7 @@ abstract class AppLocalizations {
   /// No description provided for @importReplaceConfirmationDialog.
   ///
   /// In en, this message translates to:
-  /// **'Do you really want to import the backup and replace all existing entries and categories?\nThis action cannot be undone after the action is completed.'**
+  /// **'This will replace all existing entries and categories, including the trash. You can undo this only while the confirmation message at the bottom of the screen is visible.'**
   String get importReplaceConfirmationDialog;
 
   /// No description provided for @withoutCategory.

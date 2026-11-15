@@ -85,7 +85,8 @@ dart run build_runner watch --delete-conflicting-outputs
 - Show the correct entry and category counts when previewing a backup import.
 - Restore backups and undo imports as a single operation, preserving existing data if saving fails
   and showing success only after saving completes. Undo asks before discarding later changes
-  and confirms when it completes.
+  and confirms when it completes. The import dialog explains that Undo is available only while
+  the confirmation message is visible.
 - Warn before cancelling running time tracking when importing or undoing a backup. Failed or
   cancelled operations keep the tracker running.
 

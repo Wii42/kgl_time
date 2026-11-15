@@ -332,7 +332,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get importReplaceConfirmationDialog =>
-      'Möchten Sie das Backup wirklich importieren und alle vorhandenen Einträge und Kategorien ersetzen? Dieser Vorgang kann nach Abschluss der Importierung nicht rückgängig gemacht werden.';
+      'Alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb werden ersetzt. Sie können dies nur rückgängig machen, solange die Bestätigungsmeldung am unteren Bildschirmrand sichtbar ist.';
 
   @override
   String get withoutCategory => 'Ohne Kategorie';
