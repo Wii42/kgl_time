@@ -78,6 +78,7 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Fixed
 
+- Show an import error when a backup file cannot be selected or read.
 - Show the correct entry and category counts when previewing a backup import.
 - Restore backups and undo imports as a single operation, preserving existing data if saving fails
   and showing success only after saving completes. Undo asks before discarding later changes

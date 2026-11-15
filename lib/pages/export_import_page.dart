@@ -100,10 +100,12 @@ class ExportImportPage extends KglPage {
           () async {
         AppLocalizations? loc = AppLocalizations.of(context);
         WorkData? loadedData = await ImportService().loadJsonBackup(
-          onError: (error) =>
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(loc?.importFailed ?? "<Import failed.>"))),
+          onError: (Object error) {
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(loc?.importFailed ?? "<Import failed.>")),
+            );
+          },
         );
         if (loadedData == null) {
           return;

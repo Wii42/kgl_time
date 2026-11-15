@@ -39,32 +39,22 @@ class ImportService {
   Future<WorkData?> loadJsonBackup({
     void Function(Object error)? onError,
   }) async {
-    final OpenFileDialogParams params = OpenFileDialogParams(
-      dialogType: OpenFileDialogType.document,
-      //mimeTypesFilter: ['application/json'],
-    );
-    String? filePath = await FlutterFileDialog.pickFile(params: params);
-    if (filePath == null) {
-      log("No file selected for import");
-      return null;
-    }
-    String data = await XFile(filePath).readAsString();
-    dynamic decoded;
     try {
-      decoded = jsonDecode(data);
-    } catch (e) {
-      log("$filePath does not contain valid JSON", error: e);
-      if (onError != null) {
-        onError(e);
+      final OpenFileDialogParams params = OpenFileDialogParams(
+        dialogType: OpenFileDialogType.document,
+      );
+      final String? filePath = await FlutterFileDialog.pickFile(params: params);
+      if (filePath == null) {
+        return null;
       }
+      final String data = await XFile(filePath).readAsString();
+      final Map<String, dynamic> decoded = jsonDecode(data) as Map<String, dynamic>;
+      return WorkData.fromJson(decoded);
+    } catch (error, stackTrace) {
+      log('Failed to load backup', error: error, stackTrace: stackTrace);
+      onError?.call(error);
       return null;
     }
-
-    WorkData? workData = WorkData.tryFromJson(decoded);
-    if (workData == null && onError != null) {
-      onError(ArgumentError("Invalid WorkData"));
-    }
-    return workData;
   }
 
   /// Imports the given [workData] into the provided [entriesList] and [categoriesList],

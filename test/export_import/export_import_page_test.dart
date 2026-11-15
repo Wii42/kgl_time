@@ -216,6 +216,60 @@ void main() {
     }
   }
 
+  testWidgets('file picker failures show the import error without opening confirmation', (
+    WidgetTester tester,
+  ) async {
+    await launch(tester);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      channel,
+      (MethodCall call) async {
+        expect(call.method, 'pickFile');
+        throw PlatformException(code: 'picker_failed');
+      },
+    );
+    final Finder button = find.widgetWithText(
+      ElevatedButton,
+      'Import backup and replace existing entries',
+    );
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pumpAndSettle();
+    expect(find.text('Import failed'), findsOneWidget);
+    expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
+    expect(storage.replacementCalls, 0);
+    expect(entries.entriesIncludingTrash, hasLength(2));
+    expect(categories.entries, hasLength(2));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('file picker failure after leaving the page does not use a disposed context', (
+    WidgetTester tester,
+  ) async {
+    await launch(tester);
+    final Completer<Object?> reply = Completer<Object?>();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      channel,
+      (MethodCall call) async {
+        expect(call.method, 'pickFile');
+        return reply.future;
+      },
+    );
+    final Finder button = find.widgetWithText(
+      ElevatedButton,
+      'Import backup and replace existing entries',
+    );
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pumpAndSettle();
+    await tester.pumpWidget(const MaterialApp(home: Scaffold(body: Text('Another page'))));
+    await tester.pumpAndSettle();
+    reply.completeError(PlatformException(code: 'picker_failed'));
+    await tester.pumpAndSettle();
+    expect(find.text('Import failed'), findsNothing);
+    expect(storage.replacementCalls, 0);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('saved JSON includes active entries, trash and ordered categories', (
     WidgetTester tester,
   ) async {
