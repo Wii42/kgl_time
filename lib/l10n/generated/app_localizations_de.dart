@@ -37,25 +37,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get whatsNewReleaseNotes => 'Versionshinweise';
 
   @override
-  String get highlightJsonBackupsTitle => 'Arbeitsdaten sichern';
+  String get highlightJsonBackupsTitle => 'Backups für deine Arbeitsdaten';
 
   @override
   String get highlightJsonBackupsDescription =>
-      'Speichere oder teile ein Backup aller Einträge und Kategorien einschließlich Papierkorb.';
-
-  @override
-  String get highlightBackupRestoreTitle => 'Backup wiederherstellen';
-
-  @override
-  String get highlightBackupRestoreDescription =>
-      'Prüfe und importiere dein Backup unter Export / Import. Vorhandene Einträge und Kategorien werden ersetzt. Unten am Bildschirm kannst du dies kurzzeitig rückgängig machen.';
-
-  @override
-  String get highlightSettingsSectionsTitle => 'Übersichtlichere Einstellungen';
-
-  @override
-  String get highlightSettingsSectionsDescription =>
-      'Design, Daten und App-Informationen sind in den Einstellungen jetzt in eigene Abschnitte gegliedert.';
+      'Du kannst deine Einträge und Kategorien jetzt sichern und wiederherstellen – unter Einstellungen → Export / Import.';
 
   @override
   String get groupBy => 'Gruppieren nach';

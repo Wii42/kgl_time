@@ -30,13 +30,11 @@ void main() {
     final List<ReleaseHighlight> pending = await controller.pendingHighlights('0.4.1');
     expect(pending.map((ReleaseHighlight highlight) => highlight.id), <HighlightId>[
       HighlightId.jsonBackups,
-      HighlightId.backupRestore,
-      HighlightId.settingsSections,
     ]);
     expect(await lastSeen(), isNull);
 
     final WhatsNewController nextLaunch = WhatsNewController(storage: storage, isFirstRun: false);
-    expect(await nextLaunch.pendingHighlights('0.4.1'), hasLength(3));
+    expect(await nextLaunch.pendingHighlights('0.4.1'), hasLength(1));
     await nextLaunch.acknowledge('0.4.1');
     expect(await lastSeen(), '0.4.1');
     expect(await nextLaunch.pendingHighlights('0.4.1'), isEmpty);
@@ -47,7 +45,7 @@ void main() {
     () async {
       expect(await controller.pendingHighlights('0.3.6'), isEmpty);
       expect(await lastSeen(), '0.3.6');
-      expect(await controller.pendingHighlights('0.4.0'), hasLength(3));
+      expect(await controller.pendingHighlights('0.4.0'), hasLength(1));
     },
   );
 
@@ -62,8 +60,6 @@ void main() {
     final List<ReleaseHighlight> pending = await controller.pendingHighlights('0.4.0');
     expect(pending.map((ReleaseHighlight highlight) => highlight.id), <HighlightId>[
       HighlightId.jsonBackups,
-      HighlightId.backupRestore,
-      HighlightId.settingsSections,
     ]);
     expect(await lastSeen(), '0.3.6');
   });
@@ -73,10 +69,10 @@ void main() {
       storage: storage,
       isFirstRun: false,
       highlights: const <ReleaseHighlight>[
-        ReleaseHighlight(version: '0.5.0', id: HighlightId.settingsSections),
+        ReleaseHighlight(version: '0.5.0', id: HighlightId.jsonBackups),
         ReleaseHighlight(version: '0.3.0', id: HighlightId.jsonBackups),
         ReleaseHighlight(version: '0.6.0', id: HighlightId.jsonBackups),
-        ReleaseHighlight(version: '0.4.0', id: HighlightId.backupRestore),
+        ReleaseHighlight(version: '0.4.0', id: HighlightId.jsonBackups),
       ],
     );
     await setLastSeen('0.3.0');
@@ -120,7 +116,7 @@ void main() {
       isFirstRun: false,
       highlights: const <ReleaseHighlight>[
         ReleaseHighlight(version: '2.9.0', id: HighlightId.jsonBackups),
-        ReleaseHighlight(version: '2.10.0', id: HighlightId.backupRestore),
+        ReleaseHighlight(version: '2.10.0', id: HighlightId.jsonBackups),
       ],
     );
     await setLastSeen('2.8.0');
@@ -130,7 +126,7 @@ void main() {
       '2.9.0',
     ]);
     await setLastSeen('2.9.0');
-    expect((await controller.pendingHighlights('2.10.0')).single.id, HighlightId.backupRestore);
+    expect((await controller.pendingHighlights('2.10.0')).single.id, HighlightId.jsonBackups);
   });
 
   test(
@@ -184,7 +180,7 @@ void main() {
     await setLastSeen('0.3.6');
     expect(await controller.pendingHighlights('0.4.0-beta.1'), isEmpty);
     expect(await lastSeen(), '0.4.0-beta.1');
-    expect(await controller.pendingHighlights('0.4.0'), hasLength(3));
+    expect(await controller.pendingHighlights('0.4.0'), hasLength(1));
   });
 
   test('obsolete removed highlights do not produce a popup after a long absence', () async {

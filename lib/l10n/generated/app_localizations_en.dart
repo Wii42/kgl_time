@@ -37,25 +37,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get whatsNewReleaseNotes => 'Release notes';
 
   @override
-  String get highlightJsonBackupsTitle => 'Back up your work';
+  String get highlightJsonBackupsTitle => 'Backups for your work';
 
   @override
   String get highlightJsonBackupsDescription =>
-      'Save or share a JSON backup of all entries and categories, including the trash. Settings and running timers are excluded.';
-
-  @override
-  String get highlightBackupRestoreTitle => 'Restore a backup';
-
-  @override
-  String get highlightBackupRestoreDescription =>
-      'Preview and restore your backup from Export / Import. This replaces existing entries and categories, with a temporary Undo option at the bottom of the screen.';
-
-  @override
-  String get highlightSettingsSectionsTitle => 'Clearer settings';
-
-  @override
-  String get highlightSettingsSectionsDescription =>
-      'Find appearance, data, and app information in separate sections in Settings.';
+      'You can now back up and restore your entries and categories in Settings → Export / Import.';
 
   @override
   String get groupBy => 'Group by';

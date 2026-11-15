@@ -76,7 +76,7 @@ void main() {
     await launch(tester);
     expect(find.byType(WhatsNewDialog), findsOneWidget);
     expect(find.text('Existing app screen'), findsOneWidget);
-    expect(find.text('Back up your work'), findsOneWidget);
+    expect(find.text('Backups for your work'), findsOneWidget);
     expect(await lastSeen(), '0.3.6');
 
     await tester.tap(find.text('Got it'));
@@ -94,16 +94,14 @@ void main() {
       isFirstRun: false,
       highlights: const <ReleaseHighlight>[
         ReleaseHighlight(version: '0.4.0', id: HighlightId.jsonBackups),
-        ReleaseHighlight(version: '0.5.0', id: HighlightId.backupRestore),
-        ReleaseHighlight(version: '0.6.0', id: HighlightId.settingsSections),
+        ReleaseHighlight(version: '0.5.0', id: HighlightId.jsonBackups),
+        ReleaseHighlight(version: '0.6.0', id: HighlightId.jsonBackups),
       ],
     );
     await setLastSeen('0.3.6');
     await launch(tester, version: '0.6.0');
     expect(find.byType(AlertDialog), findsOneWidget);
-    expect(find.text('Back up your work'), findsOneWidget);
-    expect(find.text('Restore a backup'), findsOneWidget);
-    expect(find.text('Clearer settings'), findsOneWidget);
+    expect(find.text('Backups for your work'), findsNWidgets(3));
     await tester.tap(find.text('Got it'));
     await tester.pumpAndSettle();
     expect(await lastSeen(), '0.6.0');
@@ -169,11 +167,11 @@ void main() {
     await setLastSeen('0.3.6');
     await launch(tester, locale: const Locale('de', 'CH'));
     expect(find.text('Was ist neu?'), findsOneWidget);
-    expect(find.text('Arbeitsdaten sichern'), findsOneWidget);
+    expect(find.text('Backups für deine Arbeitsdaten'), findsOneWidget);
     expect(
       find.text(
-        'Speichere oder teile ein JSON-Backup aller Einträge und Kategorien einschließlich '
-        'Papierkorb. Einstellungen und laufende Zeiterfassungen sind nicht enthalten.',
+        'Du kannst deine Einträge und Kategorien jetzt sichern und wiederherstellen – '
+        'unter Einstellungen → Export / Import.',
       ),
       findsOneWidget,
     );
@@ -212,7 +210,7 @@ void main() {
     );
     await setLastSeen('1.0.0');
     await launch(tester, version: '1.6.0', locale: const Locale('de'));
-    expect(find.text('Arbeitsdaten sichern'), findsNWidgets(5));
+    expect(find.text('Backups für deine Arbeitsdaten'), findsNWidgets(5));
     expect(tester.widget<AlertDialog>(find.byType(AlertDialog)).scrollable, isTrue);
     expect(tester.takeException(), isNull);
     await tester.tap(find.text('Verstanden'));
@@ -269,7 +267,7 @@ void main() {
         isFirstRun ? '0.4.1' : isNull,
       );
       if (!isFirstRun) {
-        expect(find.text('Back up your work'), findsOneWidget);
+        expect(find.text('Backups for your work'), findsOneWidget);
         await tester.tap(find.text('Got it'));
         await tester.pumpAndSettle();
         expect(
