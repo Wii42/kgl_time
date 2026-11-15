@@ -270,7 +270,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get exportJsonExplanation =>
-      'Erstellt eine Sicherung aller Arbeitseinträge und Kategorien als JSON-Datei. Diese Datei kann später verwendet werden, um Ihre Einträge wiederherzustellen oder auf einem anderen Gerät zu importieren.';
+      'Erstellt eine JSON-Sicherung aller Arbeitseinträge einschliesslich Papierkorb und Kategorien, um Daten wiederherzustellen oder auf ein anderes Gerät zu übertragen. Einstellungen und eine laufende Zeiterfassung sind nicht enthalten.';
 
   @override
   String get importBackup => 'Backup importieren';

@@ -593,7 +593,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportJsonExplanation.
   ///
   /// In en, this message translates to:
-  /// **'Creates a backup of all work entries  and categories as a JSON file. This file can be used to restore your entries later or to import them into another device.'**
+  /// **'Creates a JSON backup of all work entries, including the trash, and categories, for restoring data or transferring it to another device. Settings and running tracker sessions are not included.'**
   String get exportJsonExplanation;
 
   /// No description provided for @importBackup.
