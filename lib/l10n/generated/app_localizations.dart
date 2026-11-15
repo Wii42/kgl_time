@@ -662,6 +662,18 @@ abstract class AppLocalizations {
   /// **'Backup import undone'**
   String get undoImportSuccess;
 
+  /// No description provided for @importCancelsTrackerWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing this backup will cancel the current time tracker without saving the tracked time.'**
+  String get importCancelsTrackerWarning;
+
+  /// No description provided for @undoImportCancelsTrackerWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Undoing this import will cancel the current time tracker without saving the tracked time.'**
+  String get undoImportCancelsTrackerWarning;
+
   /// No description provided for @dateOfBackup.
   ///
   /// In en, this message translates to:

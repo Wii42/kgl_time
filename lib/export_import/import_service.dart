@@ -7,6 +7,7 @@ import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:kgl_time/export_import/work_data.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../data_model/key_values.dart';
 import '../data_model/work_categories.dart';
 import '../data_model/work_entries.dart';
 import '../main.dart';
@@ -15,10 +16,17 @@ import '../persistent_storage/persistent_storage_service.dart';
 typedef UndoImport = Future<void> Function({bool discardChanges});
 
 class ImportUndoRequiresConfirmation implements Exception {
-  const ImportUndoRequiresConfirmation();
+  const ImportUndoRequiresConfirmation({required this.hasChanges});
+
+  final bool hasChanges;
 }
 
 class ImportService {
+  static const List<String> _trackerKeys = <String>[
+    KeyValues.timeTrackerStartKey,
+    KeyValues.timeTrackerCategoriesKey,
+  ];
+
   /// Native platforms supported by the file picker plugin. Web is unsupported.
   List<TargetPlatform> get supportedImportPlatforms => const [
     TargetPlatform.android,
@@ -63,11 +71,13 @@ class ImportService {
   /// replacing their contents only after the storage transaction commits.
   ///
   /// Returns an asynchronous undo action using a separate snapshot of the previous data.
-  /// Undo requires explicit confirmation to discard changes made since the import.
+  /// Successful replacement cancels time tracking without saving a new entry.
+  /// Undo requires confirmation to discard later changes or cancel a running tracker.
   Future<UndoImport> importAndReplace(
     WorkData workData,
     WorkEntries entriesList,
     WorkCategories categoriesList,
+    KeyValues settings,
   ) async {
     final WorkData currentData = _copy(
       WorkData(
@@ -77,14 +87,16 @@ class ImportService {
         exportedAt: clock.now(),
       ),
     );
-    await _replaceAndPublish(_copy(workData), entriesList, categoriesList);
+    await _replaceAndPublish(_copy(workData), entriesList, categoriesList, settings);
     final String importedState = _stateJson(entriesList, categoriesList);
 
     return ({bool discardChanges = false}) async {
-      if (!discardChanges && _stateJson(entriesList, categoriesList) != importedState) {
-        throw const ImportUndoRequiresConfirmation();
+      final bool hasChanges = _stateJson(entriesList, categoriesList) != importedState;
+      final bool isTracking = settings.get<DateTime>(KeyValues.timeTrackerStartKey) != null;
+      if (!discardChanges && (hasChanges || isTracking)) {
+        throw ImportUndoRequiresConfirmation(hasChanges: hasChanges);
       }
-      await _replaceAndPublish(_copy(currentData), entriesList, categoriesList);
+      await _replaceAndPublish(_copy(currentData), entriesList, categoriesList, settings);
     };
   }
 
@@ -92,12 +104,15 @@ class ImportService {
     WorkData data,
     WorkEntries entriesList,
     WorkCategories categoriesList,
+    KeyValues settings,
   ) async {
     final bool committed = await PersistentStorageService.instance.replaceWorkData(
       entries: data.workEntries,
       categories: data.workCategories,
+      keysToRemove: _trackerKeys,
     );
     if (!committed) throw StateError('Storage did not commit the backup replacement');
+    settings.removeFromMemory(_trackerKeys);
     categoriesList.loadEntries(data.workCategories);
     entriesList.loadEntries(data.workEntries);
   }

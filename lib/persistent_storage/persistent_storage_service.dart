@@ -38,9 +38,14 @@ class PersistentStorageService implements PersistentStorage {
   Future<bool> replaceWorkData({
     required List<WorkEntry> entries,
     required List<WorkCategory> categories,
+    List<String> keysToRemove = const <String>[],
   }) {
     _checkHasImplementation();
-    return _implementation!.replaceWorkData(entries: entries, categories: categories);
+    return _implementation!.replaceWorkData(
+      entries: entries,
+      categories: categories,
+      keysToRemove: keysToRemove,
+    );
   }
 
   void _checkHasImplementation() {

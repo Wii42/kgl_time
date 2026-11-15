@@ -82,6 +82,8 @@ dart run build_runner watch --delete-conflicting-outputs
 - Restore backups and undo imports as a single operation, preserving existing data if saving fails
   and showing success only after saving completes. Undo asks before discarding later changes
   and confirms when it completes.
+- Warn before cancelling running time tracking when importing or undoing a backup. Failed or
+  cancelled operations keep the tracker running.
 
 ### v0.3.6
 

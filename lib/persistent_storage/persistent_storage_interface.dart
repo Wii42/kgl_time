@@ -15,13 +15,15 @@ abstract class PersistentStorage {
 
   KeyValueStorage get keyValueStorage;
 
-  /// Atomically replaces all work entries and categories, leaving settings unchanged.
+  /// Atomically replaces all work entries and categories and removes [keysToRemove].
   ///
   /// Returns true only after both collections have been committed. A false result
-  /// or an exception leaves both collections unchanged. Exceptions may propagate.
+  /// or an exception leaves both collections and settings unchanged.
+  /// Other settings are preserved. Exceptions may propagate.
   Future<bool> replaceWorkData({
     required List<WorkEntry> entries,
     required List<WorkCategory> categories,
+    List<String> keysToRemove = const <String>[],
   });
 
   /// Closes the persistent storage service.

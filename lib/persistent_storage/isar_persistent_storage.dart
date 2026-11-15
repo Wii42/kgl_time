@@ -43,10 +43,14 @@ class IsarPersistentStorage implements PersistentStorage {
   Future<bool> replaceWorkData({
     required List<WorkEntry> entries,
     required List<WorkCategory> categories,
+    List<String> keysToRemove = const <String>[],
   }) {
     return isar.writeTxn<bool>(() async {
       await isar.workEntries.clear();
       await isar.workCategories.clear();
+      for (final String key in keysToRemove) {
+        await isar.keyValues.deleteByKey(key);
+      }
       await isar.workEntries.putAll(entries);
       await isar.workCategories.putAll(categories);
       return true;

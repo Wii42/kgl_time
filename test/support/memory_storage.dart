@@ -16,6 +16,7 @@ class MemoryStorage implements PersistentStorage {
   Future<bool> replaceWorkData({
     required List<WorkEntry> entries,
     required List<WorkCategory> categories,
+    List<String> keysToRemove = const <String>[],
   }) async {
     final MemoryTable<WorkEntry> stagedEntries = MemoryTable<WorkEntry>();
     final MemoryTable<WorkCategory> stagedCategories = MemoryTable<WorkCategory>();
@@ -23,6 +24,10 @@ class MemoryStorage implements PersistentStorage {
     await stagedCategories.saveEntries(categories);
     workEntries._replaceWith(stagedEntries);
     workCategories._replaceWith(stagedCategories);
+    for (final String key in keysToRemove) {
+      keyValueStorage._values.remove(key);
+      keyValueStorage._ids.remove(key);
+    }
     return true;
   }
 

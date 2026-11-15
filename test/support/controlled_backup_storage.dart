@@ -18,13 +18,18 @@ class ControlledBackupStorage extends MemoryStorage {
   Future<bool> replaceWorkData({
     required List<WorkEntry> entries,
     required List<WorkCategory> categories,
+    List<String> keysToRemove = const <String>[],
   }) async {
     replacementCalls++;
     final Completer<void>? barrier = workCategories.writeBarrier;
     if (barrier != null) await barrier.future;
     if (workCategories.failWrites) throw StateError('Injected category write failure');
     if (!acceptReplacement) return false;
-    return super.replaceWorkData(entries: entries, categories: categories);
+    return super.replaceWorkData(
+      entries: entries,
+      categories: categories,
+      keysToRemove: keysToRemove,
+    );
   }
 }
 

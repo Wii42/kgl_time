@@ -94,6 +94,8 @@
   "undoImportChangesWarning": "This will restore the data from before the import. Changes made since the import will be lost.",
   "undoImportFailed": "Failed to undo the backup import",
   "undoImportSuccess": "Backup import undone",
+  "importCancelsTrackerWarning": "Importing this backup will cancel the current time tracker without saving the tracked time.",
+  "undoImportCancelsTrackerWarning": "Undoing this import will cancel the current time tracker without saving the tracked time.",
   "dateOfBackup": "Date of backup: {date}",
   "nrOfEntriesAndCategories": "{nrOfEntries} entries, {nrOfCategories} categories",
   "backupFromNewerVersionWarning": "Warning: The backup was created with a newer version of the app. Some data might not be imported correctly. Consider updating the app first",

@@ -3,6 +3,9 @@ import 'package:kgl_time/persistent_storage/persistent_storage_interface.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 
 class KeyValues extends ChangeNotifier {
+  static const String timeTrackerStartKey = 'timeTrackerStart';
+  static const String timeTrackerCategoriesKey = 'timeTrackerCategories';
+
   final KeyValueStorage storedEntries = PersistentStorageService.instance.keyValueStorage;
   late final Map<String, dynamic> _entries;
 
@@ -37,6 +40,14 @@ class KeyValues extends ChangeNotifier {
   void remove(String key) {
     storedEntries.remove(key);
     _entries.remove(key);
+    notifyListeners();
+  }
+
+  /// Removes keys already deleted by a storage transaction without writing them again.
+  void removeFromMemory(Iterable<String> keys) {
+    for (final String key in keys) {
+      _entries.remove(key);
+    }
     notifyListeners();
   }
 

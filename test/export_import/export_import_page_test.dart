@@ -18,7 +18,6 @@ import 'package:kgl_time/export_import/work_data.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/export_import_page.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
-import 'package:kgl_time/widgets/categories/select_category_dialog.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +31,33 @@ void main() {
   late WorkCategories categories;
   late KeyValues settings;
   final List<Map<Object?, Object?>> saves = <Map<Object?, Object?>>[];
+  final DateTime trackerStart = DateTime.utc(2026, 11, 15, 8);
+  const String importTrackerWarning =
+      'Importing this backup will cancel the current time tracker without saving the tracked time.';
+  const String undoTrackerWarning =
+      'Undoing this import will cancel the current time tracker without saving the tracked time.';
+
+  void startTracker() {
+    settings.set<DateTime>(KeyValues.timeTrackerStartKey, trackerStart);
+    settings.set<String>(KeyValues.timeTrackerCategoriesKey, '7');
+  }
+
+  Future<void> expectTrackerRunning() async {
+    expect(settings.get<DateTime>(KeyValues.timeTrackerStartKey), trackerStart);
+    expect(settings.get<String>(KeyValues.timeTrackerCategoriesKey), '7');
+    expect(
+      await storage.keyValueStorage.get<DateTime>(KeyValues.timeTrackerStartKey),
+      trackerStart,
+    );
+    expect(await storage.keyValueStorage.get<String>(KeyValues.timeTrackerCategoriesKey), '7');
+  }
+
+  Future<void> expectTrackerStopped() async {
+    expect(settings.get<DateTime>(KeyValues.timeTrackerStartKey), isNull);
+    expect(settings.get<String>(KeyValues.timeTrackerCategoriesKey), isNull);
+    expect(await storage.keyValueStorage.get<DateTime>(KeyValues.timeTrackerStartKey), isNull);
+    expect(await storage.keyValueStorage.get<String>(KeyValues.timeTrackerCategoriesKey), isNull);
+  }
 
   setUp(() async {
     storage = ControlledBackupStorage();
@@ -240,6 +266,7 @@ void main() {
       exportedAt: DateTime.utc(2026, 11, 14),
     );
     await openConfirmation(tester, empty);
+    expect(find.text(importTrackerWarning), findsNothing);
     await tester.tap(find.widgetWithText(ElevatedButton, 'Cancel'));
     await tester.pumpAndSettle();
     expect(entries.entriesIncludingTrash, hasLength(2));
@@ -252,6 +279,7 @@ void main() {
   testWidgets('restore does not show success before category persistence finishes', (
     WidgetTester tester,
   ) async {
+    startTracker();
     await launch(tester);
     await openConfirmation(tester, WorkData.fromJson(backupFixture()));
     final Completer<void> barrier = Completer<void>();
@@ -259,6 +287,7 @@ void main() {
     try {
       await confirm(tester);
       expect(find.text('Import successful'), findsNothing);
+      await expectTrackerRunning();
       expect(find.byType(ImportReplaceConfirmationDialog), findsOneWidget);
       expect(
         tester
@@ -282,6 +311,7 @@ void main() {
     }
     expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
     expect(find.text('Import successful'), findsOneWidget);
+    await expectTrackerStopped();
   });
 
   testWidgets('repeated confirmation starts only one replacement', (WidgetTester tester) async {
@@ -309,6 +339,7 @@ void main() {
     testWidgets('failed replacement stays open and allows retry (exception: $throwsError)', (
       WidgetTester tester,
     ) async {
+      startTracker();
       await launch(tester);
       final WorkData empty = WorkData(
         workEntries: const [],
@@ -323,6 +354,7 @@ void main() {
       expect(find.byType(ImportReplaceConfirmationDialog), findsOneWidget);
       expect(find.text('Import failed'), findsOneWidget);
       expect(find.text('Import successful'), findsNothing);
+      await expectTrackerRunning();
       expect(entries.entriesIncludingTrash, hasLength(2));
       expect(categories.entries, hasLength(2));
       expect(await storage.workEntries.loadEntries(), hasLength(2));
@@ -342,6 +374,7 @@ void main() {
       expect(entries.entriesIncludingTrash, isEmpty);
       expect(categories.entries, isEmpty);
       expect(storage.replacementCalls, 2);
+      await expectTrackerStopped();
     });
   }
 
@@ -424,6 +457,9 @@ void main() {
     WidgetTester tester,
   ) async {
     await importAndEdit(tester, editCategory: true);
+    startTracker();
+    await tester.pumpAndSettle();
+    expect(find.text(undoTrackerWarning), findsOneWidget);
     // The captured snapshot remains available after the snackbar's lifetime.
     await tester.pump(const Duration(seconds: 40));
     await tester.pumpAndSettle();
@@ -442,6 +478,7 @@ void main() {
       expect(entries.entries.single.description, 'Imported description');
       expect(storage.replacementCalls, 2);
       expect(find.text('Backup import undone'), findsNothing);
+      await expectTrackerRunning();
       await tester.binding.handlePopRoute();
       await tester.pumpAndSettle();
       expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
@@ -461,6 +498,7 @@ void main() {
     expect((await storage.workCategories.loadEntries()).first.displayName, 'Planning');
     expect(find.text('Backup import undone'), findsOneWidget);
     expect(tester.widget<SnackBar>(find.byType(SnackBar)).action, isNull);
+    await expectTrackerStopped();
     expect(tester.takeException(), isNull);
   });
 
@@ -469,6 +507,7 @@ void main() {
       'failed confirmed undo preserves edits and allows retry (exception: $throwsError)',
       (WidgetTester tester) async {
         await importAndEdit(tester);
+        startTracker();
         storage.workCategories.failWrites = throwsError;
         storage.acceptReplacement = throwsError;
         await tester.tap(find.widgetWithText(TextButton, 'Undo'));
@@ -476,6 +515,7 @@ void main() {
         expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
         expect(find.text('Failed to undo the backup import'), findsOneWidget);
         expect(find.text('Backup import undone'), findsNothing);
+        await expectTrackerRunning();
         expect(entries.entries.single.description, 'Later edit');
         expect(
           (await storage.workEntries.loadEntries())
@@ -497,6 +537,7 @@ void main() {
           (backupFixture()['workEntries'] as List<Map<String, dynamic>>).first['description'],
         );
         expect(storage.replacementCalls, 3);
+        await expectTrackerStopped();
         expect(find.text('Backup import undone'), findsOneWidget);
         expect(tester.widget<SnackBar>(find.byType(SnackBar)).action, isNull);
         expect(tester.takeException(), isNull);
@@ -523,32 +564,117 @@ void main() {
     expect(await storage.workEntries.loadEntries(), hasLength(2));
   });
 
-  testWidgets('restore cannot rebind a running tracker to an unrelated category with the same ID', (
+  testWidgets('successful import cancels tracking instead of rebinding its categories', (
     WidgetTester tester,
   ) async {
-    settings.set<DateTime>('timeTrackerStart', DateTime.utc(2026, 11, 14, 8));
-    settings.set<String>(SelectCategoryDialog.storageKey, '7');
+    startTracker();
     await launch(tester);
     final Map<String, dynamic> json = backupFixture();
     final List<Map<String, dynamic>> importedCategories =
         json['workCategories'] as List<Map<String, dynamic>>;
     importedCategories.first['displayName'] = 'Unrelated imported category';
     await openConfirmation(tester, WorkData.fromJson(json));
+    expect(find.text(importTrackerWarning), findsOneWidget);
     await confirm(tester);
-
-    // Blocking restore, stopping the tracker, clearing or remapping its selection are valid policies.
-    if (find.byType(ImportReplaceConfirmationDialog).evaluate().isNotEmpty ||
-        settings.get<DateTime>('timeTrackerStart') == null) {
-      return;
-    }
-    final String? selection = settings.get<String>(SelectCategoryDialog.storageKey);
-    final List<WorkCategory> selected = SelectCategoryDialog.deserializeCategories(
-      selection ?? '',
-      categories.entries,
-    );
-    expect(
-      selected.map((WorkCategory category) => category.displayName),
-      isNot(contains('Unrelated imported category')),
-    );
+    await expectTrackerStopped();
+    expect(entries.entriesIncludingTrash, hasLength(2));
+    expect(await storage.workEntries.loadEntries(), hasLength(2));
+    expect(categories.entries.first.displayName, 'Unrelated imported category');
+    await tester.tap(find.text('Undo'));
+    await tester.pumpAndSettle();
+    await expectTrackerStopped();
+    expect(entries.entriesIncludingTrash, hasLength(2));
   });
+
+  for (final (Locale locale, String warning) in <(Locale, String)>[
+    (const Locale('en'), importTrackerWarning),
+    (
+      const Locale('de'),
+      'Beim Importieren dieses Backups wird die laufende Zeiterfassung abgebrochen, ohne die erfasste Zeit zu speichern.',
+    ),
+  ]) {
+    testWidgets(
+      'import warns about running tracking and cancellation preserves it in ${locale.languageCode}',
+      (WidgetTester tester) async {
+        startTracker();
+        await launch(tester, locale: locale);
+        await openConfirmation(tester, WorkData.fromJson(backupFixture()));
+        expect(find.text(warning), findsOneWidget);
+        final AppLocalizations loc = AppLocalizations.of(
+          tester.element(find.byType(ImportReplaceConfirmationDialog)),
+        )!;
+        await tester.tap(find.widgetWithText(ElevatedButton, loc.cancel));
+        await tester.pumpAndSettle();
+        await expectTrackerRunning();
+        expect(storage.replacementCalls, 0);
+      },
+    );
+  }
+
+  for (final bool accept in <bool>[false, true]) {
+    testWidgets('a tracker started after import requires undo confirmation (accept: $accept)', (
+      WidgetTester tester,
+    ) async {
+      await launch(tester);
+      await openConfirmation(tester, WorkData.fromJson(backupFixture()));
+      await confirm(tester);
+      startTracker();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Undo'));
+      await tester.pumpAndSettle();
+      expect(find.byType(UndoImportConfirmationDialog), findsOneWidget);
+      expect(find.text(undoTrackerWarning), findsOneWidget);
+      expect(
+        find.text(
+          'This will restore the data from before the import. Changes made since the import will be lost.',
+        ),
+        findsNothing,
+      );
+      await expectTrackerRunning();
+      if (accept) {
+        await tester.tap(find.widgetWithText(TextButton, 'Undo'));
+      } else {
+        await tester.tap(find.widgetWithText(ElevatedButton, 'Cancel'));
+      }
+      await tester.pumpAndSettle();
+      if (accept) {
+        await expectTrackerStopped();
+        expect(storage.replacementCalls, 2);
+      } else {
+        await expectTrackerRunning();
+        expect(storage.replacementCalls, 1);
+      }
+      expect(entries.entriesIncludingTrash, hasLength(2));
+      expect(await storage.workEntries.loadEntries(), hasLength(2));
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets(
+    'undo warns about a new running tracker in German and cancellation keeps it running',
+    (WidgetTester tester) async {
+      await launch(tester, locale: const Locale('de'));
+      await openConfirmation(tester, WorkData.fromJson(backupFixture()));
+      final AppLocalizations loc = AppLocalizations.of(
+        tester.element(find.byType(ImportReplaceConfirmationDialog)),
+      )!;
+      await tester.tap(find.widgetWithText(TextButton, loc.importBacupAndReplaceExistingEntries));
+      await tester.pumpAndSettle();
+      startTracker();
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(loc.undo));
+      await tester.pumpAndSettle();
+      expect(
+        find.text(
+          'Beim Rückgängigmachen dieses Imports wird die laufende Zeiterfassung abgebrochen, ohne die erfasste Zeit zu speichern.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text(loc.undoImportChangesWarning), findsNothing);
+      await tester.tap(find.widgetWithText(ElevatedButton, loc.cancel));
+      await tester.pumpAndSettle();
+      await expectTrackerRunning();
+      expect(storage.replacementCalls, 1);
+    },
+  );
 }

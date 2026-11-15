@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:isar_community/isar.dart';
 import 'package:kgl_time/data_model/key_value.dart';
+import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/work_category.dart';
 import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/export_import/work_data.dart';
@@ -85,6 +86,9 @@ void main() {
       });
 
       test('category insertion failure rolls back entries and categories', () async {
+        final DateTime start = DateTime.utc(2026, 11, 15, 8);
+        await storage.keyValueStorage.set<DateTime>(KeyValues.timeTrackerStartKey, start);
+        await storage.keyValueStorage.set<String>(KeyValues.timeTrackerCategoriesKey, '1');
         final List<Map<String, dynamic>> previousEntries = (await storage.workEntries.loadEntries())
             .map(_entryData)
             .toList();
@@ -101,6 +105,10 @@ void main() {
           storage.replaceWorkData(
             entries: <WorkEntry>[replacement],
             categories: <WorkCategory>[_FailingCategory()],
+            keysToRemove: const <String>[
+              KeyValues.timeTrackerStartKey,
+              KeyValues.timeTrackerCategoriesKey,
+            ],
           ),
           throwsStateError,
         );
@@ -112,6 +120,38 @@ void main() {
           previousCategories,
         );
         expect(await storage.keyValueStorage.get<String>('themeMode'), 'dark');
+        expect(
+          (await storage.keyValueStorage.get<DateTime>(KeyValues.timeTrackerStartKey))?.toUtc(),
+          start,
+        );
+        expect(await storage.keyValueStorage.get<String>(KeyValues.timeTrackerCategoriesKey), '1');
+      });
+
+      test('replacement removes requested tracker keys while preserving other settings', () async {
+        await storage.keyValueStorage.set<DateTime>(
+          KeyValues.timeTrackerStartKey,
+          DateTime.utc(2026),
+        );
+        await storage.keyValueStorage.set<String>(KeyValues.timeTrackerCategoriesKey, '1');
+        final WorkData backup = WorkData.fromJson(backupFixture());
+        expect(
+          await storage.replaceWorkData(
+            entries: backup.workEntries,
+            categories: backup.workCategories,
+            keysToRemove: const <String>[
+              KeyValues.timeTrackerStartKey,
+              KeyValues.timeTrackerCategoriesKey,
+            ],
+          ),
+          isTrue,
+        );
+        expect(await storage.keyValueStorage.get<DateTime>(KeyValues.timeTrackerStartKey), isNull);
+        expect(
+          await storage.keyValueStorage.get<String>(KeyValues.timeTrackerCategoriesKey),
+          isNull,
+        );
+        expect(await storage.keyValueStorage.get<String>('themeMode'), 'dark');
+        expect(await storage.keyValueStorage.get<bool>('isFirstRun'), isFalse);
       });
 
       test('new records receive IDs beyond the restored IDs', () async {
@@ -254,5 +294,6 @@ class _DecliningStorage extends MemoryStorage {
   Future<bool> replaceWorkData({
     required List<WorkEntry> entries,
     required List<WorkCategory> categories,
+    List<String> keysToRemove = const <String>[],
   }) async => false;
 }

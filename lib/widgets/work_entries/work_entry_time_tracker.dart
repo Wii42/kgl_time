@@ -14,7 +14,7 @@ import 'package:timer_builder/timer_builder.dart';
 import '../../data_model/work_category.dart';
 
 class WorkEntryTimeTracker extends StatelessWidget {
-  static const String _storageKey = 'timeTrackerStart';
+  static const String _storageKey = KeyValues.timeTrackerStartKey;
 
   const WorkEntryTimeTracker({super.key});
 

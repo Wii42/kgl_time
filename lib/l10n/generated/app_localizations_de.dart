@@ -309,6 +309,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get undoImportSuccess => 'Backup-Import rückgängig gemacht';
 
   @override
+  String get importCancelsTrackerWarning =>
+      'Beim Importieren dieses Backups wird die laufende Zeiterfassung abgebrochen, ohne die erfasste Zeit zu speichern.';
+
+  @override
+  String get undoImportCancelsTrackerWarning =>
+      'Beim Rückgängigmachen dieses Imports wird die laufende Zeiterfassung abgebrochen, ohne die erfasste Zeit zu speichern.';
+
+  @override
   String dateOfBackup(Object date) {
     return 'Datum des Backups: $date';
   }

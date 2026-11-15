@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kgl_time/data_model/key_values.dart';
 import 'package:kgl_time/data_model/value.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
@@ -98,6 +99,7 @@ void main() {
     late ControlledBackupStorage storage;
     late WorkEntries entries;
     late WorkCategories categories;
+    late KeyValues settings;
     late WorkData backup;
 
     setUp(() async {
@@ -116,19 +118,39 @@ void main() {
       await storage.workCategories.saveEntries(<WorkCategory>[category]);
       entries = WorkEntries(<WorkEntry>[original]);
       categories = WorkCategories(<WorkCategory>[category]);
+      settings = KeyValues(<String, dynamic>{});
       backup = WorkData.fromJson(backupFixture());
     });
 
     tearDown(() async {
       entries.dispose();
       categories.dispose();
+      settings.dispose();
       await storage.close();
     });
 
-    Future<UndoImport> restore() => ImportService().importAndReplace(backup, entries, categories);
+    Future<UndoImport> restore() =>
+        ImportService().importAndReplace(backup, entries, categories, settings);
+
+    Future<void> startTracker() async {
+      settings.set<DateTime>(KeyValues.timeTrackerStartKey, DateTime.utc(2026, 11, 15, 8));
+      settings.set<String>(KeyValues.timeTrackerCategoriesKey, '7');
+      await Future<void>.delayed(Duration.zero);
+    }
 
     Future<Object?> state() async => jsonDecode(
       jsonEncode(<String, Object?>{
+        'trackerStart': settings
+            .get<DateTime>(KeyValues.timeTrackerStartKey)
+            ?.toUtc()
+            .toIso8601String(),
+        'trackerCategories': settings.get<String>(KeyValues.timeTrackerCategoriesKey),
+        'storedTrackerStart': (await storage.keyValueStorage.get<DateTime>(
+          KeyValues.timeTrackerStartKey,
+        ))?.toUtc().toIso8601String(),
+        'storedTrackerCategories': await storage.keyValueStorage.get<String>(
+          KeyValues.timeTrackerCategoriesKey,
+        ),
         'entries': entries.entriesIncludingTrash.map((WorkEntry entry) => entry.toJson()).toList(),
         'categories': categories.entries.map((WorkCategory category) => category.toJson()).toList(),
         'storedEntries': (await storage.workEntries.loadEntries())
@@ -141,6 +163,7 @@ void main() {
     );
 
     test('does not complete while category persistence is pending', () async {
+      await startTracker();
       final Completer<void> barrier = Completer<void>();
       storage.workCategories.writeBarrier = barrier;
       final Object? before = await state();
@@ -164,6 +187,7 @@ void main() {
     });
 
     test('a failed category write preserves both stored and in-memory datasets', () async {
+      await startTracker();
       final Object? before = await state();
       storage.workCategories.failWrites = true;
       await expectLater(restore(), throwsStateError);
@@ -172,11 +196,61 @@ void main() {
     });
 
     test('a false transaction result preserves both stored and in-memory datasets', () async {
+      await startTracker();
       final Object? before = await state();
       storage.acceptReplacement = false;
       await expectLater(restore(), throwsStateError);
       expect(await state(), before);
     });
+
+    test(
+      'successful import cancels tracking without saving it and undo does not restart it',
+      () async {
+        await startTracker();
+        final UndoImport undo = await restore();
+        expect(settings.get<DateTime>(KeyValues.timeTrackerStartKey), isNull);
+        expect(settings.get<String>(KeyValues.timeTrackerCategoriesKey), isNull);
+        expect(await storage.keyValueStorage.get<DateTime>(KeyValues.timeTrackerStartKey), isNull);
+        expect(
+          await storage.keyValueStorage.get<String>(KeyValues.timeTrackerCategoriesKey),
+          isNull,
+        );
+        expect(await storage.workEntries.loadEntries(), hasLength(backup.workEntries.length));
+        await undo();
+        expect(settings.get<DateTime>(KeyValues.timeTrackerStartKey), isNull);
+        expect(await storage.keyValueStorage.get<DateTime>(KeyValues.timeTrackerStartKey), isNull);
+        expect(await storage.workEntries.loadEntries(), hasLength(1));
+      },
+    );
+
+    test(
+      'a new tracker requires confirmation even if the imported work data is unchanged',
+      () async {
+        final UndoImport undo = await restore();
+        await startTracker();
+        final Object? before = await state();
+        await expectLater(
+          undo(),
+          throwsA(
+            isA<ImportUndoRequiresConfirmation>().having(
+              (ImportUndoRequiresConfirmation reason) => reason.hasChanges,
+              'hasChanges',
+              isFalse,
+            ),
+          ),
+        );
+        expect(await state(), before);
+        await undo(discardChanges: true);
+        expect(settings.get<DateTime>(KeyValues.timeTrackerStartKey), isNull);
+        expect(settings.get<String>(KeyValues.timeTrackerCategoriesKey), isNull);
+        expect(await storage.keyValueStorage.get<DateTime>(KeyValues.timeTrackerStartKey), isNull);
+        expect(
+          await storage.keyValueStorage.get<String>(KeyValues.timeTrackerCategoriesKey),
+          isNull,
+        );
+        expect(await storage.workEntries.loadEntries(), hasLength(1));
+      },
+    );
 
     test('undo awaits the same atomic replacement and restores a separate snapshot', () async {
       final Object? before = await state();
@@ -208,10 +282,11 @@ void main() {
     for (final bool throwsError in <bool>[true, false]) {
       test('failed undo preserves the imported data (exception: $throwsError)', () async {
         final UndoImport undo = await restore();
+        await startTracker();
         final Object? imported = await state();
         storage.workCategories.failWrites = throwsError;
         storage.acceptReplacement = throwsError;
-        await expectLater(undo(), throwsStateError);
+        await expectLater(undo(discardChanges: true), throwsStateError);
         expect(await state(), imported);
       });
     }

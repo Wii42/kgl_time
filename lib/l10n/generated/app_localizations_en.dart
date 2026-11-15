@@ -304,6 +304,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get undoImportSuccess => 'Backup import undone';
 
   @override
+  String get importCancelsTrackerWarning =>
+      'Importing this backup will cancel the current time tracker without saving the tracked time.';
+
+  @override
+  String get undoImportCancelsTrackerWarning =>
+      'Undoing this import will cancel the current time tracker without saving the tracked time.';
+
+  @override
   String dateOfBackup(Object date) {
     return 'Date of backup: $date';
   }

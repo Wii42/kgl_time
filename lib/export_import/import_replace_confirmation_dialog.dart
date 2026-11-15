@@ -4,6 +4,7 @@ import 'package:kgl_time/export_import/work_data.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
+import '../data_model/key_values.dart';
 import '../data_model/work_categories.dart';
 import '../data_model/work_entries.dart';
 import '../l10n/generated/app_localizations.dart';
@@ -28,6 +29,7 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
     if (_isImporting) return;
     final WorkEntries entriesList = context.read<WorkEntries>();
     final WorkCategories categoriesList = context.read<WorkCategories>();
+    final KeyValues settings = context.read<KeyValues>();
     final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
     final NavigatorState navigator = Navigator.of(context);
     final AppLocalizations? loc = AppLocalizations.of(context);
@@ -37,6 +39,7 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
         widget.loadedData,
         entriesList,
         categoriesList,
+        settings,
       );
       if (!mounted) return;
       Navigator.of(context).pop();
@@ -48,13 +51,14 @@ class _ImportReplaceConfirmationDialogState extends State<ImportReplaceConfirmat
             onPressed: () async {
               try {
                 await revertImport();
-              } on ImportUndoRequiresConfirmation {
+              } on ImportUndoRequiresConfirmation catch (reason) {
                 if (!navigator.mounted) return;
                 final bool undone =
                     await showDialog<bool>(
                       context: navigator.context,
                       builder: (BuildContext context) => UndoImportConfirmationDialog(
                         onUndo: () => revertImport(discardChanges: true),
+                        hasChanges: reason.hasChanges,
                       ),
                     ) ??
                     false;
@@ -124,6 +128,9 @@ class _ImportReplaceContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? loc = AppLocalizations.of(context);
+    final bool isTracking = context.select<KeyValues, bool>(
+      (KeyValues settings) => settings.get<DateTime>(KeyValues.timeTrackerStartKey) != null,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -151,6 +158,10 @@ class _ImportReplaceContent extends StatelessWidget {
         Text(
           loc?.importReplaceConfirmationDialog ?? "<import replace confirmation dialog>",
         ),
+        if (isTracking) ...<Widget>[
+          const SizedBox(height: 12),
+          Text(loc?.importCancelsTrackerWarning ?? '<Importing will cancel the running tracker.>'),
+        ],
       ],
     );
   }

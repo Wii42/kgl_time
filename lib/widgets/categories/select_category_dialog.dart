@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../../data_model/work_category.dart';
 
 class SelectCategoryDialog extends StatefulWidget {
-  static const String storageKey = 'timeTrackerCategories';
+  static const String storageKey = KeyValues.timeTrackerCategoriesKey;
 
   const SelectCategoryDialog({super.key});
 
