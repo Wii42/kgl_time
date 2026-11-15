@@ -172,6 +172,18 @@ class _AboutSection extends StatelessWidget {
         _SettingsSection(
           sectionTitle: loc?.aboutSection ?? '<About>',
           children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.rocket_launch_outlined),
+              title: Text(loc?.whatsNew ?? "<What's new>"),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (BuildContext context) => WhatsNewDialog(
+                  highlights: WhatsNewController.recentHighlights(appInfo.version),
+                  currentVersion: appInfo.version,
+                ),
+              ),
+            ),
             Tooltip(
               message: contactUri.toString(),
               child: ListTile(
@@ -189,20 +201,6 @@ class _AboutSection extends StatelessWidget {
                 title: Text(loc?.privacyPolicy ?? '<Privacy Policy>'),
                 trailing: const Icon(Icons.open_in_new),
                 onTap: () => launchUrl(privacyUri),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.rocket_launch_outlined),
-              title: Text(loc?.whatsNew ?? "<What's new>"),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () =>
-                  showDialog<void>(
-                    context: context,
-                    builder: (BuildContext context) =>
-                        WhatsNewDialog(
-                          highlights: WhatsNewController.recentHighlights(appInfo.version),
-                          currentVersion: appInfo.version,
-                        ),
               ),
             ),
           ],
