@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:material_ui/material_ui.dart';
@@ -6,18 +7,18 @@ import '../l10n/generated/app_localizations.dart';
 import 'export_import_card.dart';
 import 'export_service.dart';
 
+typedef ExportFile = ({Uint8List content, String fileName});
+
 class ExportEntriesCard extends StatelessWidget {
   final String Function(AppLocalizations? loc) title;
-  final Uint8List fileContent;
-  final String fileName;
+  final ExportFile Function() createFile;
   final String? mimeType;
   final String Function(AppLocalizations? loc)? explanationLabel;
 
   const ExportEntriesCard({
     super.key,
     required this.title,
-    required this.fileContent,
-    required this.fileName,
+    required this.createFile,
     this.mimeType,
     this.explanationLabel,
   });
@@ -34,27 +35,13 @@ class ExportEntriesCard extends StatelessWidget {
         TextButton.icon(
           label: Text(loc?.saveLocally ?? "<save locally>"),
           icon: Icon(Icons.save_alt_outlined),
-          onPressed: canSave
-              ? onSave(
-                  fileContent: fileContent,
-                  fileName: fileName,
-                  context: context,
-                  mimeTypesFilter: mimeType != null ? [mimeType!] : null,
-                )
-              : null,
+          onPressed: canSave ? () => _exportFile(context, share: false) : null,
         ),
 
         TextButton.icon(
           label: Text(loc?.share ?? "<share>"),
           icon: Icon(Icons.share),
-          onPressed: canShare
-              ? onShare(
-                  fileContent: fileContent,
-                  fileName: fileName,
-                  context: context,
-                  mimeType: mimeType,
-                )
-              : null,
+          onPressed: canShare ? () => _exportFile(context, share: true) : null,
         ),
       ],
       warningLabels: [
@@ -64,50 +51,51 @@ class ExportEntriesCard extends StatelessWidget {
     );
   }
 
-  VoidCallback onSave({
-    required Uint8List fileContent,
-    required String fileName,
-    required BuildContext context,
-    List<String>? mimeTypesFilter,
-  }) => () async {
-    ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-    AppLocalizations? loc = AppLocalizations.of(context);
-    return ExportService().saveFileLocally(
-      fileContent: fileContent,
-      fileName: fileName,
-      mimeTypesFilter: mimeTypesFilter,
-      onSuccess: (path) => messenger.showSnackBar(
+  Future<void> _exportFile(BuildContext context, {required bool share}) async {
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
+    final AppLocalizations? loc = AppLocalizations.of(context);
+    void onError(Object error) {
+      if (!messenger.mounted) return;
+      messenger.showSnackBar(
         SnackBar(
           content: Text(
-            loc?.fileSavedSuccessfully ?? "<File saved successfully.>",
+            share
+                ? loc?.failedToShareFile ?? '<Failed to share file.>'
+                : loc?.failedToSaveFile ?? '<Failed to save file.>',
           ),
         ),
-      ),
-      onError: (error) => messenger.showSnackBar(
-        SnackBar(
-          content: Text(loc?.failedToSaveFile ?? "<Failed to save file.>"),
-        ),
-      ),
-    );
-  };
+      );
+    }
 
-  VoidCallback onShare({
-    required Uint8List fileContent,
-    required String fileName,
-    required BuildContext context,
-    String? mimeType,
-  }) => () async {
-    AppLocalizations? loc = AppLocalizations.of(context);
-    ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
-    return ExportService().shareFile(
-      fileContent: fileContent,
-      fileName: fileName,
-      mimeType: mimeType,
-      onError: (error) => messenger.showSnackBar(
-        SnackBar(
-          content: Text(loc?.failedToShareFile ?? "<Failed to share file.>"),
-        ),
-      ),
-    );
-  };
+    try {
+      final ExportFile file = createFile();
+      const ExportService service = ExportService();
+      if (share) {
+        await service.shareFile(
+          fileContent: file.content,
+          fileName: file.fileName,
+          mimeType: mimeType,
+          onError: onError,
+        );
+      } else {
+        await service.saveFileLocally(
+          fileContent: file.content,
+          fileName: file.fileName,
+          mimeTypesFilter: mimeType != null ? <String>[mimeType!] : null,
+          onSuccess: (String path) {
+            if (!messenger.mounted) return;
+            messenger.showSnackBar(
+              SnackBar(
+                content: Text(loc?.fileSavedSuccessfully ?? '<File saved successfully.>'),
+              ),
+            );
+          },
+          onError: onError,
+        );
+      }
+    } catch (error, stackTrace) {
+      log('Failed to prepare export', error: error, stackTrace: stackTrace);
+      onError(error);
+    }
+  }
 }

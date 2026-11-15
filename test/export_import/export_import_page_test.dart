@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:clock/clock.dart';
+import 'package:csv/csv.dart';
 import 'package:flutter/foundation.dart' show TargetPlatform, debugDefaultTargetPlatformOverride;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -307,6 +308,58 @@ void main() {
     final Map<String, dynamic> saved = await saveBackup(tester);
     final List<dynamic> savedCategories = saved['workCategories'] as List<dynamic>;
     expect((savedCategories.first as Map<String, dynamic>)['displayName'], 'Renamed');
+  });
+
+  testWidgets('backup filename and exportedAt use the time of each save', (
+    WidgetTester tester,
+  ) async {
+    await withClock(Clock.fixed(DateTime(2026, 11, 15, 8)), () => launch(tester));
+    for (final int hour in <int>[9, 10]) {
+      final DateTime savedAt = DateTime(2026, 11, 15, hour, 30);
+      final Map<String, dynamic> saved = await withClock(
+        Clock.fixed(savedAt),
+        () => saveBackup(tester),
+      );
+      expect(saved['exportedAt'], savedAt.toIso8601String());
+      expect(
+        saves.last['fileName'],
+        'kgl_time_backup_2026-11-15_${hour.toString().padLeft(2, '0')}-30-00.json',
+      );
+    }
+  });
+
+  testWidgets('CSV export reflects new and edited entries while excluding trash', (
+    WidgetTester tester,
+  ) async {
+    await launch(tester);
+    final WorkEntry original = entries.entries.single;
+    entries.updateEntry(
+      original,
+      original.copyWith(description: const Value<String?>('Edited CSV')),
+    );
+    entries.add(
+      WorkEntry(
+        workDurationInSeconds: 60,
+        date: DateTime(2026, 11, 15),
+        description: 'New CSV',
+      )..id = 100,
+    );
+    await tester.pumpAndSettle();
+    final Finder card = find.ancestor(
+      of: find.text('Export work entries as table'),
+      matching: find.byType(ExportEntriesCard),
+    );
+    final Finder button = find.descendant(
+      of: card,
+      matching: find.widgetWithText(TextButton, 'Save locally'),
+    );
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pumpAndSettle();
+    final List<List<dynamic>> rows = csv.decode(utf8.decode(saves.last['data']! as Uint8List));
+    expect(rows.skip(1).map((List<dynamic> row) => row[2]), <String>['New CSV', 'Edited CSV']);
+    expect(saves.last['fileName'], endsWith('.csv'));
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('cancelling restore leaves stored entries and categories intact', (

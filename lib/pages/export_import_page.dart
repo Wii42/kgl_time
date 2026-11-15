@@ -42,15 +42,21 @@ class ExportImportPage extends KglPage {
           children: [
             ExportEntriesCard(
               title: (loc) => loc?.exportTable ?? "<export as table>",
-              fileContent: csvFileContent(context),
-              fileName: ExportService().csvFileName(),
+              createFile: () =>
+              (
+              content: csvFileContent(context),
+              fileName: const ExportService().csvFileName(),
+              ),
               mimeType: 'text/csv; charset=utf-8',
               explanationLabel: (loc) => loc?.exportCsvExplanation ?? "<Export as CSV explanation>",
             ),
             ExportEntriesCard(
               title: (loc) => loc?.exportBackup ?? "<export backup>",
-              fileContent: jsonFileContent(context),
-              fileName: ExportService().jsonFileName(),
+              createFile: () =>
+              (
+              content: jsonFileContent(context),
+              fileName: const ExportService().jsonFileName(),
+              ),
               mimeType: 'application/json; charset=utf-8',
               explanationLabel: (loc) =>
               loc?.exportJsonExplanation ?? "<export to JSON explanation>",
