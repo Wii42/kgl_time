@@ -128,6 +128,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get theme => 'Theme';
 
   @override
+  String get aboutSection => 'About';
+
+  @override
   String get categories => 'Categories';
 
   @override

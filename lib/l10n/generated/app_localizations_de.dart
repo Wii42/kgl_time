@@ -129,6 +129,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get theme => 'Design';
 
   @override
+  String get aboutSection => 'Über die App';
+
+  @override
   String get categories => 'Kategorien';
 
   @override

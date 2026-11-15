@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app/app_layout_constants.dart';
 import 'package:kgl_time/app/app_route.dart';
@@ -33,10 +32,11 @@ class SettingsPage extends KglPage {
           children: <Widget>[
             _SettingsSection(
               sectionTitle: loc?.appearance ?? '<Appearance>',
-              children: [Padding(
-                padding: const EdgeInsets.all(16),
-                child: _ThemeModeSettings(),
-              )
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: _ThemeModeSettings(),
+                ),
               ],
             ),
             const SizedBox(height: 24),
@@ -64,7 +64,7 @@ class SettingsPage extends KglPage {
               ],
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
             _AboutSection(),
           ],
         ),
@@ -158,86 +158,63 @@ class _ThemeModeSettings extends StatelessWidget {
 class _AboutSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AppLocalizations? loc = AppLocalizations.of(context);
-    ThemeData theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        infoWithLink(
-          infoText: '${loc?.contact}: ',
-          linkText: 'wi42.dev@gmail.com',
-          link: Uri.parse('mailto:wi42.dev@gmail.com'),
-          context: context,
-        ),
-        infoWithLink(
-          linkText: loc?.privacyPolicy ?? '<privacyPolicy>',
-          link: Uri.parse(
-            'https://github.com/Wii42/kgl_time/blob/main/PRIVACY.md#${loc?.privacyPolicyUrlFragment}',
-          ),
-          context: context,
-        ),
-        Text(''),
-        Text("v${appInfo.version}", style: theme.textTheme.bodySmall),
-        infoWithLink(
-          linkText: loc?.whatsNew ?? "What's new",
-          link: Uri.parse(
-            'https://github.com/Wii42/kgl_time/blob/main/README.md#v${appInfo.version.replaceAll('.', '')}',
-          ),
-          context: context,
-          textStyle: theme.textTheme.bodySmall,
-        ),
-      ],
+    final AppLocalizations? loc = AppLocalizations.of(context);
+    final Uri contactUri = Uri.parse('mailto:wi42.dev@gmail.com');
+    final Uri privacyUri = Uri.parse(
+      'https://github.com/Wii42/kgl_time/blob/main/PRIVACY.md#${loc?.privacyPolicyUrlFragment}',
     );
-  }
-
-  // ignore: many_lints/avoid_returning_widgets
-  static Widget infoWithLink({
-    String? infoText,
-    required String linkText,
-    required Uri link,
-    required BuildContext context,
-    TextStyle? textStyle,
-  }) {
-    ThemeData theme = Theme.of(context);
-    textStyle ??= theme.textTheme.bodyMedium;
+    final Uri releaseNotesUri = Uri.parse(
+      'https://github.com/Wii42/kgl_time/blob/main/README.md#v${appInfo.version.replaceAll(
+          '.', '')}',
+    );
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text.rich(
-          TextSpan(
-            children: [
-              if (infoText != null) TextSpan(text: infoText, style: textStyle),
-              TooltipSpan(
-                message: link.toString(),
-                inlineSpan: TextSpan(
-                  text: linkText,
-                  style: textStyle?.apply(color: theme.colorScheme.primary),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      launchUrl(link);
-                    },
-                ),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        _SettingsSection(
+          sectionTitle: loc?.aboutSection ?? '<About>',
+          children: <Widget>[
+            Tooltip(
+              message: contactUri.toString(),
+              child: ListTile(
+                leading: const Icon(Icons.email_outlined),
+                title: Text(loc?.contact ?? '<Contact>'),
+                subtitle: const Text('wi42.dev@gmail.com'),
+                trailing: const Icon(Icons.open_in_new),
+                onTap: () => launchUrl(contactUri),
               ),
-            ],
-          ),
+            ),
+            Tooltip(
+              message: privacyUri.toString(),
+              child: ListTile(
+                leading: const Icon(Icons.privacy_tip_outlined),
+                title: Text(loc?.privacyPolicy ?? '<Privacy Policy>'),
+                trailing: const Icon(Icons.open_in_new),
+                onTap: () => launchUrl(privacyUri),
+              ),
+            ),
+            Tooltip(
+              message: releaseNotesUri.toString(),
+              child: ListTile(
+                leading: const Icon(Icons.new_releases_outlined),
+                title: Text(loc?.whatsNew ?? "<What's new>"),
+                trailing: const Icon(Icons.open_in_new),
+                onTap: () => launchUrl(releaseNotesUri),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Text(
+          'v${appInfo.version}',
+          textAlign: TextAlign.center,
+          style: Theme
+              .of(context)
+              .textTheme
+              .bodySmall,
         ),
       ],
     );
   }
-}
-
-class TooltipSpan extends WidgetSpan {
-  TooltipSpan({
-    required String message,
-    required TextSpan inlineSpan,
-  }) : super(
-         child: Tooltip(
-           message: message,
-           child: Text.rich(
-             inlineSpan,
-           ),
-         ),
-       );
 }
 
 class _SettingsSection extends StatelessWidget {

@@ -86,7 +86,8 @@ dart run build_runner watch --delete-conflicting-outputs
 
 #### Changed
 
-- Group settings navigation into a compact list for categories, trash, and export/import.
+- Group settings into sections for appearance, data, and app information, with tappable rows for
+  navigation, contact, privacy, and release notes.
 
 #### Fixed
 

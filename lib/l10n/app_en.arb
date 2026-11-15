@@ -39,6 +39,7 @@
   "lightMode": "Light",
   "appearance": "Appearance",
   "theme": "Theme",
+  "aboutSection": "About",
   "categories": "Categories",
   "defaultCategoryPlanning": "Planning",
   "defaultCategoryMeetings": "Meetings",
