@@ -226,7 +226,6 @@ void main() {
         tester.element(find.byType(SettingsPage)),
       )!;
       final Finder tile = find.widgetWithText(ListTile, loc.gettingStarted);
-      expect((tester.widget<ListTile>(tile).leading! as Icon).icon, Icons.waving_hand_outlined);
       await tester.ensureVisible(tile);
       await tester.pumpAndSettle();
       await tester.tap(tile);

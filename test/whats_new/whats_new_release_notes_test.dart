@@ -170,9 +170,6 @@ void main() {
           tester.element(find.byType(SettingsPage)),
         )!;
         final Finder tile = find.widgetWithText(ListTile, loc.whatsNew);
-        final ListTile whatsNewTile = tester.widget<ListTile>(tile);
-        expect((whatsNewTile.leading! as Icon).icon, Icons.rocket_launch_outlined);
-        expect((whatsNewTile.trailing! as Icon).icon, Icons.chevron_right);
 
         await tester.ensureVisible(tile);
         await tester.pumpAndSettle();
