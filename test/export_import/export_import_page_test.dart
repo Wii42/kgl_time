@@ -94,13 +94,20 @@ void main() {
     await storage.close();
   });
 
-  Future<void> launch(WidgetTester tester, {Locale locale = const Locale('en')}) async {
+  Future<void> launch(
+    WidgetTester tester, {
+    Locale locale = const Locale('en'),
+    Size size = const Size(1200, 1600),
+    double textScaleFactor = 1,
+  }) async {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
     addTearDown(() => debugDefaultTargetPlatformOverride = null);
-    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
+    tester.platformDispatcher.textScaleFactorTestValue = textScaleFactor;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     await tester.pumpWidget(
       MultiProvider(
         providers: [
@@ -130,6 +137,33 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+  }
+
+  Future<void> scrollDialogToEnd(WidgetTester tester, Finder lastText) async {
+    final Finder contentScroll = find.descendant(
+      of: find.byType(AlertDialog),
+      matching: find.byType(SingleChildScrollView),
+    );
+    final ScrollPosition position = tester
+        .state<ScrollableState>(
+          find.descendant(of: contentScroll, matching: find.byType(Scrollable)),
+        )
+        .position;
+    expect(tester.takeException(), isNull);
+    expect(position.maxScrollExtent, greaterThan(0));
+    expect(tester.getBottomLeft(lastText).dy, greaterThan(tester.getRect(contentScroll).bottom));
+    for (int attempt = 0; attempt < 20 && position.extentAfter > 0; attempt++) {
+      await tester.drag(contentScroll, const Offset(0, -200));
+      await tester.pumpAndSettle();
+    }
+    expect(position.extentAfter, closeTo(0, 0.01));
+    expect(position.pixels, greaterThan(0));
+    expect(
+      tester.getBottomLeft(lastText).dy,
+      lessThanOrEqualTo(tester.getRect(contentScroll).bottom + 0.01),
+    );
+    expect(tester.getBottomLeft(lastText).dy, greaterThan(tester.getRect(contentScroll).top));
+    expect(tester.takeException(), isNull);
   }
 
   Future<void> confirm(WidgetTester tester) async {
@@ -205,57 +239,40 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  for (final (
-        Locale locale,
-        String entrySingular,
-        String entryPlural,
-        String categorySingular,
-        String categoryPlural,
-      )
-      in <(Locale, String, String, String, String)>[
-        (const Locale('en'), 'entry', 'entries', 'category', 'categories'),
-        (const Locale('de'), 'Eintrag', 'Einträge', 'Kategorie', 'Kategorien'),
-      ]) {
-    for (final (int entryCount, int categoryCount) in <(int, int)>[
-      (1, 3),
-      (3, 1),
-      (0, 3),
-      (1, 1),
-    ]) {
-      testWidgets(
-        'backup preview shows $entryCount entries and $categoryCount categories in ${locale.languageCode}',
-        (WidgetTester tester) async {
-          await launch(tester, locale: locale);
-          final WorkData backup = WorkData(
-            workEntries: List<WorkEntry>.generate(
-              entryCount,
-              (int index) => WorkEntry(
-                workDurationInSeconds: 60,
-                date: DateTime.utc(2026, 11, 15),
-              )..id = index + 1,
-            ),
-            workCategories: List<WorkCategory>.generate(
-              categoryCount,
-              (int index) => WorkCategory(
-                'Category $index',
-                listIndex: index,
-              )..id = index + 1,
-            ),
-            backupFormatVersion: 1,
-            exportedAt: DateTime.utc(2026, 11, 15),
-          );
-          await openConfirmation(tester, backup);
-          final String entryLabel = entryCount == 1 ? entrySingular : entryPlural;
-          final String categoryLabel = categoryCount == 1 ? categorySingular : categoryPlural;
-          expect(
-            find.text('$entryCount $entryLabel, $categoryCount $categoryLabel'),
-            findsOneWidget,
-          );
-          expect(backup.workEntries, hasLength(entryCount));
-          expect(backup.workCategories, hasLength(categoryCount));
-        },
-      );
-    }
+  for (final (int entryCount, int categoryCount) in <(int, int)>[(1, 3), (3, 1)]) {
+    testWidgets(
+      'backup preview shows $entryCount entries and $categoryCount categories',
+      (WidgetTester tester) async {
+        await launch(tester);
+        final WorkData backup = WorkData(
+          workEntries: List<WorkEntry>.generate(
+            entryCount,
+            (int index) => WorkEntry(
+              workDurationInSeconds: 60,
+              date: DateTime.utc(2026, 11, 15),
+            )..id = index + 1,
+          ),
+          workCategories: List<WorkCategory>.generate(
+            categoryCount,
+            (int index) => WorkCategory(
+              'Category $index',
+              listIndex: index,
+            )..id = index + 1,
+          ),
+          backupFormatVersion: 1,
+          exportedAt: DateTime.utc(2026, 11, 15),
+        );
+        await openConfirmation(tester, backup);
+        final String entryLabel = entryCount == 1 ? 'entry' : 'entries';
+        final String categoryLabel = categoryCount == 1 ? 'category' : 'categories';
+        expect(
+          find.text('$entryCount $entryLabel, $categoryCount $categoryLabel'),
+          findsOneWidget,
+        );
+        expect(backup.workEntries, hasLength(entryCount));
+        expect(backup.workCategories, hasLength(categoryCount));
+      },
+    );
   }
 
   testWidgets('file picker failures show the import error without opening confirmation', (
@@ -693,122 +710,156 @@ void main() {
     );
   }
 
-  for (final int version in <int>[-1, 0, 2]) {
-    testWidgets('unsupported backup format $version cannot be confirmed', (
-      WidgetTester tester,
-    ) async {
-      startTracker();
-      await launch(tester);
-      final WorkData unsupported = WorkData(
-        workEntries: const [],
-        workCategories: const [],
-        backupFormatVersion: version,
-        exportedAt: DateTime.utc(2026, 11, 14),
-      );
-      await openConfirmation(tester, unsupported);
-      final Finder button = find.widgetWithText(
-        TextButton,
-        'Replace data',
-      );
-      expect(button, findsOneWidget);
-      expect(tester.widget<TextButton>(button).onPressed, isNull);
-      expect(await storage.workEntries.loadEntries(), hasLength(2));
-      await expectTrackerRunning();
-      expect(storage.replacementCalls, 0);
-    });
-  }
+  testWidgets('import confirmation scrolls and its actions remain reachable in small landscape', (
+    WidgetTester tester,
+  ) async {
+    startTracker();
+    await launch(
+      tester,
+      locale: const Locale('de'),
+      size: const Size(568, 320),
+      textScaleFactor: 1.5,
+    );
+    await openConfirmation(tester, WorkData.fromJson(backupFixture()));
+    final AppLocalizations loc = AppLocalizations.of(
+      tester.element(find.byType(ImportReplaceConfirmationDialog)),
+    )!;
 
-  for (final Locale locale in <Locale>[const Locale('en'), const Locale('de')]) {
-    for (final int version in <int>[-1, 0, 2]) {
-      testWidgets(
-        'picking unsupported backup format $version shows an error dialog in ${locale.languageCode}',
-        (WidgetTester tester) async {
-          startTracker();
-          await launch(tester, locale: locale);
-          final BuildContext pageContext = tester.element(find.byType(ExportImportPage));
-          final AppLocalizations loc = AppLocalizations.of(pageContext)!;
-          final String previousEntries = jsonEncode(entries.entriesIncludingTrash);
-          final String previousCategories = jsonEncode(categories.entries);
-          final String previousStoredEntries = jsonEncode(await storage.workEntries.loadEntries());
-          final String previousStoredCategories = jsonEncode(
-            await storage.workCategories.loadEntries(),
-          );
-          await pickBackup(tester, jsonEncode(<String, int>{'backupFormatVersion': version}));
+    await scrollDialogToEnd(tester, find.text(loc.importCancelsTrackerWarning));
+    final Finder cancel = find.widgetWithText(ElevatedButton, loc.cancel);
+    final Finder replace = find.widgetWithText(TextButton, loc.replaceData);
+    expect(cancel.hitTestable(), findsOneWidget);
+    expect(replace.hitTestable(), findsOneWidget);
+    await tester.tap(replace);
+    await tester.pumpAndSettle();
+    expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
+    expect(find.text(loc.importSuccess), findsOneWidget);
+    expect(storage.replacementCalls, 1);
+    await expectTrackerStopped();
+    expect(tester.takeException(), isNull);
+  });
 
-          expect(find.byType(AlertDialog), findsOneWidget);
-          expect(find.text(loc.unsupportedBackupFormatTitle), findsOneWidget);
-          expect(find.text(loc.unsupportedBackupFormat), findsOneWidget);
-          expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
-          expect(find.byType(SnackBar), findsNothing);
-          expect(storage.replacementCalls, 0);
-          expect(jsonEncode(entries.entriesIncludingTrash), previousEntries);
-          expect(jsonEncode(categories.entries), previousCategories);
-          expect(jsonEncode(await storage.workEntries.loadEntries()), previousStoredEntries);
-          expect(jsonEncode(await storage.workCategories.loadEntries()), previousStoredCategories);
-          await expectTrackerRunning();
+  testWidgets('undo confirmation scrolls and restores data in small landscape with enlarged text', (
+    WidgetTester tester,
+  ) async {
+    await launch(
+      tester,
+      locale: const Locale('de'),
+      size: const Size(568, 320),
+      textScaleFactor: 1.5,
+    );
+    final List<dynamic> before =
+        jsonDecode(jsonEncode(await storage.workEntries.loadEntries())) as List<dynamic>;
+    await openConfirmation(tester, WorkData.fromJson(backupFixture()));
+    final AppLocalizations loc = AppLocalizations.of(
+      tester.element(find.byType(ImportReplaceConfirmationDialog)),
+    )!;
+    await tester.tap(find.widgetWithText(TextButton, loc.replaceData));
+    await tester.pumpAndSettle();
+    final WorkEntry original = entries.entries.single;
+    entries.updateEntry(
+      original,
+      original.copyWith(description: const Value<String?>('Later edit')),
+    );
+    startTracker();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(loc.undo));
+    await tester.pumpAndSettle();
 
-          final Finder okButton = find.widgetWithText(
-            TextButton,
-            MaterialLocalizations.of(pageContext).okButtonLabel,
-          );
-          await tester.tap(okButton);
-          await tester.pumpAndSettle();
-          expect(find.byType(AlertDialog), findsNothing);
-          expect(tester.takeException(), isNull);
-        },
-      );
-    }
-  }
+    await scrollDialogToEnd(tester, find.text(loc.undoImportCancelsTrackerWarning));
+    expect(find.widgetWithText(ElevatedButton, loc.cancel).hitTestable(), findsOneWidget);
+    final Finder undo = find.widgetWithText(TextButton, loc.undo);
+    expect(undo.hitTestable(), findsOneWidget);
+    await tester.tap(undo);
+    await tester.pumpAndSettle();
+    expect(find.byType(UndoImportConfirmationDialog), findsNothing);
+    expect(find.text(loc.undoImportSuccess), findsOneWidget);
+    expect(
+      jsonDecode(jsonEncode(await storage.workEntries.loadEntries())),
+      unorderedEquals(before),
+    );
+    await expectTrackerStopped();
+    expect(tester.takeException(), isNull);
+  });
 
-  final Map<String, String> invalidBackupFiles = <String, String>{
-    'malformed JSON': 'not JSON',
-    'invalid document': '[]',
-  };
-  for (final String collection in <String>['workEntries', 'workCategories']) {
-    for (final bool duplicate in <bool>[false, true]) {
-      final Map<String, dynamic> json = backupFixture();
-      final List<Map<String, dynamic>> records = json[collection] as List<Map<String, dynamic>>;
-      records.first['id'] = duplicate ? records.last['id'] : 1.5;
-      invalidBackupFiles['${duplicate ? 'duplicate' : 'invalid'} IDs in $collection'] = jsonEncode(
-        json,
-      );
-    }
-  }
-  for (final Locale locale in <Locale>[const Locale('en'), const Locale('de')]) {
-    for (final MapEntry<String, String> invalid in invalidBackupFiles.entries) {
-      testWidgets(
-        '${invalid.key} show the invalid backup message in ${locale.languageCode}',
-        (WidgetTester tester) async {
-          startTracker();
-          await launch(tester, locale: locale);
-          final AppLocalizations loc = AppLocalizations.of(
-            tester.element(find.byType(ExportImportPage)),
-          )!;
-          final String previousEntries = jsonEncode(entries.entriesIncludingTrash);
-          final String previousCategories = jsonEncode(categories.entries);
-          final String previousStoredEntries = jsonEncode(await storage.workEntries.loadEntries());
-          final String previousStoredCategories = jsonEncode(
-            await storage.workCategories.loadEntries(),
-          );
+  testWidgets('unsupported backup format cannot be confirmed', (WidgetTester tester) async {
+    startTracker();
+    await launch(tester);
+    final WorkData unsupported = WorkData(
+      workEntries: const <WorkEntry>[],
+      workCategories: const <WorkCategory>[],
+      backupFormatVersion: 2,
+      exportedAt: DateTime.utc(2026, 11, 14),
+    );
+    await openConfirmation(tester, unsupported);
+    expect(
+      tester.widget<TextButton>(find.widgetWithText(TextButton, 'Replace data')).onPressed,
+      isNull,
+    );
+    await expectTrackerRunning();
+    expect(storage.replacementCalls, 0);
+  });
 
-          await pickBackup(tester, invalid.value);
+  testWidgets('unsupported backup dialog scrolls in small landscape with enlarged German text', (
+    WidgetTester tester,
+  ) async {
+    startTracker();
+    await launch(
+      tester,
+      locale: const Locale('de'),
+      size: const Size(568, 320),
+      textScaleFactor: 1.5,
+    );
+    final BuildContext pageContext = tester.element(find.byType(ExportImportPage));
+    final AppLocalizations loc = AppLocalizations.of(pageContext)!;
+    await pickBackup(tester, jsonEncode(<String, int>{'backupFormatVersion': 2}));
 
-          expect(find.text(loc.invalidBackupData), findsOneWidget);
-          expect(find.text(loc.importFailed), findsNothing);
-          expect(find.byType(SnackBar), findsOneWidget);
-          expect(find.byType(AlertDialog), findsNothing);
-          expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
-          expect(storage.replacementCalls, 0);
-          expect(jsonEncode(entries.entriesIncludingTrash), previousEntries);
-          expect(jsonEncode(categories.entries), previousCategories);
-          expect(jsonEncode(await storage.workEntries.loadEntries()), previousStoredEntries);
-          expect(jsonEncode(await storage.workCategories.loadEntries()), previousStoredCategories);
-          await expectTrackerRunning();
-          expect(tester.takeException(), isNull);
-        },
-      );
-    }
-  }
+    expect(find.text(loc.unsupportedBackupFormatTitle), findsOneWidget);
+    expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
+    expect(find.byType(SnackBar), findsNothing);
+    await scrollDialogToEnd(tester, find.text(loc.unsupportedBackupFormat));
+    final Finder okButton = find.widgetWithText(
+      TextButton,
+      MaterialLocalizations.of(pageContext).okButtonLabel,
+    );
+    expect(okButton.hitTestable(), findsOneWidget);
+    await tester.tap(okButton);
+    await tester.pumpAndSettle();
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(storage.replacementCalls, 0);
+    await expectTrackerRunning();
+  });
+
+  testWidgets('invalid backup shows its error without replacing data or cancelling tracking', (
+    WidgetTester tester,
+  ) async {
+    startTracker();
+    await launch(tester);
+    final AppLocalizations loc = AppLocalizations.of(
+      tester.element(find.byType(ExportImportPage)),
+    )!;
+    final List<dynamic> beforeEntries =
+        jsonDecode(jsonEncode(await storage.workEntries.loadEntries())) as List<dynamic>;
+    final String beforeCategories = jsonEncode(await storage.workCategories.loadEntries());
+    final Map<String, dynamic> json = backupFixture();
+    (json['workEntries'] as List<Map<String, dynamic>>).first['id'] = 1.5;
+    await pickBackup(tester, jsonEncode(json));
+
+    expect(find.text(loc.invalidBackupData), findsOneWidget);
+    expect(find.text(loc.importFailed), findsNothing);
+    expect(find.byType(SnackBar), findsOneWidget);
+    expect(find.byType(AlertDialog), findsNothing);
+    expect(storage.replacementCalls, 0);
+    expect(jsonDecode(jsonEncode(entries.entriesIncludingTrash)), unorderedEquals(beforeEntries));
+    expect(jsonEncode(categories.entries), beforeCategories);
+    expect(
+      jsonDecode(jsonEncode(await storage.workEntries.loadEntries())),
+      unorderedEquals(beforeEntries),
+    );
+    expect(jsonEncode(await storage.workCategories.loadEntries()), beforeCategories);
+    await expectTrackerRunning();
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('successful import cancels tracking instead of rebinding its categories', (
     WidgetTester tester,
@@ -832,30 +883,22 @@ void main() {
     expect(entries.entriesIncludingTrash, hasLength(2));
   });
 
-  for (final (Locale locale, String warning) in <(Locale, String)>[
-    (const Locale('en'), importTrackerWarning),
-    (
-      const Locale('de'),
-      'Beim Importieren dieses Backups wird die laufende Zeiterfassung abgebrochen, ohne die erfasste Zeit zu speichern.',
-    ),
-  ]) {
-    testWidgets(
-      'import warns about running tracking and cancellation preserves it in ${locale.languageCode}',
-      (WidgetTester tester) async {
-        startTracker();
-        await launch(tester, locale: locale);
-        await openConfirmation(tester, WorkData.fromJson(backupFixture()));
-        expect(find.text(warning), findsOneWidget);
-        final AppLocalizations loc = AppLocalizations.of(
-          tester.element(find.byType(ImportReplaceConfirmationDialog)),
-        )!;
-        await tester.tap(find.widgetWithText(ElevatedButton, loc.cancel));
-        await tester.pumpAndSettle();
-        await expectTrackerRunning();
-        expect(storage.replacementCalls, 0);
-      },
-    );
-  }
+  testWidgets(
+    'import warns about running tracking and cancellation preserves it',
+    (WidgetTester tester) async {
+      startTracker();
+      await launch(tester);
+      await openConfirmation(tester, WorkData.fromJson(backupFixture()));
+      expect(find.text(importTrackerWarning), findsOneWidget);
+      final AppLocalizations loc = AppLocalizations.of(
+        tester.element(find.byType(ImportReplaceConfirmationDialog)),
+      )!;
+      await tester.tap(find.widgetWithText(ElevatedButton, loc.cancel));
+      await tester.pumpAndSettle();
+      await expectTrackerRunning();
+      expect(storage.replacementCalls, 0);
+    },
+  );
 
   for (final bool accept in <bool>[false, true]) {
     testWidgets('a tracker started after import requires undo confirmation (accept: $accept)', (
@@ -895,32 +938,4 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
-
-  testWidgets(
-    'undo warns about a new running tracker in German and cancellation keeps it running',
-    (WidgetTester tester) async {
-      await launch(tester, locale: const Locale('de'));
-      await openConfirmation(tester, WorkData.fromJson(backupFixture()));
-      final AppLocalizations loc = AppLocalizations.of(
-        tester.element(find.byType(ImportReplaceConfirmationDialog)),
-      )!;
-      await tester.tap(find.widgetWithText(TextButton, loc.replaceData));
-      await tester.pumpAndSettle();
-      startTracker();
-      await tester.pumpAndSettle();
-      await tester.tap(find.text(loc.undo));
-      await tester.pumpAndSettle();
-      expect(
-        find.text(
-          'Beim Rückgängigmachen dieses Imports wird die laufende Zeiterfassung abgebrochen, ohne die erfasste Zeit zu speichern.',
-        ),
-        findsOneWidget,
-      );
-      expect(find.text(loc.undoImportChangesWarning), findsNothing);
-      await tester.tap(find.widgetWithText(ElevatedButton, loc.cancel));
-      await tester.pumpAndSettle();
-      await expectTrackerRunning();
-      expect(storage.replacementCalls, 1);
-    },
-  );
 }

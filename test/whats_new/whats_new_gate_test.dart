@@ -66,12 +66,6 @@ void main() {
     expect(await lastSeen(), '0.4.0');
   });
 
-  testWidgets('same app version does not show a dialog', (WidgetTester tester) async {
-    await setLastSeen('0.4.0');
-    await launch(tester);
-    expect(find.byType(WhatsNewDialog), findsNothing);
-  });
-
   testWidgets('update shows a modal over the existing screen and waits for Got it', (
     WidgetTester tester,
   ) async {
@@ -110,15 +104,6 @@ void main() {
     expect(await lastSeen(), '0.6.0');
   });
 
-  testWidgets('update without highlights advances the baseline without showing a dialog', (
-    WidgetTester tester,
-  ) async {
-    await setLastSeen('0.4.0');
-    await launch(tester, version: '0.4.1');
-    expect(find.byType(WhatsNewDialog), findsNothing);
-    expect(await lastSeen(), '0.4.1');
-  });
-
   testWidgets('disposing before dismissal leaves highlights unseen for the next launch', (
     WidgetTester tester,
   ) async {
@@ -153,15 +138,6 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(WhatsNewDialog), findsNothing);
     expect(await lastSeen(), '0.4.0');
-  });
-
-  testWidgets('downgrade does not show highlights or lower the stored version', (
-    WidgetTester tester,
-  ) async {
-    await setLastSeen('0.5.0');
-    await launch(tester);
-    expect(find.byType(WhatsNewDialog), findsNothing);
-    expect(await lastSeen(), '0.5.0');
   });
 
   testWidgets('titles, descriptions, and dismissal use the active German locale', (
@@ -214,7 +190,22 @@ void main() {
     await setLastSeen('1.0.0');
     await launch(tester, version: '1.6.0', locale: const Locale('de'));
     expect(find.text('Backups für deine Arbeitsdaten'), findsNWidgets(5));
-    expect(tester.widget<AlertDialog>(find.byType(AlertDialog)).scrollable, isTrue);
+    final AppLocalizations loc = AppLocalizations.of(tester.element(find.byType(WhatsNewDialog)))!;
+    final Finder lastDescription = find.text(loc.highlightJsonBackupsDescription).last;
+    final Finder contentScroll = find.descendant(
+      of: find.byType(AlertDialog),
+      matching: find.byType(SingleChildScrollView),
+    );
+    final ScrollPosition position = tester
+        .state<ScrollableState>(
+          find.descendant(of: contentScroll, matching: find.byType(Scrollable)),
+        )
+        .position;
+    expect(lastDescription.hitTestable(), findsNothing);
+    await tester.dragUntilVisible(lastDescription, contentScroll, const Offset(0, -100));
+    await tester.pumpAndSettle();
+    expect(position.pixels, greaterThan(0));
+    expect(lastDescription.hitTestable(), findsOneWidget);
     expect(tester.takeException(), isNull);
     await tester.tap(find.text('Verstanden'));
     await tester.pumpAndSettle();

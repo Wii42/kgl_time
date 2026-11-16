@@ -180,68 +180,82 @@ void main() {
       expect(find.text(loc.welcomeBackupsDescription), findsOneWidget);
       expect(find.text(loc.welcomeDismiss), findsOneWidget);
     });
+  }
 
-    for (final Size size in <Size>[const Size(320, 568), const Size(568, 320)]) {
-      testWidgets('welcome scrolls on $size with larger text in $locale', (
-        WidgetTester tester,
-      ) async {
-        tester.view.physicalSize = size;
-        tester.view.devicePixelRatio = 1;
-        tester.platformDispatcher.textScaleFactorTestValue = 1.5;
-        addTearDown(tester.view.resetPhysicalSize);
-        addTearDown(tester.view.resetDevicePixelRatio);
-        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-        await launch(tester, locale: locale);
-        final AppLocalizations loc = AppLocalizations.of(
-          tester.element(find.byType(WelcomeDialog)),
-        )!;
-        expect(tester.widget<AlertDialog>(find.byType(AlertDialog)).scrollable, isTrue);
-        expect(tester.takeException(), isNull);
-        await tester.tap(find.text(loc.welcomeDismiss));
-        await tester.pumpAndSettle();
-        expect(await completed(), isTrue);
-        expect(tester.takeException(), isNull);
-      });
-    }
-
-    testWidgets('Settings can reopen welcome in $locale and dismissal completes it', (
+  for (final Size size in <Size>[const Size(320, 568), const Size(568, 320)]) {
+    testWidgets('welcome scrolls on $size with larger text in German', (
       WidgetTester tester,
     ) async {
-      await tester.pumpWidget(
-        ChangeNotifierProvider<KeyValues>(
-          create: (BuildContext context) => KeyValues(<String, dynamic>{}),
-          child: MaterialApp(
-            locale: locale,
-            localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-              ...GlobalMaterialLocalizations.delegates,
-              AppLocalizations.delegate,
-            ],
-            supportedLocales: supportedAppLocales,
-            home: const SettingsPage(appTitle: 'Test'),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1;
+      tester.platformDispatcher.textScaleFactorTestValue = 1.5;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+      await launch(tester, locale: const Locale('de'));
       final AppLocalizations loc = AppLocalizations.of(
-        tester.element(find.byType(SettingsPage)),
+        tester.element(find.byType(WelcomeDialog)),
       )!;
-      final Finder tile = find.widgetWithText(ListTile, loc.gettingStarted);
-      await tester.ensureVisible(tile);
+      final Finder lastDescription = find.text(loc.welcomeBackupsDescription);
+      final Finder contentScroll = find.descendant(
+        of: find.byType(AlertDialog),
+        matching: find.byType(SingleChildScrollView),
+      );
+      final ScrollPosition position = tester
+          .state<ScrollableState>(
+            find.descendant(of: contentScroll, matching: find.byType(Scrollable)),
+          )
+          .position;
+      expect(lastDescription.hitTestable(), findsNothing);
+      await tester.dragUntilVisible(lastDescription, contentScroll, const Offset(0, -100));
       await tester.pumpAndSettle();
-      await tester.tap(tile);
-      await tester.pumpAndSettle();
-      expect(find.byType(WelcomeDialog), findsOneWidget);
+      expect(position.pixels, greaterThan(0));
+      expect(lastDescription.hitTestable(), findsOneWidget);
+      expect(tester.takeException(), isNull);
       await tester.tap(find.text(loc.welcomeDismiss));
       await tester.pumpAndSettle();
       expect(await completed(), isTrue);
-
-      await tester.tap(tile);
-      await tester.pumpAndSettle();
-      expect(find.byType(WelcomeDialog), findsOneWidget);
-      await tester.tapAt(const Offset(1, 1));
-      await tester.pumpAndSettle();
-      expect(find.byType(WelcomeDialog), findsNothing);
-      expect(await completed(), isTrue);
+      expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets('Settings can reopen welcome and dismissal completes it', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      ChangeNotifierProvider<KeyValues>(
+        create: (BuildContext context) => KeyValues(<String, dynamic>{}),
+        child: MaterialApp(
+          locale: const Locale('en'),
+          localizationsDelegates: <LocalizationsDelegate<dynamic>>[
+            ...GlobalMaterialLocalizations.delegates,
+            AppLocalizations.delegate,
+          ],
+          supportedLocales: supportedAppLocales,
+          home: const SettingsPage(appTitle: 'Test'),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final AppLocalizations loc = AppLocalizations.of(
+      tester.element(find.byType(SettingsPage)),
+    )!;
+    final Finder tile = find.widgetWithText(ListTile, loc.gettingStarted);
+    await tester.ensureVisible(tile);
+    await tester.pumpAndSettle();
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+    expect(find.byType(WelcomeDialog), findsOneWidget);
+    await tester.tap(find.text(loc.welcomeDismiss));
+    await tester.pumpAndSettle();
+    expect(await completed(), isTrue);
+
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+    expect(find.byType(WelcomeDialog), findsOneWidget);
+    await tester.tapAt(const Offset(1, 1));
+    await tester.pumpAndSettle();
+    expect(find.byType(WelcomeDialog), findsNothing);
+    expect(await completed(), isTrue);
+  });
 }

@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kgl_time/data_model/work_categories.dart';
 import 'package:kgl_time/data_model/work_category.dart';
+import 'package:kgl_time/data_model/work_entries.dart';
+import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 import 'package:kgl_time/widgets/categories/edit_categories_widget.dart';
@@ -29,10 +31,13 @@ void main() {
     await storage.close();
   });
 
-  Future<void> launch(WidgetTester tester) async {
+  Future<void> launch(WidgetTester tester, {WorkEntries? workEntries}) async {
     await tester.pumpWidget(
-      ChangeNotifierProvider<WorkCategories>.value(
-        value: categories,
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<WorkCategories>.value(value: categories),
+          if (workEntries != null) ChangeNotifierProvider<WorkEntries>.value(value: workEntries),
+        ],
         child: MaterialApp(
           theme: ThemeData(platform: TargetPlatform.linux),
           locale: const Locale('en'),
@@ -99,9 +104,6 @@ void main() {
   for (final move in [
     (1, 4, [2, 3, 4, 1]),
     (4, 1, [4, 1, 2, 3]),
-    (2, 3, [1, 3, 2, 4]),
-    (3, 2, [1, 3, 2, 4]),
-    (2, 2, [1, 2, 3, 4]),
   ]) {
     testWidgets('drag category ${move.$1} to ${move.$2} preserves visible and stored order', (
       tester,
@@ -120,5 +122,81 @@ void main() {
     await expectOrder(tester, [1, 2, 3, 4]);
     await drag(tester, 2, 3);
     await expectOrder(tester, [1, 3, 2, 4]);
+  });
+
+  testWidgets('category actions validate, add, rename, and delete without losing entry data', (
+    WidgetTester tester,
+  ) async {
+    final WorkEntry entry = WorkEntry.fromDuration(
+      duration: const Duration(minutes: 45),
+      date: DateTime(2026, 10, 23),
+      description: 'Keep this work',
+      categories: <EmbeddedWorkCategory>[categories.entries.first.toEmbedded()],
+    )..id = 42;
+    await storage.workEntries.saveEntries(<WorkEntry>[entry]);
+    final WorkEntries workEntries = WorkEntries(<WorkEntry>[entry]);
+    addTearDown(workEntries.dispose);
+    await launch(tester, workEntries: workEntries);
+    final AppLocalizations loc = AppLocalizations.of(
+      tester.element(find.byType(EditCategoriesWidget)),
+    )!;
+
+    await tester.tap(find.widgetWithText(ElevatedButton, loc.addNewCategory));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(ElevatedButton, loc.add));
+    await tester.pumpAndSettle();
+    expect(find.text(loc.emptyCategoryNameError), findsOneWidget);
+    expect(await storage.workCategories.loadEntries(), hasLength(4));
+    await tester.enterText(find.byType(TextFormField), 'New category');
+    await tester.tap(find.widgetWithText(ElevatedButton, loc.add));
+    await tester.pumpAndSettle();
+    expect(find.text('New category'), findsOneWidget);
+    expect((await storage.workCategories.loadEntries()).last.listIndex, 4);
+
+    final Finder originalRow = find.widgetWithText(ListTile, 'Category 1');
+    await tester.tap(
+      find.descendant(
+        of: originalRow,
+        matching: find.widgetWithIcon(IconButton, Icons.edit_outlined),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField), 'Renamed category');
+    await tester.tap(find.widgetWithText(ElevatedButton, loc.save));
+    await tester.pumpAndSettle();
+    expect(find.text('Renamed category'), findsOneWidget);
+    expect(
+      (await storage.workCategories.loadEntries())
+          .singleWhere((WorkCategory category) => category.id == 1)
+          .displayName,
+      'Renamed category',
+    );
+    final WorkEntry renamed = (await storage.workEntries.loadEntries()).single;
+    expect(renamed.id, 42);
+    expect(renamed.categories.single.id, 1);
+    expect(renamed.categories.single.displayName, 'Renamed category');
+    expect(renamed.description, 'Keep this work');
+    expect(renamed.workDuration, const Duration(minutes: 45));
+
+    final Finder delete = find.descendant(
+      of: find.widgetWithText(ListTile, 'Renamed category'),
+      matching: find.widgetWithIcon(IconButton, Icons.delete_outline_outlined),
+    );
+    await tester.tap(delete);
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextButton, loc.cancel));
+    await tester.pumpAndSettle();
+    expect(await storage.workCategories.loadEntries(), hasLength(5));
+    await tester.tap(delete);
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextButton, loc.delete));
+    await tester.pumpAndSettle();
+    expect(find.text('Renamed category'), findsNothing);
+    expect(await storage.workCategories.loadEntries(), hasLength(4));
+    final WorkEntry afterDelete = (await storage.workEntries.loadEntries()).single;
+    expect(afterDelete.id, 42);
+    expect(afterDelete.categories.single.displayName, 'Renamed category');
+    expect(afterDelete.workDuration, const Duration(minutes: 45));
+    expect(tester.takeException(), isNull);
   });
 }

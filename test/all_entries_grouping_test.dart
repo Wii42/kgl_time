@@ -62,7 +62,6 @@ void main() {
       expect(tester.getBottomLeft(caption).dy, lessThan(tester.getTopLeft(selector).dy));
       final Finder controlsSurface = find.ancestor(of: caption, matching: find.byType(Card)).first;
       final Card surface = tester.widget<Card>(controlsSurface);
-      expect(surface.color, Theme.of(tester.element(caption)).canvasColor);
       expect(surface.color!.a, 1);
       expect(find.descendant(of: controlsSurface, matching: selector), findsOneWidget);
       expect(

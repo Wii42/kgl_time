@@ -63,6 +63,7 @@ void main() {
       await tester.drag(list, const Offset(0, -400));
       await tester.pumpAndSettle();
       expect(header.pixels, greaterThan(header.minScrollExtent));
+      expect(router.routeInformationProvider.value.uri.path, NavBarAppRoute.allEntries.path);
       final double offset = position.pixels;
       expect(offset, greaterThan(100));
 
@@ -209,35 +210,6 @@ void main() {
     await tester.drag(body, const Offset(250, 0));
     await tester.pumpAndSettle();
     expect(currentPath(), NavBarAppRoute.home.path);
-    expect(tester.takeException(), isNull);
-  });
-
-  testWidgets('vertical scrolling stays within the tab and swiping preserves its scroll state', (
-    WidgetTester tester,
-  ) async {
-    final GoRouter router = await pumpApp(tester);
-    router.go(NavBarAppRoute.allEntries.path);
-    await tester.pumpAndSettle();
-    final Finder list = find.byType(AnimatedWidthConstrainedListView);
-    final ScrollPosition position = tester
-        .state<ScrollableState>(
-          find.descendant(of: list, matching: find.byType(Scrollable)),
-        )
-        .position;
-
-    await tester.drag(list, const Offset(0, -400));
-    await tester.pumpAndSettle();
-    expect(router.routeInformationProvider.value.uri.path, NavBarAppRoute.allEntries.path);
-    expect(position.pixels, greaterThan(100));
-    final double offset = position.pixels;
-
-    await tester.drag(list, const Offset(-250, 0));
-    await tester.pumpAndSettle();
-    expect(router.routeInformationProvider.value.uri.path, NavBarAppRoute.categories.path);
-    await tester.drag(find.byType(AnimatedBranchContainer), const Offset(250, 0));
-    await tester.pumpAndSettle();
-    expect(router.routeInformationProvider.value.uri.path, NavBarAppRoute.allEntries.path);
-    expect(position.pixels, closeTo(offset, 0.01));
     expect(tester.takeException(), isNull);
   });
 }

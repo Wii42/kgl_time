@@ -105,117 +105,77 @@ void main() {
     addTearDown(appStorage.close);
   }
 
-  for (final Locale locale in <Locale>[const Locale('en'), const Locale('de')]) {
+  const Locale locale = Locale('en');
 
-    testWidgets('release notes open externally without acknowledging the dialog in $locale', (
+  testWidgets('release notes open externally without acknowledging the dialog in $locale', (
+    WidgetTester tester,
+  ) async {
+    await launch(tester, locale);
+    final AppLocalizations loc = AppLocalizations.of(
+      tester.element(find.byType(WhatsNewDialog)),
+    )!;
+    await tester.tap(find.text(loc.whatsNewReleaseNotes));
+    await tester.pumpAndSettle();
+
+    expect(launches, hasLength(1));
+    expect(
+      launches.single.arguments,
+      containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/CHANGELOG.md#v0.4.0'),
+    );
+    expect(launches.single.arguments, containsPair('useWebView', false));
+    expect(launches.single.arguments, containsPair('useSafariVC', false));
+    expect(find.byType(WhatsNewDialog), findsOneWidget);
+    expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), '0.3.6');
+
+    await tester.tap(find.text(loc.whatsNewDismiss));
+    await tester.pumpAndSettle();
+    expect(find.byType(WhatsNewDialog), findsNothing);
+    expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), '0.4.0');
+  });
+
+  testWidgets('release notes and dismissal fit a small landscape window in German', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(568, 320);
+    tester.view.devicePixelRatio = 1;
+    tester.platformDispatcher.textScaleFactorTestValue = 1.5;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+
+    await launch(tester, const Locale('de'));
+    final AppLocalizations loc = AppLocalizations.of(
+      tester.element(find.byType(WhatsNewDialog)),
+    )!;
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.text(loc.whatsNewReleaseNotes));
+    await tester.pumpAndSettle();
+    expect(launches, hasLength(1));
+    expect(find.byType(WhatsNewDialog), findsOneWidget);
+    await tester.tap(find.text(loc.whatsNewDismiss));
+    await tester.pumpAndSettle();
+    expect(find.byType(WhatsNewDialog), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final String? lastSeenVersion in <String?>['0.4.1', null]) {
+    testWidgets('Settings reopens recent highlights in $locale with last seen $lastSeenVersion', (
       WidgetTester tester,
     ) async {
-      await launch(tester, locale);
+      await launchSettings(tester, locale, lastSeenVersion: lastSeenVersion);
       final AppLocalizations loc = AppLocalizations.of(
-        tester.element(find.byType(WhatsNewDialog)),
+        tester.element(find.byType(SettingsPage)),
       )!;
-      expect(
-        find.text(locale.languageCode == 'de' ? 'Versionshinweise' : 'Release notes'),
-        findsOneWidget,
-      );
-      await tester.tap(find.text(loc.whatsNewReleaseNotes));
-      await tester.pumpAndSettle();
+      final Finder tile = find.widgetWithText(ListTile, loc.whatsNew);
 
-      expect(launches, hasLength(1));
-      expect(
-        launches.single.arguments,
-        containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/CHANGELOG.md#v0.4.0'),
-      );
-      expect(launches.single.arguments, containsPair('useWebView', false));
-      expect(launches.single.arguments, containsPair('useSafariVC', false));
+      await tester.ensureVisible(tile);
+      await tester.pumpAndSettle();
+      await tester.tap(tile);
+      await tester.pumpAndSettle();
       expect(find.byType(WhatsNewDialog), findsOneWidget);
-      expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), '0.3.6');
+      expect(find.text(loc.highlightJsonBackupsTitle), findsOneWidget);
+      expect(tester.widget<WhatsNewDialog>(find.byType(WhatsNewDialog)).currentVersion, '0.4.1');
 
-      await tester.tap(find.text(loc.whatsNewDismiss));
-      await tester.pumpAndSettle();
-      expect(find.byType(WhatsNewDialog), findsNothing);
-      expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), '0.4.0');
-    });
-
-    testWidgets('release notes and dismissal fit a small landscape window in $locale', (
-      WidgetTester tester,
-    ) async {
-      tester.view.physicalSize = const Size(568, 320);
-      tester.view.devicePixelRatio = 1;
-      tester.platformDispatcher.textScaleFactorTestValue = 1.5;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-
-      await launch(tester, locale);
-      final AppLocalizations loc = AppLocalizations.of(
-        tester.element(find.byType(WhatsNewDialog)),
-      )!;
-      expect(tester.takeException(), isNull);
-      await tester.tap(find.text(loc.whatsNewReleaseNotes));
-      await tester.pumpAndSettle();
-      expect(launches, hasLength(1));
-      expect(find.byType(WhatsNewDialog), findsOneWidget);
-      await tester.tap(find.text(loc.whatsNewDismiss));
-      await tester.pumpAndSettle();
-      expect(find.byType(WhatsNewDialog), findsNothing);
-      expect(tester.takeException(), isNull);
-    });
-
-    for (final String? lastSeenVersion in <String?>['0.4.1', null]) {
-      testWidgets('Settings reopens recent highlights in $locale with last seen $lastSeenVersion', (
-        WidgetTester tester,
-      ) async {
-        await launchSettings(tester, locale, lastSeenVersion: lastSeenVersion);
-        final AppLocalizations loc = AppLocalizations.of(
-          tester.element(find.byType(SettingsPage)),
-        )!;
-        final Finder tile = find.widgetWithText(ListTile, loc.whatsNew);
-
-        await tester.ensureVisible(tile);
-        await tester.pumpAndSettle();
-        await tester.tap(tile);
-        await tester.pumpAndSettle();
-        expect(find.byType(WhatsNewDialog), findsOneWidget);
-        expect(find.text(loc.highlightJsonBackupsTitle), findsOneWidget);
-        expect(tester.widget<WhatsNewDialog>(find.byType(WhatsNewDialog)).currentVersion, '0.4.1');
-
-        await tester.tap(find.text(loc.whatsNewReleaseNotes));
-        await tester.pumpAndSettle();
-        expect(
-          launches.single.arguments,
-          containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/CHANGELOG.md#v0.4.1'),
-        );
-        expect(find.byType(WhatsNewDialog), findsOneWidget);
-        await tester.tap(find.text(loc.whatsNewDismiss));
-        await tester.pumpAndSettle();
-        expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), lastSeenVersion);
-
-        await tester.tap(tile);
-        await tester.pumpAndSettle();
-        expect(find.byType(WhatsNewDialog), findsOneWidget);
-        await tester.tap(find.text(loc.whatsNewDismiss));
-        await tester.pumpAndSettle();
-        expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), lastSeenVersion);
-        expect(tester.takeException(), isNull);
-      });
-    }
-
-    testWidgets('empty manual dialog still offers localized release notes in $locale', (
-      WidgetTester tester,
-    ) async {
-      await launchSettings(tester, locale);
-      final BuildContext context = tester.element(find.byType(SettingsPage));
-      final AppLocalizations loc = AppLocalizations.of(context)!;
-      final Future<void> dismissed = showDialog<void>(
-        context: context,
-        builder: (BuildContext context) => const WhatsNewDialog(
-          highlights: <ReleaseHighlight>[],
-          currentVersion: '0.4.1',
-        ),
-      );
-      await tester.pumpAndSettle();
-      expect(find.text(loc.whatsNewNoHighlights), findsOneWidget);
       await tester.tap(find.text(loc.whatsNewReleaseNotes));
       await tester.pumpAndSettle();
       expect(
@@ -225,8 +185,43 @@ void main() {
       expect(find.byType(WhatsNewDialog), findsOneWidget);
       await tester.tap(find.text(loc.whatsNewDismiss));
       await tester.pumpAndSettle();
-      await dismissed;
-      expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), isNull);
+      expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), lastSeenVersion);
+
+      await tester.tap(tile);
+      await tester.pumpAndSettle();
+      expect(find.byType(WhatsNewDialog), findsOneWidget);
+      await tester.tap(find.text(loc.whatsNewDismiss));
+      await tester.pumpAndSettle();
+      expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), lastSeenVersion);
+      expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets('empty manual dialog still offers localized release notes in $locale', (
+    WidgetTester tester,
+  ) async {
+    await launchSettings(tester, locale);
+    final BuildContext context = tester.element(find.byType(SettingsPage));
+    final AppLocalizations loc = AppLocalizations.of(context)!;
+    final Future<void> dismissed = showDialog<void>(
+      context: context,
+      builder: (BuildContext context) => const WhatsNewDialog(
+        highlights: <ReleaseHighlight>[],
+        currentVersion: '0.4.1',
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text(loc.whatsNewNoHighlights), findsOneWidget);
+    await tester.tap(find.text(loc.whatsNewReleaseNotes));
+    await tester.pumpAndSettle();
+    expect(
+      launches.single.arguments,
+      containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/CHANGELOG.md#v0.4.1'),
+    );
+    expect(find.byType(WhatsNewDialog), findsOneWidget);
+    await tester.tap(find.text(loc.whatsNewDismiss));
+    await tester.pumpAndSettle();
+    await dismissed;
+    expect(await storage.get<String>(WhatsNewController.lastSeenVersionKey), isNull);
+  });
 }

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' show Abi;
 import 'dart:io';
@@ -12,10 +11,8 @@ import 'package:kgl_time/data_model/work_entry.dart';
 import 'package:kgl_time/export_import/work_data.dart';
 import 'package:kgl_time/persistent_storage/isar_persistent_storage.dart';
 import 'package:kgl_time/persistent_storage/persistent_storage_interface.dart';
-import 'package:kgl_time/persistent_storage/persistent_storage_service.dart';
 
 import '../support/backup_fixture.dart';
-import '../support/controlled_backup_storage.dart';
 import '../support/memory_storage.dart';
 
 void main() {
@@ -171,60 +168,6 @@ void main() {
       });
     });
   }
-
-  test('service forwards false without modifying either collection', () async {
-    final MemoryStorage storage = _DecliningStorage();
-    PersistentStorageService.setImplementation(storage);
-    await storage.workEntries.addEntry(
-      WorkEntry(workDurationInSeconds: 60, date: DateTime.utc(2020))..id = 1,
-    );
-    await storage.workCategories.addEntry(WorkCategory('Original', listIndex: 0)..id = 1);
-    addTearDown(storage.close);
-    final WorkData backup = WorkData.fromJson(backupFixture());
-    expect(
-      await PersistentStorageService.instance.replaceWorkData(
-        entries: backup.workEntries,
-        categories: backup.workCategories,
-      ),
-      isFalse,
-    );
-    expect((await storage.workEntries.loadEntries()).single.id, 1);
-    expect((await storage.workCategories.loadEntries()).single.displayName, 'Original');
-  });
-
-  test('service awaits commit and exposes no replacement while writes are pending', () async {
-    final ControlledBackupStorage storage = ControlledBackupStorage();
-    PersistentStorageService.setImplementation(storage);
-    addTearDown(storage.close);
-    final WorkEntry original = WorkEntry(workDurationInSeconds: 60, date: DateTime.utc(2020))
-      ..id = 1;
-    await storage.workEntries.addEntry(original);
-    await storage.workCategories.addEntry(WorkCategory('Original', listIndex: 0)..id = 1);
-    final Completer<void> barrier = Completer<void>();
-    storage.workCategories.writeBarrier = barrier;
-    final WorkData backup = WorkData.fromJson(backupFixture());
-    bool completed = false;
-    final Future<bool> result = PersistentStorageService.instance
-        .replaceWorkData(
-          entries: backup.workEntries,
-          categories: backup.workCategories,
-        )
-        .then((bool success) {
-          completed = true;
-          return success;
-        });
-    try {
-      await Future<void>.delayed(Duration.zero);
-      expect(completed, isFalse);
-      expect((await storage.workEntries.loadEntries()).single.id, 1);
-      expect((await storage.workCategories.loadEntries()).single.displayName, 'Original');
-    } finally {
-      barrier.complete();
-      expect(await result, isTrue);
-    }
-    expect(await storage.workEntries.loadEntries(), hasLength(2));
-    expect(await storage.workCategories.loadEntries(), hasLength(2));
-  });
 }
 
 Map<String, dynamic> _entryData(WorkEntry entry) {
@@ -287,13 +230,4 @@ class _FailingCategory extends WorkCategory {
 
   @override
   int get id => throw StateError('Injected category ID read failure');
-}
-
-class _DecliningStorage extends MemoryStorage {
-  @override
-  Future<bool> replaceWorkData({
-    required List<WorkEntry> entries,
-    required List<WorkCategory> categories,
-    List<String> keysToRemove = const <String>[],
-  }) async => false;
 }

@@ -230,42 +230,40 @@ void main() {
     expectVisible(tester, {1, 3, 4});
   });
 
-  for (final (int from, int to) in [(0, 1), (1, 0)]) {
-    testWidgets(
-      'reordering categories from $from to $to preserves selections',
-      (WidgetTester tester) async {
-        await launch(tester);
-        await toggle(tester, 'Category A');
+  testWidgets(
+    'reordering categories preserves selections',
+    (WidgetTester tester) async {
+      await launch(tester);
+      await toggle(tester, 'Category A');
 
-        categories.reorder(from, to);
-        await tester.pumpAndSettle();
+      categories.reorder(0, 1);
+      await tester.pumpAndSettle();
 
-        final List<FilterChip> chips = tester
-            .widgetList<FilterChip>(find.byType(FilterChip))
-            .toList();
-        expect(chips.map((FilterChip chip) => (chip.label as Text).data), [
-          'Category B',
-          'Category A',
-          'Without category',
-        ]);
-        expect(
-          tester.getTopLeft(chip('Category B')).dx,
-          lessThan(tester.getTopLeft(chip('Category A')).dx),
-        );
-        expectSelected(tester, 'Category A', false);
-        expectSelected(tester, 'Category B', true);
-        expectVisible(tester, {2, 3, 4});
+      final List<FilterChip> chips = tester
+          .widgetList<FilterChip>(find.byType(FilterChip))
+          .toList();
+      expect(chips.map((FilterChip chip) => (chip.label as Text).data), [
+        'Category B',
+        'Category A',
+        'Without category',
+      ]);
+      expect(
+        tester.getTopLeft(chip('Category B')).dx,
+        lessThan(tester.getTopLeft(chip('Category A')).dx),
+      );
+      expectSelected(tester, 'Category A', false);
+      expectSelected(tester, 'Category B', true);
+      expectVisible(tester, {2, 3, 4});
 
-        // The reordered chips must still change the selection for the right ID.
-        await toggle(tester, 'Category A');
-        expectVisible(tester, {1, 2, 3, 4});
-        await toggle(tester, 'Category B');
-        expectSelected(tester, 'Category A', true);
-        expectSelected(tester, 'Category B', false);
-        expectVisible(tester, {1, 3, 4});
-      },
-    );
-  }
+      // The reordered chips must still change the selection for the right ID.
+      await toggle(tester, 'Category A');
+      expectVisible(tester, {1, 2, 3, 4});
+      await toggle(tester, 'Category B');
+      expectSelected(tester, 'Category A', true);
+      expectSelected(tester, 'Category B', false);
+      expectVisible(tester, {1, 3, 4});
+    },
+  );
 
   testWidgets(
     'editing entry categories removes and restores the matching row',

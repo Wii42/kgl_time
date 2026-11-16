@@ -104,32 +104,11 @@ void main() {
     });
   }
 
-  for (final values in [
-    ('-1', '30'),
-    ('0', '-1'),
-    ('999999999999999999999999999999', '0'),
-    ('0', '999999999999999999999999999999'),
-    ('0', '4294967297'),
-    ('0', '71582789'),
-    ('1193047', '0'),
-    ('1193046', '29'),
-  ]) {
-    testWidgetsWithAdvancingClock('rejects invalid duration $values without saving', (
-      tester,
-    ) async {
-      final loc = await openForm(tester);
-      fillDuration(tester, values.$1, values.$2);
-      await tester.tap(find.text(loc.save));
-      await tester.pumpAndSettle();
-      expect(await storage.workEntries.loadEntries(), isEmpty);
-      expect(find.byType(NewEntryPage), findsOneWidget);
-      expect(tester.takeException(), isNull);
-    });
-  }
-
-  for (final values in [
+  for (final (String, String, String?, String?) values in <(String, String, String?, String?)>[
     ('invalid', '30', 'parse', null),
     ('1', 'invalid', null, 'parse'),
+    ('999999999999999999999999999999', '0', 'parse', null),
+    ('0', '999999999999999999999999999999', null, 'parse'),
     ('-1', '30', 'invalid', null),
     ('1', '-1', null, 'invalid'),
     ('4294967297', '30', 'large', 'sum'),
@@ -138,14 +117,14 @@ void main() {
     ('1', '71582789', 'sum', 'large'),
     ('1193046', '29', 'sum', 'sum'),
   ]) {
-    testWidgetsWithAdvancingClock('duration errors belong to the correct field for $values', (
-      tester,
+    testWidgetsWithAdvancingClock('invalid duration $values shows field errors without saving', (
+      WidgetTester tester,
     ) async {
-      final loc = await openForm(tester);
+      final AppLocalizations loc = await openForm(tester);
       fillDuration(tester, values.$1, values.$2);
-      tester.state<FormState>(find.byType(Form)).validate();
-      await tester.pump();
-      final messages = {
+      await tester.tap(find.text(loc.save));
+      await tester.pumpAndSettle();
+      final Map<String, String> messages = <String, String>{
         'parse': loc.inputTooLargeOrNanException,
         'invalid': loc.inputInvalidException,
         'large': loc.inputTooLargeException,
@@ -159,6 +138,9 @@ void main() {
         tester.state<FormFieldState<String>>(find.byType(TextFormField).at(1)).errorText,
         messages[values.$4],
       );
+      expect(await storage.workEntries.loadEntries(), isEmpty);
+      expect(find.byType(NewEntryPage), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
   }
 
