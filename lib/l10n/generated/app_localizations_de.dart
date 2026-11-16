@@ -16,7 +16,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get newEntry => 'Neuer Eintrag';
 
   @override
-  String get editEntry => 'Eintrag Bearbeiten';
+  String get editEntry => 'Eintrag bearbeiten';
 
   @override
   String get settings => 'Einstellungen';
@@ -118,7 +118,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get minutes => 'Minuten';
 
   @override
-  String get noInputError => 'Bitte geben Sie eine Dauer ein.\nNur Ziffern erlaubt';
+  String get noInputError => 'Bitte gib eine Dauer ein.\nNur Ziffern sind erlaubt.';
 
   @override
   String get description => 'Beschreibung';
@@ -139,16 +139,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get unexpectedError => 'Unerwarteter Fehler';
 
   @override
-  String get inputTooLargeOrNanException => 'Eingegebener Wert ist zu groß oder keine ganze Zahl';
+  String get inputTooLargeOrNanException =>
+      'Der eingegebene Wert ist zu groß oder keine ganze Zahl.';
 
   @override
-  String get inputTooLargeException => 'Eingegebener Wert ist zu groß';
+  String get inputTooLargeException => 'Der eingegebene Wert ist zu groß.';
 
   @override
-  String get inputSumTooLargeException => 'Summe der beiden Werte ist zu groß';
+  String get inputSumTooLargeException => 'Die Summe der beiden Werte ist zu groß.';
 
   @override
-  String get inputInvalidException => 'Eingegebener Wert ist ungültig';
+  String get inputInvalidException => 'Der eingegebene Wert ist ungültig.';
 
   @override
   String get createNewEntry => 'Neuen Eintrag erfassen';
@@ -211,7 +212,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String deleteCategoryConfirmationDialog(Object category) {
-    return 'Wollen Sie die Kategorie $category wirklich löschen?\n\nEinträge, die dieser Kategorie zugeordnet sind, werden nicht verändert.';
+    return 'Möchtest du die Kategorie $category wirklich löschen?\n\nEinträge, die dieser Kategorie zugeordnet sind, werden nicht verändert.';
   }
 
   @override
@@ -227,7 +228,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get editCategories => 'Kategorien bearbeiten';
 
   @override
-  String get emptyCategoryNameError => 'Bitte geben Sie einen Namen ein';
+  String get emptyCategoryNameError => 'Bitte gib einen Namen ein.';
 
   @override
   String get category => 'Kategorie';
@@ -252,7 +253,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get confirmDeleteDialog =>
-      'Wollen Sie den Eintrag wirklich löschen?\nDer Eintrag wird in den Papierkorb verschoben und kann dort 30 Tage lang wiederhergestellt werden.';
+      'Möchtest du den Eintrag wirklich löschen?\nDer Eintrag wird in den Papierkorb verschoben und kann dort 30 Tage lang wiederhergestellt werden.';
 
   @override
   String get selectCategory => 'Kategorie wählen';
@@ -322,7 +323,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get workingTime => 'Arbeitszeit';
 
   @override
-  String get fromTo => 'Von-Bis';
+  String get fromTo => 'Von–bis';
 
   @override
   String get fileSavedSuccessfully => 'Datei erfolgreich gespeichert';
@@ -340,7 +341,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get exportTable => 'Einträge als Tabelle exportieren';
 
   @override
-  String get exportBackup => 'Backup der Einträge exportieren';
+  String get exportBackup => 'Backup exportieren';
 
   @override
   String get exportCsvExplanation =>
@@ -348,14 +349,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get exportJsonExplanation =>
-      'Erstellt eine JSON-Sicherung aller Arbeitseinträge einschliesslich Papierkorb und Kategorien, um Daten wiederherzustellen oder auf ein anderes Gerät zu übertragen. Einstellungen und eine laufende Zeiterfassung sind nicht enthalten.';
+      'Erstellt ein JSON-Backup aller Einträge einschließlich Papierkorb und Kategorien, um Daten wiederherzustellen oder auf ein anderes Gerät zu übertragen. Einstellungen und eine laufende Zeiterfassung sind nicht enthalten.';
 
   @override
   String get importBackup => 'Backup importieren';
 
   @override
   String get importBackupExplanation =>
-      'Importieren Sie eine JSON-Sicherung, um Ihre Arbeitseinträge und Kategorien wiederherzustellen. Dabei werden alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb ersetzt.';
+      'Importiere ein JSON-Backup, um deine Einträge und Kategorien wiederherzustellen. Dabei werden alle vorhandenen Einträge und Kategorien einschließlich Papierkorb ersetzt.';
 
   @override
   String get replaceData => 'Daten ersetzen';
@@ -403,8 +404,20 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String nrOfEntriesAndCategories(Object nrOfCategories, Object nrOfEntries) {
-    return '$nrOfEntries Einträge, $nrOfCategories Kategorien';
+  String nrOfEntriesAndCategories(int nrOfCategories, int nrOfEntries) {
+    String _temp0 = intl.Intl.pluralLogic(
+      nrOfEntries,
+      locale: localeName,
+      other: '$nrOfEntries Einträge',
+      one: '1 Eintrag',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      nrOfCategories,
+      locale: localeName,
+      other: '$nrOfCategories Kategorien',
+      one: '1 Kategorie',
+    );
+    return '$_temp0, $_temp1';
   }
 
   @override
@@ -412,11 +425,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get unsupportedBackupFormat =>
-      'Dieses Backup-Format wird nicht unterstützt und kann nicht importiert werden. Falls es mit einer neueren App-Version erstellt wurde, aktualisieren Sie zuerst die App.';
+      'Dieses Backup-Format wird nicht unterstützt und kann nicht importiert werden. Falls es mit einer neueren App-Version erstellt wurde, aktualisiere zuerst die App.';
 
   @override
   String get importReplaceConfirmationDialog =>
-      'Alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb werden ersetzt. Sie können dies nur rückgängig machen, solange die Bestätigungsmeldung am unteren Bildschirmrand sichtbar ist.';
+      'Alle vorhandenen Einträge und Kategorien einschließlich Papierkorb werden ersetzt. Du kannst dies nur rückgängig machen, solange die Bestätigungsmeldung am unteren Bildschirmrand sichtbar ist.';
 
   @override
   String get withoutCategory => 'Ohne Kategorie';
@@ -432,14 +445,27 @@ class AppLocalizationsDeCh extends AppLocalizationsDe {
   AppLocalizationsDeCh() : super('de_CH');
 
   @override
-  String get inputTooLargeOrNanException => 'Eingegebener Wert ist zu gross oder keine ganze Zahl';
+  String get inputTooLargeOrNanException =>
+      'Der eingegebene Wert ist zu gross oder keine ganze Zahl.';
 
   @override
-  String get inputTooLargeException => 'Eingegebener Wert ist zu gross';
+  String get inputTooLargeException => 'Der eingegebene Wert ist zu gross.';
 
   @override
-  String get inputSumTooLargeException => 'Summe der beiden Werte ist zu gross';
+  String get inputSumTooLargeException => 'Die Summe der beiden Werte ist zu gross.';
 
   @override
   String get stop => 'Stop';
+
+  @override
+  String get exportJsonExplanation =>
+      'Erstellt ein JSON-Backup aller Einträge einschliesslich Papierkorb und Kategorien, um Daten wiederherzustellen oder auf ein anderes Gerät zu übertragen. Einstellungen und eine laufende Zeiterfassung sind nicht enthalten.';
+
+  @override
+  String get importBackupExplanation =>
+      'Importiere ein JSON-Backup, um deine Einträge und Kategorien wiederherzustellen. Dabei werden alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb ersetzt.';
+
+  @override
+  String get importReplaceConfirmationDialog =>
+      'Alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb werden ersetzt. Du kannst dies nur rückgängig machen, solange die Bestätigungsmeldung am unteren Bildschirmrand sichtbar ist.';
 }

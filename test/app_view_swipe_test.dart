@@ -81,7 +81,7 @@ void main() {
         await tester.tap(
           find.descendant(
             of: find.byType(navigation.NavigationBar),
-            matching: find.text('All Entries'),
+            matching: find.text('All entries'),
           ),
         );
       }

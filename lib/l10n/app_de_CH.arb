@@ -1,7 +1,10 @@
 {
   "@@locale": "de_CH",
-  "inputTooLargeOrNanException": "Eingegebener Wert ist zu gross oder keine ganze Zahl",
-  "inputTooLargeException": "Eingegebener Wert ist zu gross",
-  "inputSumTooLargeException": "Summe der beiden Werte ist zu gross",
-  "stop": "Stop"
+  "stop": "Stop",
+  "inputTooLargeOrNanException": "Der eingegebene Wert ist zu gross oder keine ganze Zahl.",
+  "inputTooLargeException": "Der eingegebene Wert ist zu gross.",
+  "inputSumTooLargeException": "Die Summe der beiden Werte ist zu gross.",
+  "exportJsonExplanation": "Erstellt ein JSON-Backup aller Einträge einschliesslich Papierkorb und Kategorien, um Daten wiederherzustellen oder auf ein anderes Gerät zu übertragen. Einstellungen und eine laufende Zeiterfassung sind nicht enthalten.",
+  "importBackupExplanation": "Importiere ein JSON-Backup, um deine Einträge und Kategorien wiederherzustellen. Dabei werden alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb ersetzt.",
+  "importReplaceConfirmationDialog": "Alle vorhandenen Einträge und Kategorien einschliesslich Papierkorb werden ersetzt. Du kannst dies nur rückgängig machen, solange die Bestätigungsmeldung am unteren Bildschirmrand sichtbar ist."
 }

@@ -137,14 +137,14 @@ void main() {
         await launch(tester);
         expectSelected(tester, 'Category A', true);
         expectSelected(tester, 'Category B', true);
-        expectSelected(tester, 'Without Category', true);
+        expectSelected(tester, 'Without category', true);
         expectVisible(tester, {1, 2, 3, 4});
         if (!a) await toggle(tester, 'Category A');
         if (!b) await toggle(tester, 'Category B');
-        if (!withoutCategory) await toggle(tester, 'Without Category');
+        if (!withoutCategory) await toggle(tester, 'Without category');
         expectSelected(tester, 'Category A', a);
         expectSelected(tester, 'Category B', b);
-        expectSelected(tester, 'Without Category', withoutCategory);
+        expectSelected(tester, 'Without category', withoutCategory);
         expectVisible(tester, {...visible, if (withoutCategory) 4});
       });
     }
@@ -246,7 +246,7 @@ void main() {
         expect(chips.map((FilterChip chip) => (chip.label as Text).data), [
           'Category B',
           'Category A',
-          'Without Category',
+          'Without category',
         ]);
         expect(
           tester.getTopLeft(chip('Category B')).dx,
@@ -347,15 +347,15 @@ void main() {
     await toggle(tester, 'Category A');
     expectVisible(tester, {2, 3, 4});
 
-    await toggle(tester, 'Without Category');
+    await toggle(tester, 'Without category');
     expectVisible(tester, {2, 3});
-    expectSelected(tester, 'Without Category', false);
+    expectSelected(tester, 'Without category', false);
     expectSelected(tester, 'Category A', false);
     expectSelected(tester, 'Category B', true);
 
-    await toggle(tester, 'Without Category');
+    await toggle(tester, 'Without category');
     expectVisible(tester, {2, 3, 4});
-    expectSelected(tester, 'Without Category', true);
+    expectSelected(tester, 'Without category', true);
     expectSelected(tester, 'Category A', false);
     expectSelected(tester, 'Category B', true);
   });
@@ -366,12 +366,12 @@ void main() {
     await launch(tester);
 
     expect(find.byType(FilterChip), findsOneWidget);
-    expectSelected(tester, 'Without Category', true);
+    expectSelected(tester, 'Without category', true);
     // References to deleted categories are not empty category lists.
     expectVisible(tester, {4});
-    await toggle(tester, 'Without Category');
+    await toggle(tester, 'Without category');
     expectVisible(tester, {});
-    await toggle(tester, 'Without Category');
+    await toggle(tester, 'Without category');
     expectVisible(tester, {4});
   });
 
@@ -381,7 +381,7 @@ void main() {
     await launch(tester);
     await toggle(tester, 'Category A');
     await toggle(tester, 'Category B');
-    await toggle(tester, 'Without Category');
+    await toggle(tester, 'Without category');
     entries.add(
       WorkEntry.fromDuration(
         duration: const Duration(minutes: 5),
@@ -390,23 +390,23 @@ void main() {
       )..id = 5,
     );
     await tester.pumpAndSettle();
-    expectSelected(tester, 'Without Category', false);
+    expectSelected(tester, 'Without category', false);
     expectVisible(tester, {});
 
-    await toggle(tester, 'Without Category');
+    await toggle(tester, 'Without category');
     expectVisible(tester, {4, 5});
-    await toggle(tester, 'Without Category');
+    await toggle(tester, 'Without category');
     expectVisible(tester, {});
   });
 
   testWidgets('category changes preserve the disabled without-category chip', (tester) async {
     await launch(tester);
     await toggle(tester, 'Category A');
-    await toggle(tester, 'Without Category');
+    await toggle(tester, 'Without category');
 
     Future<void> check() async {
       await tester.pumpAndSettle();
-      expectSelected(tester, 'Without Category', false);
+      expectSelected(tester, 'Without category', false);
       expectVisible(tester, {2, 3});
     }
 
@@ -423,7 +423,7 @@ void main() {
     categories.remove(categoryC);
     await check();
 
-    await toggle(tester, 'Without Category');
+    await toggle(tester, 'Without category');
     expectVisible(tester, {2, 3, 4});
   });
 
@@ -434,7 +434,7 @@ void main() {
       await launch(tester);
       await toggle(tester, 'Category A');
       await toggle(tester, 'Category B');
-      if (!withoutCategory) await toggle(tester, 'Without Category');
+      if (!withoutCategory) await toggle(tester, 'Without category');
       final original = entries.entries.singleWhere((entry) => entry.id == 4);
       final assigned = WorkEntry.fromDuration(
         duration: original.workDuration,
@@ -451,7 +451,7 @@ void main() {
 
       entries.updateEntry(assigned, original);
       await tester.pumpAndSettle();
-      expectSelected(tester, 'Without Category', withoutCategory);
+      expectSelected(tester, 'Without category', withoutCategory);
       expectVisible(tester, {1, 3, if (withoutCategory) 4});
     });
 
@@ -461,7 +461,7 @@ void main() {
       await launch(tester);
       await toggle(tester, 'Category A');
       await toggle(tester, 'Category B');
-      if (!withoutCategory) await toggle(tester, 'Without Category');
+      if (!withoutCategory) await toggle(tester, 'Without category');
       final original = entries.entries.singleWhere((entry) => entry.id == 4);
 
       entries.moveToTrashBin(original);
@@ -471,7 +471,7 @@ void main() {
 
       entries.restoreFromTrashBin(entries.entriesInTrash.single);
       await tester.pumpAndSettle();
-      expectSelected(tester, 'Without Category', withoutCategory);
+      expectSelected(tester, 'Without category', withoutCategory);
       expectVisible(tester, {if (withoutCategory) 4});
     });
   }
@@ -480,7 +480,7 @@ void main() {
     'trashing and restoring entries updates the list and empty state',
     (WidgetTester tester) async {
       await launch(tester);
-      await toggle(tester, 'Without Category');
+      await toggle(tester, 'Without category');
       await toggle(tester, 'Category B');
       final WorkEntry onlyA = entries.entries.singleWhere(
         (WorkEntry entry) => entry.id == 1,
@@ -516,7 +516,7 @@ void main() {
     'editing an entry date updates row order while keeping the filter',
     (WidgetTester tester) async {
       await launch(tester);
-      await toggle(tester, 'Without Category');
+      await toggle(tester, 'Without category');
       await toggle(tester, 'Category B');
       final WorkEntry original = entries.entries.singleWhere(
         (WorkEntry entry) => entry.id == 3,

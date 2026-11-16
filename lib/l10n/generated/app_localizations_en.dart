@@ -10,13 +10,13 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get allEntries => 'All Entries';
+  String get allEntries => 'All entries';
 
   @override
-  String get newEntry => 'New Entry';
+  String get newEntry => 'New entry';
 
   @override
-  String get editEntry => 'Edit Entry';
+  String get editEntry => 'Edit entry';
 
   @override
   String get settings => 'Settings';
@@ -106,7 +106,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get groupByMonth => 'Month';
 
   @override
-  String get calendarWeek => 'Calendar Week';
+  String get calendarWeek => 'Calendar week';
 
   @override
   String get hours => 'Hours';
@@ -115,7 +115,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get minutes => 'Minutes';
 
   @override
-  String get noInputError => 'Please enter a duration.\nOnly digits allowed';
+  String get noInputError => 'Please enter a duration.\nOnly digits are allowed.';
 
   @override
   String get description => 'Description';
@@ -136,16 +136,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unexpectedError => 'Unexpected error';
 
   @override
-  String get inputTooLargeOrNanException => 'Input value is too large or not an integer';
+  String get inputTooLargeOrNanException => 'The entered value is too large or not a whole number.';
 
   @override
-  String get inputTooLargeException => 'Input value is too large';
+  String get inputTooLargeException => 'The entered value is too large.';
 
   @override
-  String get inputSumTooLargeException => 'Sum of both values is too large';
+  String get inputSumTooLargeException => 'The sum of the two values is too large.';
 
   @override
-  String get inputInvalidException => 'Input value is invalid';
+  String get inputInvalidException => 'The entered value is invalid.';
 
   @override
   String get createNewEntry => 'Create new entry';
@@ -223,7 +223,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editCategories => 'Edit categories';
 
   @override
-  String get emptyCategoryNameError => 'Please enter a name';
+  String get emptyCategoryNameError => 'Please enter a name.';
 
   @override
   String get category => 'Category';
@@ -235,7 +235,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contact => 'Contact';
 
   @override
-  String get privacyPolicy => 'Privacy Policy';
+  String get privacyPolicy => 'Privacy policy';
 
   @override
   String get privacyPolicyUrlFragment => 'privacy-policy-for-kgl-time';
@@ -271,13 +271,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get home => 'Home';
 
   @override
-  String get openTrashBin => 'Open Trash Bin';
+  String get openTrashBin => 'Open trash bin';
 
   @override
   String get restoreEntry => 'Restore';
 
   @override
-  String get trashBin => 'Trash Bin';
+  String get trashBin => 'Trash bin';
 
   @override
   String get noMatchingEntries => 'No matching entries found';
@@ -294,7 +294,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Deleted entries appear here. You can restore them for up to 30 days after deletion.';
 
   @override
-  String get exportImportEntries => 'Export/Import Entries';
+  String get exportImportEntries => 'Export/import entries';
 
   @override
   String get share => 'Share';
@@ -312,10 +312,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importingNotSupported => 'Importing files is not supported on this platform.';
 
   @override
-  String get workingTime => 'Working Time';
+  String get workingTime => 'Working time';
 
   @override
-  String get fromTo => 'From-To';
+  String get fromTo => 'From–to';
 
   @override
   String get fileSavedSuccessfully => 'File saved successfully';
@@ -330,25 +330,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get failedToShareFile => 'Failed to share file';
 
   @override
-  String get exportTable => 'Export work entries as table';
+  String get exportTable => 'Export entries as a table';
 
   @override
-  String get exportBackup => 'Export backup of work entries';
+  String get exportBackup => 'Export backup';
 
   @override
   String get exportCsvExplanation =>
-      'Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.';
+      'Exports all entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.';
 
   @override
   String get exportJsonExplanation =>
-      'Creates a JSON backup of all work entries, including the trash, and categories, for restoring data or transferring it to another device. Settings and running tracker sessions are not included.';
+      'Creates a JSON backup of all entries, including the trash, and categories, for restoring data or transferring it to another device. Settings and running tracker sessions are not included.';
 
   @override
   String get importBackup => 'Import backup';
 
   @override
   String get importBackupExplanation =>
-      'Import a JSON backup to restore your work entries and categories. This replaces all existing entries and categories, including the trash.';
+      'Import a JSON backup to restore your entries and categories. This replaces all existing entries and categories, including the trash.';
 
   @override
   String get replaceData => 'Replace data';
@@ -395,8 +395,20 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String nrOfEntriesAndCategories(Object nrOfCategories, Object nrOfEntries) {
-    return '$nrOfEntries entries, $nrOfCategories categories';
+  String nrOfEntriesAndCategories(int nrOfCategories, int nrOfEntries) {
+    String _temp0 = intl.Intl.pluralLogic(
+      nrOfEntries,
+      locale: localeName,
+      other: '$nrOfEntries entries',
+      one: '1 entry',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      nrOfCategories,
+      locale: localeName,
+      other: '$nrOfCategories categories',
+      one: '1 category',
+    );
+    return '$_temp0, $_temp1';
   }
 
   @override
@@ -411,5 +423,5 @@ class AppLocalizationsEn extends AppLocalizations {
       'This will replace all existing entries and categories, including the trash. You can undo this only while the confirmation message at the bottom of the screen is visible.';
 
   @override
-  String get withoutCategory => 'Without Category';
+  String get withoutCategory => 'Without category';
 }

@@ -47,10 +47,10 @@ class ExportService {
   String entriesToCsv(List<WorkEntry> entries, AppLocalizations? loc) {
     List<List<dynamic>> rows = [
       [
-        loc?.workingTime ?? "Working Time",
+        loc?.workingTime ?? "Working time",
         loc?.date ?? "Date",
         loc?.description ?? "Description",
-        loc?.fromTo ?? "From-To",
+        loc?.fromTo ?? "From–to",
         loc?.categories ?? "Categories",
       ],
       ...entries.map(

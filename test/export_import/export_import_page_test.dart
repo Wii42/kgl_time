@@ -164,7 +164,7 @@ void main() {
 
   Future<Map<String, dynamic>> saveBackup(WidgetTester tester) async {
     final Finder card = find.ancestor(
-      of: find.text('Export backup of work entries'),
+      of: find.text('Export backup'),
       matching: find.byType(ExportEntriesCard),
     );
     final Finder button = find.descendant(
@@ -205,11 +205,23 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  for (final (Locale locale, String entryLabel, String categoryLabel) in <(Locale, String, String)>[
-    (const Locale('en'), 'entries', 'categories'),
-    (const Locale('de'), 'Einträge', 'Kategorien'),
-  ]) {
-    for (final (int entryCount, int categoryCount) in <(int, int)>[(1, 3), (3, 1), (0, 3)]) {
+  for (final (
+        Locale locale,
+        String entrySingular,
+        String entryPlural,
+        String categorySingular,
+        String categoryPlural,
+      )
+      in <(Locale, String, String, String, String)>[
+        (const Locale('en'), 'entry', 'entries', 'category', 'categories'),
+        (const Locale('de'), 'Eintrag', 'Einträge', 'Kategorie', 'Kategorien'),
+      ]) {
+    for (final (int entryCount, int categoryCount) in <(int, int)>[
+      (1, 3),
+      (3, 1),
+      (0, 3),
+      (1, 1),
+    ]) {
       testWidgets(
         'backup preview shows $entryCount entries and $categoryCount categories in ${locale.languageCode}',
         (WidgetTester tester) async {
@@ -233,6 +245,8 @@ void main() {
             exportedAt: DateTime.utc(2026, 11, 15),
           );
           await openConfirmation(tester, backup);
+          final String entryLabel = entryCount == 1 ? entrySingular : entryPlural;
+          final String categoryLabel = categoryCount == 1 ? categorySingular : categoryPlural;
           expect(
             find.text('$entryCount $entryLabel, $categoryCount $categoryLabel'),
             findsOneWidget,
@@ -373,7 +387,7 @@ void main() {
     );
     await tester.pumpAndSettle();
     final Finder card = find.ancestor(
-      of: find.text('Export work entries as table'),
+      of: find.text('Export entries as a table'),
       matching: find.byType(ExportEntriesCard),
     );
     final Finder button = find.descendant(

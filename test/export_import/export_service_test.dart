@@ -21,7 +21,7 @@ void main() {
   group('ExportService.entriesToCsv', () {
     test('exports only the header when there are no entries', () {
       expect(csv.decode(service.entriesToCsv([], english)), [
-        ['Working Time', 'Date', 'Description', 'From-To', 'Categories'],
+        ['Working time', 'Date', 'Description', 'From–to', 'Categories'],
       ]);
     });
 
@@ -44,7 +44,7 @@ void main() {
       ];
 
       expect(csv.decode(service.entriesToCsv(entries, english)), [
-        ['Working Time', 'Date', 'Description', 'From-To', 'Categories'],
+        ['Working time', 'Date', 'Description', 'From–to', 'Categories'],
         [
           '1h 30 min',
           'Fri 23.10.2026',
@@ -63,7 +63,7 @@ void main() {
       );
 
       expect(csv.decode(service.entriesToCsv([entry], german)), [
-        ['Arbeitszeit', 'Datum', 'Beschreibung', 'Von-Bis', 'Kategorien'],
+        ['Arbeitszeit', 'Datum', 'Beschreibung', 'Von–bis', 'Kategorien'],
         ['2h', 'Fr. 23.10.2026', '', '', ''],
       ]);
     });
@@ -79,7 +79,7 @@ void main() {
       );
 
       expect(csv.decode(output), [
-        ['Working Time', 'Date', 'Description', 'From-To', 'Categories'],
+        ['Working time', 'Date', 'Description', 'From–to', 'Categories'],
         ['0 min', 'Fri 23.10.2026', '', '', ''],
       ]);
     });

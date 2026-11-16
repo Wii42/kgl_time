@@ -7,6 +7,15 @@
 - Display app copyright and GPL-3.0-or-later licensing information in the About dialog, with inline
   links to the source code and app license.
 
+### Changed
+
+- Use consistent English and German wording in the app and CSV exports, with regional spelling for
+  Switzerland and Austria.
+
+### Fixed
+
+- Show correct singular and plural forms for entry and category counts in backup previews.
+
 <a name="v0.4.1"></a>
 
 ## v0.4.1

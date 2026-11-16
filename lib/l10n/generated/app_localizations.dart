@@ -101,19 +101,19 @@ abstract class AppLocalizations {
   /// No description provided for @allEntries.
   ///
   /// In en, this message translates to:
-  /// **'All Entries'**
+  /// **'All entries'**
   String get allEntries;
 
   /// No description provided for @newEntry.
   ///
   /// In en, this message translates to:
-  /// **'New Entry'**
+  /// **'New entry'**
   String get newEntry;
 
   /// No description provided for @editEntry.
   ///
   /// In en, this message translates to:
-  /// **'Edit Entry'**
+  /// **'Edit entry'**
   String get editEntry;
 
   /// No description provided for @settings.
@@ -287,7 +287,7 @@ abstract class AppLocalizations {
   /// No description provided for @calendarWeek.
   ///
   /// In en, this message translates to:
-  /// **'Calendar Week'**
+  /// **'Calendar week'**
   String get calendarWeek;
 
   /// No description provided for @hours.
@@ -305,7 +305,7 @@ abstract class AppLocalizations {
   /// No description provided for @noInputError.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a duration.\nOnly digits allowed'**
+  /// **'Please enter a duration.\nOnly digits are allowed.'**
   String get noInputError;
 
   /// No description provided for @description.
@@ -347,25 +347,25 @@ abstract class AppLocalizations {
   /// No description provided for @inputTooLargeOrNanException.
   ///
   /// In en, this message translates to:
-  /// **'Input value is too large or not an integer'**
+  /// **'The entered value is too large or not a whole number.'**
   String get inputTooLargeOrNanException;
 
   /// No description provided for @inputTooLargeException.
   ///
   /// In en, this message translates to:
-  /// **'Input value is too large'**
+  /// **'The entered value is too large.'**
   String get inputTooLargeException;
 
   /// No description provided for @inputSumTooLargeException.
   ///
   /// In en, this message translates to:
-  /// **'Sum of both values is too large'**
+  /// **'The sum of the two values is too large.'**
   String get inputSumTooLargeException;
 
   /// No description provided for @inputInvalidException.
   ///
   /// In en, this message translates to:
-  /// **'Input value is invalid'**
+  /// **'The entered value is invalid.'**
   String get inputInvalidException;
 
   /// No description provided for @createNewEntry.
@@ -515,7 +515,7 @@ abstract class AppLocalizations {
   /// No description provided for @emptyCategoryNameError.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a name'**
+  /// **'Please enter a name.'**
   String get emptyCategoryNameError;
 
   /// No description provided for @category.
@@ -539,7 +539,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicy.
   ///
   /// In en, this message translates to:
-  /// **'Privacy Policy'**
+  /// **'Privacy policy'**
   String get privacyPolicy;
 
   /// No description provided for @privacyPolicyUrlFragment.
@@ -605,7 +605,7 @@ abstract class AppLocalizations {
   /// No description provided for @openTrashBin.
   ///
   /// In en, this message translates to:
-  /// **'Open Trash Bin'**
+  /// **'Open trash bin'**
   String get openTrashBin;
 
   /// No description provided for @restoreEntry.
@@ -617,7 +617,7 @@ abstract class AppLocalizations {
   /// No description provided for @trashBin.
   ///
   /// In en, this message translates to:
-  /// **'Trash Bin'**
+  /// **'Trash bin'**
   String get trashBin;
 
   /// No description provided for @noMatchingEntries.
@@ -647,7 +647,7 @@ abstract class AppLocalizations {
   /// No description provided for @exportImportEntries.
   ///
   /// In en, this message translates to:
-  /// **'Export/Import Entries'**
+  /// **'Export/import entries'**
   String get exportImportEntries;
 
   /// No description provided for @share.
@@ -683,13 +683,13 @@ abstract class AppLocalizations {
   /// No description provided for @workingTime.
   ///
   /// In en, this message translates to:
-  /// **'Working Time'**
+  /// **'Working time'**
   String get workingTime;
 
   /// No description provided for @fromTo.
   ///
   /// In en, this message translates to:
-  /// **'From-To'**
+  /// **'From–to'**
   String get fromTo;
 
   /// No description provided for @fileSavedSuccessfully.
@@ -719,25 +719,25 @@ abstract class AppLocalizations {
   /// No description provided for @exportTable.
   ///
   /// In en, this message translates to:
-  /// **'Export work entries as table'**
+  /// **'Export entries as a table'**
   String get exportTable;
 
   /// No description provided for @exportBackup.
   ///
   /// In en, this message translates to:
-  /// **'Export backup of work entries'**
+  /// **'Export backup'**
   String get exportBackup;
 
   /// No description provided for @exportCsvExplanation.
   ///
   /// In en, this message translates to:
-  /// **'Exports all work entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.'**
+  /// **'Exports all entries as a CSV file. The file can be opened with spreadsheet applications like Microsoft Excel or Google Sheets.'**
   String get exportCsvExplanation;
 
   /// No description provided for @exportJsonExplanation.
   ///
   /// In en, this message translates to:
-  /// **'Creates a JSON backup of all work entries, including the trash, and categories, for restoring data or transferring it to another device. Settings and running tracker sessions are not included.'**
+  /// **'Creates a JSON backup of all entries, including the trash, and categories, for restoring data or transferring it to another device. Settings and running tracker sessions are not included.'**
   String get exportJsonExplanation;
 
   /// No description provided for @importBackup.
@@ -749,7 +749,7 @@ abstract class AppLocalizations {
   /// No description provided for @importBackupExplanation.
   ///
   /// In en, this message translates to:
-  /// **'Import a JSON backup to restore your work entries and categories. This replaces all existing entries and categories, including the trash.'**
+  /// **'Import a JSON backup to restore your entries and categories. This replaces all existing entries and categories, including the trash.'**
   String get importBackupExplanation;
 
   /// Button label confirming replacement of existing work entries and categories with an imported backup.
@@ -830,11 +830,11 @@ abstract class AppLocalizations {
   /// **'Date of backup: {date}'**
   String dateOfBackup(Object date);
 
-  /// No description provided for @nrOfEntriesAndCategories.
+  /// Backup preview showing the number of entries and categories, with singular and plural forms.
   ///
   /// In en, this message translates to:
-  /// **'{nrOfEntries} entries, {nrOfCategories} categories'**
-  String nrOfEntriesAndCategories(Object nrOfCategories, Object nrOfEntries);
+  /// **'{nrOfEntries, plural, =1{1 entry} other{{nrOfEntries} entries}}, {nrOfCategories, plural, =1{1 category} other{{nrOfCategories} categories}}'**
+  String nrOfEntriesAndCategories(int nrOfCategories, int nrOfEntries);
 
   /// No description provided for @unsupportedBackupFormatTitle.
   ///
@@ -857,7 +857,7 @@ abstract class AppLocalizations {
   /// No description provided for @withoutCategory.
   ///
   /// In en, this message translates to:
-  /// **'Without Category'**
+  /// **'Without category'**
   String get withoutCategory;
 }
 
