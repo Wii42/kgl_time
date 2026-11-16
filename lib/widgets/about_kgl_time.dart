@@ -59,30 +59,36 @@ class AboutKglTimeDialog extends StatelessWidget {
     final ThemeData themeData = Theme.of(context);
     final MaterialLocalizations localizations = MaterialLocalizations.of(context);
     return AlertDialog(
-      content: ListBody(
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              if (icon != null) IconTheme(data: themeData.iconTheme, child: icon),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: ListBody(
-                    children: <Widget>[
-                      Text(name, style: themeData.textTheme.headlineSmall),
-                      Text(version, style: themeData.textTheme.bodyMedium),
-                      const SizedBox(height: 18),
-                    ],
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListBody(
+          children: <Widget>[
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                if (icon != null) IconTheme(data: themeData.iconTheme, child: icon),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 4),
+                        Text(name, style: themeData.textTheme.headlineSmall),
+                        Text(version, style: themeData.textTheme.bodyMedium),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 18),
-          Text(applicationLegalese ?? '', style: themeData.textTheme.bodySmall),
-          ...?children,
-        ],
+              ],
+            ),
+            const SizedBox(height: 18),
+            Text(applicationLegalese ?? '', style: themeData.textTheme.bodySmall),
+            ...?children,
+          ],
+        ),
       ),
       actions: <Widget>[
         TextButton(
