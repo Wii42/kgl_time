@@ -69,7 +69,9 @@ class SettingsPage extends KglPage {
             ),
 
             const SizedBox(height: 24),
-            _AboutSection(),
+            _AboutSection(
+              appName: appTitle,
+            ),
             const SizedBox(height: 12),
           ],
         ),
@@ -161,6 +163,9 @@ class _ThemeModeSettings extends StatelessWidget {
 }
 
 class _AboutSection extends StatelessWidget {
+  final String? appName;
+
+  const new({super.key, this.appName});
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? loc = AppLocalizations.of(context);
@@ -222,16 +227,17 @@ class _AboutSection extends StatelessWidget {
                 onTap: () => launchUrl(privacyUri),
               ),
             ),
+            AboutListTile(
+              icon: const Icon(Icons.info_outline),
+              applicationVersion: "v${appInfo.version}",
+              applicationName: appName,
+              applicationIcon: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset('assets/playstore-icon.png', width: 64),
+              ),
+              applicationLegalese: loc?.aboutCopyrightAndLicense ?? '<Copyright and license>',
+            ),
           ],
-        ),
-        const SizedBox(height: 24),
-        Text(
-          'v${appInfo.version}',
-          textAlign: TextAlign.center,
-          style: Theme
-              .of(context)
-              .textTheme
-              .bodySmall,
         ),
       ],
     );

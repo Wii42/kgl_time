@@ -28,6 +28,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsExportImport => 'Export / Import';
 
   @override
+  String get aboutCopyrightAndLicense =>
+      'Copyright © 2024–2026 Lukas Künzi.\nLicensed under GNU GPL version 3 or later.';
+
+  @override
   String get gettingStarted => 'Getting started';
 
   @override

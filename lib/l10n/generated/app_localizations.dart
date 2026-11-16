@@ -134,6 +134,12 @@ abstract class AppLocalizations {
   /// **'Export / Import'**
   String get settingsExportImport;
 
+  /// No description provided for @aboutCopyrightAndLicense.
+  ///
+  /// In en, this message translates to:
+  /// **'Copyright © 2024–2026 Lukas Künzi.\nLicensed under GNU GPL version 3 or later.'**
+  String get aboutCopyrightAndLicense;
+
   /// No description provided for @gettingStarted.
   ///
   /// In en, this message translates to:

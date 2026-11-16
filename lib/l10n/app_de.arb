@@ -6,6 +6,7 @@
   "settings": "Einstellungen",
   "settingsDataSectionTitle": "Daten",
   "settingsExportImport": "Export / Import",
+  "aboutCopyrightAndLicense": "Copyright © 2024–2026 Lukas Künzi.\nLizenziert unter der GNU GPL, Version 3 oder neuer.",
   "gettingStarted": "Erste Schritte",
   "welcomeTitle": "Willkommen bei KGL Time",
   "welcomeDismiss": "Los geht’s",
