@@ -13,6 +13,22 @@
   implementing new ones. Reuse or compose them when appropriate instead of duplicating behavior
   from scratch.
 
+# Scope and project context
+
+- Treat review, explanation, and design questions as read-only unless implementation is requested.
+- Read [docs/decisions.md](docs/decisions.md) when changing persistence, backups, startup dialogs,
+  or
+  release-note links. Update the record when a change affects the documented decisions or rationale.
+- Keep proposed work and unresolved questions in GitHub issues, clearly distinguished from accepted
+  decisions and implemented behavior.
+- Keep repository documentation focused on public project information. Do not copy personal details,
+  private information, or conversation history into it.
+
+# Tests
+
+- Test observable behavior and data integrity. Avoid assertions about specific decorative icons;
+  verify the associated actions, navigation, and persistence instead.
+
 # Release notes
 
 - When implementing a user-visible feature or fixing a user-visible bug, update the **Unreleased**
