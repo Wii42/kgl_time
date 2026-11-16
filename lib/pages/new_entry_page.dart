@@ -176,6 +176,7 @@ class _NewEntryStatefulPageState extends State<_NewEntryStatefulPage> {
     );
   }
 
+  // ignore: many_lints/avoid_returning_widgets
   Widget bottomButtons({required AppLocalizations? localizations}) {
     return LayoutBuilder(
       builder: (context, constraints) {

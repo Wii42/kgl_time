@@ -80,6 +80,7 @@ class AnimatedBranchContainer extends StatelessWidget {
     );
   }
 
+  // ignore: many_lints/avoid_returning_widgets
   Widget _branchNavigatorWrapper(int index, Widget navigator) => IgnorePointer(
     ignoring: index != currentIndex,
     child: TickerMode(enabled: index == currentIndex, child: navigator),

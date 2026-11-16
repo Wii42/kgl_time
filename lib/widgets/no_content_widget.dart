@@ -52,6 +52,7 @@ class NoContentWidget extends StatelessWidget {
     );
   }
 
+  // ignore: many_lints/avoid_returning_widgets
   static Widget inAlwaysFillingScrollView({
     IconData? icon,
     String? title,
