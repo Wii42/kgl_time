@@ -7,6 +7,7 @@ import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/utils/helpers.dart';
 import 'package:kgl_time/widgets/about_kgl_time.dart';
 import 'package:kgl_time/widgets/layout/always_filling_scroll_view.dart';
+import 'package:kgl_time/widgets/settings_setction.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,7 +37,7 @@ class SettingsPage extends KglPage {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            _SettingsSection(
+            SettingsSection(
               sectionTitle: loc?.appearance ?? '<Appearance>',
               children: [
                 Padding(
@@ -46,7 +47,7 @@ class SettingsPage extends KglPage {
               ],
             ),
             const SizedBox(height: 24),
-            _SettingsSection(
+            SettingsSection(
               sectionTitle: loc?.settingsDataSectionTitle ?? '<Data>',
               children: <Widget>[
                 ListTile(
@@ -105,7 +106,7 @@ class _ThemeModeSettings extends StatelessWidget {
 
             final TextStyle? titleStyle =
                 tileTheme.titleTextStyle ??
-                    theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.onSurface);
+                theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.onSurface);
             return SizedBox(
               width: constraints.maxWidth,
               child: Wrap(
@@ -174,7 +175,7 @@ class _AboutSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        _SettingsSection(
+        SettingsSection(
           sectionTitle: loc?.aboutSection ?? '<About>',
           children: <Widget>[
             ListTile(
@@ -195,9 +196,7 @@ class _AboutSection extends StatelessWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () async {
                 final OnboardingController controller = OnboardingController(
-                  storage: context
-                      .read<KeyValues>()
-                      .storedEntries,
+                  storage: context.read<KeyValues>().storedEntries,
                 );
                 await showDialog<void>(
                   context: context,
@@ -227,54 +226,6 @@ class _AboutSection extends StatelessWidget {
             ),
             AboutKglTimeListTile(appName: appName),
           ],
-        ),
-      ],
-    );
-  }
-}
-
-class _SettingsSection extends StatelessWidget {
-  final String sectionTitle;
-  final List<Widget> children;
-  final bool addDividerBetweenChildren;
-
-  final Widget divider = const Divider(height: 1, indent: 56, endIndent: 16);
-
-  const _SettingsSection({
-    required this.sectionTitle,
-    required this.children,
-    this.addDividerBetweenChildren = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: Text(
-            sectionTitle,
-            style: Theme
-                .of(context)
-                .textTheme
-                .titleSmall
-                ?.copyWith(
-              color: Theme
-                  .of(context)
-                  .colorScheme
-                  .primary,
-            ),
-          ),
-        ),
-        Card(
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: addDividerBetweenChildren ? children.withWidgetBetween(divider) : children,
-          ),
         ),
       ],
     );
