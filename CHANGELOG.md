@@ -4,7 +4,8 @@
 
 ### Added
 
-- Display app copyright and GPL-3.0-or-later licensing information in the About dialog.
+- Display app copyright and GPL-3.0-or-later licensing information in the About dialog, with inline
+  links to the source code and app license.
 
 <a name="v0.4.1"></a>
 

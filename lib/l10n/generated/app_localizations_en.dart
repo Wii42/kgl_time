@@ -32,6 +32,21 @@ class AppLocalizationsEn extends AppLocalizations {
       'Copyright © 2024–2026 Lukas Künzi.\nLicensed under GNU GPL version 3 or later.';
 
   @override
+  String get aboutSourceCode => 'source code';
+
+  @override
+  String get aboutAppLicense => 'app license';
+
+  @override
+  String get aboutProjectLinksPrefix => 'The ';
+
+  @override
+  String get aboutProjectLinksSeparator => ' and ';
+
+  @override
+  String get aboutProjectLinksSuffix => ' are available on GitHub.';
+
+  @override
   String get gettingStarted => 'Getting started';
 
   @override

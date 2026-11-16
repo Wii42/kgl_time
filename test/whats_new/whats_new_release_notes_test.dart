@@ -106,6 +106,57 @@ void main() {
   }
 
   for (final Locale locale in <Locale>[const Locale('en'), const Locale('de')]) {
+    testWidgets(
+      'About links open source code and app license without closing the dialog in $locale',
+      (
+        WidgetTester tester,
+      ) async {
+        await launchSettings(tester, locale);
+        final AppLocalizations loc = AppLocalizations.of(
+          tester.element(find.byType(SettingsPage)),
+        )!;
+        final Finder aboutTile = find.byType(AboutListTile);
+        await tester.ensureVisible(aboutTile);
+        await tester.pumpAndSettle();
+        await tester.tap(aboutTile);
+        await tester.pumpAndSettle();
+        expect(find.byType(AboutDialog), findsOneWidget);
+        expect(find.text(loc.aboutCopyrightAndLicense), findsOneWidget);
+
+        expect(
+          find.text(locale.languageCode == 'de' ? 'Quellcode' : 'source code'),
+          findsOneWidget,
+        );
+        final Finder sourceLink = find.text(loc.aboutSourceCode);
+        await tester.ensureVisible(sourceLink);
+        await tester.pumpAndSettle();
+        await tester.tap(sourceLink);
+        await tester.pumpAndSettle();
+        expect(launches, hasLength(1));
+        expect(launches.single.arguments, containsPair('url', 'https://github.com/Wii42/kgl_time'));
+        expect(launches.single.arguments, containsPair('useWebView', false));
+        expect(find.byType(AboutDialog), findsOneWidget);
+
+        expect(
+          find.text(locale.languageCode == 'de' ? 'App-Lizenz' : 'app license'),
+          findsOneWidget,
+        );
+        final Finder licenseLink = find.text(loc.aboutAppLicense);
+        await tester.ensureVisible(licenseLink);
+        await tester.pumpAndSettle();
+        await tester.tap(licenseLink);
+        await tester.pumpAndSettle();
+        expect(launches, hasLength(2));
+        expect(
+          launches.last.arguments,
+          containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/LICENSE'),
+        );
+        expect(launches.last.arguments, containsPair('useWebView', false));
+        expect(find.byType(AboutDialog), findsOneWidget);
+        expect(tester.takeException(), isNull);
+      },
+    );
+
     testWidgets('release notes open externally without acknowledging the dialog in $locale', (
       WidgetTester tester,
     ) async {

@@ -7,6 +7,7 @@ import 'package:kgl_time/utils/helpers.dart';
 import 'package:kgl_time/widgets/layout/always_filling_scroll_view.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../data_model/key_values.dart';
@@ -165,7 +166,7 @@ class _ThemeModeSettings extends StatelessWidget {
 class _AboutSection extends StatelessWidget {
   final String? appName;
 
-  const new({super.key, this.appName});
+  const new({this.appName});
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? loc = AppLocalizations.of(context);
@@ -236,10 +237,56 @@ class _AboutSection extends StatelessWidget {
                 child: Image.asset('assets/playstore-icon.png', width: 64),
               ),
               applicationLegalese: loc?.aboutCopyrightAndLicense ?? '<Copyright and license>',
+              aboutBoxChildren: <Widget>[
+                const SizedBox(height: 12),
+                const _AboutProjectLinks(),
+              ],
             ),
           ],
         ),
       ],
+    );
+  }
+}
+
+class _AboutProjectLinks extends StatelessWidget {
+  const _AboutProjectLinks();
+
+  @override
+  Widget build(BuildContext context) {
+    final AppLocalizations loc = AppLocalizations.of(context)!;
+    final TextStyle linkStyle = TextStyle(
+      color: Theme
+          .of(context)
+          .colorScheme
+          .primary,
+    );
+
+    WidgetSpan link(String label, String url) =>
+        WidgetSpan(
+          alignment: PlaceholderAlignment.baseline,
+          baseline: TextBaseline.alphabetic,
+          child: Link(
+            uri: Uri.parse(url),
+            target: LinkTarget.blank,
+            builder: (BuildContext context, FollowLink? followLink) =>
+                InkWell(
+                  onTap: followLink,
+                  child: Text(label, style: linkStyle),
+                ),
+          ),
+        );
+
+    return Text.rich(
+      TextSpan(
+        children: <InlineSpan>[
+          TextSpan(text: loc.aboutProjectLinksPrefix),
+          link(loc.aboutSourceCode, 'https://github.com/Wii42/kgl_time'),
+          TextSpan(text: loc.aboutProjectLinksSeparator),
+          link(loc.aboutAppLicense, 'https://github.com/Wii42/kgl_time/blob/main/LICENSE'),
+          TextSpan(text: loc.aboutProjectLinksSuffix),
+        ],
+      ),
     );
   }
 }

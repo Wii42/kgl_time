@@ -7,6 +7,14 @@
   "settingsDataSectionTitle": "Data",
   "settingsExportImport": "Export / Import",
   "aboutCopyrightAndLicense": "Copyright © 2024–2026 Lukas Künzi.\nLicensed under GNU GPL version 3 or later.",
+  "aboutSourceCode": "source code",
+  "aboutAppLicense": "app license",
+  "aboutProjectLinksPrefix": "The ",
+  "@aboutProjectLinksPrefix": {
+    "description": "Sentence parts around the source code and app license links. Preserve spaces. Order: prefix, source code link, separator, license link, suffix."
+  },
+  "aboutProjectLinksSeparator": " and ",
+  "aboutProjectLinksSuffix": " are available on GitHub.",
   "gettingStarted": "Getting started",
   "welcomeTitle": "Welcome to KGL Time",
   "welcomeDismiss": "Get started",

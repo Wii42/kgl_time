@@ -140,6 +140,36 @@ abstract class AppLocalizations {
   /// **'Copyright © 2024–2026 Lukas Künzi.\nLicensed under GNU GPL version 3 or later.'**
   String get aboutCopyrightAndLicense;
 
+  /// No description provided for @aboutSourceCode.
+  ///
+  /// In en, this message translates to:
+  /// **'source code'**
+  String get aboutSourceCode;
+
+  /// No description provided for @aboutAppLicense.
+  ///
+  /// In en, this message translates to:
+  /// **'app license'**
+  String get aboutAppLicense;
+
+  /// Sentence parts around the source code and app license links. Preserve spaces. Order: prefix, source code link, separator, license link, suffix.
+  ///
+  /// In en, this message translates to:
+  /// **'The '**
+  String get aboutProjectLinksPrefix;
+
+  /// No description provided for @aboutProjectLinksSeparator.
+  ///
+  /// In en, this message translates to:
+  /// **' and '**
+  String get aboutProjectLinksSeparator;
+
+  /// No description provided for @aboutProjectLinksSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' are available on GitHub.'**
+  String get aboutProjectLinksSuffix;
+
   /// No description provided for @gettingStarted.
   ///
   /// In en, this message translates to:
