@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Display app copyright and GPL-3.0-or-later licensing information in the About dialog.
+
 <a name="v0.4.1"></a>
 
 ## v0.4.1
