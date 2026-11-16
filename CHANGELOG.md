@@ -1,5 +1,7 @@
 # Changelog
 
+<a name="v0.4.1"></a>
+
 ## v0.4.1
 
 ### Added
@@ -7,6 +9,8 @@
 - Add a short welcome guide on first launch, also available in Settings → Getting started.
 - Show release highlights after updates; revisit recent highlights and access the full release notes
   from Settings → What's new.
+
+<a name="v0.4.0"></a>
 
 ## v0.4.0
 
@@ -26,6 +30,8 @@
 ### Fixed
 
 - CSV exports use the latest data when saving or sharing.
+
+<a name="v0.3.6"></a>
 
 ## v0.3.6
 
@@ -48,6 +54,8 @@
   success messages.
 - Keep status bar text and icons white for both dark and light mode.
 
+<a name="v0.3.5"></a>
+
 ## v0.3.5
 
 ### Changed
@@ -58,6 +66,8 @@
 - Smoother transitions between Home, All Entries, and Categories.
 - Helpful hints when lists are empty, explaining how to create entries, adjust filters, or restore
   deleted entries from the trash.
+
+<a name="v0.3.4"></a>
 
 ## v0.3.4
 
@@ -77,6 +87,8 @@
 - Aligned work entry card widths across Home, All Entries, and Categories.
 - Prevented entries from being hidden behind filters.
 
+<a name="v0.3.3"></a>
+
 ## v0.3.3
 
 - Added a filter for work entries without a category
@@ -84,10 +96,14 @@
 - Improved validation and error messages when entering work durations
 - Minor bug fixes and improvements
 
+<a name="v0.3.2"></a>
+
 ## v0.3.2
 
 - Added CSV export of work entries, with options to save or share the file
 - Exported tables include working time, date, description, start/end times, and categories
+
+<a name="v0.3.1"></a>
 
 ## v0.3.1
 
@@ -95,27 +111,39 @@
 - Added animations on adding/deleting work entries, to give better visual feedback to the user
 - Minor bug fixes and improvements
 
+<a name="v0.3.0"></a>
+
 ## v0.3.0
 
 - Added a navigation bar
 - Minor bug fixes and adjustments
 
+<a name="v0.2.3"></a>
+
 ## v0.2.3
 
 - Improved the error message text for excessively large numbers (see v0.2.2)
+
+<a name="v0.2.2"></a>
 
 ## v0.2.2
 
 - Fixed an issue where very large numbers entered for work duration on the “New Entry” page appeared
   as negative values
 
+<a name="v0.2.0"></a>
+
 ## v0.2.0
 
 - Categories can now be added directly in the time entry slider
 
+<a name="v0.1.1"></a>
+
 ## v0.1.1
 
 - Minor UI improvements
+
+<a name="v0.1.0"></a>
 
 ## v0.1.0
 
