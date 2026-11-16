@@ -15,6 +15,7 @@
 ### Fixed
 
 - Show correct singular and plural forms for entry and category counts in backup previews.
+- Fix inconsistent comparisons between saved categories and embedded category snapshots.
 
 <a name="v0.4.1"></a>
 

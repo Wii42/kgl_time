@@ -18,6 +18,8 @@ running tracker sessions are excluded. They are user-initiated files, with no bu
 See [PRIVACY.md](../PRIVACY.md) for the public description of data handling and system backups.
 
 Entry categories are embedded snapshots and may outlive categories in the editable category list.
+Live categories and embedded snapshots are distinct equality types; assignment matching compares
+their local IDs explicitly.
 Their numeric IDs belong to the local dataset and backup snapshot; they are not global identifiers
 for cross-device merging. A future relational schema or synchronization feature needs an explicit
 identity and relationship design rather than treating backup import as a merge operation.

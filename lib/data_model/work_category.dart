@@ -18,11 +18,14 @@ abstract class IWorkCategory {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is IWorkCategory && other.displayName == displayName && other.icon == icon;
+    return other is IWorkCategory &&
+        other.runtimeType == runtimeType &&
+        other.displayName == displayName &&
+        other.icon == icon;
   }
 
   @override
-  int get hashCode => Object.hash(displayName, icon);
+  int get hashCode => Object.hash(runtimeType, displayName, icon);
 
   Map<String, dynamic> toJson();
 }
