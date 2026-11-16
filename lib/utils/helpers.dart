@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:material_ui/material_ui.dart';
 
 Uri releaseNotesUriForVersion(String version) => Uri.parse(
-  'https://github.com/Wii42/kgl_time/blob/main/README.md#v${version.split('+').first.replaceAll('.', '')}',
+  'https://github.com/Wii42/kgl_time/blob/main/CHANGELOG.md#v${version.split('+').first}',
 );
 
 ThemeMode? parseThemeMode(String? themeMode) {

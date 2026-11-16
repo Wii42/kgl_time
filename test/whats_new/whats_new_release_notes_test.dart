@@ -123,7 +123,7 @@ void main() {
       expect(launches, hasLength(1));
       expect(
         launches.single.arguments,
-        containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/README.md#v040'),
+        containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/CHANGELOG.md#v0.4.0'),
       );
       expect(launches.single.arguments, containsPair('useWebView', false));
       expect(launches.single.arguments, containsPair('useSafariVC', false));
@@ -183,7 +183,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(
           launches.single.arguments,
-          containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/README.md#v041'),
+          containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/CHANGELOG.md#v0.4.1'),
         );
         expect(find.byType(WhatsNewDialog), findsOneWidget);
         await tester.tap(find.text(loc.whatsNewDismiss));
@@ -219,7 +219,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         launches.single.arguments,
-        containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/README.md#v041'),
+        containsPair('url', 'https://github.com/Wii42/kgl_time/blob/main/CHANGELOG.md#v0.4.1'),
       );
       expect(find.byType(WhatsNewDialog), findsOneWidget);
       await tester.tap(find.text(loc.whatsNewDismiss));

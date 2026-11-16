@@ -16,7 +16,7 @@
 # Release notes
 
 - When implementing a user-visible feature or fixing a user-visible bug, update the **Unreleased**
-  section of the changelog in `README.md` in the same change.
+  section of `CHANGELOG.md` in the same change.
 - Describe the resulting behavior in concise, user-facing language. Use Added, Changed, Fixed, or
   Removed headings as appropriate; omit empty headings.
 - Include changes users can notice or need to know about: features, UI changes, bug fixes,
@@ -31,8 +31,12 @@
   rather than adding them to the release notes.
 - Document only implemented changes. Do not describe proposed or unresolved fixes as completed, and
   do not rewrite notes for released versions.
-- When preparing a release, move the Unreleased notes under the actual version and create a fresh
-  Unreleased section. Do not choose or increment a release version unless the task calls for it.
+- When preparing a release, move the Unreleased notes in `CHANGELOG.md` under the actual version and
+  create a fresh Unreleased section. Do not choose or increment a release version unless the task
+  calls for it.
+- Give every released version heading in `CHANGELOG.md` an explicit anchor matching its version,
+  e.g. `<a name="v0.4.1"></a>`, as the app links directly to these anchors.
+- Preserve the compatibility version headings and links in `README.md` for older app versions.
 
 # What's New highlights
 
