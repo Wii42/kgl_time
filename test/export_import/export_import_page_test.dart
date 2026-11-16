@@ -812,11 +812,19 @@ void main() {
     );
     final BuildContext pageContext = tester.element(find.byType(ExportImportPage));
     final AppLocalizations loc = AppLocalizations.of(pageContext)!;
+    final String previousEntries = jsonEncode(entries.entriesIncludingTrash);
+    final String previousCategories = jsonEncode(categories.entries);
+    final String previousStoredEntries = jsonEncode(await storage.workEntries.loadEntries());
+    final String previousStoredCategories = jsonEncode(await storage.workCategories.loadEntries());
     await pickBackup(tester, jsonEncode(<String, int>{'backupFormatVersion': 2}));
 
     expect(find.text(loc.unsupportedBackupFormatTitle), findsOneWidget);
     expect(find.byType(ImportReplaceConfirmationDialog), findsNothing);
     expect(find.byType(SnackBar), findsNothing);
+    expect(jsonEncode(entries.entriesIncludingTrash), previousEntries);
+    expect(jsonEncode(categories.entries), previousCategories);
+    expect(jsonEncode(await storage.workEntries.loadEntries()), previousStoredEntries);
+    expect(jsonEncode(await storage.workCategories.loadEntries()), previousStoredCategories);
     await scrollDialogToEnd(tester, find.text(loc.unsupportedBackupFormat));
     final Finder okButton = find.widgetWithText(
       TextButton,
