@@ -4,10 +4,10 @@ import 'package:kgl_time/app/app_route.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/utils/helpers.dart';
+import 'package:kgl_time/widgets/about_kgl_time.dart';
 import 'package:kgl_time/widgets/layout/always_filling_scroll_view.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../data_model/key_values.dart';
@@ -104,9 +104,7 @@ class _ThemeModeSettings extends StatelessWidget {
 
             final TextStyle? titleStyle =
                 tileTheme.titleTextStyle ??
-                    theme.textTheme.bodyLarge?.copyWith(
-                      color: theme.colorScheme.onSurface,
-                    );
+                    theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.onSurface);
             return SizedBox(
               width: constraints.maxWidth,
               child: Wrap(
@@ -164,9 +162,9 @@ class _ThemeModeSettings extends StatelessWidget {
 }
 
 class _AboutSection extends StatelessWidget {
-  final String? appName;
+  final String appName;
 
-  const new({this.appName});
+  const new({required this.appName});
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? loc = AppLocalizations.of(context);
@@ -228,65 +226,10 @@ class _AboutSection extends StatelessWidget {
                 onTap: () => launchUrl(privacyUri),
               ),
             ),
-            AboutListTile(
-              icon: const Icon(Icons.info_outline),
-              applicationVersion: "v${appInfo.version}",
-              applicationName: appName,
-              applicationIcon: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.asset('assets/playstore-icon.png', width: 64),
-              ),
-              applicationLegalese: loc?.aboutCopyrightAndLicense ?? '<Copyright and license>',
-              aboutBoxChildren: <Widget>[
-                const SizedBox(height: 12),
-                const _AboutProjectLinks(),
-              ],
-            ),
+            AboutKglTimeListTile(appName: appName),
           ],
         ),
       ],
-    );
-  }
-}
-
-class _AboutProjectLinks extends StatelessWidget {
-  const _AboutProjectLinks();
-
-  @override
-  Widget build(BuildContext context) {
-    final AppLocalizations loc = AppLocalizations.of(context)!;
-    final TextStyle linkStyle = TextStyle(
-      color: Theme
-          .of(context)
-          .colorScheme
-          .primary,
-    );
-
-    WidgetSpan link(String label, String url) =>
-        WidgetSpan(
-          alignment: PlaceholderAlignment.baseline,
-          baseline: TextBaseline.alphabetic,
-          child: Link(
-            uri: Uri.parse(url),
-            target: LinkTarget.blank,
-            builder: (BuildContext context, FollowLink? followLink) =>
-                InkWell(
-                  onTap: followLink,
-                  child: Text(label, style: linkStyle),
-                ),
-          ),
-        );
-
-    return Text.rich(
-      TextSpan(
-        children: <InlineSpan>[
-          TextSpan(text: loc.aboutProjectLinksPrefix),
-          link(loc.aboutSourceCode, 'https://github.com/Wii42/kgl_time'),
-          TextSpan(text: loc.aboutProjectLinksSeparator),
-          link(loc.aboutAppLicense, 'https://github.com/Wii42/kgl_time/blob/main/LICENSE'),
-          TextSpan(text: loc.aboutProjectLinksSuffix),
-        ],
-      ),
     );
   }
 }
