@@ -1,8 +1,8 @@
+import 'package:kgl_time/app/external_links.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../l10n/generated/app_localizations.dart';
-import '../utils/helpers.dart';
 import 'highlight_localizations.dart';
 import 'release_highlight.dart';
 import 'whats_new_controller.dart';
@@ -53,7 +53,7 @@ class WhatsNewDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: () => launchUrl(
-            releaseNotesUriForVersion(currentVersion),
+            ExternalLinks.releaseNotesForVersion(currentVersion),
             mode: LaunchMode.externalApplication,
           ),
           child: Text(loc.whatsNewReleaseNotes),

@@ -1,3 +1,4 @@
+import 'package:kgl_time/app/external_links.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/main.dart';
 import 'package:material_ui/material_ui.dart';
@@ -43,11 +44,11 @@ class _AboutProjectLinks extends StatelessWidget {
       color: Theme.of(context).colorScheme.primary,
     );
 
-    WidgetSpan link(String label, String url) => WidgetSpan(
+    WidgetSpan link(String label, Uri url) => WidgetSpan(
       alignment: PlaceholderAlignment.baseline,
       baseline: TextBaseline.alphabetic,
       child: Link(
-        uri: Uri.parse(url),
+        uri: url,
         target: LinkTarget.blank,
         builder: (BuildContext context, FollowLink? followLink) => InkWell(
           onTap: followLink,
@@ -60,9 +61,9 @@ class _AboutProjectLinks extends StatelessWidget {
       TextSpan(
         children: <InlineSpan>[
           TextSpan(text: loc.aboutProjectLinksPrefix),
-          link(loc.aboutSourceCode, 'https://github.com/Wii42/kgl_time'),
+          link(loc.aboutSourceCode, ExternalLinks.githubRepo),
           TextSpan(text: loc.aboutProjectLinksSeparator),
-          link(loc.aboutAppLicense, 'https://github.com/Wii42/kgl_time/blob/main/LICENSE'),
+          link(loc.aboutAppLicense, ExternalLinks.license),
           TextSpan(text: loc.aboutProjectLinksSuffix),
         ],
       ),

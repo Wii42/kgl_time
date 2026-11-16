@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:kgl_time/app/app_layout_constants.dart';
 import 'package:kgl_time/app/app_route.dart';
+import 'package:kgl_time/app/external_links.dart';
 import 'package:kgl_time/l10n/generated/app_localizations.dart';
 import 'package:kgl_time/pages/kgl_page.dart';
 import 'package:kgl_time/utils/helpers.dart';
@@ -168,10 +169,8 @@ class _AboutSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? loc = AppLocalizations.of(context);
-    final Uri contactUri = Uri.parse('mailto:wi42.dev@gmail.com');
-    final Uri privacyUri = Uri.parse(
-      'https://github.com/Wii42/kgl_time/blob/main/PRIVACY.md#${loc?.privacyPolicyUrlFragment}',
-    );
+    final Uri contactUri = ExternalLinks.emailContact;
+    final Uri privacyUri = ExternalLinks.privacyForLanguage(loc?.privacyPolicyUrlFragment);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
