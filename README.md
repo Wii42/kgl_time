@@ -45,7 +45,7 @@ app data may be included in operating system backups. See [PRIVACY.md](PRIVACY.m
 
 KGL Time is licensed under
 the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.html). You can view the
-terms and conditions in the [LICENSE.md](LICENSE.md) file.
+terms and conditions in the [LICENSE](LICENSE) file.
 
 ## Platform Compatibility
 
